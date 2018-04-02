@@ -1,0 +1,28 @@
+<div class="page-header bg-login">
+  <h1>Login</h1>
+</div>
+
+<section class="section-padding">
+  <div class="container">
+    <div class="login-form card">
+      <div class="card-body">
+        <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
+          <!-- <p class="h5 text-center mb-4">Sign in</p> -->
+          <div class="md-form">
+            <i class="fa fa-envelope prefix grey-text"></i>
+            <input type="email"  name="email" placeholder="Your Email" id="defaultForm-email" formControlName="email" class="form-control" mdbActive>
+            <!-- <label for="defaultForm-email">Your email</label> -->
+          </div>
+          <div class="md-form">
+            <i class="fa fa-lock prefix grey-text"></i>
+            <input type="password" placeholder="Your Password" id="defaultForm-pass" formControlName="password" class="form-control" mdbActive>
+            <!-- <label for="defaultForm-pass">Your password</label> -->
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-default waves-light" mdbRippleRadius [disabled]="!loginForm.valid || requestRunning">Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

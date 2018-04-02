@@ -1,0 +1,25 @@
+<div class="container-fluid">
+    <div class="card">
+      <div class="view hm-white-slight waves-light" mdbRippleRadius>
+        <img src="assets/images/profile-placeholder.jpg" class="img-fluid" alt="">
+        <a>
+          <div class="mask"></div>
+        </a>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="profileForm" (ngSubmit)="updateProfile(profileForm.value)">
+          <div class="alert-danger" *ngIf="error">{{errorMsg}}</div>
+          <div class="alert-success" *ngIf="success">{{successMsg}}</div>        
+          <div class="md-form">
+            <i class="fa fa-user-o prefix grey-text"></i>
+            <input type="text" id="firstName" name="firstName" formControlName="firstName" class="form-control" mdbActive>
+            <label for="Name">Name</label>
+          </div>             
+          <div class="text-center">
+            <button  type="submit" class="btn btn-default waves-light" mdbRippleRadius [disabled]="!profileForm.valid || activeRequest">Update</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

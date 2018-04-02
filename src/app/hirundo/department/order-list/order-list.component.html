@@ -1,0 +1,29 @@
+<div>
+    <div class="text-center" *ngIf="loadingOrders">Loading...</div>
+    <div *ngIf="!loadingOrders">
+        <div class="card order-list" *ngFor="let order of orders | orderby: '-created_at'">
+            <div class="card-body" [class.opacity]="order.status == 3">
+                <h4 class="card-title">
+                    <div>
+                        <i class="far fa-clock"></i> {{order.created_at | date:'hh:mm a'}}</div>
+                    <div class="status" [class.bg-red]="order.status == 0" [class.bg-green]="order.status == 2" [class.bg-yellow]="order.status == 4">{{getOrderStatus(order.status)}}</div>
+                </h4>
+                <div class="card-text">
+                    <p>
+                        <i class="fas fa-cube"></i> {{order.room.name}}</p>
+                    <p>
+                        <img src="assets/images/table.png" alt="">
+                        <span>Table 2</span>
+                    </p>
+                    <p>
+                        <i class="far fa-user"></i> {{order.noOfPeople}}</p>
+                </div>
+                <div class="btn-container d-flex justify-content-between">
+                    <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 3)">Cancel</button>
+                    <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 4)">In Progress</button>
+                    <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 2)">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
