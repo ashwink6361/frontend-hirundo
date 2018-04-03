@@ -18,19 +18,17 @@ export class CreateOrderComponent implements OnInit {
   public numberOfPerson: number;
   public tableId: number;
   public roomId: number;
-
+  public quantity: number = 0;
   constructor(private createOrderService: CreateOrderService, private globalService: GlobalService) { }
 
   ngOnInit() {
     this.roomData = JSON.parse(localStorage.getItem('roomdata'));
     this.tableData = JSON.parse(localStorage.getItem('tabledata'));
     console.log(this.roomData, 'this.roomData');
-
-    this.createOrderService.getCategory().then(data => {
-      console.log('data', data);
-      this.category = data.data;
-      console.log('this.category', this.category);
-    })
+    this.createOrderService.getCategory()
+      .then(data => {
+        console.log('data', data);
+      })
       .catch(error => {
         console.log('error', error);
       });
@@ -49,12 +47,18 @@ export class CreateOrderComponent implements OnInit {
     this.showItem = false;
   }
 
-
-  // selectRoom(room): void {
-  //   console.log('room',room);
-  //   this.tableId = null;
-  //   this.roomId = room._id;
-  //   this.tableData = room.tables;
-  //   console.log('this.tableData',this.tableData);    
-  //   };
+  increaseValue() {
+    let value = this.quantity;
+    value = isNaN(value) ? 0 : value;
+    value++;
+    this.quantity = value;
+  }
+  
+  decreaseValue() {
+    let value = this.quantity;
+    value = isNaN(value) ? 0 : value;
+    value < 1 ? value = 1 : '';
+    value--;
+    this.quantity = value;
+  }
 }

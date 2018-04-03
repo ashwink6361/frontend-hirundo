@@ -12,7 +12,7 @@ import { WebsocketService } from '../service/websocket.service';
     CommonModule,
     SharedModule,
     MainRouting   ,
-    MDBBootstrapModule 
+    MDBBootstrapModule
   ],
   declarations: [HirundoComponent],
   providers: [

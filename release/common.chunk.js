@@ -7,8 +7,9 @@ webpackJsonp(["common"],{
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreateOrderService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__global_service__ = __webpack_require__("../../../../../src/app/hirundo/global.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -21,58 +22,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var CreateOrderService = /** @class */ (function () {
-    function CreateOrderService(http) {
+    function CreateOrderService(http, globalService) {
         this.http = http;
+        this.globalService = globalService;
     }
-    CreateOrderService.prototype.getRooms = function () {
-        var url = '/api/rooms';
-        return this.http.get(url).toPromise()
-            .then(this.extractData)
-            .catch(this.handleErrorPromise);
-    };
     CreateOrderService.prototype.getCategory = function () {
         var url = '/api/category';
         return this.http.get(url).toPromise()
-            .then(this.extractData)
-            .catch(this.handleErrorPromise);
-    };
-    CreateOrderService.prototype.extractData = function (res) {
-        var body = res.json();
-        if (body.hasOwnProperty('error')) {
-            if (body.error.message === 'Token is required') {
-                this.logout();
-            }
-            else {
-                return Promise.resolve(body || {});
-            }
-        }
-        else {
-            return Promise.resolve(body || {});
-        }
-    };
-    CreateOrderService.prototype.handleErrorPromise = function (error) {
-        var body = error.json();
-        if (error.status === 400 || error.status === 401) {
-            return Promise.reject(body.message || error);
-        }
-        else {
-            this.logout();
-        }
-    };
-    CreateOrderService.prototype.logout = function () {
-        localStorage.removeItem('isLoggedin');
-        localStorage.removeItem('currentUser');
-        localStorage.removeItem('token');
-        document.cookie = "token=" + '';
-        window.location.href = '/';
+            .then(this.globalService.extractData)
+            .catch(this.globalService.handleErrorPromise);
     };
     CreateOrderService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Injectable */])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__global_service__["a" /* GlobalService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__global_service__["a" /* GlobalService */]) === "function" && _b || Object])
     ], CreateOrderService);
     return CreateOrderService;
-    var _a;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=create-order.service.js.map
@@ -86,8 +53,9 @@ var CreateOrderService = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DashboardService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__global_service__ = __webpack_require__("../../../../../src/app/hirundo/global.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -100,52 +68,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var DashboardService = /** @class */ (function () {
-    function DashboardService(http) {
+    function DashboardService(http, globalService) {
         this.http = http;
+        this.globalService = globalService;
     }
     DashboardService.prototype.getRooms = function () {
         var url = '/api/rooms';
         return this.http.get(url).toPromise()
-            .then(this.extractData)
-            .catch(this.handleErrorPromise);
-    };
-    DashboardService.prototype.extractData = function (res) {
-        var body = res.json();
-        if (body.hasOwnProperty('error')) {
-            if (body.error.message === 'Token is required') {
-                this.logout();
-            }
-            else {
-                return Promise.resolve(body || {});
-            }
-        }
-        else {
-            return Promise.resolve(body || {});
-        }
-    };
-    DashboardService.prototype.handleErrorPromise = function (error) {
-        var body = error.json();
-        if (error.status === 400 || error.status === 401) {
-            return Promise.reject(body.message || error);
-        }
-        else {
-            this.logout();
-        }
-    };
-    DashboardService.prototype.logout = function () {
-        localStorage.removeItem('isLoggedin');
-        localStorage.removeItem('currentUser');
-        localStorage.removeItem('token');
-        document.cookie = "token=" + '';
-        window.location.href = '/';
+            .then(this.globalService.extractData)
+            .catch(this.globalService.handleErrorPromise);
     };
     DashboardService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Injectable */])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__global_service__["a" /* GlobalService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__global_service__["a" /* GlobalService */]) === "function" && _b || Object])
     ], DashboardService);
     return DashboardService;
-    var _a;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=dashboard.service.js.map
