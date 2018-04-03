@@ -101,7 +101,7 @@ var DepartmentModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_2__department_routes__["a" /* DepartmentRouting */],
                 __WEBPACK_IMPORTED_MODULE_4__shared_shared_module__["a" /* SharedModule */],
                 __WEBPACK_IMPORTED_MODULE_5__angular_forms__["c" /* FormsModule */],
-                __WEBPACK_IMPORTED_MODULE_5__angular_forms__["f" /* ReactiveFormsModule */]
+                __WEBPACK_IMPORTED_MODULE_5__angular_forms__["g" /* ReactiveFormsModule */]
             ],
             declarations: [__WEBPACK_IMPORTED_MODULE_3__department_component__["a" /* DepartmentComponent */]]
         })

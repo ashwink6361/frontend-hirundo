@@ -91,7 +91,7 @@ var WaiterModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_6__shared_shared_module__["a" /* SharedModule */],
                 __WEBPACK_IMPORTED_MODULE_4_angular_bootstrap_md__["a" /* MDBBootstrapModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* FormsModule */],
-                __WEBPACK_IMPORTED_MODULE_2__angular_forms__["f" /* ReactiveFormsModule */]
+                __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* ReactiveFormsModule */]
             ],
             declarations: [__WEBPACK_IMPORTED_MODULE_5__waiter_component__["a" /* WaiterComponent */]],
             providers: [

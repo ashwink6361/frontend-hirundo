@@ -1,7 +1,13 @@
 <div class="container-fluid">
     <div class="card">
+      <input type="file" name="myImage" accept="image/*" (change)="fileChangeEvent($event)" placeholder="Upload file..."/>      
+      <div>
+        <button type="submit" class="btn btn-default waves-light" mdbRippleRadius (click)="uploadProfilePic()" ng-disabled="uploadPicRequest">Update</button>
+      </div>
       <div class="view hm-white-slight waves-light" mdbRippleRadius>
-        <img src="assets/images/profile-placeholder.jpg" class="img-fluid" alt="">
+        <!-- <img src="assets/images/profile-placeholder.jpg" class="img-fluid" alt=""> -->
+        <img *ngIf="!previewImage" src="assets/images/profile-placeholder.jpg" class="img-fluid" alt="">
+        <img *ngIf="previewImage" [src]="previewImage" class="img-fluid" alt="">       
         <a>
           <div class="mask"></div>
         </a>

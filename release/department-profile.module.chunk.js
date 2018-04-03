@@ -67,7 +67,7 @@ var DepartmentProfileComponent = /** @class */ (function () {
     };
     DepartmentProfileComponent.prototype.createProfileForm = function () {
         this.profileForm = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormGroup */]({
-            firstName: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormControl */](this.ProfileData.firstName, __WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].required),
+            firstName: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormControl */](this.ProfileData.firstName, __WEBPACK_IMPORTED_MODULE_1__angular_forms__["h" /* Validators */].required),
         });
     };
     DepartmentProfileComponent.prototype.updateProfile = function (user) {
@@ -148,7 +148,7 @@ var DepartmentProfileModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_1__angular_common__["b" /* CommonModule */],
                 __WEBPACK_IMPORTED_MODULE_4__department_profile_routes__["a" /* DepartmentProfileRouting */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* FormsModule */],
-                __WEBPACK_IMPORTED_MODULE_2__angular_forms__["f" /* ReactiveFormsModule */],
+                __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* ReactiveFormsModule */],
                 __WEBPACK_IMPORTED_MODULE_6_angular_bootstrap_md__["a" /* MDBBootstrapModule */]
             ],
             declarations: [__WEBPACK_IMPORTED_MODULE_3__department_profile_component__["a" /* DepartmentProfileComponent */]],
@@ -250,7 +250,7 @@ var DepartmentProfileService = /** @class */ (function () {
     };
     DepartmentProfileService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Injectable */])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
     ], DepartmentProfileService);
     return DepartmentProfileService;
     var _a;

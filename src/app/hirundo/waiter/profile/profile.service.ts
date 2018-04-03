@@ -16,11 +16,15 @@ export class ProfileService {
 
   updateProfilePicture(opts): Promise<any> {
     let url = "api/user/picture/upload";
-    return this.http.post(url, opts).toPromise()
+    var fd = new FormData();
+    for (var key in opts) {
+        fd.append(key, opts[key]);
+    }
+    return this.http.post(url, fd ).toPromise()
       .then(this.extractData)
       .catch(this.handleErrorPromise);
   }
-
+  
   public extractData(res: Response) {
     let body = res.json();
     if (body.hasOwnProperty('error')) {

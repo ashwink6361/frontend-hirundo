@@ -8,7 +8,7 @@ export class CreateOrderService {
   constructor(private http: Http, private globalService: GlobalService) { }
 
   getCategory(): Promise<any> {
-    let url = '/api/category';
+    let url = '/api/categories';
     return this.http.get(url).toPromise()
       .then(this.globalService.extractData)
       .catch(this.globalService.handleErrorPromise);

@@ -16,6 +16,13 @@ export class ProfileComponent implements OnInit {
   errorMsg: string = '';
   success: boolean = false;
   successMsg: string = '';
+  uploadPicRequest: boolean = false;
+  picerror: boolean = false;
+  picerrorMsg: string = '';
+  picsuccess: boolean = false;
+  picsuccessMsg: string = '';
+  previewImage = '';
+  public profilePic;
   constructor(private profileService: ProfileService, private authGuard: AuthGuard) { }
 
   ngOnInit() {
@@ -57,6 +64,53 @@ export class ProfileComponent implements OnInit {
       setTimeout(() => {
         this.error = false;
         this.errorMsg = '';
+      }, 4000);
+    });
+  }
+
+  public fileChangeEvent(fileInput: any) {
+    if (fileInput.target.files && fileInput.target.files[0]) {
+      var reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.previewImage = e.target.result;
+        var datauri = e.target.result.split(',')[1];
+        var binary = atob(datauri);
+        var array = [];
+        for (var i = 0; i < binary.length; i++) {
+          array.push(binary.charCodeAt(i));
+        }
+        //Convert the binary format of image into image file object to upload
+        this.profilePic = new File([new Uint8Array(array)], 'profile_pic.jpg', {
+          type: 'image/jpg'
+        });
+      }
+      reader.readAsDataURL(fileInput.target.files[0]);
+    }
+  }
+
+  public uploadProfilePic() {
+    console.log('this.profilePic', this.profilePic);
+    let opts = {
+      picture: this.profilePic
+    }
+    this.uploadPicRequest = true;
+    this.profileService.updateProfilePicture(opts).then(data => {
+      console.log('data',data);
+      this.uploadPicRequest = false;
+      this.profilePic = '';
+      this.success = true;
+      this.successMsg = data.message;
+      setTimeout(() => {
+        this.picsuccess = false;
+        this.picsuccessMsg = '';
+      }, 4000);
+    }).catch(error => {
+      this.uploadPicRequest = false;
+      this.error = true;
+      this.errorMsg = error;
+      setTimeout(() => {
+        this.picerror = false;
+        this.picerrorMsg = '';
       }, 4000);
     });
   }

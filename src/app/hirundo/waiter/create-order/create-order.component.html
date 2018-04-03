@@ -20,18 +20,15 @@
     <div class="category-list" [class.slideright]="stepperForm" [class.slideleft]="!stepperForm">
         <div class="d-flex justify-content-between flex-wrap ">
             <div class="d-flex align-items-center justify-content-between search-category w-100">
-                <input class="form-control" type="text" placeholder="Search Category" />
+                <ng2-completer [(ngModel)]="searchStr" [datasource]="dataService" [minSearchLength]="0" (selected)="onSelected($event)" placeholder="Search Category"></ng2-completer>
                 <button class="btn btn-default waves-light" (click)="stepperback()" mdbRippleRadius>
                     <i class="fas fa-angle-left"></i>
                 </button>
             </div>
-            <div class="category" (click)="showItems()">
-                <img src="assets/images/drinks.jpg" alt="" />
-                <p class="name">Category Name</p>
-            </div>
-            <div class="category" (click)="showItems()">
-                <img src="assets/images/drinks.jpg" alt="" />
-                <p class="name">Category Name</p>
+            <div class="category" *ngFor="let category of categoryList" [ngStyle]="{'background-color': category.color}" (click)="showItems()">
+                <img *ngIf="!category.isIcon" [src]="category.logo.small" alt="" />
+                <img *ngIf="category.isIcon" [src]="category.icon" alt="" />
+                <p class="name">{{category.name}}</p>
             </div>
         </div>
     </div>
