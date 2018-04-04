@@ -3,7 +3,7 @@ webpackJsonp(["create-order.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/create-order/create-order.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header class=\"page-content-header\" *ngIf=\"!stepperForm\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\">\r\n        Create an Order\r\n    </div>\r\n</header>\r\n<header class=\"page-content-header\" *ngIf=\"stepperForm\">\r\n    <div class=\"back-btn\">\r\n        <a (click)=\"stepperback()\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\">\r\n        Choose Category\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <div class=\"stepper-form\">\r\n        <div [class.slideleft]=\"stepperForm\" [class.slideright]=\"!stepperForm\">\r\n            <div class=\"d-flex justify-content-between label-container\">\r\n                <label class=\"label label-lg d-flex align-items-center\">\r\n                    <i class=\"fas fa-cube\"></i>\r\n                    <span class=\"label-primary\">{{roomData.name}}</span>\r\n                </label>\r\n                <label class=\"label label-lg d-flex align-items-center\">\r\n                    <img src=\"assets/images/table.png\" alt=\"\">\r\n                    <span class=\"label-yellow\">{{tableData.name}}</span>\r\n                </label>\r\n            </div>\r\n            <div class=\"md-form\">\r\n                <input class=\"form-control\" type=\"number\" min=\"0\" [(ngModel)]=\"numberOfPerson\" placeholder=\"No. of Person\" />\r\n            </div>\r\n            <div class=\"text-center\">\r\n                <button class=\"btn btn-success waves-light\" (click)=\"stepper()\" mdbRippleRadius>Make an Order</button>\r\n            </div>\r\n        </div>\r\n        <div class=\"category-list\" [class.slideright]=\"stepperForm\" [class.slideleft]=\"!stepperForm\">\r\n            <div class=\"d-flex justify-content-between flex-wrap \">\r\n                <div class=\"d-flex align-items-center justify-content-between search-category w-100\">\r\n                    <ng2-completer [(ngModel)]=\"searchStr\" [datasource]=\"dataService\" [minSearchLength]=\"0\" (selected)=\"onSelected($event)\" placeholder=\"Search Category\"></ng2-completer>\r\n                </div>\r\n                <div class=\"category\" *ngFor=\"let category of categoryList\" [ngStyle]=\"{'background-color': category.color}\" (click)=\"showItems(category._id,category.name)\">\r\n                    <img *ngIf=\"!category.isIcon\" [src]=\"category.logo.small\" alt=\"\" />\r\n                    <img *ngIf=\"category.isIcon\" [src]=\"category.icon\" alt=\"\" />\r\n                    <p class=\"name\">{{category.name}}</p>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class=\"item-container\" [class.showitems]=\"showItem\">\r\n            <div class=\"item-header\">\r\n                <div class=\"header-title\">\r\n                    Add Items to Cart\r\n                </div>\r\n                <div class=\"back-btn\">\r\n                    <a (click)=\"hideItem()\">\r\n                        <i class=\"far fa-times-circle\"></i>\r\n                    </a>\r\n                </div>\r\n            </div>\r\n            <div class=\"search-category w-100\">\r\n                <ng2-completer [(ngModel)]=\"searchStr\" [datasource]=\"dataService1\" [minSearchLength]=\"0\" (selected)=\"onSelected($event)\"\r\n                    placeholder=\"Search Category\"></ng2-completer>\r\n                <input class=\"form-control\" type=\"text\" placeholder=\"Search Item\" />\r\n            </div>\r\n            <div class=\"item-list align-items-center\" *ngFor=\"let article of categoryItems\">\r\n                <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                    <!-- <img src=\"assets/images/lunch.jpg\" alt=\"\" /> -->\r\n                    <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                    <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                        alt=\"Category Logo\" />\r\n                    <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                    <p class=\"name\">{{article.name}}</p>\r\n                </div>\r\n                <div class=\"input-prepend-append\">\r\n                    <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue()\" value=\"Decrease Value\">\r\n                        - </button>\r\n                    <input type=\"number\" [(ngModel)]=\"quantity\" id=\"number\">\r\n                    <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue()\" value=\"Increase Value\">\r\n                        + </button>\r\n                </div>\r\n                <button type=\"submit\" class=\"btn btn-brown add-cart\">\r\n                    <i class=\"fas fa-cart-plus\"></i>\r\n                </button>\r\n            </div>\r\n\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<header class=\"page-content-header\" *ngIf=\"!stepperForm\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\">\r\n        Create an Order\r\n    </div>\r\n</header>\r\n<header class=\"page-content-header\" *ngIf=\"stepperForm\">\r\n    <div class=\"back-btn\">\r\n        <a (click)=\"stepperback()\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\">\r\n        Choose Category\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <div class=\"stepper-form\">\r\n        <div [class.slideleft]=\"stepperForm\" [class.slideright]=\"!stepperForm\">\r\n            <div class=\"d-flex justify-content-between label-container\">\r\n                <label class=\"label label-lg d-flex align-items-center\">\r\n                    <i class=\"fas fa-cube\"></i>\r\n                    <span class=\"label-primary\">{{roomData.name}}</span>\r\n                </label>\r\n                <label class=\"label label-lg d-flex align-items-center\">\r\n                    <img src=\"assets/images/table.png\" alt=\"\">\r\n                    <span class=\"label-yellow\">{{tableData.name}}</span>\r\n                </label>\r\n            </div>\r\n            <div class=\"md-form\">\r\n                <input class=\"form-control\" type=\"number\" min=\"0\" [(ngModel)]=\"numberOfPerson\" placeholder=\"No. of Person\" />\r\n            </div>\r\n            <div class=\"text-center\">\r\n                <button class=\"btn btn-success waves-light\" (click)=\"stepper()\" mdbRippleRadius>Make an Order</button>\r\n            </div>\r\n        </div>\r\n        <div class=\"category-list\" [class.slideright]=\"stepperForm\" [class.slideleft]=\"!stepperForm\">\r\n            <div class=\"d-flex justify-content-between flex-wrap \">\r\n                <div class=\"d-flex align-items-center justify-content-between search-category w-100\">\r\n                    <ng2-completer [(ngModel)]=\"searchStr\" [datasource]=\"dataService\" [minSearchLength]=\"0\" (selected)=\"onSelected($event)\" placeholder=\"Search Category\"></ng2-completer>\r\n                </div>\r\n                <div class=\"category\" *ngFor=\"let category of categoryList\" [ngStyle]=\"{'background-color': category.color}\" (click)=\"showItems(category._id,category.name)\">\r\n                    <img *ngIf=\"!category.isIcon\" [src]=\"category.logo.small\" alt=\"\" />\r\n                    <img *ngIf=\"category.isIcon\" [src]=\"category.icon\" alt=\"\" />\r\n                    <p class=\"name\">{{category.name}}</p>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class=\"item-container\" [class.showitems]=\"showItem\">\r\n            <div class=\"item-header\">\r\n                <div class=\"header-title\">\r\n                    Add Items to Cart\r\n                </div>\r\n                <div class=\"back-btn\">\r\n                    <a (click)=\"hideItem()\">\r\n                        <i class=\"far fa-times-circle\"></i>\r\n                    </a>\r\n                </div>\r\n            </div>\r\n            <div class=\"search-category w-100\">\r\n                <ng2-completer [(ngModel)]=\"searchStr\" [datasource]=\"dataService1\" [minSearchLength]=\"0\" (selected)=\"onSelected($event)\"\r\n                    placeholder=\"Search Category\"></ng2-completer>\r\n                <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Item\" />\r\n            </div>\r\n            <div class=\"item-list align-items-center\" *ngFor=\"let article of categoryItems | filter : searchText\">\r\n                <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                    <!-- <img src=\"assets/images/lunch.jpg\" alt=\"\" /> -->\r\n                    <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                    <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                        alt=\"Category Logo\" />\r\n                    <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                    <p class=\"name\">{{article.name}}</p>\r\n                </div>\r\n                <div class=\"input-prepend-append\">\r\n                    <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue()\" value=\"Decrease Value\">\r\n                        - </button>\r\n                    <input type=\"number\" [(ngModel)]=\"quantity\" id=\"number\">\r\n                    <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue()\" value=\"Increase Value\">\r\n                        + </button>\r\n                </div>\r\n                <button type=\"submit\" class=\"btn btn-brown add-cart\">\r\n                    <i class=\"fas fa-cart-plus\"></i>\r\n                </button>\r\n            </div>\r\n\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -73,7 +73,6 @@ var CreateOrderComponent = /** @class */ (function () {
         this.tableData = JSON.parse(localStorage.getItem('tabledata'));
         this.createOrderService.getCategory()
             .then(function (data) {
-            console.log('data category', data);
             _this.categoryList = data.data;
             if (_this.categoryList.length) {
                 for (var i = 0; i < _this.categoryList.length; i++) {
@@ -82,7 +81,6 @@ var CreateOrderComponent = /** @class */ (function () {
                         name: _this.categoryList[i].name,
                     });
                 }
-                console.log('this.categorySearchData', _this.categorySearchData);
                 _this.dataService = _this.completerService.local(_this.categorySearchData, 'name', 'name');
             }
         })
@@ -102,34 +100,23 @@ var CreateOrderComponent = /** @class */ (function () {
             _id: id,
             name: name
         };
-        console.log('this.selectedCategory before click', this.selectedCategory);
         this.selectedCategory = obj;
-        console.log('this.selectedCategory on click', this.selectedCategory);
         if (this.selectedCategory) {
             this.searchStr = this.selectedCategory["name"];
             this.dataService1 = this.completerService.local(this.categorySearchData, 'name', 'name');
             this.categoryItems = [];
             this.createOrderService.getCategoryItem().then(function (data) {
-                console.log('data onSelected', data);
                 for (var i = 0; i < data.data.length; i++) {
                     if (data.data[i].category._id == _this.selectedCategory["_id"]) {
                         _this.categoryItems.push(data.data[i].items[0]);
                     }
                 }
-                console.log('this.categoryItems', _this.categoryItems);
             })
                 .catch(function (error) {
                 console.log('error', error);
             });
             this.showItem = true;
         }
-        // this.createOrderService.getCategoryItem().then(data => {
-        //   console.log('data onSelected', data);
-        // })
-        // .catch(error => {
-        //   console.log('error', error);
-        // });
-        // this.showItem = true;
     };
     CreateOrderComponent.prototype.hideItem = function () {
         this.showItem = false;
@@ -149,23 +136,16 @@ var CreateOrderComponent = /** @class */ (function () {
     };
     CreateOrderComponent.prototype.onSelected = function (item) {
         var _this = this;
-        console.log('item', item);
-        // if (item) {
-        //   this.selectedCategory = item.originalObject;
-        // }
         this.selectedCategory = item ? item.originalObject : {};
-        console.log('this.selectedCategory', this.selectedCategory);
         if (this.selectedCategory) {
             this.dataService1 = this.completerService.local(this.categorySearchData, 'name', 'name');
             this.categoryItems = [];
             this.createOrderService.getCategoryItem().then(function (data) {
-                console.log('data onSelected', data);
                 for (var i = 0; i < data.data.length; i++) {
                     if (data.data[i].category._id == _this.selectedCategory["_id"]) {
                         _this.categoryItems.push(data.data[i].items[0]);
                     }
                 }
-                console.log('this.categoryItems', _this.categoryItems);
             })
                 .catch(function (error) {
                 console.log('error', error);
@@ -201,12 +181,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__create_order_component__ = __webpack_require__("../../../../../src/app/hirundo/waiter/create-order/create-order.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__create_order_routes__ = __webpack_require__("../../../../../src/app/hirundo/waiter/create-order/create-order.routes.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ng2_completer__ = __webpack_require__("../../../../ng2-completer/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__shared_pipes_filter_pipe__ = __webpack_require__("../../../../../src/app/shared/pipes/filter.pipe.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -225,7 +207,7 @@ var CreateOrderModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* ReactiveFormsModule */],
                 __WEBPACK_IMPORTED_MODULE_5_ng2_completer__["b" /* Ng2CompleterModule */]
             ],
-            declarations: [__WEBPACK_IMPORTED_MODULE_3__create_order_component__["a" /* CreateOrderComponent */]]
+            declarations: [__WEBPACK_IMPORTED_MODULE_3__create_order_component__["a" /* CreateOrderComponent */], __WEBPACK_IMPORTED_MODULE_6__shared_pipes_filter_pipe__["a" /* FilterPipe */]]
         })
     ], CreateOrderModule);
     return CreateOrderModule;
@@ -249,6 +231,45 @@ var routes = [
 ];
 var CreateOrderRouting = __WEBPACK_IMPORTED_MODULE_0__angular_router__["b" /* RouterModule */].forChild(routes);
 //# sourceMappingURL=create-order.routes.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/shared/pipes/filter.pipe.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FilterPipe; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+var FilterPipe = /** @class */ (function () {
+    function FilterPipe() {
+    }
+    FilterPipe.prototype.transform = function (items, searchText) {
+        if (!items)
+            return [];
+        if (!searchText)
+            return items;
+        searchText = searchText.toLowerCase();
+        return items.filter(function (it) {
+            return it.name.toLowerCase().includes(searchText);
+        });
+    };
+    FilterPipe = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Pipe */])({
+            name: 'filter',
+            pure: false
+        })
+    ], FilterPipe);
+    return FilterPipe;
+}());
+
+//# sourceMappingURL=filter.pipe.js.map
 
 /***/ }),
 
