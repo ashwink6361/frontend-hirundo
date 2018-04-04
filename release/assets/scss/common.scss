@@ -11,7 +11,7 @@ body {
     background-color: red;
 }
 
-.btn-default{
+.btn-default {
     background-color: $primary;
 }
 
@@ -474,7 +474,7 @@ header {
 
 // Waiter Dashboard
 .room-container {
-    .room-name{
+    .room-name {
         font-size: 20px;
         font-weight: bold;
     }
@@ -499,36 +499,49 @@ header {
         }
     }
 }
-.search-category{
-    .form-control{
-        max-width: 80%;
+
+.search-category {
+    ng2-completer {
+        width: 100%;
+        .completer-input {
+            padding: 0;
+            padding-bottom: 0.6rem;
+            padding-top: 0.5rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            background-color: transparent;
+            background-image: none;
+            border-radius: 0;
+            margin-top: 0.2rem;
+            margin-bottom: 1rem;
+        }
     }
-    .btn-default{
+    .btn-default {
         padding: 10px 15px;
     }
 }
+
 .stepper-form {
     overflow: hidden; // Create Order
-    .label-container{
-        img{
+    .label-container {
+        img {
             max-width: 30px;
         }
-        i{
+        i {
             font-size: 22px;
             color: $primary;
         }
-        i, img{
+        i,
+        img {
             margin-right: 5px;
         }
-        .label-yellow{
+        .label-yellow {
             background-color: $primary;
             color: #fff;
             padding: 2px 7px;
             border-radius: 2px;
         }
     }
-
-    
     .slideright {
         transform: none;
         visibility: visible;
@@ -584,7 +597,13 @@ header {
         padding: 20px;
         transition: 0.3s;
         &.showitems {
-            bottom: calc(0% - 69px);
+            bottom: 0;
+        }
+        .item-header{
+            display: flex;
+            justify-content: space-between;
+            padding-bottom: 13px;
+            border-bottom: 1px solid #dedede;
         }
         .item-list {
             display: flex;
@@ -616,7 +635,7 @@ header {
                     padding: 5px 10px;
                 }
             }
-            .add-cart{
+            .add-cart {
                 padding: 10px 15px;
             }
         }
@@ -669,4 +688,3 @@ header {
         }
     }
 }
-

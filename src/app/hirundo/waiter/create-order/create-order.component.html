@@ -1,63 +1,92 @@
-<div class="stepper-form">
-    <div [class.slideleft]="stepperForm" [class.slideright]="!stepperForm">
-        <div class="d-flex justify-content-between label-container">
-            <label class="label label-lg d-flex align-items-center">
-                <i class="fas fa-cube"></i>
-                <span class="label-primary">{{roomData.name}}</span>
-            </label>
-            <label class="label label-lg d-flex align-items-center">
-                <img src="assets/images/table.png" alt="">
-                <span class="label-yellow" >{{tableData.name}}</span>
-            </label>
-        </div>
-        <div class="md-form">
-            <input class="form-control" type="number" min="0" [(ngModel)]="numberOfPerson" placeholder="No. of Person" />
-        </div>
-        <div class="text-center">
-            <button class="btn btn-success waves-light" (click)="stepper()" mdbRippleRadius>Make an Order</button>
-        </div>
+<header class="page-content-header" *ngIf="!stepperForm">
+    <div class="back-btn">
+        <a routerLink="/waiter">
+            <i class="fas fa-angle-left"></i>
+        </a>
     </div>
-    <div class="category-list" [class.slideright]="stepperForm" [class.slideleft]="!stepperForm">
-        <div class="d-flex justify-content-between flex-wrap ">
-            <div class="d-flex align-items-center justify-content-between search-category w-100">
-                <ng2-completer [(ngModel)]="searchStr" class="form-control" [datasource]="dataService" [minSearchLength]="0" (selected)="onSelected($event)" placeholder="Search Category"></ng2-completer>
-                <button class="btn btn-default waves-light" (click)="stepperback()" mdbRippleRadius>
-                    <i class="fas fa-angle-left"></i>
+    <div class="header-title">
+        Create an Order
+    </div>
+</header>
+<header class="page-content-header" *ngIf="stepperForm">
+    <div class="back-btn">
+        <a (click)="stepperback()">
+            <i class="fas fa-angle-left"></i>
+        </a>
+    </div>
+    <div class="header-title">
+        Choose Category
+    </div>
+</header>
+<div class="page-content">
+    <div class="stepper-form">
+        <div [class.slideleft]="stepperForm" [class.slideright]="!stepperForm">
+            <div class="d-flex justify-content-between label-container">
+                <label class="label label-lg d-flex align-items-center">
+                    <i class="fas fa-cube"></i>
+                    <span class="label-primary">{{roomData.name}}</span>
+                </label>
+                <label class="label label-lg d-flex align-items-center">
+                    <img src="assets/images/table.png" alt="">
+                    <span class="label-yellow">{{tableData.name}}</span>
+                </label>
+            </div>
+            <div class="md-form">
+                <input class="form-control" type="number" min="0" [(ngModel)]="numberOfPerson" placeholder="No. of Person" />
+            </div>
+            <div class="text-center">
+                <button class="btn btn-success waves-light" (click)="stepper()" mdbRippleRadius>Make an Order</button>
+            </div>
+        </div>
+        <div class="category-list" [class.slideright]="stepperForm" [class.slideleft]="!stepperForm">
+            <div class="d-flex justify-content-between flex-wrap ">
+                <div class="d-flex align-items-center justify-content-between search-category w-100">
+                    <ng2-completer [(ngModel)]="searchStr" [datasource]="dataService" [minSearchLength]="0" (selected)="onSelected($event)" placeholder="Search Category"></ng2-completer>
+                </div>
+                <div class="category" *ngFor="let category of categoryList" [ngStyle]="{'background-color': category.color}" (click)="showItems(category._id,category.name)">
+                    <img *ngIf="!category.isIcon" [src]="category.logo.small" alt="" />
+                    <img *ngIf="category.isIcon" [src]="category.icon" alt="" />
+                    <p class="name">{{category.name}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="item-container" [class.showitems]="showItem">
+            <div class="item-header">
+                <div class="header-title">
+                    Add Items to Cart
+                </div>
+                <div class="back-btn">
+                    <a (click)="hideItem()">
+                        <i class="far fa-times-circle"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="search-category w-100">
+                <ng2-completer [(ngModel)]="searchStr" [datasource]="dataService1" [minSearchLength]="0" (selected)="onSelected($event)"
+                    placeholder="Search Category"></ng2-completer>
+                <input class="form-control" type="text" placeholder="Search Item" />
+            </div>
+            <div class="item-list align-items-center" *ngFor="let article of categoryItems">
+                <div class="item" [ngStyle]="{'background-color': article.category.color}">
+                    <!-- <img src="assets/images/lunch.jpg" alt="" /> -->
+                    <img *ngIf="!article.logo.small && article.category.isIcon" class="icon-img" [src]="article.category.icon" alt="" />
+                    <img *ngIf="!article.logo.small && !article.category.isIcon && article.category.logo.small" [src]="article.category.logo.small"
+                        alt="Category Logo" />
+                    <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
+                    <p class="name">{{article.name}}</p>
+                </div>
+                <div class="input-prepend-append">
+                    <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue()" value="Decrease Value">
+                        - </button>
+                    <input type="number" [(ngModel)]="quantity" id="number">
+                    <button type="button" class="btn btn-append btn-success" id="increase" (click)="increaseValue()" value="Increase Value">
+                        + </button>
+                </div>
+                <button type="submit" class="btn btn-brown add-cart">
+                    <i class="fas fa-cart-plus"></i>
                 </button>
             </div>
-            <div class="category" *ngFor="let category of categoryList" [ngStyle]="{'background-color': category.color}" (click)="showItems(category._id,category.name)">
-                <img *ngIf="!category.isIcon" [src]="category.logo.small" alt="" />
-                <img *ngIf="category.isIcon" [src]="category.icon" alt="" />
-                <p class="name">{{category.name}}</p>
-            </div>
+
         </div>
-    </div>
-    <div class="item-container" [class.showitems]="showItem">
-        <div class="d-flex align-items-center justify-content-between search-category w-100">
-            <input class="form-control" type="text" placeholder="Search Item" />
-            <ng2-completer [(ngModel)]="searchStr" class="form-control" [datasource]="dataService1" [minSearchLength]="0" (selected)="onSelected($event)" placeholder="Search Category"></ng2-completer>            
-            <button class="btn btn-default waves-light" (click)="hideItem()" mdbRippleRadius>
-                    <i class="far fa-times-circle"></i>
-            </button>
-        </div>        
-        <div class="item-list align-items-center" *ngFor="let article of categoryItems">
-            <div class="item" [ngStyle]="{'background-color': article.category.color}">
-                <!-- <img src="assets/images/lunch.jpg" alt="" /> -->
-                <img *ngIf="!article.logo.small && article.category.isIcon" class="icon-img" [src]="article.category.icon" alt="" />
-                <img *ngIf="!article.logo.small && !article.category.isIcon && article.category.logo.small" [src]="article.category.logo.small" alt="Category Logo" />
-                <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
-                <p class="name">{{article.name}}</p>
-            </div>
-            <div class="input-prepend-append">
-                <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue()" value="Decrease Value"> - </button>
-                <input type="number" [(ngModel)]="quantity" id="number">
-                <button type="button" class="btn btn-append btn-success" id="increase" (click)="increaseValue()" value="Increase Value"> + </button>
-            </div>
-            <button type="submit" class="btn btn-brown add-cart"><i class="fas fa-cart-plus"></i></button>
-        </div>
-        <!-- <div class="text-center">
-        <button class="btn btn-default waves-light" (click)="stepper(2)" mdbRippleRadius>Back</button>
-        <button class="btn btn-default waves-light" (click)="makeOrder()" mdbRippleRadius>Submit</button>
-    </div> -->
     </div>
 </div>

@@ -3,7 +3,7 @@ webpackJsonp(["dashboard.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/dashboard/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section class=\"room-container\" *ngFor=\"let room of roomData\">\n    <div class=\"room-name\">{{room.name}}</div>\n    <div class=\"d-flex flex-wrap justify-content-between\">\n        <div class=\"room\" (click)=\"createOrder(table, room)\" *ngFor=\"let table of room.tables\">\n            <div class=\"table\">\n                <span>{{table.name}}</span>\n            </div>\n        </div>\n    </div>\n</section>\n\n"
+module.exports = "<section class=\"room-container\" *ngFor=\"let room of roomData\">\r\n    <div class=\"room-name\">{{room.name}}</div>\r\n    <div class=\"d-flex flex-wrap justify-content-between\">\r\n        <div class=\"room\" (click)=\"createOrder(table, room)\" *ngFor=\"let table of room.tables\">\r\n            <div class=\"table\">\r\n                <span>{{table.name}}</span>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</section>\r\n\r\n"
 
 /***/ }),
 

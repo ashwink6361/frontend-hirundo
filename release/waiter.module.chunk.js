@@ -119,6 +119,7 @@ var WaiterModule = /** @class */ (function () {
 
 
 var routes = [
+    { path: 'create-order/:id', loadChildren: './create-order/create-order.module#CreateOrderModule' },
     {
         path: '',
         component: __WEBPACK_IMPORTED_MODULE_1__waiter_component__["a" /* WaiterComponent */],
@@ -126,7 +127,6 @@ var routes = [
             { path: '', loadChildren: './dashboard/dashboard.module#DashboardModule' },
             { path: 'change-password', loadChildren: './change-password/change-password.module#ChangePasswordModule' },
             { path: 'profile', loadChildren: './profile/profile.module#ProfileModule' },
-            { path: 'create-order/:id', loadChildren: './create-order/create-order.module#CreateOrderModule' },
             { path: 'cart', loadChildren: './cart/cart.module#CartModule' },
         ],
         canActivate: []
