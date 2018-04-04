@@ -25,7 +25,9 @@ export class CreateOrderComponent implements OnInit {
   public categorySearchData: any[] = [];
   protected searchStr: string;
   protected dataService: CompleterData;
+  protected dataService1: CompleterData;  
   protected selectedCategory = {};
+  private categoryItems = [];  
   constructor(private createOrderService: CreateOrderService, private completerService: CompleterService, private globalService: GlobalService) {}
 
   ngOnInit() {
@@ -57,8 +59,39 @@ export class CreateOrderComponent implements OnInit {
   stepperback() {
     this.stepperForm = false;
   }
-  showItems() {
-    this.showItem = true;
+  showItems(id, name) {
+    let obj = {
+      _id: id,
+      name: name
+    }
+    console.log('this.selectedCategory before click', this.selectedCategory);    
+    this.selectedCategory = obj;
+    console.log('this.selectedCategory on click', this.selectedCategory);
+    if (this.selectedCategory) {
+      this.searchStr = this.selectedCategory["name"];
+      this.dataService1 = this.completerService.local(this.categorySearchData, 'name', 'name');
+      this.categoryItems = [];
+      this.createOrderService.getCategoryItem().then(data => {
+        console.log('data onSelected', data);
+        for (let i = 0; i < data.data.length; i++) {
+          if (data.data[i].category._id == this.selectedCategory["_id"]) {
+              this.categoryItems.push(data.data[i].items[0]);
+          }
+        }
+        console.log('this.categoryItems', this.categoryItems);
+      })
+        .catch(error => {
+          console.log('error', error);
+        });
+      this.showItem = true;
+    }
+    // this.createOrderService.getCategoryItem().then(data => {
+    //   console.log('data onSelected', data);
+    // })
+    // .catch(error => {
+    //   console.log('error', error);
+    // });
+    // this.showItem = true;
   }
   hideItem() {
     this.showItem = false;
@@ -79,8 +112,29 @@ export class CreateOrderComponent implements OnInit {
     this.quantity = value;
   }
 
-  protected onSelected(item) {
-    console.log('item',item);
-    this.selectedCategory = item? item: {};
+  onSelected(item) {
+    console.log('item', item);
+    // if (item) {
+    //   this.selectedCategory = item.originalObject;
+    // }
+    this.selectedCategory = item ? item.originalObject : {};
+    console.log('this.selectedCategory', this.selectedCategory);
+    if (this.selectedCategory) {
+      this.dataService1 = this.completerService.local(this.categorySearchData, 'name', 'name');
+      this.categoryItems = [];
+      this.createOrderService.getCategoryItem().then(data => {
+        console.log('data onSelected', data);
+        for (let i = 0; i < data.data.length; i++) {
+          if (data.data[i].category._id == this.selectedCategory["_id"]) {
+              this.categoryItems.push(data.data[i].items[0]);
+          }
+        }
+        console.log('this.categoryItems', this.categoryItems);
+      })
+        .catch(error => {
+          console.log('error', error);
+        });
+      this.showItem = true;
+    }
   }
 }

@@ -25,7 +25,7 @@
                     <i class="fas fa-angle-left"></i>
                 </button>
             </div>
-            <div class="category" *ngFor="let category of categoryList" [ngStyle]="{'background-color': category.color}" (click)="showItems()">
+            <div class="category" *ngFor="let category of categoryList" [ngStyle]="{'background-color': category.color}" (click)="showItems(category._id,category.name)">
                 <img *ngIf="!category.isIcon" [src]="category.logo.small" alt="" />
                 <img *ngIf="category.isIcon" [src]="category.icon" alt="" />
                 <p class="name">{{category.name}}</p>
@@ -34,15 +34,19 @@
     </div>
     <div class="item-container" [class.showitems]="showItem">
         <div class="d-flex align-items-center justify-content-between search-category w-100">
-            <input class="form-control" type="text" placeholder="Search Category" />
+            <input class="form-control" type="text" placeholder="Search Item" />
+            <ng2-completer [(ngModel)]="searchStr" class="form-control" [datasource]="dataService1" [minSearchLength]="0" (selected)="onSelected($event)" placeholder="Search Category"></ng2-completer>            
             <button class="btn btn-default waves-light" (click)="hideItem()" mdbRippleRadius>
                     <i class="far fa-times-circle"></i>
             </button>
         </div>        
-        <div class="item-list align-items-center">
-            <div class="item">
-                <img src="assets/images/lunch.jpg" alt="" />
-                <p class="name">Item Name</p>
+        <div class="item-list align-items-center" *ngFor="let article of categoryItems">
+            <div class="item" [ngStyle]="{'background-color': article.category.color}">
+                <!-- <img src="assets/images/lunch.jpg" alt="" /> -->
+                <img *ngIf="!article.logo.small && article.category.isIcon" class="icon-img" [src]="article.category.icon" alt="" />
+                <img *ngIf="!article.logo.small && !article.category.isIcon && article.category.logo.small" [src]="article.category.logo.small" alt="Category Logo" />
+                <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
+                <p class="name">{{article.name}}</p>
             </div>
             <div class="input-prepend-append">
                 <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue()" value="Decrease Value"> - </button>

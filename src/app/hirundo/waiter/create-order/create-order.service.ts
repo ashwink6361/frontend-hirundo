@@ -13,6 +13,11 @@ export class CreateOrderService {
       .then(this.globalService.extractData)
       .catch(this.globalService.handleErrorPromise);
   }
-
+  getCategoryItem(): Promise<any> {
+    let url = '/api/categories/items';
+    return this.http.get(url).toPromise()
+      .then(this.globalService.extractData)
+      .catch(this.globalService.handleErrorPromise);
+  }
   
 }
