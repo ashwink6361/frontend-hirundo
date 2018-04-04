@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateOrderComponent } from './create-order.component';
 import { CreateOrderRouting } from './create-order.routes';
 import { Ng2CompleterModule } from 'ng2-completer';
+import { FilterPipe } from '../../../shared/pipes/filter.pipe';
 @NgModule({
   imports: [
     CommonModule,
@@ -12,6 +13,6 @@ import { Ng2CompleterModule } from 'ng2-completer';
     ReactiveFormsModule,
     Ng2CompleterModule
   ],
-  declarations: [CreateOrderComponent]
+  declarations: [CreateOrderComponent, FilterPipe]
 })
 export class CreateOrderModule { }
