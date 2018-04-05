@@ -13,6 +13,7 @@
         <div class="md-form">
             <input class="form-control" type="number" min="0" [(ngModel)]="numberOfPerson" placeholder="No. of Person" />
         </div>
+        <div class="alert-danger" *ngIf="numberError">{{numberErrorMsg}}</div>              
         <div class="text-center">
             <button class="btn btn-success waves-light" (click)="stepper()" mdbRippleRadius>Make an Order</button>
         </div>
@@ -39,8 +40,9 @@
             <button class="btn btn-default waves-light" (click)="hideItem()" mdbRippleRadius>
                     <i class="far fa-times-circle"></i>
             </button>
-        </div>        
-        <div class="item-list align-items-center" *ngFor="let article of categoryItems | filter : searchText">
+        </div>  
+        <div class="alert-danger" *ngIf="error">{{errorMsg}}</div>      
+        <div class="item-list align-items-center" *ngFor="let article of categoryItems | filter : searchText ; let i = index">
             <div class="item" [ngStyle]="{'background-color': article.category.color}">
                 <img *ngIf="!article.logo.small && article.category.isIcon" class="icon-img" [src]="article.category.icon" alt="" />
                 <img *ngIf="!article.logo.small && !article.category.isIcon && article.category.logo.small" [src]="article.category.logo.small" alt="Category Logo" />
@@ -48,11 +50,11 @@
                 <p class="name">{{article.name}}</p>
             </div>
             <div class="input-prepend-append">
-                <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue()" value="Decrease Value"> - </button>
-                <input type="number" [(ngModel)]="quantity" id="number">
-                <button type="button" class="btn btn-append btn-success" id="increase" (click)="increaseValue()" value="Increase Value"> + </button>
+                <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue(i)" value="Decrease Value"> - </button>
+                <input type="number" value="0" [(ngModel)]="quantity[i]" id="number">
+                <button type="button" class="btn btn-append btn-success" id="increase" (click)="increaseValue(i)" value="Increase Value"> + </button>
             </div>
-            <button type="submit" class="btn btn-brown add-cart"><i class="fas fa-cart-plus"></i></button>
+            <button type="submit" class="btn btn-brown add-cart" (click)="addToCart(article,quantity[i],i)"><i class="fas fa-cart-plus"></i></button>
         </div>
         <!-- <div class="text-center">
         <button class="btn btn-default waves-light" (click)="stepper(2)" mdbRippleRadius>Back</button>

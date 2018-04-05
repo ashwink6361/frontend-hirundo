@@ -21,13 +21,18 @@ export class CreateOrderComponent implements OnInit {
   public numberOfPerson: number;
   public tableId: number;
   public roomId: number;
-  public quantity: number = 0;
+  public quantity = [];
   public categorySearchData: any[] = [];
   protected searchStr: string;
   protected dataService: CompleterData;
   protected dataService1: CompleterData;
   protected selectedCategory = {};
   private categoryItems = [];
+  private addToCartItems: any[] = [];
+  private error: boolean = false;
+  private errorMsg = '';
+  private numberError: boolean = false;
+  private numberErrorMsg = '';
   constructor(private createOrderService: CreateOrderService, private completerService: CompleterService, private globalService: GlobalService) { }
 
   ngOnInit() {
@@ -52,7 +57,17 @@ export class CreateOrderComponent implements OnInit {
   }
 
   stepper() {
-    this.stepperForm = true;
+    if(this.numberOfPerson){
+      this.stepperForm = true;
+    }
+    else{
+      this.numberError = true;
+      this.numberErrorMsg = 'Please choose number of person';
+      setTimeout(() => {
+        this.numberError = false;
+        this.numberErrorMsg = '';
+      }, 4000);
+    }
   }
   stepperback() {
     this.stepperForm = false;
@@ -84,19 +99,19 @@ export class CreateOrderComponent implements OnInit {
     this.showItem = false;
   }
 
-  increaseValue() {
-    let value = this.quantity;
+  increaseValue(i) {
+    let value = this.quantity[i];
     value = isNaN(value) ? 0 : value;
     value++;
-    this.quantity = value;
+    this.quantity[i] = value;
   }
 
-  decreaseValue() {
-    let value = this.quantity;
+  decreaseValue(i) {
+    let value = this.quantity[i];
     value = isNaN(value) ? 0 : value;
     value < 1 ? value = 1 : '';
     value--;
-    this.quantity = value;
+    this.quantity[i] = value;
   }
 
   onSelected(item) {
@@ -115,6 +130,34 @@ export class CreateOrderComponent implements OnInit {
           console.log('error', error);
         });
       this.showItem = true;
+    }
+  }
+
+  addToCart(article,quantity,index){
+    console.log('article',article);
+    console.log('quantity',quantity);
+    if(quantity>0){
+      if (this.addToCartItems.length) {
+        for (let i = 0; i < this.addToCartItems.length; i++) {
+          if (this.addToCartItems[i]._id == article._id) {
+            this.addToCartItems.splice(this.addToCartItems[i], 1);
+            console.log('this.addToCartItems 1',this.addToCartItems);
+            break;            
+          }
+        }
+      }
+      article.quantity = quantity;
+      article.priceOfQuantity = article.quantity * article.price;
+      this.addToCartItems.push(article);
+      console.log('this.addToCartItems',this.addToCartItems);
+    }
+    else {
+      this.error = true;
+      this.errorMsg = 'Please choose quantity';
+      setTimeout(() => {
+        this.error = false;
+        this.errorMsg = '';
+      }, 4000);
     }
   }
 }

@@ -3,7 +3,7 @@ webpackJsonp(["create-order.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/create-order/create-order.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"stepper-form\">\n    <div [class.slideleft]=\"stepperForm\" [class.slideright]=\"!stepperForm\">\n        <div class=\"d-flex justify-content-between label-container\">\n            <label class=\"label label-lg d-flex align-items-center\">\n                <i class=\"fas fa-cube\"></i>\n                <span class=\"label-primary\">{{roomData.name}}</span>\n            </label>\n            <label class=\"label label-lg d-flex align-items-center\">\n                <img src=\"assets/images/table.png\" alt=\"\">\n                <span class=\"label-yellow\" >{{tableData.name}}</span>\n            </label>\n        </div>\n        <div class=\"md-form\">\n            <input class=\"form-control\" type=\"number\" min=\"0\" [(ngModel)]=\"numberOfPerson\" placeholder=\"No. of Person\" />\n        </div>\n        <div class=\"text-center\">\n            <button class=\"btn btn-success waves-light\" (click)=\"stepper()\" mdbRippleRadius>Make an Order</button>\n        </div>\n    </div>\n    <div class=\"category-list\" [class.slideright]=\"stepperForm\" [class.slideleft]=\"!stepperForm\">\n        <div class=\"d-flex justify-content-between flex-wrap \">\n            <div class=\"d-flex align-items-center justify-content-between search-category w-100\">\n                <ng2-completer [(ngModel)]=\"searchStr\" class=\"form-control\" [datasource]=\"dataService\" [minSearchLength]=\"0\" (selected)=\"onSelected($event)\" placeholder=\"Search Category\"></ng2-completer>\n                <button class=\"btn btn-default waves-light\" (click)=\"stepperback()\" mdbRippleRadius>\n                    <i class=\"fas fa-angle-left\"></i>\n                </button>\n            </div>\n            <div class=\"category\" *ngFor=\"let category of categoryList\" [ngStyle]=\"{'background-color': category.color}\" (click)=\"showItems(category._id,category.name)\">\n                <img *ngIf=\"!category.isIcon\" [src]=\"category.logo.small\" alt=\"\" />\n                <img *ngIf=\"category.isIcon\" [src]=\"category.icon\" alt=\"\" />\n                <p class=\"name\">{{category.name}}</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"item-container\" [class.showitems]=\"showItem\">\n        <div class=\"d-flex align-items-center justify-content-between search-category w-100\">\n            <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Item\" />\n            <ng2-completer [(ngModel)]=\"searchStr\" class=\"form-control\" [datasource]=\"dataService1\" [minSearchLength]=\"0\" (selected)=\"onSelected($event)\" placeholder=\"Search Category\"></ng2-completer>            \n            <button class=\"btn btn-default waves-light\" (click)=\"hideItem()\" mdbRippleRadius>\n                    <i class=\"far fa-times-circle\"></i>\n            </button>\n        </div>        \n        <div class=\"item-list align-items-center\" *ngFor=\"let article of categoryItems | filter : searchText\">\n            <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\n                <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\n                <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\" alt=\"Category Logo\" />\n                <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\n                <p class=\"name\">{{article.name}}</p>\n            </div>\n            <div class=\"input-prepend-append\">\n                <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue()\" value=\"Decrease Value\"> - </button>\n                <input type=\"number\" [(ngModel)]=\"quantity\" id=\"number\">\n                <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue()\" value=\"Increase Value\"> + </button>\n            </div>\n            <button type=\"submit\" class=\"btn btn-brown add-cart\"><i class=\"fas fa-cart-plus\"></i></button>\n        </div>\n        <!-- <div class=\"text-center\">\n        <button class=\"btn btn-default waves-light\" (click)=\"stepper(2)\" mdbRippleRadius>Back</button>\n        <button class=\"btn btn-default waves-light\" (click)=\"makeOrder()\" mdbRippleRadius>Submit</button>\n    </div> -->\n    </div>\n</div>\n"
+module.exports = "<div class=\"stepper-form\">\n    <div [class.slideleft]=\"stepperForm\" [class.slideright]=\"!stepperForm\">\n        <div class=\"d-flex justify-content-between label-container\">\n            <label class=\"label label-lg d-flex align-items-center\">\n                <i class=\"fas fa-cube\"></i>\n                <span class=\"label-primary\">{{roomData.name}}</span>\n            </label>\n            <label class=\"label label-lg d-flex align-items-center\">\n                <img src=\"assets/images/table.png\" alt=\"\">\n                <span class=\"label-yellow\" >{{tableData.name}}</span>\n            </label>\n        </div>\n        <div class=\"md-form\">\n            <input class=\"form-control\" type=\"number\" min=\"0\" [(ngModel)]=\"numberOfPerson\" placeholder=\"No. of Person\" />\n        </div>\n        <div class=\"alert-danger\" *ngIf=\"numberError\">{{numberErrorMsg}}</div>              \n        <div class=\"text-center\">\n            <button class=\"btn btn-success waves-light\" (click)=\"stepper()\" mdbRippleRadius>Make an Order</button>\n        </div>\n    </div>\n    <div class=\"category-list\" [class.slideright]=\"stepperForm\" [class.slideleft]=\"!stepperForm\">\n        <div class=\"d-flex justify-content-between flex-wrap \">\n            <div class=\"d-flex align-items-center justify-content-between search-category w-100\">\n                <ng2-completer [(ngModel)]=\"searchStr\" class=\"form-control\" [datasource]=\"dataService\" [minSearchLength]=\"0\" (selected)=\"onSelected($event)\" placeholder=\"Search Category\"></ng2-completer>\n                <button class=\"btn btn-default waves-light\" (click)=\"stepperback()\" mdbRippleRadius>\n                    <i class=\"fas fa-angle-left\"></i>\n                </button>\n            </div>\n            <div class=\"category\" *ngFor=\"let category of categoryList\" [ngStyle]=\"{'background-color': category.color}\" (click)=\"showItems(category._id,category.name)\">\n                <img *ngIf=\"!category.isIcon\" [src]=\"category.logo.small\" alt=\"\" />\n                <img *ngIf=\"category.isIcon\" [src]=\"category.icon\" alt=\"\" />\n                <p class=\"name\">{{category.name}}</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"item-container\" [class.showitems]=\"showItem\">\n        <div class=\"d-flex align-items-center justify-content-between search-category w-100\">\n            <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Item\" />\n            <ng2-completer [(ngModel)]=\"searchStr\" class=\"form-control\" [datasource]=\"dataService1\" [minSearchLength]=\"0\" (selected)=\"onSelected($event)\" placeholder=\"Search Category\"></ng2-completer>            \n            <button class=\"btn btn-default waves-light\" (click)=\"hideItem()\" mdbRippleRadius>\n                    <i class=\"far fa-times-circle\"></i>\n            </button>\n        </div>  \n        <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>      \n        <div class=\"item-list align-items-center\" *ngFor=\"let article of categoryItems | filter : searchText ; let i = index\">\n            <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\n                <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\n                <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\" alt=\"Category Logo\" />\n                <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\n                <p class=\"name\">{{article.name}}</p>\n            </div>\n            <div class=\"input-prepend-append\">\n                <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue(i)\" value=\"Decrease Value\"> - </button>\n                <input type=\"number\" value=\"0\" [(ngModel)]=\"quantity[i]\" id=\"number\">\n                <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue(i)\" value=\"Increase Value\"> + </button>\n            </div>\n            <button type=\"submit\" class=\"btn btn-brown add-cart\" (click)=\"addToCart(article,quantity[i],i)\"><i class=\"fas fa-cart-plus\"></i></button>\n        </div>\n        <!-- <div class=\"text-center\">\n        <button class=\"btn btn-default waves-light\" (click)=\"stepper(2)\" mdbRippleRadius>Back</button>\n        <button class=\"btn btn-default waves-light\" (click)=\"makeOrder()\" mdbRippleRadius>Submit</button>\n    </div> -->\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -62,10 +62,15 @@ var CreateOrderComponent = /** @class */ (function () {
         this.showItem = false;
         this.room = {};
         this.tableData = {};
-        this.quantity = 0;
+        this.quantity = [];
         this.categorySearchData = [];
         this.selectedCategory = {};
         this.categoryItems = [];
+        this.addToCartItems = [];
+        this.error = false;
+        this.errorMsg = '';
+        this.numberError = false;
+        this.numberErrorMsg = '';
     }
     CreateOrderComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -89,7 +94,18 @@ var CreateOrderComponent = /** @class */ (function () {
         });
     };
     CreateOrderComponent.prototype.stepper = function () {
-        this.stepperForm = true;
+        var _this = this;
+        if (this.numberOfPerson) {
+            this.stepperForm = true;
+        }
+        else {
+            this.numberError = true;
+            this.numberErrorMsg = 'Please choose number of person';
+            setTimeout(function () {
+                _this.numberError = false;
+                _this.numberErrorMsg = '';
+            }, 4000);
+        }
     };
     CreateOrderComponent.prototype.stepperback = function () {
         this.stepperForm = false;
@@ -121,18 +137,18 @@ var CreateOrderComponent = /** @class */ (function () {
     CreateOrderComponent.prototype.hideItem = function () {
         this.showItem = false;
     };
-    CreateOrderComponent.prototype.increaseValue = function () {
-        var value = this.quantity;
+    CreateOrderComponent.prototype.increaseValue = function (i) {
+        var value = this.quantity[i];
         value = isNaN(value) ? 0 : value;
         value++;
-        this.quantity = value;
+        this.quantity[i] = value;
     };
-    CreateOrderComponent.prototype.decreaseValue = function () {
-        var value = this.quantity;
+    CreateOrderComponent.prototype.decreaseValue = function (i) {
+        var value = this.quantity[i];
         value = isNaN(value) ? 0 : value;
         value < 1 ? value = 1 : '';
         value--;
-        this.quantity = value;
+        this.quantity[i] = value;
     };
     CreateOrderComponent.prototype.onSelected = function (item) {
         var _this = this;
@@ -151,6 +167,34 @@ var CreateOrderComponent = /** @class */ (function () {
                 console.log('error', error);
             });
             this.showItem = true;
+        }
+    };
+    CreateOrderComponent.prototype.addToCart = function (article, quantity, index) {
+        var _this = this;
+        console.log('article', article);
+        console.log('quantity', quantity);
+        if (quantity > 0) {
+            if (this.addToCartItems.length) {
+                for (var i = 0; i < this.addToCartItems.length; i++) {
+                    if (this.addToCartItems[i]._id == article._id) {
+                        this.addToCartItems.splice(this.addToCartItems[i], 1);
+                        console.log('this.addToCartItems 1', this.addToCartItems);
+                        break;
+                    }
+                }
+            }
+            article.quantity = quantity;
+            article.priceOfQuantity = article.quantity * article.price;
+            this.addToCartItems.push(article);
+            console.log('this.addToCartItems', this.addToCartItems);
+        }
+        else {
+            this.error = true;
+            this.errorMsg = 'Please choose quantity';
+            setTimeout(function () {
+                _this.error = false;
+                _this.errorMsg = '';
+            }, 4000);
         }
     };
     CreateOrderComponent = __decorate([
