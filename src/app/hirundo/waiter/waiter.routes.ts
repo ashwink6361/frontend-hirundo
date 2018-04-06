@@ -1,8 +1,7 @@
 import { Routes, RouterModule }  from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
 import { WaiterComponent } from './waiter.component';
-export const routes: Routes = [
-  { path: 'create-order/:id', loadChildren: './create-order/create-order.module#CreateOrderModule' },  
+export const routes: Routes = [    
   {
     path: '',
     component: WaiterComponent,

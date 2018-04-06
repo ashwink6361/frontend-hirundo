@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CreateOrderService } from './create-order.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { GlobalService } from '../../global.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
+import { OrderService } from '../order.service';
+import { GlobalService } from '../../../global.service'
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 @Component({
@@ -28,12 +28,12 @@ export class CreateOrderComponent implements OnInit {
   protected dataService1: CompleterData;
   protected selectedCategory = {};
   private categoryItems = [];
-  constructor(private createOrderService: CreateOrderService, private completerService: CompleterService, private globalService: GlobalService) { }
+  constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService) { }
 
   ngOnInit() {
     this.roomData = JSON.parse(localStorage.getItem('roomdata'));
     this.tableData = JSON.parse(localStorage.getItem('tabledata'));
-    this.createOrderService.getCategory()
+    this.orderService.getCategory()
       .then(data => {
         this.categoryList = data.data;
         if (this.categoryList.length) {
@@ -67,7 +67,7 @@ export class CreateOrderComponent implements OnInit {
       this.searchStr = this.selectedCategory["name"];
       this.dataService1 = this.completerService.local(this.categorySearchData, 'name', 'name');
       this.categoryItems = [];
-      this.createOrderService.getCategoryItem().then(data => {
+      this.orderService.getCategoryItem().then(data => {
         for (let i = 0; i < data.data.length; i++) {
           if (data.data[i].category._id == this.selectedCategory["_id"]) {
             this.categoryItems.push(data.data[i].items[0]);
@@ -104,7 +104,7 @@ export class CreateOrderComponent implements OnInit {
     if (this.selectedCategory) {
       this.dataService1 = this.completerService.local(this.categorySearchData, 'name', 'name');
       this.categoryItems = [];
-      this.createOrderService.getCategoryItem().then(data => {
+      this.orderService.getCategoryItem().then(data => {
         for (let i = 0; i < data.data.length; i++) {
           if (data.data[i].category._id == this.selectedCategory["_id"]) {
             this.categoryItems.push(data.data[i].items[0]);

@@ -5,7 +5,6 @@ import { WaiterRouting } from './waiter.routes'
 import { MDBBootstrapModule } from 'angular-bootstrap-md'
 import { WaiterComponent } from './waiter.component';
 import { SharedModule } from '../../shared/shared.module';
-import { CreateOrderService } from '../waiter/create-order/create-order.service';
 import { ProfileService } from '../waiter/profile/profile.service';
 import { DashboardService } from './dashboard/dashboard.service';
 @NgModule({
@@ -19,7 +18,6 @@ import { DashboardService } from './dashboard/dashboard.service';
   ],
   declarations: [WaiterComponent],
   providers: [
-    CreateOrderService,
     ProfileService,
     DashboardService
   ]

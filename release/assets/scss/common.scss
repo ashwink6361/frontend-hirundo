@@ -479,17 +479,17 @@ header {
         font-weight: bold;
     }
     .room {
-        margin-bottom: 20px;
+        margin: 0 3px 3px 0;
         background-color: $secondary;
-        max-width: 135px;
+        max-width: 90px;
         width: 100%;
-        height: 135px;
-        padding: 15px;
+        height: 90px;
+        padding: 10px;
         cursor: pointer;
         .table {
-            max-width: 105px;
+            max-width: 70px;
             width: 100%;
-            height: 105px;
+            height: 70px;
             border-radius: 100%;
             background-color: #fff;
             display: flex;
@@ -637,6 +637,28 @@ header {
             }
             .add-cart {
                 padding: 10px 15px;
+            }
+        }
+        .view-cart-container{
+            position: fixed;
+            min-height: 70px;
+            max-height: 148px;
+            bottom: 0;
+            width: 100%;
+            background-color: #fff;
+            box-shadow: 0 -2px 6px 0 rgba(0,0,0,.1);
+            box-sizing: border-box;
+            z-index: 9;
+            left: 0;
+            .checkout{
+                padding: 12px;
+                a{
+                    padding: 16px 20px;
+                    text-align: left;
+                    display: block;
+                    background-color: green;
+                    color: #fff;
+                }
             }
         }
     }

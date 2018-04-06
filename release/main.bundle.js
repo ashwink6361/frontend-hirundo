@@ -12,6 +12,10 @@ var map = {
 		"../../../../../src/app/hirundo/waiter/change-password/change-password.module.ts",
 		"change-password.module"
 	],
+	"./choose-category/choose-category.module": [
+		"../../../../../src/app/hirundo/waiter/create-order/choose-category/choose-category.module.ts",
+		"choose-category.module"
+	],
 	"./create-order/create-order.module": [
 		"../../../../../src/app/hirundo/waiter/create-order/create-order.module.ts",
 		"create-order.module",

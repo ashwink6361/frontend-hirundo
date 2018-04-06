@@ -3,10 +3,9 @@ import { Http, Response } from '@angular/http';
 import { GlobalService } from '../../global.service';
 import 'rxjs/add/operator/toPromise';
 @Injectable()
-export class CreateOrderService {
+export class OrderService {
 
   constructor(private http: Http, private globalService: GlobalService) { }
-
   getCategory(): Promise<any> {
     let url = '/api/categories';
     return this.http.get(url).toPromise()
@@ -19,5 +18,5 @@ export class CreateOrderService {
       .then(this.globalService.extractData)
       .catch(this.globalService.handleErrorPromise);
   }
-  
+
 }

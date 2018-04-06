@@ -3,7 +3,7 @@ webpackJsonp(["dashboard.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/dashboard/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section class=\"room-container\" *ngFor=\"let room of roomData\">\r\n    <div class=\"room-name\">{{room.name}}</div>\r\n    <div class=\"d-flex flex-wrap justify-content-between\">\r\n        <div class=\"room\" (click)=\"createOrder(table, room)\" *ngFor=\"let table of room.tables\">\r\n            <div class=\"table\">\r\n                <span>{{table.name}}</span>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</section>\r\n\r\n"
+module.exports = "<section class=\"room-container\" *ngFor=\"let room of roomData\">\r\n    <!-- <form [formGroup]=\"roomtable\">\r\n        <select class=\"form-control\" formControlName=\"room\">\r\n            <option *ngFor=\"let room of roomData\" [value]=\"room\">{{room.name}}</option>\r\n        </select>\r\n    </form> -->\r\n    <div class=\"room-name\">{{room.name}}</div>\r\n    <div class=\"d-flex flex-wrap \">\r\n        <div class=\"room\" (click)=\"createOrder(table, room)\" *ngFor=\"let table of room.tables\">\r\n            <div class=\"table\">\r\n                <span>{{table.name}}</span>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</section>\r\n"
 
 /***/ }),
 
@@ -93,12 +93,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__("../../../common/@angular/common.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dashboard_routes__ = __webpack_require__("../../../../../src/app/hirundo/waiter/dashboard/dashboard.routes.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__dashboard_component__ = __webpack_require__("../../../../../src/app/hirundo/waiter/dashboard/dashboard.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -110,7 +112,9 @@ var DashboardModule = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* NgModule */])({
             imports: [
                 __WEBPACK_IMPORTED_MODULE_1__angular_common__["b" /* CommonModule */],
-                __WEBPACK_IMPORTED_MODULE_2__dashboard_routes__["a" /* DashboardRouting */]
+                __WEBPACK_IMPORTED_MODULE_2__dashboard_routes__["a" /* DashboardRouting */],
+                __WEBPACK_IMPORTED_MODULE_4__angular_forms__["c" /* FormsModule */],
+                __WEBPACK_IMPORTED_MODULE_4__angular_forms__["g" /* ReactiveFormsModule */]
             ],
             declarations: [__WEBPACK_IMPORTED_MODULE_3__dashboard_component__["a" /* DashboardComponent */]]
         })

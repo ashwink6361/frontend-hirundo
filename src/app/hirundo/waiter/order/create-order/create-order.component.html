@@ -8,16 +8,6 @@
         Create an Order
     </div>
 </header>
-<header class="page-content-header" *ngIf="stepperForm">
-    <div class="back-btn">
-        <a (click)="stepperback()">
-            <i class="fas fa-angle-left"></i>
-        </a>
-    </div>
-    <div class="header-title">
-        Choose Category
-    </div>
-</header>
 <div class="page-content">
     <div class="stepper-form">
         <div [class.slideleft]="stepperForm" [class.slideright]="!stepperForm">
@@ -35,21 +25,10 @@
                 <input class="form-control" type="number" min="0" [(ngModel)]="numberOfPerson" placeholder="No. of Person" />
             </div>
             <div class="text-center">
-                <button class="btn btn-success waves-light" (click)="stepper()" mdbRippleRadius>Make an Order</button>
+                <button class="btn btn-success waves-light" routerLink="/choose-category" mdbRippleRadius>Make an Order</button>
             </div>
         </div>
-        <div class="category-list" [class.slideright]="stepperForm" [class.slideleft]="!stepperForm">
-            <div class="d-flex justify-content-between flex-wrap ">
-                <div class="d-flex align-items-center justify-content-between search-category w-100">
-                    <ng2-completer [(ngModel)]="searchStr" [datasource]="dataService" [minSearchLength]="0" (selected)="onSelected($event)" placeholder="Search Category"></ng2-completer>
-                </div>
-                <div class="category" *ngFor="let category of categoryList" [ngStyle]="{'background-color': category.color}" (click)="showItems(category._id,category.name)">
-                    <img *ngIf="!category.isIcon" [src]="category.logo.small" alt="" />
-                    <img *ngIf="category.isIcon" [src]="category.icon" alt="" />
-                    <p class="name">{{category.name}}</p>
-                </div>
-            </div>
-        </div>
+        
         <div class="item-container" [class.showitems]="showItem">
             <div class="item-header">
                 <div class="header-title">
@@ -86,7 +65,11 @@
                     <i class="fas fa-cart-plus"></i>
                 </button>
             </div>
-
+            <div class="view-cart-container" *ngIf="showItem">
+                <div class="checkout">
+                    <a (click)="viewCart()">View Cart</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
