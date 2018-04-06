@@ -12,12 +12,8 @@ var map = {
 		"../../../../../src/app/hirundo/waiter/change-password/change-password.module.ts",
 		"change-password.module"
 	],
-	"./choose-category/choose-category.module": [
-		"../../../../../src/app/hirundo/waiter/create-order/choose-category/choose-category.module.ts",
-		"choose-category.module"
-	],
 	"./create-order/create-order.module": [
-		"../../../../../src/app/hirundo/waiter/create-order/create-order.module.ts",
+		"../../../../../src/app/hirundo/waiter/order/create-order/create-order.module.ts",
 		"create-order.module",
 		"common"
 	],
@@ -49,6 +45,11 @@ var map = {
 	"./order-list/order-list.module": [
 		"../../../../../src/app/hirundo/department/order-list/order-list.module.ts",
 		"order-list.module"
+	],
+	"./order/order.module": [
+		"../../../../../src/app/hirundo/waiter/order/order.module.ts",
+		"order.module",
+		"common"
 	],
 	"./profile/profile.module": [
 		"../../../../../src/app/hirundo/waiter/profile/profile.module.ts",
@@ -452,7 +453,6 @@ var routes = [
             { path: '', loadChildren: './home/home.module#HomeModule' },
             { path: 'login', loadChildren: './login/login.module#LoginModule' },
             { path: 'register', loadChildren: './register/register.module#RegisterModule' },
-            { path: 'waiter', loadChildren: './waiter/waiter.module#WaiterModule' },
         ],
         canActivate: []
     },

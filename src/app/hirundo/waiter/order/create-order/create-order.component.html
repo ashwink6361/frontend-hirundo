@@ -27,49 +27,6 @@
             <div class="text-center">
                 <button class="btn btn-success waves-light" routerLink="/choose-category" mdbRippleRadius>Make an Order</button>
             </div>
-        </div>
-        
-        <div class="item-container" [class.showitems]="showItem">
-            <div class="item-header">
-                <div class="header-title">
-                    Add Items to Cart
-                </div>
-                <div class="back-btn">
-                    <a (click)="hideItem()">
-                        <i class="far fa-times-circle"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="search-category w-100">
-                <ng2-completer [(ngModel)]="searchStr" [datasource]="dataService1" [minSearchLength]="0" (selected)="onSelected($event)"
-                    placeholder="Search Category"></ng2-completer>
-                <input class="form-control" [(ngModel)]="searchText" type="text" placeholder="Search Item" />
-            </div>
-            <div class="item-list align-items-center" *ngFor="let article of categoryItems | filter : searchText">
-                <div class="item" [ngStyle]="{'background-color': article.category.color}">
-                    <!-- <img src="assets/images/lunch.jpg" alt="" /> -->
-                    <img *ngIf="!article.logo.small && article.category.isIcon" class="icon-img" [src]="article.category.icon" alt="" />
-                    <img *ngIf="!article.logo.small && !article.category.isIcon && article.category.logo.small" [src]="article.category.logo.small"
-                        alt="Category Logo" />
-                    <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
-                    <p class="name">{{article.name}}</p>
-                </div>
-                <div class="input-prepend-append">
-                    <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue()" value="Decrease Value">
-                        - </button>
-                    <input type="number" [(ngModel)]="quantity" id="number">
-                    <button type="button" class="btn btn-append btn-success" id="increase" (click)="increaseValue()" value="Increase Value">
-                        + </button>
-                </div>
-                <button type="submit" class="btn btn-brown add-cart">
-                    <i class="fas fa-cart-plus"></i>
-                </button>
-            </div>
-            <div class="view-cart-container" *ngIf="showItem">
-                <div class="checkout">
-                    <a (click)="viewCart()">View Cart</a>
-                </div>
-            </div>
-        </div>
+        </div>        
     </div>
 </div>

@@ -6,11 +6,12 @@ export const routes: Routes = [
     path: '',
     component: OrderComponent,
     children: [
-      { path: 'create-order/:id', loadChildren: './create-order/create-order.module#DashboardModule' },    
+      { path: '', loadChildren: './create-order/create-order.module#CreateOrderModule' },  
+      { path: 'choose-category', loadChildren: './choose-category/choose-category.module#ChooseCategoryModule' },      
       
     ],   
     canActivate: []
   },
 ];
 
-export const WaiterRouting: ModuleWithProviders = RouterModule.forChild(routes);
+export const OrderRouting: ModuleWithProviders = RouterModule.forChild(routes);
