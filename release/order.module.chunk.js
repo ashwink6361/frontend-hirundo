@@ -112,6 +112,7 @@ var routes = [
         component: __WEBPACK_IMPORTED_MODULE_1__order_component__["a" /* OrderComponent */],
         children: [
             { path: '', loadChildren: './create-order/create-order.module#CreateOrderModule' },
+            { path: 'choose-category', loadChildren: './choose-category/choose-category.module#ChooseCategoryModule' },
         ],
         canActivate: []
     },

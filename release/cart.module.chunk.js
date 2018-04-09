@@ -3,7 +3,7 @@ webpackJsonp(["cart.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/cart/cart.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\r\n  cart works!\r\n</p>\r\n\r\n"
+module.exports = "<p>\n  cart works!\n</p>\n\n"
 
 /***/ }),
 
