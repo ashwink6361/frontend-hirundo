@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { OrderService } from '../order.service';
+import { Router } from '@angular/router';
 import { GlobalService } from '../../../global.service'
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -28,7 +29,7 @@ export class CreateOrderComponent implements OnInit {
   protected dataService1: CompleterData;
   protected selectedCategory = {};
   private categoryItems = [];
-  constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService) { }
+  constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
     this.roomData = JSON.parse(localStorage.getItem('roomdata'));
@@ -51,70 +52,7 @@ export class CreateOrderComponent implements OnInit {
       });
   }
 
-  stepper() {
-    this.stepperForm = true;
-  }
-  stepperback() {
-    this.stepperForm = false;
-  }
-  showItems(id, name) {
-    let obj = {
-      _id: id,
-      name: name
-    }
-    this.selectedCategory = obj;
-    if (this.selectedCategory) {
-      this.searchStr = this.selectedCategory["name"];
-      this.dataService1 = this.completerService.local(this.categorySearchData, 'name', 'name');
-      this.categoryItems = [];
-      this.orderService.getCategoryItem().then(data => {
-        for (let i = 0; i < data.data.length; i++) {
-          if (data.data[i].category._id == this.selectedCategory["_id"]) {
-            this.categoryItems.push(data.data[i].items[0]);
-          }
-        }
-      })
-        .catch(error => {
-          console.log('error', error);
-        });
-      this.showItem = true;
-    }
-  }
-  hideItem() {
-    this.showItem = false;
-  }
-
-  increaseValue() {
-    let value = this.quantity;
-    value = isNaN(value) ? 0 : value;
-    value++;
-    this.quantity = value;
-  }
-
-  decreaseValue() {
-    let value = this.quantity;
-    value = isNaN(value) ? 0 : value;
-    value < 1 ? value = 1 : '';
-    value--;
-    this.quantity = value;
-  }
-
-  onSelected(item) {
-    this.selectedCategory = item ? item.originalObject : {};
-    if (this.selectedCategory) {
-      this.dataService1 = this.completerService.local(this.categorySearchData, 'name', 'name');
-      this.categoryItems = [];
-      this.orderService.getCategoryItem().then(data => {
-        for (let i = 0; i < data.data.length; i++) {
-          if (data.data[i].category._id == this.selectedCategory["_id"]) {
-            this.categoryItems.push(data.data[i].items[0]);
-          }
-        }
-      })
-        .catch(error => {
-          console.log('error', error);
-        });
-      this.showItem = true;
-    }
+  makeOrder() {
+    this.router.navigate(['/waiter/order/:id/choose-category']);
   }
 }

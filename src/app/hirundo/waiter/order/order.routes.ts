@@ -1,15 +1,19 @@
-import { Routes, RouterModule }  from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
 import { OrderComponent } from './order.component';
+import { ItemComponent } from './item/item.component';
+import { ChooseCategoryComponent } from './choose-category/choose-category.component';
+import { CreateOrderComponent } from './create-order/create-order.component';
 export const routes: Routes = [
+  
   {
     path: '',
     component: OrderComponent,
     children: [
-      { path: '', loadChildren: './create-order/create-order.module#CreateOrderModule' },  
-      { path: 'choose-category', loadChildren: './choose-category/choose-category.module#ChooseCategoryModule' },      
-      
-    ],   
+      { path: '', component: CreateOrderComponent },
+      { path: 'choose-category',  component: ChooseCategoryComponent},
+      { path: 'choose-item', component: ItemComponent },
+    ],
     canActivate: []
   },
 ];

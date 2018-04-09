@@ -12,11 +12,6 @@ var map = {
 		"../../../../../src/app/hirundo/waiter/change-password/change-password.module.ts",
 		"change-password.module"
 	],
-	"./create-order/create-order.module": [
-		"../../../../../src/app/hirundo/waiter/order/create-order/create-order.module.ts",
-		"create-order.module",
-		"common"
-	],
 	"./dashboard/dashboard.module": [
 		"../../../../../src/app/hirundo/waiter/dashboard/dashboard.module.ts",
 		"dashboard.module",
@@ -48,8 +43,7 @@ var map = {
 	],
 	"./order/order.module": [
 		"../../../../../src/app/hirundo/waiter/order/order.module.ts",
-		"order.module",
-		"common"
+		"order.module"
 	],
 	"./profile/profile.module": [
 		"../../../../../src/app/hirundo/waiter/profile/profile.module.ts",
