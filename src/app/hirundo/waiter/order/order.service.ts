@@ -4,7 +4,7 @@ import { GlobalService } from '../../global.service';
 import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class OrderService {
-
+  public orderData = {};
   constructor(private http: Http, private globalService: GlobalService) { }
   getCategory(): Promise<any> {
     let url = '/api/categories';

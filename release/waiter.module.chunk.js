@@ -116,6 +116,7 @@ var WaiterModule = /** @class */ (function () {
 
 
 var routes = [
+    { path: 'order/:id', loadChildren: './order/order.module#OrderModule' },
     {
         path: '',
         component: __WEBPACK_IMPORTED_MODULE_1__waiter_component__["a" /* WaiterComponent */],
@@ -124,7 +125,6 @@ var routes = [
             { path: 'change-password', loadChildren: './change-password/change-password.module#ChangePasswordModule' },
             { path: 'profile', loadChildren: './profile/profile.module#ProfileModule' },
             { path: 'cart', loadChildren: './cart/cart.module#CartModule' },
-            { path: 'create-order/:id', loadChildren: './order/order.module#OrderModule' },
         ],
         canActivate: []
     },

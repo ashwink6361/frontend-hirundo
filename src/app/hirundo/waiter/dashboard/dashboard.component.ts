@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
 createOrder(table, room) {
   localStorage.setItem('roomdata', JSON.stringify(room));
   localStorage.setItem('tabledata', JSON.stringify(table));
-  this.router.navigate(['/waiter/create-order', room._id]);
+  this.router.navigate(['/waiter/order', room._id]);
 }
 
 }
