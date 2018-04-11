@@ -22,66 +22,89 @@ export class ChooseCategoryComponent implements OnInit {
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
-    console.log('this.orderService.orderData',this.orderService.orderData);
     this.orderService.getCategory()
-    .then(data => {
-      this.categoryList = data.data;
-      if (this.categoryList.length) {
-        for (var i = 0; i < this.categoryList.length; i++) {
-          this.categorySearchData.push({
-            _id: this.categoryList[i]._id,
-            name: this.categoryList[i].name,
-          });
+      .then(data => {
+        this.categoryList = data.data;
+        if (this.categoryList.length) {
+          for (var i = 0; i < this.categoryList.length; i++) {
+            this.categorySearchData.push({
+              _id: this.categoryList[i]._id,
+              name: this.categoryList[i].name,
+            });
+          }
+          this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
         }
-        this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
-      }
-    })
-    .catch(error => {
-      console.log('error', error);
-    });
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
   }
 
   onSelected(item) {
     this.selectedCategory = item ? item.originalObject : {};
+    let orderdata1 = this.orderService.getOrderData();
+    orderdata1.selectedCategory = this.selectedCategory;
+    orderdata1.searchStr = this.searchStr;
     if (this.selectedCategory) {
       this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
-      this.categoryItems = [];
       this.orderService.getCategoryItem().then(data => {
         for (let i = 0; i < data.data.length; i++) {
           if (data.data[i].category._id == this.selectedCategory["_id"]) {
-            this.categoryItems.push(data.data[i].items[0]);
+            orderdata1.categoryItems = data.data[i].items;
+            this.orderService.setOrderData(orderdata1);
           }
         }
+        this.router.navigate(['/waiter/order/:id/choose-item']);
       })
         .catch(error => {
           console.log('error', error);
         });
-      this.showItem = true;
     }
   }
 
-  showItems(id, name) {
-    let obj = {
-      _id: id,
-      name: name
-    }
-    this.selectedCategory = obj;
-    if (this.selectedCategory) {
-      this.searchStr = this.selectedCategory["name"];
-      this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
-      this.categoryItems = [];
-      this.orderService.getCategoryItem().then(data => {
-        for (let i = 0; i < data.data.length; i++) {
-          if (data.data[i].category._id == this.selectedCategory["_id"]) {
-            this.categoryItems.push(data.data[i].items[0]);
-          }
+  showItems(category) {
+    let orderdata = this.orderService.getOrderData();
+    orderdata.selectedCategory = {
+      _id: category._id,
+      name: category.name
+    };
+    orderdata.searchStr = category.name;
+    this.orderService.getCategoryItem().then(data => {
+      for (let i = 0; i < data.data.length; i++) {
+        if (data.data[i].category._id == category._id) {
+          orderdata.categoryItems = data.data[i].items;
+          this.orderService.setOrderData(orderdata);
         }
-      })
-        .catch(error => {
-          console.log('error', error);
-        });
-        this.router.navigate(['/waiter/order/:id/choose-item']);
-    }
+      }
+      this.router.navigate(['/waiter/order/:id/choose-item']);
+    })
+      .catch(error => {
+        console.log('error', error);
+      });
   }
+
+  // showItems(id, name) {
+  //   let obj = {
+  //     _id: id,
+  //     name: name
+  //   }
+  //   this.selectedCategory = obj;
+  //   if (this.selectedCategory) {
+  //     this.searchStr = this.selectedCategory["name"];
+  //     this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
+  //     this.categoryItems = [];
+  //     this.orderService.getCategoryItem().then(data => {
+  //       for (let i = 0; i < data.data.length; i++) {
+  //         if (data.data[i].category._id == this.selectedCategory["_id"]) {
+  //           this.categoryItems.push(data.data[i].items[0]);
+  //         }
+  //       }
+  //     })
+  //       .catch(error => {
+  //         console.log('error', error);
+  //       });
+  //       this.router.navigate(['/waiter/order/:id/choose-item']);
+  //   }
+  // }
 
 }

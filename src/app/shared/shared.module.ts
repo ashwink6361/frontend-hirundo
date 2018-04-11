@@ -10,14 +10,15 @@ import { UserChangePassowrdComponent } from './user-change-passowrd/user-change-
 import { TranslateModule } from '@ngx-translate/core';
 import { UserChangePasswordService } from './user-change-passowrd/user-change-password.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { FilterPipe } from '../shared/pipes/filter.pipe';
 import { AppService} from '../service/app.service';
 const NGA_COMPONENTS = [
   HeaderComponent,
   FooterComponent,
   HeaderLoginComponent,
   SidebarComponent,
-  UserChangePassowrdComponent
+  UserChangePassowrdComponent,
+  FilterPipe
 ];
 
 @NgModule({

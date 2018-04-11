@@ -1,4 +1,5 @@
-<section class="room-container" *ngFor="let room of roomData">
+<input class="form-control" [(ngModel)]="searchText" type="text" placeholder="Search Room" />
+<section class="room-container" *ngFor="let room of roomData | filter : searchText">
     <!-- <form [formGroup]="roomtable">
         <select class="form-control" formControlName="room">
             <option *ngFor="let room of roomData" [value]="room">{{room.name}}</option>

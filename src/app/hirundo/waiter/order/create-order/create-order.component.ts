@@ -34,6 +34,9 @@ export class CreateOrderComponent implements OnInit {
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
+    if (this.orderService.getOrderData().numberOfPerson) {
+      this.numberOfPerson = this.orderService.getOrderData().numberOfPerson;
+    }
     this.roomData = JSON.parse(localStorage.getItem('roomdata'));
     this.tableData = JSON.parse(localStorage.getItem('tabledata'));
     this.orderService.getCategory()
@@ -61,8 +64,7 @@ export class CreateOrderComponent implements OnInit {
         tableId: this.tableData["_id"],
         numberOfPerson: this.numberOfPerson
       }
-      this.orderService.orderData = data;
-      console.log('this.orderService.orderData',this.orderService.orderData);
+      this.orderService.setOrderData(data);
       this.router.navigate(['/waiter/order/:id/choose-category']);
     }
     else {

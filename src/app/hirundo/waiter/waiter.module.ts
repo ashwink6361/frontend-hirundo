@@ -11,7 +11,7 @@ import { DashboardService } from './dashboard/dashboard.service';
   imports: [
     CommonModule,
     WaiterRouting,
-    SharedModule,
+    SharedModule.forRoot(),
     MDBBootstrapModule,
     FormsModule,
     ReactiveFormsModule

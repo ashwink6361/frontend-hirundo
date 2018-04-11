@@ -14,7 +14,7 @@
             <div class="d-flex align-items-center justify-content-between search-category w-100">
                 <ng2-completer [(ngModel)]="searchStr" [datasource]="dataService" [minSearchLength]="0" (selected)="onSelected($event)" placeholder="Search Category"></ng2-completer>
             </div>
-            <div class="category" *ngFor="let category of categoryList" [ngStyle]="{'background-color': category.color}" (click)="showItems(category._id,category.name)">
+            <div class="category" *ngFor="let category of categoryList" [ngStyle]="{'background-color': category.color}" (click)="showItems(category)">
                 <img *ngIf="!category.isIcon" [src]="category.logo.small" alt="" />
                 <img class="icon-img" *ngIf="category.isIcon" [src]="category.icon" alt="" />
                 <p class="name">{{category.name}}</p>

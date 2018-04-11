@@ -408,7 +408,7 @@ var HirundoModule = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* NgModule */])({
             imports: [
                 __WEBPACK_IMPORTED_MODULE_1__angular_common__["b" /* CommonModule */],
-                __WEBPACK_IMPORTED_MODULE_2__shared_shared_module__["a" /* SharedModule */],
+                __WEBPACK_IMPORTED_MODULE_2__shared_shared_module__["a" /* SharedModule */].forRoot(),
                 __WEBPACK_IMPORTED_MODULE_4__hirundo_routes__["a" /* MainRouting */],
                 __WEBPACK_IMPORTED_MODULE_3_angular_bootstrap_md__["a" /* MDBBootstrapModule */]
             ],
@@ -938,6 +938,45 @@ var HeaderComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "../../../../../src/app/shared/pipes/filter.pipe.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FilterPipe; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+var FilterPipe = /** @class */ (function () {
+    function FilterPipe() {
+    }
+    FilterPipe.prototype.transform = function (items, searchText) {
+        if (!items)
+            return [];
+        if (!searchText)
+            return items;
+        searchText = searchText.toLowerCase();
+        return items.filter(function (it) {
+            return it.name.toLowerCase().includes(searchText);
+        });
+    };
+    FilterPipe = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Pipe */])({
+            name: 'filter',
+            pure: false
+        })
+    ], FilterPipe);
+    return FilterPipe;
+}());
+
+//# sourceMappingURL=filter.pipe.js.map
+
+/***/ }),
+
 /***/ "../../../../../src/app/shared/shared.module.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -955,7 +994,8 @@ var HeaderComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ngx_translate_core__ = __webpack_require__("../../../../@ngx-translate/core/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__user_change_passowrd_user_change_password_service__ = __webpack_require__("../../../../../src/app/shared/user-change-passowrd/user-change-password.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__service_app_service__ = __webpack_require__("../../../../../src/app/service/app.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__shared_pipes_filter_pipe__ = __webpack_require__("../../../../../src/app/shared/pipes/filter.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__service_app_service__ = __webpack_require__("../../../../../src/app/service/app.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -975,12 +1015,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var NGA_COMPONENTS = [
     __WEBPACK_IMPORTED_MODULE_3__header__["a" /* HeaderComponent */],
     __WEBPACK_IMPORTED_MODULE_4__footer__["a" /* FooterComponent */],
     __WEBPACK_IMPORTED_MODULE_6__header_login_header_login_component__["a" /* HeaderLoginComponent */],
     __WEBPACK_IMPORTED_MODULE_7__sidebar_sidebar_component__["a" /* SidebarComponent */],
-    __WEBPACK_IMPORTED_MODULE_8__user_change_passowrd_user_change_passowrd_component__["a" /* UserChangePassowrdComponent */]
+    __WEBPACK_IMPORTED_MODULE_8__user_change_passowrd_user_change_passowrd_component__["a" /* UserChangePassowrdComponent */],
+    __WEBPACK_IMPORTED_MODULE_12__shared_pipes_filter_pipe__["a" /* FilterPipe */]
 ];
 var SharedModule = /** @class */ (function () {
     function SharedModule() {
@@ -991,7 +1033,7 @@ var SharedModule = /** @class */ (function () {
             ngModule: SharedModule_1,
             providers: [
                 __WEBPACK_IMPORTED_MODULE_10__user_change_passowrd_user_change_password_service__["a" /* UserChangePasswordService */],
-                __WEBPACK_IMPORTED_MODULE_12__service_app_service__["a" /* AppService */]
+                __WEBPACK_IMPORTED_MODULE_13__service_app_service__["a" /* AppService */]
             ],
         };
     };

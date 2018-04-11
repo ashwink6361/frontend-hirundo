@@ -10,7 +10,7 @@ import { WebsocketService } from '../service/websocket.service';
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule,
+    SharedModule.forRoot(),
     MainRouting   ,
     MDBBootstrapModule
   ],

@@ -8,16 +8,18 @@ import { OrderService } from './order.service';
 import { ItemComponent } from './item/item.component';
 import { CreateOrderComponent } from './create-order/create-order.component';
 import { ChooseCategoryComponent } from './choose-category/choose-category.component';
-import { FilterPipe } from '../../../shared/pipes/filter.pipe';
+import { SharedModule } from '../../../shared/shared.module';
+
 @NgModule({
   imports: [
     CommonModule,
     OrderRouting,
     FormsModule,
+    SharedModule.forRoot(),
     ReactiveFormsModule,
     Ng2CompleterModule
   ],
-  declarations: [OrderComponent, ItemComponent, CreateOrderComponent, ChooseCategoryComponent, FilterPipe],
+  declarations: [OrderComponent, ItemComponent, CreateOrderComponent, ChooseCategoryComponent],
   providers: [OrderService, ]
 })
 export class OrderModule { }
