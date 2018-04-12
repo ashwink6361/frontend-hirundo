@@ -73,6 +73,10 @@ export class ChooseCategoryComponent implements OnInit {
       for (let i = 0; i < data.data.length; i++) {
         if (data.data[i].category._id == category._id) {
           orderdata.categoryItems = data.data[i].items;
+          for(let i=0;i<orderdata.categoryItems.length;i++){
+            orderdata.categoryItems[i].quantity = 0;
+            orderdata.selectedItems = [];
+          }
           this.orderService.setOrderData(orderdata);
         }
       }

@@ -4,17 +4,17 @@
             <i class="fas fa-angle-left"></i>
         </a>
     </div>
-    <div class="header-title">
-       {{orderService.getOrderData().selectedCategory.name}}
+    <div class="header-title" *ngIf="orderService.getOrderData().selectedCategory">
+        {{orderService.getOrderData().selectedCategory.name}}
     </div>
 </header>
 <div class="page-content">
     <div class="item-container">
-        <div class="d-flex align-items-center justify-content-between search-category w-100">
+        <div class="search-category w-100">
             <input class="form-control" [(ngModel)]="searchText" type="text" placeholder="Search Item" />
-            <ng2-completer [(ngModel)]="searchStr" class="form-control" [datasource]="dataService" [minSearchLength]="0" (selected)="onSelected($event)"
-                placeholder="Search Category"></ng2-completer>            
-        </div>        
+            <!-- <ng2-completer [(ngModel)]="searchStr" class="form-control" [datasource]="dataService" [minSearchLength]="0" (selected)="onSelected($event)"
+                placeholder="Search Category"></ng2-completer> -->
+        </div>
         <div class="alert-danger" *ngIf="error">{{errorMsg}}</div>
         <div class="item-list align-items-center" *ngFor="let article of articles | filter : searchText ; let i = index">
             <div class="item" [ngStyle]="{'background-color': article.category.color}">
@@ -22,17 +22,22 @@
                 <img *ngIf="!article.logo.small && !article.category.isIcon && article.category.logo.small" [src]="article.category.logo.small"
                     alt="Category Logo" />
                 <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
-                <p class="name">{{article.name}}</p>
+                <span class="item-quantity" *ngIf="article.quantity>0">{{article.quantity}}</span>
+            </div>
+            <div>
+                <p class="name m-0">{{article.name}}</p>
+                <p class="name m-0">{{article.price}}</p>
             </div>
             <div class="input-prepend-append">
-                <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue(i)" value="Decrease Value">
-                - </button>
-                <input type="number" value="0" [(ngModel)]="quantity[i]" id="number">
-                <button type="button" class="btn btn-append btn-success" id="increase" (click)="increaseValue(i)" value="Increase Value">
-                + </button>
+                <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue(article,i)" value="Decrease Value">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-append btn-success" id="increase" (click)="increaseValue(article,i)" value="Increase Value">
+                    <i class="fas fa-plus"></i>
+                </button>
             </div>
             <button type="submit" class="btn btn-brown add-cart" (click)="addToCart(article,quantity[i],i)">
-                <i class="fas fa-cart-plus"></i>
+                <i class="fas fa-pencil"></i>
             </button>
         </div>
     </div>

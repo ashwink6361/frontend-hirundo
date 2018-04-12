@@ -53,6 +53,7 @@ var DashboardComponent = /** @class */ (function () {
     }
     DashboardComponent.prototype.ngOnInit = function () {
         var _this = this;
+        localStorage.removeItem('orderData');
         this.dashboardService.getRooms().then(function (data) {
             console.log('data', data);
             _this.roomData = data.data;
