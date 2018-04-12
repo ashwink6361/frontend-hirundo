@@ -3,7 +3,7 @@ webpackJsonp(["dashboard.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/dashboard/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"tabs-container\">\n    <ul>\n        <li class=\"prev\">\n          <i class=\"fas fa-chevron-left\"></i>\n        </li>\n        <li *ngFor=\"let room of roomData\" [class.active]=\"active\">\n            {{room.name}}\n        </li>\n        <li class=\"next\">\n          <i class=\"fas fa-chevron-right\"></i>\n        </li>\n      </ul>\n</div>\n<!-- <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Room\" /> -->\n<section class=\"room-container\" *ngFor=\"let room of roomData | filter : searchText\">\n    <!-- <form [formGroup]=\"roomtable\">\n        <select class=\"form-control\" formControlName=\"room\">\n            <option *ngFor=\"let room of roomData\" [value]=\"room\">{{room.name}}</option>\n        </select>\n    </form> -->\n    <!-- <div class=\"room-name\">{{room.name}}</div> -->\n    <div class=\"d-flex flex-wrap \">\n        <div class=\"room\" (click)=\"createOrder(table, room)\" *ngFor=\"let table of room.tables\">\n            <div class=\"table\">\n                <span>{{table.name}}</span>\n            </div>\n        </div>\n    </div>\n</section>\n"
+module.exports = "<div class=\"tabs-container\">\n    <ul>\n        <li class=\"prev\">\n          <i class=\"fas fa-chevron-left\"></i>\n        </li>\n        <li *ngFor=\"let room of roomData; let i= index\" [class.active]=\"activeRoom[i]\" (click)=\"getTables(room,i)\">\n            {{room.name}}\n        </li>\n        <li class=\"next\">\n          <i class=\"fas fa-chevron-right\"></i>\n        </li>\n      </ul>\n</div>\n<!-- <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Room\" /> -->\n<section class=\"room-container\">\n    <!-- <form [formGroup]=\"roomtable\">\n        <select class=\"form-control\" formControlName=\"room\">\n            <option *ngFor=\"let room of roomData\" [value]=\"room\">{{room.name}}</option>\n        </select>\n    </form> -->\n    <!-- <div class=\"room-name\">{{room.name}}</div> -->\n    <div class=\"d-flex flex-wrap \">\n        <div class=\"room\" (click)=\"createOrder(table)\" *ngFor=\"let table of tables\">\n            <div class=\"table\">\n                <span>{{table.name}}</span>\n            </div>\n        </div>\n    </div>\n</section>\n"
 
 /***/ }),
 
@@ -50,6 +50,8 @@ var DashboardComponent = /** @class */ (function () {
         this.router = router;
         this.dashboardService = dashboardService;
         this.roomData = [];
+        this.tables = [];
+        this.activeRoom = [false];
     }
     DashboardComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -57,16 +59,28 @@ var DashboardComponent = /** @class */ (function () {
         this.dashboardService.getRooms().then(function (data) {
             console.log('data', data);
             _this.roomData = data.data;
-            console.log('this.roomData', _this.roomData);
+            _this.activeRoom[0] = true;
+            _this.tables = _this.roomData[0].tables;
+            localStorage.setItem('roomdata', JSON.stringify(_this.roomData[0]));
         })
             .catch(function (error) {
             console.log('error', error);
         });
     };
-    DashboardComponent.prototype.createOrder = function (table, room) {
-        localStorage.setItem('roomdata', JSON.stringify(room));
+    DashboardComponent.prototype.createOrder = function (table) {
         localStorage.setItem('tabledata', JSON.stringify(table));
+        var room = JSON.parse(localStorage.getItem('roomdata'));
         this.router.navigate(['/waiter/order', room._id]);
+    };
+    DashboardComponent.prototype.getTables = function (room, index) {
+        localStorage.setItem('roomdata', JSON.stringify(room));
+        this.tables = room.tables;
+        this.activeRoom[index] = true;
+        for (var i = 0; i < this.activeRoom.length; i++) {
+            if (index != i) {
+                this.activeRoom[i] = false;
+            }
+        }
     };
     DashboardComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({

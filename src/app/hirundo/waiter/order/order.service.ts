@@ -28,4 +28,16 @@ export class OrderService {
     let data = localStorage.getItem('orderData');
     return JSON.parse(data);
   }
+  getVariants(): Promise<any> {
+    let url = '/api/variant';
+    return this.http.get(url).toPromise()
+      .then(this.globalService.extractData)
+      .catch(this.globalService.handleErrorPromise);
+  }
+  getNotes(): Promise<any> {
+    let url = '/api/note';
+    return this.http.get(url).toPromise()
+      .then(this.globalService.extractData)
+      .catch(this.globalService.handleErrorPromise);
+  }
 }

@@ -401,10 +401,14 @@ var ItemComponent = /** @class */ (function () {
         this.articles = [];
         this.categoryList = [];
         this.categorySearchData = [];
+        this.variantList = [];
+        this.noteList = [];
     }
     ItemComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.articles = this.orderService.getOrderData().categoryItems;
+        if (this.orderService.getOrderData().categoryItems) {
+            this.articles = this.orderService.getOrderData().categoryItems;
+        }
         this.searchStr = this.orderService.getOrderData().searchStr;
         this.orderService.getCategory()
             .then(function (data) {
@@ -418,6 +422,20 @@ var ItemComponent = /** @class */ (function () {
                 }
                 _this.dataService = _this.completerService.local(_this.categorySearchData, 'name', 'name');
             }
+        })
+            .catch(function (error) {
+            console.log('error', error);
+        });
+        this.orderService.getVariants()
+            .then(function (data) {
+            _this.variantList = data.data;
+        })
+            .catch(function (error) {
+            console.log('error', error);
+        });
+        this.orderService.getNotes()
+            .then(function (data) {
+            _this.noteList = data.data;
         })
             .catch(function (error) {
             console.log('error', error);
@@ -690,6 +708,18 @@ var OrderService = /** @class */ (function () {
     OrderService.prototype.getOrderData = function () {
         var data = localStorage.getItem('orderData');
         return JSON.parse(data);
+    };
+    OrderService.prototype.getVariants = function () {
+        var url = '/api/variants';
+        return this.http.get(url).toPromise()
+            .then(this.globalService.extractData)
+            .catch(this.globalService.handleErrorPromise);
+    };
+    OrderService.prototype.getNotes = function () {
+        var url = '/api/notes';
+        return this.http.get(url).toPromise()
+            .then(this.globalService.extractData)
+            .catch(this.globalService.handleErrorPromise);
     };
     OrderService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Injectable */])(),
