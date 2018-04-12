@@ -16,6 +16,7 @@
                 placeholder="Search Category"></ng2-completer>            
         </div>        
         <div class="alert-danger" *ngIf="error">{{errorMsg}}</div>
+        <div *ngIf="articles.length">
         <div class="item-list align-items-center" *ngFor="let article of articles | filter : searchText ; let i = index">
             <div class="item" [ngStyle]="{'background-color': article.category.color}">
                 <img *ngIf="!article.logo.small && article.category.isIcon" class="icon-img" [src]="article.category.icon" alt="" />
@@ -36,6 +37,7 @@
             <button type="submit" class="btn btn-brown add-cart" (click)="addToCart(article,quantity[i],i)">
                 <i class="fas fa-cart-plus"></i>
             </button>
+        </div>
         </div>
     </div>
 </div>
