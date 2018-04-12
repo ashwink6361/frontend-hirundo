@@ -75,7 +75,7 @@ export class ChooseCategoryComponent implements OnInit {
           orderdata.categoryItems = data.data[i].items;
           for(let i=0;i<orderdata.categoryItems.length;i++){
             orderdata.categoryItems[i].quantity = 0;
-            orderdata.selectedItems = [];
+            // orderdata.selectedItems = [];
           }
           this.orderService.setOrderData(orderdata);
         }

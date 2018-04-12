@@ -59,6 +59,7 @@ body {
         li {
             padding: 5px;
             display: inline-block;
+            min-width: 71px;
             &.prev {
                 position: absolute;
                 width: 20px;
