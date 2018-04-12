@@ -649,7 +649,7 @@ var WebsocketService = /** @class */ (function () {
 /***/ "../../../../../src/app/shared/footer/footer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<footer>\n  <div class=\"footer-bottom\">\n    <div class=\"container\">\n      <div class=\"d-flex justify-space-between\">\n        <div class=\"copyright\">\n          &copy; 2018 Hirundo | All Rights Reserved.\n        </div>\n      </div>\n    </div>\n  </div>\n</footer>\n"
+module.exports = "<footer>\r\n  <div class=\"footer-bottom\">\r\n    <div class=\"container\">\r\n      <div class=\"d-flex justify-space-between\">\r\n        <div class=\"copyright\">\r\n          &copy; 2018 Hirundo | All Rights Reserved.\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</footer>\r\n"
 
 /***/ }),
 
@@ -777,7 +777,7 @@ var AuthGuard = /** @class */ (function () {
 /***/ "../../../../../src/app/shared/header-login/header-login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header>\n  <div class=\"menu-btn\" (click)=\"sidebar()\">\n    <i class=\"fas fa-bars\"></i>\n  </div>\n  <div class=\"logo\">\n    <img src=\"assets/images/logo.png\" alt=\"\" />\n  </div>\n  <!-- <div class=\"cart\">\n    <a routerLink=\"/waiter/cart\"><i class=\"fas fa-shopping-cart\"></i></a>\n  </div> -->\n</header>\n"
+module.exports = "<header>\r\n  <div class=\"menu-btn\" (click)=\"sidebar()\">\r\n    <i class=\"fas fa-bars\"></i>\r\n  </div>\r\n  <div class=\"logo\">\r\n    <img src=\"assets/images/logo.png\" alt=\"\" />\r\n  </div>\r\n  <!-- <div class=\"cart\">\r\n    <a routerLink=\"/waiter/cart\"><i class=\"fas fa-shopping-cart\"></i></a>\r\n  </div> -->\r\n</header>\r\n"
 
 /***/ }),
 
@@ -845,7 +845,7 @@ var HeaderLoginComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/shared/header/header.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<mdb-navbar SideClass=\"navbar navbar-expand-lg navbar-light\">\n    <logo>\n        <a class=\"navbar-brand\" routerLink=\"/\">\n            <img src=\"/assets/images/logo.png\" alt=\"\">\n        </a>\n    </logo>\n    <links>        \n        <ul class=\"navbar-nav ml-auto\">            \n            <li class=\"language-option\">\n                <div class=\"text-right\">\n                    <a class=\"dropdown-toggle\" id=\"language\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n                        <img src=\"assets/images/flags/English.png\" *ngIf=\"(currentLan=='en')\" alt=\"\" title=\"\">\n                        <img src=\"assets/images/flags/Italian.png\" *ngIf=\"(currentLan=='it')\" alt=\"\" title=\"\">\n                        <span class=\"fa fa-chevron-down\" aria-hidden=\"true\"></span>\n                    </a>\n                    <div class=\"dropdown-menu\" aria-labelledby=\"language\">\n                        <a class=\"dropdown-item\" (click)=\"changeLang('en')\">\n                            <img src=\"assets/images/flags/English.png\"> English</a>\n                        <a class=\"dropdown-item\" (click)=\"changeLang('it')\">\n                            <img src=\"assets/images/flags/Italian.png\"> Italian</a>\n                    </div>\n                </div>\n            </li>\n        </ul>\n    </links>\n</mdb-navbar>\n"
+module.exports = "<mdb-navbar SideClass=\"navbar navbar-expand-lg navbar-light\">\r\n    <logo>\r\n        <a class=\"navbar-brand\" routerLink=\"/\">\r\n            <img src=\"/assets/images/logo.png\" alt=\"\">\r\n        </a>\r\n    </logo>\r\n    <links>        \r\n        <ul class=\"navbar-nav ml-auto\">            \r\n            <li class=\"language-option\">\r\n                <div class=\"text-right\">\r\n                    <a class=\"dropdown-toggle\" id=\"language\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\r\n                        <img src=\"assets/images/flags/English.png\" *ngIf=\"(currentLan=='en')\" alt=\"\" title=\"\">\r\n                        <img src=\"assets/images/flags/Italian.png\" *ngIf=\"(currentLan=='it')\" alt=\"\" title=\"\">\r\n                        <span class=\"fa fa-chevron-down\" aria-hidden=\"true\"></span>\r\n                    </a>\r\n                    <div class=\"dropdown-menu\" aria-labelledby=\"language\">\r\n                        <a class=\"dropdown-item\" (click)=\"changeLang('en')\">\r\n                            <img src=\"assets/images/flags/English.png\"> English</a>\r\n                        <a class=\"dropdown-item\" (click)=\"changeLang('it')\">\r\n                            <img src=\"assets/images/flags/Italian.png\"> Italian</a>\r\n                    </div>\r\n                </div>\r\n            </li>\r\n        </ul>\r\n    </links>\r\n</mdb-navbar>\r\n"
 
 /***/ }),
 
@@ -992,7 +992,6 @@ var FilterPipe = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__shared_pipes_filter_pipe__ = __webpack_require__("../../../../../src/app/shared/pipes/filter.pipe.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__service_app_service__ = __webpack_require__("../../../../../src/app/service/app.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__tabs_tabs_component__ = __webpack_require__("../../../../../src/app/shared/tabs/tabs.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1013,14 +1012,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-
 var NGA_COMPONENTS = [
     __WEBPACK_IMPORTED_MODULE_3__header__["a" /* HeaderComponent */],
     __WEBPACK_IMPORTED_MODULE_4__footer__["a" /* FooterComponent */],
     __WEBPACK_IMPORTED_MODULE_6__header_login_header_login_component__["a" /* HeaderLoginComponent */],
     __WEBPACK_IMPORTED_MODULE_7__sidebar_sidebar_component__["a" /* SidebarComponent */],
     __WEBPACK_IMPORTED_MODULE_8__user_change_passowrd_user_change_passowrd_component__["a" /* UserChangePassowrdComponent */],
-    __WEBPACK_IMPORTED_MODULE_14__tabs_tabs_component__["a" /* TabsComponent */],
     __WEBPACK_IMPORTED_MODULE_12__shared_pipes_filter_pipe__["a" /* FilterPipe */]
 ];
 var SharedModule = /** @class */ (function () {
@@ -1062,7 +1059,7 @@ var SharedModule = /** @class */ (function () {
 /***/ "../../../../../src/app/shared/sidebar/sidebar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"sidebar\" [class.sidebartoggle]=\"appService.sidebarToggle\">\n    <div class=\"sidebar-user-detail\">\n        <img src=\"assets/images/test1.png\" alt=\"\" />\n        <p>{{authGuard.getCurrentUser().firstName}}\n            <span *ngIf=\"authGuard.getCurrentUser().lastName\">&nbsp;{{authGuard.getCurrentUser().lastName}}</span>\n        </p>\n    </div>\n    <div class=\"sidebar-nav\">\n        <ul>\n            <li>\n                <a class=\"waves-effect\" *ngIf=\"userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter\">\n                    <i class=\"fas fa-tachometer-alt\"></i> Home</a>\n            </li>\n            <li>\n                <a class=\"waves-effect\" *ngIf=\"userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter/profile\">\n                    <i class=\"far fa-user\"></i> Profile</a>\n                <a class=\"waves-effect\" *ngIf=\"userType == 4\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department/profile\">\n                    <i class=\"far fa-user\"></i> Profile</a>\n            </li>\n            <li *ngIf=\"userType == 4\">\n                <a class=\"waves-effect\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department\">\n                    <i class=\"fas fa-cart-plus\"></i> Orders</a>\n            </li>\n            <li>\n                <a class=\"waves-effect\" *ngIf=\"userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter/change-password\">\n                    <i class=\"fas fa-cog\"></i> Change Password</a>\n                <a class=\"waves-effect\" *ngIf=\"userType == 4\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department/change-password\">\n                    <i class=\"fas fa-cog\"></i> Change Password</a>\n            </li>\n            <li>\n                <a class=\"waves-effect\" mdbRippleRadius (click)=\"appService.logout()\">\n                    <i class=\"fas fa-power-off\"></i> Logout</a>\n            </li>\n        </ul>\n    </div>\n</div>\n"
+module.exports = "<div class=\"sidebar\" [class.sidebartoggle]=\"appService.sidebarToggle\">\r\n    <div class=\"sidebar-user-detail\">\r\n        <img src=\"assets/images/test1.png\" alt=\"\" />\r\n        <p>{{authGuard.getCurrentUser().firstName}}\r\n            <span *ngIf=\"authGuard.getCurrentUser().lastName\">&nbsp;{{authGuard.getCurrentUser().lastName}}</span>\r\n        </p>\r\n    </div>\r\n    <div class=\"sidebar-nav\">\r\n        <ul>\r\n            <li>\r\n                <a class=\"waves-effect\" *ngIf=\"userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter\">\r\n                    <i class=\"fas fa-tachometer-alt\"></i> Home</a>\r\n            </li>\r\n            <li>\r\n                <a class=\"waves-effect\" *ngIf=\"userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter/profile\">\r\n                    <i class=\"far fa-user\"></i> Profile</a>\r\n                <a class=\"waves-effect\" *ngIf=\"userType == 4\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department/profile\">\r\n                    <i class=\"far fa-user\"></i> Profile</a>\r\n            </li>\r\n            <li *ngIf=\"userType == 4\">\r\n                <a class=\"waves-effect\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department\">\r\n                    <i class=\"fas fa-cart-plus\"></i> Orders</a>\r\n            </li>\r\n            <li>\r\n                <a class=\"waves-effect\" *ngIf=\"userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter/change-password\">\r\n                    <i class=\"fas fa-cog\"></i> Change Password</a>\r\n                <a class=\"waves-effect\" *ngIf=\"userType == 4\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department/change-password\">\r\n                    <i class=\"fas fa-cog\"></i> Change Password</a>\r\n            </li>\r\n            <li>\r\n                <a class=\"waves-effect\" mdbRippleRadius (click)=\"appService.logout()\">\r\n                    <i class=\"fas fa-power-off\"></i> Logout</a>\r\n            </li>\r\n        </ul>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -1132,71 +1129,10 @@ var SidebarComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "../../../../../src/app/shared/tabs/tabs.component.html":
-/***/ (function(module, exports) {
-
-module.exports = "\n"
-
-/***/ }),
-
-/***/ "../../../../../src/app/shared/tabs/tabs.component.scss":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "", ""]);
-
-// exports
-
-
-/*** EXPORTS FROM exports-loader ***/
-module.exports = module.exports.toString();
-
-/***/ }),
-
-/***/ "../../../../../src/app/shared/tabs/tabs.component.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-var TabsComponent = /** @class */ (function () {
-    function TabsComponent() {
-    }
-    TabsComponent.prototype.ngOnInit = function () {
-    };
-    TabsComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
-            selector: 'app-tabs',
-            template: __webpack_require__("../../../../../src/app/shared/tabs/tabs.component.html"),
-            styles: [__webpack_require__("../../../../../src/app/shared/tabs/tabs.component.scss")]
-        }),
-        __metadata("design:paramtypes", [])
-    ], TabsComponent);
-    return TabsComponent;
-}());
-
-//# sourceMappingURL=tabs.component.js.map
-
-/***/ }),
-
 /***/ "../../../../../src/app/shared/user-change-passowrd/user-change-passowrd.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\">\n  <div class=\"card\">\n    <div class=\"card-body\">\n      <div class=\"row\">\n        <div class=\"col-sm-6\">\n          <h4 class=\"card-title\">Change Password</h4>\n          <!-- <form [formGroup]=\"changePasswordForm\" (ngSubmit)=\"changePassword(changePasswordForm.value)\"> -->\n            <div class=\"alert-danger\" *ngIf=\"changePasswordError\">{{changePasswordErrorMsg}}</div>\n            <div class=\"alert-success\" *ngIf=\"changePasswordSuccess\">{{changePasswordSuccessMsg}}</div>            \n            <div class=\"md-form\">\n              <i class=\"fa fa-lock prefix grey-text\"></i>\n              <input type=\"password\" id=\"old-pass\" class=\"form-control\" [(ngModel)]=\"changePasswordData.oldPassword\" mdbActive>\n              <label for=\"old-pass\">Old Password</label>\n            </div>\n            <div class=\"md-form\">\n              <i class=\"fa fa-lock prefix grey-text\"></i>\n              <input type=\"password\" id=\"new-pass\" class=\"form-control\" [(ngModel)]=\"changePasswordData.newPassword\" mdbActive>\n              <label for=\"new-pass\">New Password</label>\n            </div>\n            <div class=\"md-form\">\n              <i class=\"fa fa-lock prefix grey-text\"></i>\n              <input type=\"password\" id=\"confirm-pass\" class=\"form-control\" [(ngModel)]=\"changePasswordData.confirmPassword\" mdbActive>\n              <label for=\"confirm-pass\">Confirm Password</label>\n            </div>\n            <!-- <small class=\"text-danger\" *ngIf=\"changePasswordForm.value.oldPassword==changePasswordForm.value.newPassword\">Old Password and New Password cannot be same.</small>             -->\n            <!-- <small class=\"text-danger\" *ngIf=\"changePasswordForm.value.newPassword!=changePasswordForm.value.confirmPassword\">New Password and Confirm Password must be same.</small> -->\n            <div class=\"text-center\">\n              <button type=\"submit\" class=\"btn btn-primary waves-light\" [disabled]=\"activeRequest\" mdbRippleRadius (click)=\"changePassword(changePasswordData)\">Submit</button>\n            </div>\n          <!-- </form> -->\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container-fluid\">\r\n  <div class=\"card\">\r\n    <div class=\"card-body\">\r\n      <div class=\"row\">\r\n        <div class=\"col-sm-6\">\r\n          <h4 class=\"card-title\">Change Password</h4>\r\n          <!-- <form [formGroup]=\"changePasswordForm\" (ngSubmit)=\"changePassword(changePasswordForm.value)\"> -->\r\n            <div class=\"alert-danger\" *ngIf=\"changePasswordError\">{{changePasswordErrorMsg}}</div>\r\n            <div class=\"alert-success\" *ngIf=\"changePasswordSuccess\">{{changePasswordSuccessMsg}}</div>            \r\n            <div class=\"md-form\">\r\n              <i class=\"fa fa-lock prefix grey-text\"></i>\r\n              <input type=\"password\" id=\"old-pass\" class=\"form-control\" [(ngModel)]=\"changePasswordData.oldPassword\" mdbActive>\r\n              <label for=\"old-pass\">Old Password</label>\r\n            </div>\r\n            <div class=\"md-form\">\r\n              <i class=\"fa fa-lock prefix grey-text\"></i>\r\n              <input type=\"password\" id=\"new-pass\" class=\"form-control\" [(ngModel)]=\"changePasswordData.newPassword\" mdbActive>\r\n              <label for=\"new-pass\">New Password</label>\r\n            </div>\r\n            <div class=\"md-form\">\r\n              <i class=\"fa fa-lock prefix grey-text\"></i>\r\n              <input type=\"password\" id=\"confirm-pass\" class=\"form-control\" [(ngModel)]=\"changePasswordData.confirmPassword\" mdbActive>\r\n              <label for=\"confirm-pass\">Confirm Password</label>\r\n            </div>\r\n            <!-- <small class=\"text-danger\" *ngIf=\"changePasswordForm.value.oldPassword==changePasswordForm.value.newPassword\">Old Password and New Password cannot be same.</small>             -->\r\n            <!-- <small class=\"text-danger\" *ngIf=\"changePasswordForm.value.newPassword!=changePasswordForm.value.confirmPassword\">New Password and Confirm Password must be same.</small> -->\r\n            <div class=\"text-center\">\r\n              <button type=\"submit\" class=\"btn btn-primary waves-light\" [disabled]=\"activeRequest\" mdbRippleRadius (click)=\"changePassword(changePasswordData)\">Submit</button>\r\n            </div>\r\n          <!-- </form> -->\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 

@@ -722,6 +722,7 @@ header {
     .item-list {
         display: flex;
         justify-content: space-between;
+        margin-bottom: 10px;
         .item {
             max-width: 70px;
             position: relative;
