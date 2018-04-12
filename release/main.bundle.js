@@ -4,10 +4,6 @@ webpackJsonp(["main"],{
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./cart/cart.module": [
-		"../../../../../src/app/hirundo/waiter/cart/cart.module.ts",
-		"cart.module"
-	],
 	"./change-password/change-password.module": [
 		"../../../../../src/app/hirundo/waiter/change-password/change-password.module.ts",
 		"change-password.module"
@@ -996,6 +992,7 @@ var FilterPipe = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__shared_pipes_filter_pipe__ = __webpack_require__("../../../../../src/app/shared/pipes/filter.pipe.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__service_app_service__ = __webpack_require__("../../../../../src/app/service/app.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__tabs_tabs_component__ = __webpack_require__("../../../../../src/app/shared/tabs/tabs.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1016,12 +1013,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var NGA_COMPONENTS = [
     __WEBPACK_IMPORTED_MODULE_3__header__["a" /* HeaderComponent */],
     __WEBPACK_IMPORTED_MODULE_4__footer__["a" /* FooterComponent */],
     __WEBPACK_IMPORTED_MODULE_6__header_login_header_login_component__["a" /* HeaderLoginComponent */],
     __WEBPACK_IMPORTED_MODULE_7__sidebar_sidebar_component__["a" /* SidebarComponent */],
     __WEBPACK_IMPORTED_MODULE_8__user_change_passowrd_user_change_passowrd_component__["a" /* UserChangePassowrdComponent */],
+    __WEBPACK_IMPORTED_MODULE_14__tabs_tabs_component__["a" /* TabsComponent */],
     __WEBPACK_IMPORTED_MODULE_12__shared_pipes_filter_pipe__["a" /* FilterPipe */]
 ];
 var SharedModule = /** @class */ (function () {
@@ -1130,6 +1129,67 @@ var SidebarComponent = /** @class */ (function () {
 }());
 
 //# sourceMappingURL=sidebar.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/shared/tabs/tabs.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/shared/tabs/tabs.component.scss":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/shared/tabs/tabs.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var TabsComponent = /** @class */ (function () {
+    function TabsComponent() {
+    }
+    TabsComponent.prototype.ngOnInit = function () {
+    };
+    TabsComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
+            selector: 'app-tabs',
+            template: __webpack_require__("../../../../../src/app/shared/tabs/tabs.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/shared/tabs/tabs.component.scss")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], TabsComponent);
+    return TabsComponent;
+}());
+
+//# sourceMappingURL=tabs.component.js.map
 
 /***/ }),
 

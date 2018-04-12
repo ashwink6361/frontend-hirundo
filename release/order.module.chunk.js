@@ -1,5 +1,66 @@
 webpackJsonp(["order.module"],{
 
+/***/ "../../../../../src/app/hirundo/waiter/order/cart/cart.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<header class=\"page-content-header\">\n  <div class=\"back-btn\">\n      <a routerLink=\"/waiter/order/:id/choose-item\">\n          <i class=\"fas fa-angle-left\"></i>\n      </a>\n  </div>\n  <div class=\"header-title\">\n      Create Order\n  </div>\n</header>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/hirundo/waiter/order/cart/cart.component.scss":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/hirundo/waiter/order/cart/cart.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CartComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var CartComponent = /** @class */ (function () {
+    function CartComponent() {
+    }
+    CartComponent.prototype.ngOnInit = function () {
+    };
+    CartComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
+            selector: 'app-cart',
+            template: __webpack_require__("../../../../../src/app/hirundo/waiter/order/cart/cart.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/hirundo/waiter/order/cart/cart.component.scss")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], CartComponent);
+    return CartComponent;
+}());
+
+//# sourceMappingURL=cart.component.js.map
+
+/***/ }),
+
 /***/ "../../../../../src/app/hirundo/waiter/order/choose-category/choose-category.component.html":
 /***/ (function(module, exports) {
 
@@ -281,7 +342,7 @@ var CreateOrderComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/hirundo/waiter/order/item/item.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header class=\"page-content-header\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter/order/:id/choose-category\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\r\n        {{orderService.getOrderData().selectedCategory.name}}\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <div class=\"item-container\">\r\n        <div class=\"search-category w-100\">\r\n            <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Item\" />\r\n            <!-- <ng2-completer [(ngModel)]=\"searchStr\" class=\"form-control\" [datasource]=\"dataService\" [minSearchLength]=\"0\" (selected)=\"onSelected($event)\"\r\n                placeholder=\"Search Category\"></ng2-completer> -->\r\n        </div>\r\n        <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>\r\n        <div class=\"item-list align-items-center\" *ngFor=\"let article of articles | filter : searchText ; let i = index\">\r\n            <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                    alt=\"Category Logo\" />\r\n                <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\r\n            </div>\r\n            <div>\r\n                <p class=\"name m-0\">{{article.name}}</p>\r\n                <p class=\"name m-0\">{{article.price}}</p>\r\n            </div>\r\n            <div class=\"input-prepend-append\">\r\n                <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue(article,i)\" value=\"Decrease Value\">\r\n                    <i class=\"fas fa-minus\"></i>\r\n                </button>\r\n                <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue(article,i)\" value=\"Increase Value\">\r\n                    <i class=\"fas fa-plus\"></i>\r\n                </button>\r\n            </div>\r\n            <button type=\"submit\" class=\"btn btn-brown add-cart\" (click)=\"addToCart(article,quantity[i],i)\">\r\n                <i class=\"fas fa-pencil\"></i>\r\n            </button>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<header class=\"page-content-header\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter/order/:id/choose-category\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\r\n        {{orderService.getOrderData().selectedCategory.name}}\r\n    </div>\r\n    <div class=\"subcategory-container\">\r\n        <div class=\"tabs-container\">\r\n            <ul>\r\n                <li class=\"prev\">\r\n                  <i class=\"fas fa-chevron-left\"></i>\r\n                </li>\r\n                <li *ngFor=\"let room of roomData\">\r\n                    {{room.name}}\r\n                </li>\r\n                <li class=\"next\">\r\n                  <i class=\"fas fa-chevron-right\"></i>\r\n                </li>\r\n              </ul>\r\n        </div>\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <div class=\"item-container\">\r\n        <div class=\"search-category w-100\">\r\n            <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Item\" />\r\n            <button type=\"button\" class=\"btn-cart\" (click)=\"viewCart()\"><i class=\"fas fa-shopping-cart\"></i></button>\r\n            <!-- <ng2-completer [(ngModel)]=\"searchStr\" class=\"form-control\" [datasource]=\"dataService\" [minSearchLength]=\"0\" (selected)=\"onSelected($event)\"\r\n                placeholder=\"Search Category\"></ng2-completer> -->\r\n        </div>\r\n        <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>\r\n        <div class=\"item-list align-items-center\" *ngFor=\"let article of articles | filter : searchText ; let i = index\">\r\n            <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                    alt=\"Category Logo\" />\r\n                <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\r\n            </div>\r\n            <div class=\"item-name\">\r\n                <p class=\"name m-0\">{{article.name}}</p>\r\n                <p class=\"name m-0\">&euro; {{article.price}}</p>\r\n            </div>\r\n            <div class=\"input-prepend-append\">\r\n                <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue(article,i)\" value=\"Decrease Value\">\r\n                    <i class=\"fas fa-minus\"></i>\r\n                </button>\r\n                <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue(article,i)\" value=\"Increase Value\">\r\n                    <i class=\"fas fa-plus\"></i>\r\n                </button>\r\n            </div>\r\n            <button type=\"submit\" class=\"btn-floating waves-light\" (click)=\"addToCart(article,quantity[i],i)\">\r\n                <i class=\"fas fa-pencil-alt\"></i>\r\n            </button>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -405,6 +466,9 @@ var ItemComponent = /** @class */ (function () {
             });
         }
     };
+    ItemComponent.prototype.viewCart = function () {
+        this.router.navigate(['/waiter/order/:id/cart']);
+    };
     ItemComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
             selector: 'app-item',
@@ -492,12 +556,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__create_order_create_order_component__ = __webpack_require__("../../../../../src/app/hirundo/waiter/order/create-order/create-order.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__choose_category_choose_category_component__ = __webpack_require__("../../../../../src/app/hirundo/waiter/order/choose-category/choose-category.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__shared_shared_module__ = __webpack_require__("../../../../../src/app/shared/shared.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__cart_cart_component__ = __webpack_require__("../../../../../src/app/hirundo/waiter/order/cart/cart.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -522,7 +588,7 @@ var OrderModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* ReactiveFormsModule */],
                 __WEBPACK_IMPORTED_MODULE_3_ng2_completer__["b" /* Ng2CompleterModule */]
             ],
-            declarations: [__WEBPACK_IMPORTED_MODULE_4__order_component__["a" /* OrderComponent */], __WEBPACK_IMPORTED_MODULE_7__item_item_component__["a" /* ItemComponent */], __WEBPACK_IMPORTED_MODULE_8__create_order_create_order_component__["a" /* CreateOrderComponent */], __WEBPACK_IMPORTED_MODULE_9__choose_category_choose_category_component__["a" /* ChooseCategoryComponent */]],
+            declarations: [__WEBPACK_IMPORTED_MODULE_4__order_component__["a" /* OrderComponent */], __WEBPACK_IMPORTED_MODULE_7__item_item_component__["a" /* ItemComponent */], __WEBPACK_IMPORTED_MODULE_8__create_order_create_order_component__["a" /* CreateOrderComponent */], __WEBPACK_IMPORTED_MODULE_9__choose_category_choose_category_component__["a" /* ChooseCategoryComponent */], __WEBPACK_IMPORTED_MODULE_11__cart_cart_component__["a" /* CartComponent */]],
             providers: [__WEBPACK_IMPORTED_MODULE_6__order_service__["a" /* OrderService */],]
         })
     ], OrderModule);
@@ -544,6 +610,8 @@ var OrderModule = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__item_item_component__ = __webpack_require__("../../../../../src/app/hirundo/waiter/order/item/item.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__choose_category_choose_category_component__ = __webpack_require__("../../../../../src/app/hirundo/waiter/order/choose-category/choose-category.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__create_order_create_order_component__ = __webpack_require__("../../../../../src/app/hirundo/waiter/order/create-order/create-order.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__cart_cart_component__ = __webpack_require__("../../../../../src/app/hirundo/waiter/order/cart/cart.component.ts");
+
 
 
 
@@ -557,6 +625,7 @@ var routes = [
             { path: '', component: __WEBPACK_IMPORTED_MODULE_4__create_order_create_order_component__["a" /* CreateOrderComponent */] },
             { path: 'choose-category', component: __WEBPACK_IMPORTED_MODULE_3__choose_category_choose_category_component__["a" /* ChooseCategoryComponent */] },
             { path: 'choose-item', component: __WEBPACK_IMPORTED_MODULE_2__item_item_component__["a" /* ItemComponent */] },
+            { path: 'cart', component: __WEBPACK_IMPORTED_MODULE_5__cart_cart_component__["a" /* CartComponent */] },
         ],
         canActivate: []
     },

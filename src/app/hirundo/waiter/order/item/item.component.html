@@ -7,11 +7,27 @@
     <div class="header-title" *ngIf="orderService.getOrderData().selectedCategory">
         {{orderService.getOrderData().selectedCategory.name}}
     </div>
+    <div class="subcategory-container">
+        <div class="tabs-container">
+            <ul>
+                <li class="prev">
+                  <i class="fas fa-chevron-left"></i>
+                </li>
+                <li *ngFor="let room of roomData">
+                    {{room.name}}
+                </li>
+                <li class="next">
+                  <i class="fas fa-chevron-right"></i>
+                </li>
+              </ul>
+        </div>
+    </div>
 </header>
 <div class="page-content">
     <div class="item-container">
         <div class="search-category w-100">
             <input class="form-control" [(ngModel)]="searchText" type="text" placeholder="Search Item" />
+            <button type="button" class="btn-cart" (click)="viewCart()"><i class="fas fa-shopping-cart"></i></button>
             <!-- <ng2-completer [(ngModel)]="searchStr" class="form-control" [datasource]="dataService" [minSearchLength]="0" (selected)="onSelected($event)"
                 placeholder="Search Category"></ng2-completer> -->
         </div>
@@ -24,9 +40,9 @@
                 <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
                 <span class="item-quantity" *ngIf="article.quantity>0">{{article.quantity}}</span>
             </div>
-            <div>
+            <div class="item-name">
                 <p class="name m-0">{{article.name}}</p>
-                <p class="name m-0">{{article.price}}</p>
+                <p class="name m-0">&euro; {{article.price}}</p>
             </div>
             <div class="input-prepend-append">
                 <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue(article,i)" value="Decrease Value">
@@ -36,8 +52,8 @@
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
-            <button type="submit" class="btn btn-brown add-cart" (click)="addToCart(article,quantity[i],i)">
-                <i class="fas fa-pencil"></i>
+            <button type="submit" class="btn-floating waves-light" (click)="addToCart(article,quantity[i],i)">
+                <i class="fas fa-pencil-alt"></i>
             </button>
         </div>
     </div>
