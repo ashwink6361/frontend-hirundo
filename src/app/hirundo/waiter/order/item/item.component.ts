@@ -17,10 +17,15 @@ export class ItemComponent implements OnInit {
   public categorySearchData: any[] = [];
   protected dataService: CompleterData;
   protected searchStr: string;
+  private variantList = [];
+  private noteList = [];
+  
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
-    this.articles = this.orderService.getOrderData().categoryItems;
+    if(this.orderService.getOrderData().categoryItems){
+      this.articles = this.orderService.getOrderData().categoryItems;
+    }
     this.searchStr = this.orderService.getOrderData().searchStr;
     this.orderService.getCategory()
       .then(data => {
@@ -34,6 +39,20 @@ export class ItemComponent implements OnInit {
           }
           this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
         }
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+      this.orderService.getVariants()
+      .then(data => {
+        this.variantList = data.data;
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+      this.orderService.getNotes()
+      .then(data => {
+        this.noteList = data.data;
       })
       .catch(error => {
         console.log('error', error);
