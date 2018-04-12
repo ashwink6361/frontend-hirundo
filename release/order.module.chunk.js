@@ -426,20 +426,20 @@ var ItemComponent = /** @class */ (function () {
             .catch(function (error) {
             console.log('error', error);
         });
-        this.orderService.getVariants()
-            .then(function (data) {
-            _this.variantList = data.data;
-        })
-            .catch(function (error) {
-            console.log('error', error);
-        });
-        this.orderService.getNotes()
-            .then(function (data) {
-            _this.noteList = data.data;
-        })
-            .catch(function (error) {
-            console.log('error', error);
-        });
+        // this.orderService.getVariants()
+        // .then(data => {
+        //   this.variantList = data.data;
+        // })
+        // .catch(error => {
+        //   console.log('error', error);
+        // });
+        // this.orderService.getNotes()
+        // .then(data => {
+        //   this.noteList = data.data;
+        // })
+        // .catch(error => {
+        //   console.log('error', error);
+        // });
     };
     ItemComponent.prototype.increaseValue = function (article, index) {
         var value = article.quantity;
@@ -710,13 +710,13 @@ var OrderService = /** @class */ (function () {
         return JSON.parse(data);
     };
     OrderService.prototype.getVariants = function () {
-        var url = '/api/variants';
+        var url = '/api/variant';
         return this.http.get(url).toPromise()
             .then(this.globalService.extractData)
             .catch(this.globalService.handleErrorPromise);
     };
     OrderService.prototype.getNotes = function () {
-        var url = '/api/notes';
+        var url = '/api/note';
         return this.http.get(url).toPromise()
             .then(this.globalService.extractData)
             .catch(this.globalService.handleErrorPromise);
