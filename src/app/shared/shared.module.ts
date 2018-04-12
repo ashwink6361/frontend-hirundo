@@ -12,12 +12,14 @@ import { UserChangePasswordService } from './user-change-passowrd/user-change-pa
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FilterPipe } from '../shared/pipes/filter.pipe';
 import { AppService} from '../service/app.service';
+import { TabsComponent } from './tabs/tabs.component';
 const NGA_COMPONENTS = [
   HeaderComponent,
   FooterComponent,
   HeaderLoginComponent,
   SidebarComponent,
   UserChangePassowrdComponent,
+  TabsComponent,
   FilterPipe
 ];
 

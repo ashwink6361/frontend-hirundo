@@ -4,17 +4,33 @@
             <i class="fas fa-angle-left"></i>
         </a>
     </div>
-    <div class="header-title">
-       {{orderService.getOrderData().selectedCategory.name}}
+    <div class="header-title" *ngIf="orderService.getOrderData().selectedCategory">
+        {{orderService.getOrderData().selectedCategory.name}}
+    </div>
+    <div class="subcategory-container">
+        <div class="tabs-container">
+            <ul>
+                <li class="prev">
+                  <i class="fas fa-chevron-left"></i>
+                </li>
+                <li *ngFor="let room of roomData">
+                    {{room.name}}
+                </li>
+                <li class="next">
+                  <i class="fas fa-chevron-right"></i>
+                </li>
+              </ul>
+        </div>
     </div>
 </header>
 <div class="page-content">
     <div class="item-container">
-        <div class="d-flex align-items-center justify-content-between search-category w-100">
+        <div class="search-category w-100">
             <input class="form-control" [(ngModel)]="searchText" type="text" placeholder="Search Item" />
-            <ng2-completer [(ngModel)]="searchStr" class="form-control" [datasource]="dataService" [minSearchLength]="0" (selected)="onSelected($event)"
-                placeholder="Search Category"></ng2-completer>            
-        </div>        
+            <button type="button" class="btn-cart" (click)="viewCart()"><i class="fas fa-shopping-cart"></i></button>
+            <!-- <ng2-completer [(ngModel)]="searchStr" class="form-control" [datasource]="dataService" [minSearchLength]="0" (selected)="onSelected($event)"
+                placeholder="Search Category"></ng2-completer> -->
+        </div>
         <div class="alert-danger" *ngIf="error">{{errorMsg}}</div>
         <div *ngIf="articles.length">
         <div class="item-list align-items-center" *ngFor="let article of articles | filter : searchText ; let i = index">
@@ -23,19 +39,22 @@
                 <img *ngIf="!article.logo.small && !article.category.isIcon && article.category.logo.small" [src]="article.category.logo.small"
                     alt="Category Logo" />
                 <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
-                <p class="name">{{article.name}}</p>
-            <span *ngIf="article.quantity>0">{{article.quantity}}</span>                            
+                <span class="item-quantity" *ngIf="article.quantity>0">{{article.quantity}}</span>
+            </div>
+            <div class="item-name">
+                <p class="name m-0">{{article.name}}</p>
+                <p class="name m-0">&euro; {{article.price}}</p>
             </div>
             <div class="input-prepend-append">
                 <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue(article,i)" value="Decrease Value">
-                - </button>
-                <label><span>{{article.quantity}}</span></label>
-                <!-- <input type="number" value="0" min="0" [(ngModel)]="quantity[i]" id="number"> -->
+                    <i class="fas fa-minus"></i>
+                </button>
                 <button type="button" class="btn btn-append btn-success" id="increase" (click)="increaseValue(article,i)" value="Increase Value">
-                + </button>
+                    <i class="fas fa-plus"></i>
+                </button>
             </div>
-            <button type="submit" class="btn btn-brown add-cart" (click)="addToCart(article,quantity[i],i)">
-                <i class="fas fa-cart-plus"></i>
+            <button type="submit" class="btn-floating waves-light" (click)="addToCart(article,quantity[i],i)">
+                <i class="fas fa-pencil-alt"></i>
             </button>
         </div>
         </div>

@@ -9,6 +9,7 @@ import { ItemComponent } from './item/item.component';
 import { CreateOrderComponent } from './create-order/create-order.component';
 import { ChooseCategoryComponent } from './choose-category/choose-category.component';
 import { SharedModule } from '../../../shared/shared.module';
+import { CartComponent } from './cart/cart.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,7 @@ import { SharedModule } from '../../../shared/shared.module';
     ReactiveFormsModule,
     Ng2CompleterModule
   ],
-  declarations: [OrderComponent, ItemComponent, CreateOrderComponent, ChooseCategoryComponent],
+  declarations: [OrderComponent, ItemComponent, CreateOrderComponent, ChooseCategoryComponent, CartComponent],
   providers: [OrderService, ]
 })
 export class OrderModule { }

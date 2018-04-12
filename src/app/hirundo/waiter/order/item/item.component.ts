@@ -91,4 +91,7 @@ export class ItemComponent implements OnInit {
         });
     }
   }
+  viewCart(){
+    this.router.navigate(['/waiter/order/:id/cart']);
+  }
 }

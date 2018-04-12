@@ -10,8 +10,6 @@ export const routes: Routes = [
       { path: '', loadChildren: './dashboard/dashboard.module#DashboardModule' },
       { path: 'change-password', loadChildren: './change-password/change-password.module#ChangePasswordModule' },
       { path: 'profile', loadChildren: './profile/profile.module#ProfileModule' },
-      { path: 'cart', loadChildren: './cart/cart.module#CartModule' },
-
     ],
     canActivate: []
   },
