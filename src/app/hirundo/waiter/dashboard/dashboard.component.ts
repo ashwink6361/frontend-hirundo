@@ -14,6 +14,7 @@ export class DashboardComponent implements OnInit {
   constructor(public router: Router, private dashboardService: DashboardService) { }
 
   ngOnInit() {
+    localStorage.removeItem('orderData');
     this.dashboardService.getRooms().then(data => {
       console.log('data', data);
       this.roomData = data.data;

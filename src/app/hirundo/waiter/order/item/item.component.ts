@@ -40,19 +40,31 @@ export class ItemComponent implements OnInit {
       });
   }
 
-  increaseValue() {
-    let value = this.quantity;
+  increaseValue(article,index) {
+    let value = article.quantity;
     value = isNaN(value) ? 0 : value;
     value++;
-    this.quantity = value;
+    article.quantity = value;
+    console.log('article i',article);
+    // let data = this.orderService.getOrderData();    
+    //   data.selectedItems.push(article);
+   
+    // console.log('data 1',data);
+    
   }
 
-  decreaseValue() {
-    let value = this.quantity;
+  decreaseValue(article,index) {
+    let value = article.quantity;
     value = isNaN(value) ? 0 : value;
     value < 1 ? value = 1 : '';
     value--;
-    this.quantity = value;
+    article.quantity = value;
+    console.log('article i',article);
+    // let data = this.orderService.getOrderData();        
+    //   data.selectedItems.push(article);
+ 
+    // console.log('data 2',data);
+    
   }
 
   onSelected(item) {

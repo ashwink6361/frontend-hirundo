@@ -34,7 +34,7 @@ export class CreateOrderComponent implements OnInit {
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
-    if (this.orderService.getOrderData().numberOfPerson) {
+    if (this.orderService.getOrderData()) {
       this.numberOfPerson = this.orderService.getOrderData().numberOfPerson;
     }
     this.roomData = JSON.parse(localStorage.getItem('roomdata'));

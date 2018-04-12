@@ -23,12 +23,14 @@
                     alt="Category Logo" />
                 <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
                 <p class="name">{{article.name}}</p>
+            <span *ngIf="article.quantity>0">{{article.quantity}}</span>                            
             </div>
             <div class="input-prepend-append">
-                <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue(i)" value="Decrease Value">
+                <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue(article,i)" value="Decrease Value">
                 - </button>
-                <input type="number" value="0" [(ngModel)]="quantity[i]" id="number">
-                <button type="button" class="btn btn-append btn-success" id="increase" (click)="increaseValue(i)" value="Increase Value">
+                <label><span>{{article.quantity}}</span></label>
+                <!-- <input type="number" value="0" min="0" [(ngModel)]="quantity[i]" id="number"> -->
+                <button type="button" class="btn btn-append btn-success" id="increase" (click)="increaseValue(article,i)" value="Increase Value">
                 + </button>
             </div>
             <button type="submit" class="btn btn-brown add-cart" (click)="addToCart(article,quantity[i],i)">
