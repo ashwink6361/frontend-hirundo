@@ -40,7 +40,7 @@ body {
 
 // Tabs
 .tabs-container {
-    margin-top: -21px;
+    margin-top: -21px !important;
     margin: auto;
     ul {
         list-style: none;
@@ -59,6 +59,7 @@ body {
         li {
             padding: 5px;
             display: inline-block;
+            min-width: 71px;
             &.prev {
                 position: absolute;
                 width: 20px;
