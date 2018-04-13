@@ -19,7 +19,8 @@ export class ItemComponent implements OnInit {
   protected searchStr: string;
   private variantList = [];
   private noteList = [];
-  
+  public showVarient:  boolean = false;
+
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
@@ -55,20 +56,20 @@ export class ItemComponent implements OnInit {
     //   .catch(error => {
     //     console.log('error', error);
     //   });
-      // this.orderService.getVariants()
-      // .then(data => {
-      //   this.variantList = data.data;
-      // })
-      // .catch(error => {
-      //   console.log('error', error);
-      // });
-      // this.orderService.getNotes()
-      // .then(data => {
-      //   this.noteList = data.data;
-      // })
-      // .catch(error => {
-      //   console.log('error', error);
-      // });
+    // this.orderService.getVariants()
+    // .then(data => {
+    //   this.variantList = data.data;
+    // })
+    // .catch(error => {
+    //   console.log('error', error);
+    // });
+    // this.orderService.getNotes()
+    // .then(data => {
+    //   this.noteList = data.data;
+    // })
+    // .catch(error => {
+    //   console.log('error', error);
+    // });
   }
 
   increaseValue(article) {
@@ -123,7 +124,11 @@ export class ItemComponent implements OnInit {
         });
     }
   }
-  viewCart(){
+  viewCart() {
     this.router.navigate(['/waiter/order/:id/cart']);
+  }
+
+  viewVarient() {
+    this.showVarient = true;
   }
 }

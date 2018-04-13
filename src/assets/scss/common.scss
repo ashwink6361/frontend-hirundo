@@ -57,9 +57,9 @@ body {
         padding: 0 20px;
         background: #c5c8cd;
         li {
-            padding: 5px;
+            padding: 8px 5px;
             display: inline-block;
-            min-width: 71px;
+            min-width: 80px;
             &.prev {
                 position: absolute;
                 width: 20px;
@@ -74,7 +74,7 @@ body {
                 left: inherit;
                 right: 0;
             }
-            &.active{
+            &.active {
                 background-color: #faaa02
             }
         }
@@ -799,5 +799,15 @@ header {
                 color: #fff;
             }
         }
+    }
+}
+
+.varient-container{
+    position: fixed;
+    border-bottom: -100%;
+    transition: 0.3s ease-in-out;
+    z-index: 2;
+    .show-varient{
+        bottom: 0;
     }
 }
