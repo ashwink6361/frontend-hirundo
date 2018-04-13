@@ -9,7 +9,6 @@ export class OrderListService {
     this.http.get(url).toPromise()
       .then(data => {
         let res = data.json();
-        console.log('res',res);
         this.orderList = res.data;
       })
       .catch(error => {
@@ -18,9 +17,7 @@ export class OrderListService {
   }
 
   setOrder(data) {
-    console.log('data', data);
     this.orderList.push(data);
-    console.log('this.orderList', this.orderList);
   }
 
   public extractData(res: Response) {

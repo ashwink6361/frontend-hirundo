@@ -203,7 +203,6 @@ var OrderListService = /** @class */ (function () {
         this.http.get(url).toPromise()
             .then(function (data) {
             var res = data.json();
-            console.log('res', res);
             _this.orderList = res.data;
         })
             .catch(function (error) {
@@ -211,9 +210,7 @@ var OrderListService = /** @class */ (function () {
         });
     }
     OrderListService.prototype.setOrder = function (data) {
-        console.log('data', data);
         this.orderList.push(data);
-        console.log('this.orderList', this.orderList);
     };
     OrderListService.prototype.extractData = function (res) {
         var body = res.json();

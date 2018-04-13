@@ -3,12 +3,14 @@ import * as io from 'socket.io-client';
 import { Observable } from 'rxjs/Observable';
 import { Http, Response } from '@angular/http';
 import * as Rx from 'rxjs/Rx';
+import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class WebsocketService {
     // Our socket connection
     private socket;
     public _orders: Array<any> = [];
+    public _rooms: Array<any> = [];    
     constructor( private http: Http ) {
         this.connect();
     }
@@ -32,21 +34,47 @@ export class WebsocketService {
                 }
             }
         });
+        this.socket.on('tablestatus', (data) => {
+            for (var i = 0; i < this._rooms.length; i++) {
+                if (data.room == this._rooms[i]._id) {
+                    for (var j = 0; j < this._rooms[i].tables.length; j++) {
+                        if (data.table == this._rooms[i].tables[j]._id) {
+                            this._rooms[i].tables[j].status = data.status;
+                            break;
+                        }
+                    }
+                }
+            }
+        });
         let url = '/api/department/orders';
         this.http.get(url).toPromise()
-          .then(data => {
-            let res = data.json();
-            this._orders = res.data;
-          })
-          .catch(error => {
-            this._orders = [];
-          });
+            .then(data => {
+                let res = data.json();
+                this._orders = res.data;
+            })
+            .catch(error => {
+                this._orders = [];
+            });
     }
 
     public getOrders() {
         return this._orders;
     }
-
+    public getRooms(): Promise<any> {
+        let url1 = '/api/rooms';
+        return this.http.get(url1).toPromise()
+            .then(data => {
+                let res = data.json();
+                this._rooms = res.data;
+                return this._rooms;
+            })
+            .catch(error => {
+                this._rooms = [];
+                return error;
+            });
+        // console.log('this._rooms 1',this._rooms);        
+        // return this._rooms;
+    }
     public updateOrder(id, opts): Promise<any> {
         let url = '/api/department/orders/'+id;
         return this.http.put(url,opts).toPromise()

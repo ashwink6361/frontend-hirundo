@@ -572,6 +572,8 @@ var AppService = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_socket_io_client__ = __webpack_require__("../../../../socket.io-client/lib/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_socket_io_client___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_socket_io_client__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -584,10 +586,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var WebsocketService = /** @class */ (function () {
     function WebsocketService(http) {
         this.http = http;
         this._orders = [];
+        this._rooms = [];
         this.connect();
     }
     WebsocketService.prototype.connect = function () {
@@ -611,6 +615,18 @@ var WebsocketService = /** @class */ (function () {
                 }
             }
         });
+        this.socket.on('tablestatus', function (data) {
+            for (var i = 0; i < _this._rooms.length; i++) {
+                if (data.room == _this._rooms[i]._id) {
+                    for (var j = 0; j < _this._rooms[i].tables.length; j++) {
+                        if (data.table == _this._rooms[i].tables[j]._id) {
+                            _this._rooms[i].tables[j].status = data.status;
+                            break;
+                        }
+                    }
+                }
+            }
+        });
         var url = '/api/department/orders';
         this.http.get(url).toPromise()
             .then(function (data) {
@@ -623,6 +639,22 @@ var WebsocketService = /** @class */ (function () {
     };
     WebsocketService.prototype.getOrders = function () {
         return this._orders;
+    };
+    WebsocketService.prototype.getRooms = function () {
+        var _this = this;
+        var url1 = '/api/rooms';
+        return this.http.get(url1).toPromise()
+            .then(function (data) {
+            var res = data.json();
+            _this._rooms = res.data;
+            return _this._rooms;
+        })
+            .catch(function (error) {
+            _this._rooms = [];
+            return error;
+        });
+        // console.log('this._rooms 1',this._rooms);        
+        // return this._rooms;
     };
     WebsocketService.prototype.updateOrder = function (id, opts) {
         var url = '/api/department/orders/' + id;
