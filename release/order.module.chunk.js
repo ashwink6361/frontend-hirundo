@@ -64,7 +64,7 @@ var CartComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/hirundo/waiter/order/choose-category/choose-category.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header class=\"page-content-header\">\n    <div class=\"back-btn\">\n        <a routerLink=\"/waiter/order/:id\">\n            <i class=\"fas fa-angle-left\"></i>\n        </a>\n    </div>\n    <div class=\"header-title\">\n        Choose Category\n    </div>\n</header>\n<div class=\"page-content\">\n    <div class=\"category-list\">\n        <div class=\"d-flex flex-wrap\">\n            <div class=\"d-flex align-items-center justify-content-between search-category w-100\">\n                <ng2-completer [(ngModel)]=\"searchStr\" [datasource]=\"dataService\" [minSearchLength]=\"0\" (selected)=\"onSelected($event)\" placeholder=\"Search Category\"></ng2-completer>\n            </div>\n            <div class=\"category\" *ngFor=\"let category of categoryList\" [ngStyle]=\"{'background-color': category.color}\" (click)=\"showItems(category)\">\n                <img *ngIf=\"!category.isIcon\" [src]=\"category.logo.small\" alt=\"\" />\n                <img class=\"icon-img\" *ngIf=\"category.isIcon\" [src]=\"category.icon\" alt=\"\" />\n                <p class=\"name\">{{category.name}}</p>\n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "<header class=\"page-content-header\">\n    <div class=\"back-btn\">\n        <a routerLink=\"/waiter/order/:id\">\n            <i class=\"fas fa-angle-left\"></i>\n        </a>\n    </div>\n    <div class=\"header-title\">\n        Choose Category\n    </div>\n</header>\n<div class=\"page-content\">\n    <div class=\"category-list\">\n        <div class=\"d-flex flex-wrap\">\n            <div class=\"d-flex align-items-center justify-content-between search-category w-100\">\n                <!-- <ng2-completer [(ngModel)]=\"searchStr\" [datasource]=\"dataService\" [minSearchLength]=\"0\" (selected)=\"onSelected($event)\" placeholder=\"Search Category\"></ng2-completer> -->\n                <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Category\" />\n            </div>\n            <div class=\"category\" *ngFor=\"let category of categoryList | filter : searchText\" [ngStyle]=\"{'background-color': category.color}\" (click)=\"showItems(category)\">\n                <img *ngIf=\"!category.isIcon\" [src]=\"category.logo.small\" alt=\"\" />\n                <img class=\"icon-img\" *ngIf=\"category.isIcon\" [src]=\"category.icon\" alt=\"\" />\n                <p class=\"name\">{{category.name}}</p>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -169,19 +169,12 @@ var ChooseCategoryComponent = /** @class */ (function () {
     ChooseCategoryComponent.prototype.showItems = function (category) {
         var _this = this;
         var orderdata = this.orderService.getOrderData();
-        orderdata.selectedCategory = {
-            _id: category._id,
-            name: category.name
-        };
-        orderdata.searchStr = category.name;
+        orderdata.selectedCategory = category;
+        orderdata.categoryItems = [];
         this.orderService.getCategoryItem().then(function (data) {
             for (var i = 0; i < data.data.length; i++) {
                 if (data.data[i].category._id == category._id) {
                     orderdata.categoryItems = data.data[i].items;
-                    for (var i_1 = 0; i_1 < orderdata.categoryItems.length; i_1++) {
-                        orderdata.categoryItems[i_1].quantity = 0;
-                        // orderdata.selectedItems = [];
-                    }
                     _this.orderService.setOrderData(orderdata);
                 }
             }
@@ -309,7 +302,8 @@ var CreateOrderComponent = /** @class */ (function () {
             var data = {
                 roomId: this.roomData["_id"],
                 tableId: this.tableData["_id"],
-                numberOfPerson: this.numberOfPerson
+                numberOfPerson: this.numberOfPerson,
+                selectedItems: []
             };
             this.orderService.setOrderData(data);
             this.router.navigate(['/waiter/order/:id/choose-category']);
@@ -342,7 +336,7 @@ var CreateOrderComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/hirundo/waiter/order/item/item.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header class=\"page-content-header\">\n    <div class=\"back-btn\">\n        <a routerLink=\"/waiter/order/:id/choose-category\">\n            <i class=\"fas fa-angle-left\"></i>\n        </a>\n    </div>\n    <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\n        {{orderService.getOrderData().selectedCategory.name}}\n    </div>\n    <div class=\"subcategory-container\">\n        <div class=\"tabs-container\">\n            <ul>\n                <li class=\"prev\">\n                  <i class=\"fas fa-chevron-left\"></i>\n                </li>\n                <li *ngFor=\"let room of roomData\">\n                    {{room.name}}\n                </li>\n                <li class=\"next\">\n                  <i class=\"fas fa-chevron-right\"></i>\n                </li>\n              </ul>\n        </div>\n    </div>\n</header>\n<div class=\"page-content\">\n    <div class=\"item-container\">\n        <div class=\"search-category w-100\">\n            <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Item\" />\n            <button type=\"button\" class=\"btn-cart\" (click)=\"viewCart()\"><i class=\"fas fa-shopping-cart\"></i></button>\n            <!-- <ng2-completer [(ngModel)]=\"searchStr\" class=\"form-control\" [datasource]=\"dataService\" [minSearchLength]=\"0\" (selected)=\"onSelected($event)\"\n                placeholder=\"Search Category\"></ng2-completer> -->\n        </div>\n        <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>\n        <div *ngIf=\"articles.length\">\n        <div class=\"item-list align-items-center\" *ngFor=\"let article of articles | filter : searchText ; let i = index\">\n            <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\n                <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\n                <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\n                    alt=\"Category Logo\" />\n                <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\n                <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\n            </div>\n            <div class=\"item-name\">\n                <p class=\"name m-0\">{{article.name}}</p>\n                <p class=\"name m-0\">&euro; {{article.price}}</p>\n            </div>\n            <div class=\"input-prepend-append\">\n                <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue(article,i)\" value=\"Decrease Value\">\n                    <i class=\"fas fa-minus\"></i>\n                </button>\n                <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue(article,i)\" value=\"Increase Value\">\n                    <i class=\"fas fa-plus\"></i>\n                </button>\n            </div>\n            <button type=\"submit\" class=\"btn-floating waves-light\" (click)=\"addToCart(article,quantity[i],i)\">\n                <i class=\"fas fa-pencil-alt\"></i>\n            </button>\n        </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "<header class=\"page-content-header\">\n    <div class=\"back-btn\">\n        <a routerLink=\"/waiter/order/:id/choose-category\">\n            <i class=\"fas fa-angle-left\"></i>\n        </a>\n    </div>\n    <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\n        {{orderService.getOrderData().selectedCategory.name}}\n    </div>\n    <div class=\"subcategory-container\">\n        <div class=\"tabs-container\">\n            <ul>\n                <li class=\"prev\">\n                  <i class=\"fas fa-chevron-left\"></i>\n                </li>\n                <li *ngFor=\"let room of roomData\">\n                    {{room.name}}\n                </li>\n                <li class=\"next\">\n                  <i class=\"fas fa-chevron-right\"></i>\n                </li>\n              </ul>\n        </div>\n    </div>\n</header>\n<div class=\"page-content\">\n    <div class=\"item-container\">\n        <div class=\"search-category w-100\">\n            <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Item\" />\n            <button type=\"button\" class=\"btn-cart\" (click)=\"viewCart()\"><i class=\"fas fa-shopping-cart\"></i></button>\n            <!-- <ng2-completer [(ngModel)]=\"searchStr\" class=\"form-control\" [datasource]=\"dataService\" [minSearchLength]=\"0\" (selected)=\"onSelected($event)\"\n                placeholder=\"Search Category\"></ng2-completer> -->\n        </div>\n        <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>\n        <div *ngIf=\"articles.length\">\n        <div class=\"item-list align-items-center\" *ngFor=\"let article of articles | filter : searchText ; let i = index\">\n            <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\n                <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\n                <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\n                    alt=\"Category Logo\" />\n                <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\n                <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\n            </div>\n            <div class=\"item-name\">\n                <p class=\"name m-0\">{{article.name}}</p>\n                <p class=\"name m-0\">&euro; {{article.price}}</p>\n            </div>\n            <div class=\"input-prepend-append\">\n                <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue(article)\" value=\"Decrease Value\">\n                    <i class=\"fas fa-minus\"></i>\n                </button>\n                <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue(article)\" value=\"Increase Value\">\n                    <i class=\"fas fa-plus\"></i>\n                </button>\n            </div>\n            <button type=\"submit\" class=\"btn-floating waves-light\" (click)=\"addToCart(article,quantity[i],i)\">\n                <i class=\"fas fa-pencil-alt\"></i>\n            </button>\n        </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -405,27 +399,38 @@ var ItemComponent = /** @class */ (function () {
         this.noteList = [];
     }
     ItemComponent.prototype.ngOnInit = function () {
-        var _this = this;
-        if (this.orderService.getOrderData().categoryItems) {
+        var data = this.orderService.getOrderData();
+        console.log('data.data', data);
+        if (data.categoryItems) {
+            for (var i = 0; i < data.categoryItems.length; i++) {
+                if (data.selectedItems.length) {
+                    for (var j = 0; j < data.selectedItems.length; j++) {
+                        if (data.selectedItems[j]._id == data.categoryItems[i]._id) {
+                            data.categoryItems[i].quantity = data.selectedItems[j].quantity;
+                        }
+                    }
+                }
+            }
+            this.orderService.setOrderData(data);
             this.articles = this.orderService.getOrderData().categoryItems;
         }
-        this.searchStr = this.orderService.getOrderData().searchStr;
-        this.orderService.getCategory()
-            .then(function (data) {
-            _this.categoryList = data.data;
-            if (_this.categoryList.length) {
-                for (var i = 0; i < _this.categoryList.length; i++) {
-                    _this.categorySearchData.push({
-                        _id: _this.categoryList[i]._id,
-                        name: _this.categoryList[i].name,
-                    });
-                }
-                _this.dataService = _this.completerService.local(_this.categorySearchData, 'name', 'name');
-            }
-        })
-            .catch(function (error) {
-            console.log('error', error);
-        });
+        // this.searchStr = this.orderService.getOrderData().searchStr;
+        // this.orderService.getCategory()
+        //   .then(data => {
+        //     this.categoryList = data.data;
+        //     if (this.categoryList.length) {
+        //       for (var i = 0; i < this.categoryList.length; i++) {
+        //         this.categorySearchData.push({
+        //           _id: this.categoryList[i]._id,
+        //           name: this.categoryList[i].name,
+        //         });
+        //       }
+        //       this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
+        //     }
+        //   })
+        //   .catch(error => {
+        //     console.log('error', error);
+        //   });
         // this.orderService.getVariants()
         // .then(data => {
         //   this.variantList = data.data;
@@ -441,32 +446,33 @@ var ItemComponent = /** @class */ (function () {
         //   console.log('error', error);
         // });
     };
-    ItemComponent.prototype.increaseValue = function (article, index) {
+    ItemComponent.prototype.increaseValue = function (article) {
         var value = article.quantity;
         value = isNaN(value) ? 0 : value;
         value++;
         article.quantity = value;
         var data = this.orderService.getOrderData();
-        for (var i = 0; i < data.categoryItems.length; i++) {
-            if (data.categoryItems[i]._id == article._id) {
-                console.log('for if ', data.categoryItems[i]._id);
-                data.categoryItems[i].quantity = article.quantity;
+        for (var i = 0; i < data.selectedItems.length; i++) {
+            if (data.selectedItems[i]._id == article._id) {
+                data.selectedItems.splice(i, 1);
             }
         }
+        data.selectedItems.push(article);
         this.orderService.setOrderData(data);
     };
-    ItemComponent.prototype.decreaseValue = function (article, index) {
+    ItemComponent.prototype.decreaseValue = function (article) {
         var value = article.quantity;
         value = isNaN(value) ? 0 : value;
         value < 1 ? value = 1 : '';
         value--;
         article.quantity = value;
         var data = this.orderService.getOrderData();
-        for (var i = 0; i < data.categoryItems.length; i++) {
-            if (data.categoryItems[i]._id == article._id) {
-                data.categoryItems[i].quantity = article.quantity;
+        for (var i = 0; i < data.selectedItems.length; i++) {
+            if (data.selectedItems[i]._id == article._id) {
+                data.selectedItems.splice(i, 1);
             }
         }
+        data.selectedItems.push(article);
         this.orderService.setOrderData(data);
     };
     ItemComponent.prototype.onSelected = function (item) {

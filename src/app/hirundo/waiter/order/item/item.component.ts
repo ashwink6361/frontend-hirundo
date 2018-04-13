@@ -23,26 +23,38 @@ export class ItemComponent implements OnInit {
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
-    if(this.orderService.getOrderData().categoryItems){
+    let data = this.orderService.getOrderData();
+    console.log('data.data', data);
+    if (data.categoryItems) {
+      for (let i = 0; i < data.categoryItems.length; i++) {
+        if (data.selectedItems.length) {
+          for (let j = 0; j < data.selectedItems.length; j++) {
+            if (data.selectedItems[j]._id == data.categoryItems[i]._id) {
+              data.categoryItems[i].quantity = data.selectedItems[j].quantity;
+            }
+          }
+        }
+      }
+      this.orderService.setOrderData(data);
       this.articles = this.orderService.getOrderData().categoryItems;
     }
-    this.searchStr = this.orderService.getOrderData().searchStr;
-    this.orderService.getCategory()
-      .then(data => {
-        this.categoryList = data.data;
-        if (this.categoryList.length) {
-          for (var i = 0; i < this.categoryList.length; i++) {
-            this.categorySearchData.push({
-              _id: this.categoryList[i]._id,
-              name: this.categoryList[i].name,
-            });
-          }
-          this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
-        }
-      })
-      .catch(error => {
-        console.log('error', error);
-      });
+    // this.searchStr = this.orderService.getOrderData().searchStr;
+    // this.orderService.getCategory()
+    //   .then(data => {
+    //     this.categoryList = data.data;
+    //     if (this.categoryList.length) {
+    //       for (var i = 0; i < this.categoryList.length; i++) {
+    //         this.categorySearchData.push({
+    //           _id: this.categoryList[i]._id,
+    //           name: this.categoryList[i].name,
+    //         });
+    //       }
+    //       this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.log('error', error);
+    //   });
       // this.orderService.getVariants()
       // .then(data => {
       //   this.variantList = data.data;
@@ -59,33 +71,34 @@ export class ItemComponent implements OnInit {
       // });
   }
 
-  increaseValue(article, index) {
+  increaseValue(article) {
     let value = article.quantity;
     value = isNaN(value) ? 0 : value;
     value++;
     article.quantity = value;
     let data = this.orderService.getOrderData();
-    for (let i = 0; i < data.categoryItems.length; i++) {
-      if (data.categoryItems[i]._id == article._id) {
-        console.log('for if ', data.categoryItems[i]._id);
-        data.categoryItems[i].quantity = article.quantity;
+    for (let i = 0; i < data.selectedItems.length; i++) {
+      if (data.selectedItems[i]._id == article._id) {
+        data.selectedItems.splice(i, 1);
       }
     }
+    data.selectedItems.push(article);
     this.orderService.setOrderData(data);
   }
 
-  decreaseValue(article, index) {
+  decreaseValue(article) {
     let value = article.quantity;
     value = isNaN(value) ? 0 : value;
     value < 1 ? value = 1 : '';
     value--;
     article.quantity = value;
     let data = this.orderService.getOrderData();
-      for (let i = 0; i < data.categoryItems.length; i++) {
-        if (data.categoryItems[i]._id == article._id) {
-          data.categoryItems[i].quantity = article.quantity;
-        }
+    for (let i = 0; i < data.selectedItems.length; i++) {
+      if (data.selectedItems[i]._id == article._id) {
+        data.selectedItems.splice(i, 1);
       }
+    }
+    data.selectedItems.push(article);
     this.orderService.setOrderData(data);
   }
 
