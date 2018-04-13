@@ -20,23 +20,24 @@ export class ItemComponent implements OnInit {
   private variantList = [];
   private noteList = [];
   public showVarient:  boolean = false;
-
+  public activeTab: boolean = false;
+  public data: any;
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
-    let data = this.orderService.getOrderData();
-    console.log('data.data', data);
-    if (data.categoryItems) {
-      for (let i = 0; i < data.categoryItems.length; i++) {
-        if (data.selectedItems.length) {
-          for (let j = 0; j < data.selectedItems.length; j++) {
-            if (data.selectedItems[j]._id == data.categoryItems[i]._id) {
-              data.categoryItems[i].quantity = data.selectedItems[j].quantity;
+    this.data = this.orderService.getOrderData();
+    console.log('data.data', this.data );
+    if (this.data.categoryItems) {
+      for (let i = 0; i < this.data.categoryItems.length; i++) {
+        if (this.data.selectedItems.length) {
+          for (let j = 0; j < this.data.selectedItems.length; j++) {
+            if (this.data.selectedItems[j]._id == this.data.categoryItems[i]._id) {
+              this.data.categoryItems[i].quantity = this.data.selectedItems[j].quantity;
             }
           }
         }
       }
-      this.orderService.setOrderData(data);
+      this.orderService.setOrderData(this.data);
       this.articles = this.orderService.getOrderData().categoryItems;
     }
     // this.searchStr = this.orderService.getOrderData().searchStr;
@@ -144,5 +145,9 @@ export class ItemComponent implements OnInit {
 
   hideVarient(){
     this.showVarient = false;
+  }
+
+  tabActive(){
+    this.activeTab = !this.activeTab;
   }
 }

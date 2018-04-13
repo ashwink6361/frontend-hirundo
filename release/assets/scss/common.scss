@@ -49,7 +49,6 @@ body {
 
 // Tabs
 .tabs-container {
-    margin-top: -21px !important;
     margin: auto;
     ul {
         list-style: none;
@@ -60,9 +59,7 @@ body {
         overflow: hidden;
         position: relative;
         margin: 0;
-        margin-bottom: 20px;
-        margin-right: -20px;
-        margin-left: -20px;
+        margin-bottom: 10px;
         padding: 0 20px;
         background: #c5c8cd;
         li {
@@ -461,11 +458,12 @@ footer {
 header {
     display: flex;
     align-items: center;
-    padding: 5px 0;
+    padding: 0px 0;
     background-color: #757473;
     position: fixed;
     width: 100%;
     top: 0;
+    height: 60px;
     z-index: 6;
     .menu-btn {
         font-size: 26px;
@@ -540,15 +538,13 @@ header {
 
 // Page-content
 .page-content {
-    margin-left: 0px;
     position: relative;
-    margin-top: 20px;
-    padding: 0 20px;
-    top: 70px;
+    top: 60px;
 }
 
 // Waiter Dashboard
 .room-container {
+    padding: 0 20px;
     .room-name {
         font-size: 20px;
         font-weight: bold;
@@ -623,7 +619,10 @@ header {
 }
 
 .stepper-form {
-    overflow: hidden; // Create Order
+    overflow: hidden; 
+    padding: 0 20px;
+    margin-top: 10px;
+    // Create Order
     .label-container {
         img {
             max-width: 30px;
@@ -704,6 +703,8 @@ header {
 .category-list {
     transition: 0.3s;
     margin-bottom: 60px;
+    padding: 0 20px;
+    margin-top: 10px;
     .category {
         max-width: 135px;
         position: relative;
@@ -735,6 +736,7 @@ header {
 
 .item-container {
     transition: 0.3s;
+    padding: 0 10px;
     .item-list {
         display: flex;
         justify-content: space-between;
@@ -763,10 +765,13 @@ header {
                 justify-content: center;
             }
             img {
-                max-width: 50px;
+                max-width: 70px;
+                border-radius: 50%
             }
         }
         .item-name {
+            max-width: 100px;
+            width: 100%;
             .name {
                 font-weight: bold;
             }
@@ -829,14 +834,29 @@ header {
     &.show-varient{
         bottom: 0;
     }
+    .varient-content{
+        padding: 0 20px;
+        margin-top: 10px;
+        h1{
+            font-size: 15px;
+        }
+    }
     .modal-header{
         padding: 15px 0;
         .back-btn{
-            padding: 0 5px;
+            padding: 0 10px;
         }
         .header-title{
             width: 100%;
             text-align: center;
+            button{
+                float: right;
+                margin-right: 10px;
+                background-color: #3fb34f;
+                border: none;
+                border-radius: 5px;
+                color: #fff;
+            }
         }
     }
 }
@@ -850,4 +870,35 @@ header {
     border: none;
     color: #fff;
     padding: 15px 0;
+}
+
+.tabs-btn{
+    display: flex;
+    button{
+        width: 50%;
+        border: none;
+        margin: 0;
+        padding: 10px 0;
+        &.active{
+            background-color: #4b473f;
+            color: #fff;
+        }
+    }
+}
+
+.steps-container{
+    ul{
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        background-color: #4b473f;
+        li{
+            display: inline-block;
+            color: #fff;
+            &.active{
+                color: #fbab0e;
+                background-color: transparent;
+            }
+        }
+    }
 }
