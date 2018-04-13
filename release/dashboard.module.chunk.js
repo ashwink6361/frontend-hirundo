@@ -3,7 +3,7 @@ webpackJsonp(["dashboard.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/dashboard/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"tabs-container\">\r\n    <ul>\r\n        <li class=\"prev\">\r\n          <i class=\"fas fa-chevron-left\"></i>\r\n        </li>\r\n        <li *ngFor=\"let room of roomData; let i= index\" [class.active]=\"activeRoom[i]\" (click)=\"getTables(room,i)\">\r\n            {{room.name}}\r\n        </li>\r\n        <li class=\"next\">\r\n          <i class=\"fas fa-chevron-right\"></i>\r\n        </li>\r\n      </ul>\r\n</div>\r\n<!-- <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Room\" /> -->\r\n<section class=\"room-container\">\r\n    <!-- <form [formGroup]=\"roomtable\">\r\n        <select class=\"form-control\" formControlName=\"room\">\r\n            <option *ngFor=\"let room of roomData\" [value]=\"room\">{{room.name}}</option>\r\n        </select>\r\n    </form> -->\r\n    <!-- <div class=\"room-name\">{{room.name}}</div> -->\r\n    <div class=\"d-flex flex-wrap \">\r\n        <div class=\"room\" (click)=\"createOrder(table)\" *ngFor=\"let table of tables\">\r\n            <div class=\"table\">\r\n                <span>{{table.name}}</span>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</section>\r\n"
+module.exports = "<div class=\"tabs-container\">\n    <ul>\n        <li class=\"prev\">\n          <i class=\"fas fa-chevron-left\"></i>\n        </li>\n        <li *ngFor=\"let room of roomData; let i= index\" [class.active]=\"activeRoom[i]\" (click)=\"getTables(room,i)\">\n            {{room.name}}\n        </li>\n        <li class=\"next\">\n          <i class=\"fas fa-chevron-right\"></i>\n        </li>\n      </ul>\n</div>\n<!-- <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Room\" /> -->\n<section class=\"room-container\">\n    <!-- <form [formGroup]=\"roomtable\">\n        <select class=\"form-control\" formControlName=\"room\">\n            <option *ngFor=\"let room of roomData\" [value]=\"room\">{{room.name}}</option>\n        </select>\n    </form> -->\n    <!-- <div class=\"room-name\">{{room.name}}</div> -->\n    <div class=\"d-flex flex-wrap \">\n        <div class=\"room\" (click)=\"createOrder(table)\" *ngFor=\"let table of tables\" [ngStyle]=\"table.status == 0 ? {'background-color':'green'} : table.status == 1 ? {'background-color':'yellow'} : {'background-color':'red'}\">\n            <div class=\"table\">\n                <span>{{table.name}}</span>\n            </div>\n        </div>\n    </div>\n</section>\n"
 
 /***/ }),
 
@@ -33,6 +33,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dashboard_service__ = __webpack_require__("../../../../../src/app/hirundo/waiter/dashboard/dashboard.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__service_websocket_service__ = __webpack_require__("../../../../../src/app/service/websocket.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -45,10 +46,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var DashboardComponent = /** @class */ (function () {
-    function DashboardComponent(router, dashboardService) {
+    function DashboardComponent(router, dashboardService, websocketService) {
         this.router = router;
         this.dashboardService = dashboardService;
+        this.websocketService = websocketService;
         this.roomData = [];
         this.tables = [];
         this.activeRoom = [false];
@@ -56,9 +59,8 @@ var DashboardComponent = /** @class */ (function () {
     DashboardComponent.prototype.ngOnInit = function () {
         var _this = this;
         localStorage.removeItem('orderData');
-        this.dashboardService.getRooms().then(function (data) {
-            console.log('data', data);
-            _this.roomData = data.data;
+        this.websocketService.getRooms().then(function (data) {
+            _this.roomData = data;
             _this.activeRoom[0] = true;
             _this.tables = _this.roomData[0].tables;
             localStorage.setItem('roomdata', JSON.stringify(_this.roomData[0]));
@@ -88,10 +90,10 @@ var DashboardComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/hirundo/waiter/dashboard/dashboard.component.html"),
             styles: [__webpack_require__("../../../../../src/app/hirundo/waiter/dashboard/dashboard.component.scss")]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__dashboard_service__["a" /* DashboardService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__dashboard_service__["a" /* DashboardService */]) === "function" && _b || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__dashboard_service__["a" /* DashboardService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__dashboard_service__["a" /* DashboardService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__service_websocket_service__["a" /* WebsocketService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__service_websocket_service__["a" /* WebsocketService */]) === "function" && _c || Object])
     ], DashboardComponent);
     return DashboardComponent;
-    var _a, _b;
+    var _a, _b, _c;
 }());
 
 //# sourceMappingURL=dashboard.component.js.map
