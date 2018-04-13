@@ -63,5 +63,27 @@
 
 
 <div class="varient-container" [class.show-varient]="showVarient">
-
+    <div>
+        <div class="back-btn">
+            <a (click)="hideVarient()">
+                <i class="fas fa-times"></i>
+            </a>
+        </div>
+        <div class="header-title" *ngIf="orderService.getOrderData().selectedCategory">
+            Choose Varient
+        </div>       
+    </div>
+    <div class="varient-content">
+        <div class="varient-list">
+            <table>
+                <tbody>
+                    <tr *ngFor="let varient of variantList">
+                        <td>{{varient.name}}</td>
+                        <td>{{varient.price}}</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

@@ -134,4 +134,8 @@ export class ItemComponent implements OnInit {
   viewVarient() {
     this.showVarient = true;
   }
+
+  hideVarient(){
+    this.showVarient = false;
+  }
 }
