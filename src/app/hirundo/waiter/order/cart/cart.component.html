@@ -1,26 +1,36 @@
 <header class="page-content-header">
-  <div class="back-btn">
-      <a routerLink="/waiter/order/:id/choose-item">
-          <i class="fas fa-angle-left"></i>
-      </a>
-  </div>
-  <div class="header-title">
-      Create Order
-  </div>
+    <div class="back-btn">
+        <a routerLink="/waiter/order/:id/choose-item">
+            <i class="fas fa-angle-left"></i>
+        </a>
+    </div>
+    <div class="header-title">
+        Create Order
+    </div>
 </header>
-<div class="item-list align-items-center" *ngFor="let article of items">
-    <div class="item" [ngStyle]="{'background-color': article.category.color}">
-        <img *ngIf="!article.logo.small && article.category.isIcon" class="icon-img" [src]="article.category.icon" alt="" />
-        <img *ngIf="!article.logo.small && !article.category.isIcon && article.category.logo.small" [src]="article.category.logo.small"
-            alt="Category Logo" />
-        <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
-        <span class="item-quantity" *ngIf="article.quantity>0">{{article.quantity}}</span>
+<div class="page-content">
+    <div class="item-container">
+        <div *ngIf="!(items && items.length)">No Item Add</div>
+        <div *ngIf="(items && items.length)">
+            <div class="item-list align-items-center" *ngFor="let article of items">
+                <div class="item" [ngStyle]="{'background-color': article.category.color}">
+                    <img *ngIf="!article.logo.small && article.category.isIcon" class="icon-img" [src]="article.category.icon" alt="" />
+                    <img *ngIf="!article.logo.small && !article.category.isIcon && article.category.logo.small" [src]="article.category.logo.small"
+                        alt="Category Logo" />
+                    <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
+                    <span class="item-quantity" *ngIf="article.quantity>0">{{article.quantity}}</span>
+                </div>
+                <div class="item-name">
+                    <p class="name m-0">{{article.name}}</p>
+                    <p class="name m-0">&euro; {{article.price}}</p>
+                </div>
+                <button type="submit" class="btn btn-floating waves-light">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <button type="submit" class="order-btn waves-light" (click)="createOrder()">
+            Create Order
+        </button>
     </div>
-    <div class="item-name">
-        <p class="name m-0">{{article.name}}</p>
-        <p class="name m-0">&euro; {{article.price}}</p>
-    </div>
-    <button type="submit" class="btn-floating waves-light">
-        <i class="fas fa-pencil-alt"></i>
-    </button>
 </div>

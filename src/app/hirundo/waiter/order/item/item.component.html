@@ -53,7 +53,7 @@
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
-            <button type="submit" class="btn-floating waves-light" (click)="viewVarient()">
+            <button type="submit" class="btn btn-floating waves-light" (click)="viewVarient()">
                 <i class="fas fa-pencil-alt"></i>
             </button>
         </div>
@@ -63,7 +63,7 @@
 
 
 <div class="varient-container" [class.show-varient]="showVarient">
-    <div>
+    <div class="modal-header">
         <div class="back-btn">
             <a (click)="hideVarient()">
                 <i class="fas fa-times"></i>
@@ -71,6 +71,7 @@
         </div>
         <div class="header-title" *ngIf="orderService.getOrderData().selectedCategory">
             Choose Varient
+            <button>Save</button>
         </div>       
     </div>
     <div class="varient-content">

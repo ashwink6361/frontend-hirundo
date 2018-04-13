@@ -34,4 +34,10 @@ export class OrderService {
       .then(this.globalService.extractData)
       .catch(this.globalService.handleErrorPromise);
   }
+  createOrder(data): Promise<any> {
+    let url = '/api/waiter/order';
+    return this.http.post(url, data).toPromise()
+      .then(this.globalService.extractData)
+      .catch(this.globalService.handleErrorPromise);
+  }
 }

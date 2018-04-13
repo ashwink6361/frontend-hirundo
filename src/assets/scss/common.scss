@@ -28,6 +28,15 @@ body {
     min-height: 409px;
 }
 
+.btn.btn-floating{
+    background: #c5c8cd;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+}
+
 .page-header {
     padding: 50px 0;
     h1 {
@@ -60,6 +69,10 @@ body {
             padding: 8px 5px;
             display: inline-block;
             min-width: 80px;
+            width: 80px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
             &.prev {
                 position: absolute;
                 width: 20px;
@@ -567,6 +580,8 @@ header {
     bottom: 0;
     left: 0;
     border-top: 1px solid #dedede;
+    z-index: 1;
+    background-color: #fff;
     .form-control,
     .completer-input {
         padding-left: 10px !important;
@@ -688,6 +703,7 @@ header {
 
 .category-list {
     transition: 0.3s;
+    margin-bottom: 60px;
     .category {
         max-width: 135px;
         position: relative;
@@ -813,4 +829,25 @@ header {
     &.show-varient{
         bottom: 0;
     }
+    .modal-header{
+        padding: 15px 0;
+        .back-btn{
+            padding: 0 5px;
+        }
+        .header-title{
+            width: 100%;
+            text-align: center;
+        }
+    }
+}
+
+.order-btn{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    background-color: #3fb34f;
+    border: none;
+    color: #fff;
+    padding: 15px 0;
 }
