@@ -103,6 +103,13 @@ export class ItemComponent implements OnInit {
     if(article.quantity > 0){
       data.selectedItems.push(article);
     }
+    else if(article.quantity == 0){
+      for (let i = 0; i < data.categoryItems.length; i++) {
+        if (data.categoryItems[i]._id == article._id) {
+          delete data.categoryItems[i].quantity;
+        }
+      }
+    }
     this.orderService.setOrderData(data);
   }
 

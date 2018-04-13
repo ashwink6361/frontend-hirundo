@@ -580,6 +580,8 @@ header {
     bottom: 0;
     left: 0;
     border-top: 1px solid #dedede;
+    z-index: 1;
+    background-color: #fff;
     .form-control,
     .completer-input {
         padding-left: 10px !important;
@@ -701,6 +703,7 @@ header {
 
 .category-list {
     transition: 0.3s;
+    margin-bottom: 60px;
     .category {
         max-width: 135px;
         position: relative;
