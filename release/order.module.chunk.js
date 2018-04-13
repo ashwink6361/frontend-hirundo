@@ -3,7 +3,7 @@ webpackJsonp(["order.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/order/cart/cart.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header class=\"page-content-header\">\n  <div class=\"back-btn\">\n      <a routerLink=\"/waiter/order/:id/choose-item\">\n          <i class=\"fas fa-angle-left\"></i>\n      </a>\n  </div>\n  <div class=\"header-title\">\n      Create Order\n  </div>\n</header>"
+module.exports = "<header class=\"page-content-header\">\r\n  <div class=\"back-btn\">\r\n      <a routerLink=\"/waiter/order/:id/choose-item\">\r\n          <i class=\"fas fa-angle-left\"></i>\r\n      </a>\r\n  </div>\r\n  <div class=\"header-title\">\r\n      Create Order\r\n  </div>\r\n</header>\r\n<div class=\"item-list align-items-center\" *ngFor=\"let article of items\">\r\n    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n            alt=\"Category Logo\" />\r\n        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n        <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\r\n    </div>\r\n    <div class=\"item-name\">\r\n        <p class=\"name m-0\">{{article.name}}</p>\r\n        <p class=\"name m-0\">&euro; {{article.price}}</p>\r\n    </div>\r\n    <button type=\"submit\" class=\"btn-floating waves-light\">\r\n        <i class=\"fas fa-pencil-alt\"></i>\r\n    </button>\r\n</div>"
 
 /***/ }),
 
@@ -31,6 +31,9 @@ module.exports = module.exports.toString();
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CartComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__order_service__ = __webpack_require__("../../../../../src/app/hirundo/waiter/order/order.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__ = __webpack_require__("../../../../rxjs/Rx.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -41,10 +44,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
 var CartComponent = /** @class */ (function () {
-    function CartComponent() {
+    function CartComponent(orderService) {
+        this.orderService = orderService;
+        this.items = [];
     }
     CartComponent.prototype.ngOnInit = function () {
+        this.items = this.orderService.getOrderData().selectedItems;
+        console.log('data.this.items', this.items);
     };
     CartComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
@@ -52,9 +61,10 @@ var CartComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/hirundo/waiter/order/cart/cart.component.html"),
             styles: [__webpack_require__("../../../../../src/app/hirundo/waiter/order/cart/cart.component.scss")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__order_service__["a" /* OrderService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__order_service__["a" /* OrderService */]) === "function" && _a || Object])
     ], CartComponent);
     return CartComponent;
+    var _a;
 }());
 
 //# sourceMappingURL=cart.component.js.map
@@ -400,6 +410,7 @@ var ItemComponent = /** @class */ (function () {
         this.showVarient = false;
     }
     ItemComponent.prototype.ngOnInit = function () {
+        var _this = this;
         var data = this.orderService.getOrderData();
         console.log('data.data', data);
         if (data.categoryItems) {
@@ -432,13 +443,14 @@ var ItemComponent = /** @class */ (function () {
         //   .catch(error => {
         //     console.log('error', error);
         //   });
-        // this.orderService.getVariants()
-        // .then(data => {
-        //   this.variantList = data.data;
-        // })
-        // .catch(error => {
-        //   console.log('error', error);
-        // });
+        this.orderService.getVariantAndNotes()
+            .then(function (data) {
+            _this.variantList = data.data.variants;
+            _this.noteList = data.data.notes;
+        })
+            .catch(function (error) {
+            console.log('error', error);
+        });
         // this.orderService.getNotes()
         // .then(data => {
         //   this.noteList = data.data;
@@ -473,7 +485,9 @@ var ItemComponent = /** @class */ (function () {
                 data.selectedItems.splice(i, 1);
             }
         }
-        data.selectedItems.push(article);
+        if (article.quantity > 0) {
+            data.selectedItems.push(article);
+        }
         this.orderService.setOrderData(data);
     };
     ItemComponent.prototype.onSelected = function (item) {
@@ -719,14 +733,8 @@ var OrderService = /** @class */ (function () {
         var data = localStorage.getItem('orderData');
         return JSON.parse(data);
     };
-    OrderService.prototype.getVariants = function () {
-        var url = '/api/variant';
-        return this.http.get(url).toPromise()
-            .then(this.globalService.extractData)
-            .catch(this.globalService.handleErrorPromise);
-    };
-    OrderService.prototype.getNotes = function () {
-        var url = '/api/note';
+    OrderService.prototype.getVariantAndNotes = function () {
+        var url = '/api/variantAndNotes';
         return this.http.get(url).toPromise()
             .then(this.globalService.extractData)
             .catch(this.globalService.handleErrorPromise);

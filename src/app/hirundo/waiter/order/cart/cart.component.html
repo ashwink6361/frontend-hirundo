@@ -8,3 +8,19 @@
       Create Order
   </div>
 </header>
+<div class="item-list align-items-center" *ngFor="let article of items">
+    <div class="item" [ngStyle]="{'background-color': article.category.color}">
+        <img *ngIf="!article.logo.small && article.category.isIcon" class="icon-img" [src]="article.category.icon" alt="" />
+        <img *ngIf="!article.logo.small && !article.category.isIcon && article.category.logo.small" [src]="article.category.logo.small"
+            alt="Category Logo" />
+        <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
+        <span class="item-quantity" *ngIf="article.quantity>0">{{article.quantity}}</span>
+    </div>
+    <div class="item-name">
+        <p class="name m-0">{{article.name}}</p>
+        <p class="name m-0">&euro; {{article.price}}</p>
+    </div>
+    <button type="submit" class="btn-floating waves-light">
+        <i class="fas fa-pencil-alt"></i>
+    </button>
+</div>

@@ -804,10 +804,10 @@ header {
 
 .varient-container{
     position: fixed;
-    border-bottom: -100%;
+    bottom: -100%;
     transition: 0.3s ease-in-out;
     z-index: 2;
-    .show-varient{
+    &.show-varient{
         bottom: 0;
     }
 }

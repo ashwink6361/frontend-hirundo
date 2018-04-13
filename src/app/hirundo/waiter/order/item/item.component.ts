@@ -56,20 +56,21 @@ export class ItemComponent implements OnInit {
     //   .catch(error => {
     //     console.log('error', error);
     //   });
-    // this.orderService.getVariants()
-    // .then(data => {
-    //   this.variantList = data.data;
-    // })
-    // .catch(error => {
-    //   console.log('error', error);
-    // });
-    // this.orderService.getNotes()
-    // .then(data => {
-    //   this.noteList = data.data;
-    // })
-    // .catch(error => {
-    //   console.log('error', error);
-    // });
+      this.orderService.getVariantAndNotes()
+      .then(data => {
+        this.variantList = data.data.variants;
+        this.noteList = data.data.notes;
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+      // this.orderService.getNotes()
+      // .then(data => {
+      //   this.noteList = data.data;
+      // })
+      // .catch(error => {
+      //   console.log('error', error);
+      // });
   }
 
   increaseValue(article) {
@@ -99,7 +100,9 @@ export class ItemComponent implements OnInit {
         data.selectedItems.splice(i, 1);
       }
     }
-    data.selectedItems.push(article);
+    if(article.quantity > 0){
+      data.selectedItems.push(article);
+    }
     this.orderService.setOrderData(data);
   }
 
