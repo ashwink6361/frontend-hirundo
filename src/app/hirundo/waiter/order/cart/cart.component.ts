@@ -47,4 +47,15 @@ export class CartComponent implements OnInit {
         console.log('error', error);
       });
   }
+
+  deleteItemFromCart(article){
+    let data = this.orderService.getOrderData();
+    for(let i=0;i<data.selectedItems.length;i++){
+      if(data.selectedItems[i]._id == article._id){
+        data.selectedItems.splice(i,1);
+      }
+    this.orderService.setOrderData(data);      
+    this.items = this.orderService.getOrderData().selectedItems;
+    }
+  }
 }
