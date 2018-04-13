@@ -32,8 +32,9 @@ module.exports = module.exports.toString();
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CartComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__order_service__ = __webpack_require__("../../../../../src/app/hirundo/waiter/order/order.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__ = __webpack_require__("../../../../rxjs/Rx.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Rx__ = __webpack_require__("../../../../rxjs/Rx.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Rx__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -46,15 +47,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var CartComponent = /** @class */ (function () {
-    function CartComponent(orderService) {
+    function CartComponent(orderService, router) {
         this.orderService = orderService;
+        this.router = router;
         this.items = [];
     }
     CartComponent.prototype.ngOnInit = function () {
         this.items = this.orderService.getOrderData().selectedItems;
     };
     CartComponent.prototype.createOrder = function () {
+        var _this = this;
         var data = this.orderService.getOrderData();
         var itemarray = [];
         for (var i = 0; i < data.selectedItems.length; i++) {
@@ -78,6 +82,7 @@ var CartComponent = /** @class */ (function () {
         this.orderService.createOrder(createorder)
             .then(function (data) {
             console.log('data', data);
+            _this.router.navigate(['/waiter']);
         })
             .catch(function (error) {
             console.log('error', error);
@@ -89,10 +94,10 @@ var CartComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/hirundo/waiter/order/cart/cart.component.html"),
             styles: [__webpack_require__("../../../../../src/app/hirundo/waiter/order/cart/cart.component.scss")]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__order_service__["a" /* OrderService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__order_service__["a" /* OrderService */]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__order_service__["a" /* OrderService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__order_service__["a" /* OrderService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */]) === "function" && _b || Object])
     ], CartComponent);
     return CartComponent;
-    var _a;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=cart.component.js.map

@@ -11,7 +11,7 @@ import 'rxjs/Rx';
 })
 export class CartComponent implements OnInit {
   private items = [];
-  constructor(private orderService: OrderService) { }
+  constructor(private orderService: OrderService, private router: Router) { }
 
   ngOnInit() {
     this.items = this.orderService.getOrderData().selectedItems;
@@ -41,6 +41,7 @@ export class CartComponent implements OnInit {
     this.orderService.createOrder(createorder)
       .then(data => {
         console.log('data', data);
+        this.router.navigate(['/waiter'])
       })
       .catch(error => {
         console.log('error', error);
