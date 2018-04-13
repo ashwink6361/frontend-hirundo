@@ -55,13 +55,13 @@ export class ItemComponent implements OnInit {
     //   .catch(error => {
     //     console.log('error', error);
     //   });
-      this.orderService.getVariantAndNotes()
-      .then(data => {
-        this.variantList = data.data;
-      })
-      .catch(error => {
-        console.log('error', error);
-      });
+      // this.orderService.getVariantAndNotes()
+      // .then(data => {
+      //   this.variantList = data.data;
+      // })
+      // .catch(error => {
+      //   console.log('error', error);
+      // });
       // this.orderService.getNotes()
       // .then(data => {
       //   this.noteList = data.data;

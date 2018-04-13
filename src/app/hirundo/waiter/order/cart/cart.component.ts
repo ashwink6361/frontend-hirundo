@@ -10,12 +10,40 @@ import 'rxjs/Rx';
   styleUrls: ['./cart.component.scss']
 })
 export class CartComponent implements OnInit {
-private items = [];
+  private items = [];
   constructor(private orderService: OrderService) { }
 
   ngOnInit() {
     this.items = this.orderService.getOrderData().selectedItems;
-    console.log('data.this.items', this.items);
   }
 
+  createOrder() {
+    let data = this.orderService.getOrderData();
+    var itemarray = [];
+    for (let i = 0; i < data.selectedItems.length; i++) {
+      var item = {
+        id: data.selectedItems[i]._id,
+        category: data.selectedItems[i].category._id,
+        quantity: data.selectedItems[i].quantity,
+        price: data.selectedItems[i].price,
+        notes: '',
+        variant: []
+      }
+      itemarray.push(item);
+    }
+    let createorder = {
+      room: data.roomId,
+      table: data.tableId,
+      noOfPeople: data.numberOfPerson,
+      item: itemarray
+    }
+    console.log('createorder', createorder);
+    this.orderService.createOrder(createorder)
+      .then(data => {
+        console.log('data', data);
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+  }
 }

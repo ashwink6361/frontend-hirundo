@@ -3,7 +3,7 @@ webpackJsonp(["order.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/order/cart/cart.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header class=\"page-content-header\">\n  <div class=\"back-btn\">\n      <a routerLink=\"/waiter/order/:id/choose-item\">\n          <i class=\"fas fa-angle-left\"></i>\n      </a>\n  </div>\n  <div class=\"header-title\">\n      Create Order\n  </div>\n</header>\n<div class=\"item-list align-items-center\" *ngFor=\"let article of items\">\n    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\n        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\n        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\n            alt=\"Category Logo\" />\n        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\n        <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\n    </div>\n    <div class=\"item-name\">\n        <p class=\"name m-0\">{{article.name}}</p>\n        <p class=\"name m-0\">&euro; {{article.price}}</p>\n    </div>\n    <button type=\"submit\" class=\"btn-floating waves-light\">\n        <i class=\"fas fa-pencil-alt\"></i>\n    </button>\n</div>"
+module.exports = "<header class=\"page-content-header\">\n  <div class=\"back-btn\">\n      <a routerLink=\"/waiter/order/:id/choose-item\">\n          <i class=\"fas fa-angle-left\"></i>\n      </a>\n  </div>\n  <div class=\"header-title\">\n      Create Order\n  </div>\n</header>\n<div class=\"item-list align-items-center\" *ngFor=\"let article of items\">\n    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\n        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\n        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\n            alt=\"Category Logo\" />\n        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\n        <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\n    </div>\n    <div class=\"item-name\">\n        <p class=\"name m-0\">{{article.name}}</p>\n        <p class=\"name m-0\">&euro; {{article.price}}</p>\n    </div>\n    <button type=\"submit\" class=\"btn-floating waves-light\">\n        <i class=\"fas fa-pencil-alt\"></i>\n    </button>\n</div>\n<button type=\"submit\" class=\"btn-floating waves-light\" (click)=\"createOrder()\">\n    Create Order\n</button>"
 
 /***/ }),
 
@@ -53,7 +53,35 @@ var CartComponent = /** @class */ (function () {
     }
     CartComponent.prototype.ngOnInit = function () {
         this.items = this.orderService.getOrderData().selectedItems;
-        console.log('data.this.items', this.items);
+    };
+    CartComponent.prototype.createOrder = function () {
+        var data = this.orderService.getOrderData();
+        var itemarray = [];
+        for (var i = 0; i < data.selectedItems.length; i++) {
+            var item = {
+                id: data.selectedItems[i]._id,
+                category: data.selectedItems[i].category._id,
+                quantity: data.selectedItems[i].quantity,
+                price: data.selectedItems[i].price,
+                notes: '',
+                variant: []
+            };
+            itemarray.push(item);
+        }
+        var createorder = {
+            room: data.roomId,
+            table: data.tableId,
+            noOfPeople: data.numberOfPerson,
+            item: itemarray
+        };
+        console.log('createorder', createorder);
+        this.orderService.createOrder(createorder)
+            .then(function (data) {
+            console.log('data', data);
+        })
+            .catch(function (error) {
+            console.log('error', error);
+        });
     };
     CartComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
@@ -409,7 +437,6 @@ var ItemComponent = /** @class */ (function () {
         this.noteList = [];
     }
     ItemComponent.prototype.ngOnInit = function () {
-        var _this = this;
         var data = this.orderService.getOrderData();
         console.log('data.data', data);
         if (data.categoryItems) {
@@ -442,13 +469,13 @@ var ItemComponent = /** @class */ (function () {
         //   .catch(error => {
         //     console.log('error', error);
         //   });
-        this.orderService.getVariantAndNotes()
-            .then(function (data) {
-            _this.variantList = data.data;
-        })
-            .catch(function (error) {
-            console.log('error', error);
-        });
+        // this.orderService.getVariantAndNotes()
+        // .then(data => {
+        //   this.variantList = data.data;
+        // })
+        // .catch(error => {
+        //   console.log('error', error);
+        // });
         // this.orderService.getNotes()
         // .then(data => {
         //   this.noteList = data.data;
@@ -731,6 +758,12 @@ var OrderService = /** @class */ (function () {
     OrderService.prototype.getVariantAndNotes = function () {
         var url = '/api/variantAndNotes';
         return this.http.get(url).toPromise()
+            .then(this.globalService.extractData)
+            .catch(this.globalService.handleErrorPromise);
+    };
+    OrderService.prototype.createOrder = function (data) {
+        var url = '/api/waiter/order';
+        return this.http.post(url, data).toPromise()
             .then(this.globalService.extractData)
             .catch(this.globalService.handleErrorPromise);
     };
