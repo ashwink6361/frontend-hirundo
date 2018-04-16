@@ -3,7 +3,7 @@ webpackJsonp(["department-profile.module"],{
 /***/ "../../../../../src/app/hirundo/department/department-profile/department-profile.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\">\r\n    <div class=\"card\">\r\n      <div class=\"view hm-white-slight waves-light\" mdbRippleRadius>\r\n        <img src=\"assets/images/profile-placeholder.jpg\" class=\"img-fluid\" alt=\"\">\r\n        <a>\r\n          <div class=\"mask\"></div>\r\n        </a>\r\n      </div>\r\n      <div class=\"card-body\">\r\n        <form [formGroup]=\"profileForm\" (ngSubmit)=\"updateProfile(profileForm.value)\">\r\n          <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>\r\n          <div class=\"alert-success\" *ngIf=\"success\">{{successMsg}}</div>        \r\n          <div class=\"md-form\">\r\n            <i class=\"fa fa-user-o prefix grey-text\"></i>\r\n            <input type=\"text\" id=\"firstName\" name=\"firstName\" formControlName=\"firstName\" class=\"form-control\" mdbActive>\r\n            <label for=\"Name\">Name</label>\r\n          </div>             \r\n          <div class=\"text-center\">\r\n            <button  type=\"submit\" class=\"btn btn-default waves-light\" mdbRippleRadius [disabled]=\"!profileForm.valid || activeRequest\">Update</button>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  "
+module.exports = "<div class=\"container-fluid\">\r\n    <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>\r\n    <div class=\"alert-success\" *ngIf=\"success\">{{successMsg}}</div> \r\n    <div class=\"card\">\r\n      <input type=\"file\" #myInput name=\"myImage\" accept=\"image/*\" (change)=\"fileChangeEvent($event)\" placeholder=\"Upload file...\"\r\n      />\r\n      <div>\r\n        <button type=\"submit\" class=\"btn btn-default waves-light\" mdbRippleRadius (click)=\"uploadProfilePic()\" ng-disabled=\"uploadPicRequest\">Update</button>\r\n      </div>\r\n      <div class=\"view hm-white-slight waves-light\" mdbRippleRadius>\r\n        <img *ngIf=\"!previewImage && !ProfileData.picture.original\" src=\"assets/images/profile-placeholder.jpg\" class=\"img-fluid\" alt=\"\">\r\n        <img *ngIf=\"previewImage\" [src]=\"previewImage\" class=\"img-fluid\" alt=\"\">\r\n        <img *ngIf=\"!previewImage && ProfileData.picture.original\" [src]=\"ProfileData.picture.original\" class=\"img-fluid\" alt=\"\">               \r\n        <a>\r\n          <div class=\"mask\"></div>\r\n        </a>\r\n      </div>\r\n      <div class=\"card-body\">\r\n        <form [formGroup]=\"profileForm\" (ngSubmit)=\"updateProfile(profileForm.value)\">\r\n          <div class=\"md-form\">\r\n            <i class=\"fa fa-user-o prefix grey-text\"></i>\r\n            <input type=\"text\" id=\"firstName\" name=\"firstName\" formControlName=\"firstName\" class=\"form-control\" mdbActive>\r\n            <label for=\"Name\">Name</label>\r\n          </div>             \r\n          <div class=\"text-center\">\r\n            <button  type=\"submit\" class=\"btn btn-default waves-light\" mdbRippleRadius [disabled]=\"!profileForm.valid || activeRequest\">Update</button>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  "
 
 /***/ }),
 
@@ -57,6 +57,8 @@ var DepartmentProfileComponent = /** @class */ (function () {
         this.errorMsg = '';
         this.success = false;
         this.successMsg = '';
+        this.uploadPicRequest = false;
+        this.previewImage = '';
     }
     DepartmentProfileComponent.prototype.ngOnInit = function () {
         this.ProfileData = this.authGuard.getCurrentUser();
@@ -76,6 +78,7 @@ var DepartmentProfileComponent = /** @class */ (function () {
         this.User.firstName = user.firstName;
         this.profileService.updateProfile(this.User).then(function (data) {
             _this.activeRequest = false;
+            window.scrollTo(0, 0);
             _this.ProfileData = data.data;
             localStorage.setItem('currentUser', JSON.stringify(data.data));
             if (_this.ProfileData) {
@@ -88,6 +91,7 @@ var DepartmentProfileComponent = /** @class */ (function () {
                 _this.successMsg = '';
             }, 4000);
         }).catch(function (error) {
+            window.scrollTo(0, 0);
             _this.activeRequest = false;
             _this.error = true;
             _this.errorMsg = error;
@@ -97,6 +101,59 @@ var DepartmentProfileComponent = /** @class */ (function () {
             }, 4000);
         });
     };
+    DepartmentProfileComponent.prototype.uploadProfilePic = function () {
+        var _this = this;
+        var opts = {
+            picture: this.profilePic
+        };
+        this.uploadPicRequest = true;
+        this.profileService.updateProfilePicture(opts).then(function (data) {
+            window.scrollTo(0, 0);
+            _this.uploadPicRequest = false;
+            localStorage.setItem('currentUser', JSON.stringify(data.data));
+            _this.profilePic = '';
+            _this.myInputVariable.nativeElement.value = "";
+            _this.success = true;
+            _this.successMsg = data.message;
+            setTimeout(function () {
+                _this.success = false;
+                _this.successMsg = '';
+            }, 4000);
+        }).catch(function (error) {
+            window.scrollTo(0, 0);
+            _this.uploadPicRequest = false;
+            _this.error = true;
+            _this.errorMsg = error;
+            setTimeout(function () {
+                _this.error = false;
+                _this.errorMsg = '';
+            }, 4000);
+        });
+    };
+    DepartmentProfileComponent.prototype.fileChangeEvent = function (fileInput) {
+        var _this = this;
+        if (fileInput.target.files && fileInput.target.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                _this.previewImage = e.target.result;
+                var datauri = e.target.result.split(',')[1];
+                var binary = atob(datauri);
+                var array = [];
+                for (var i = 0; i < binary.length; i++) {
+                    array.push(binary.charCodeAt(i));
+                }
+                //Convert the binary format of image into image file object to upload
+                _this.profilePic = new File([new Uint8Array(array)], 'profile_pic.jpg', {
+                    type: 'image/jpg'
+                });
+            };
+            reader.readAsDataURL(fileInput.target.files[0]);
+        }
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_17" /* ViewChild */])('myInput'),
+        __metadata("design:type", Object)
+    ], DepartmentProfileComponent.prototype, "myInputVariable", void 0);
     DepartmentProfileComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
             selector: 'app-profile',
@@ -214,9 +271,23 @@ var DepartmentProfileService = /** @class */ (function () {
     };
     DepartmentProfileService.prototype.updateProfilePicture = function (opts) {
         var url = "api/user/picture/upload";
-        return this.http.post(url, opts).toPromise()
+        var fd = new FormData();
+        for (var key in opts) {
+            fd.append(key, opts[key]);
+        }
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]();
+        headers.append('Authorization', 'Bearer ' + this.getCookie('session'));
+        headers.append('privatekey', 'BbZJjyoXAdr8BUZuiKKARWimKfrSmQ6fv8kZ7OFfc');
+        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({ headers: headers });
+        return this.http.post('http://localhost:5051/' + url, fd, options).toPromise()
             .then(this.extractData)
             .catch(this.handleErrorPromise);
+    };
+    DepartmentProfileService.prototype.getCookie = function (name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length == 2)
+            return parts.pop().split(";").shift();
     };
     DepartmentProfileService.prototype.extractData = function (res) {
         var body = res.json();
@@ -238,7 +309,7 @@ var DepartmentProfileService = /** @class */ (function () {
             return Promise.reject(body.message || error);
         }
         else {
-            this.logout();
+            return Promise.reject(body.message || error);
         }
     };
     DepartmentProfileService.prototype.logout = function () {

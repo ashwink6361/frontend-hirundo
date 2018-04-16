@@ -6,7 +6,8 @@ body {
     font-family: 'Montserrat', sans-serif;
     font-size: 16px;
 }
-.mw-160{
+
+.mw-160 {
     max-width: 160px !important;
 }
 
@@ -31,7 +32,7 @@ body {
     min-height: 409px;
 }
 
-.btn.btn-floating{
+.btn.btn-floating {
     background: #c5c8cd;
     border: none;
     border-radius: 50%;
@@ -490,7 +491,7 @@ header {
     background: #4b473f;
     position: fixed;
     left: 0;
-    top: 69px;
+    top: 60px;
     width: 100%;
     height: 100%;
     z-index: 100;
@@ -623,10 +624,9 @@ header {
 }
 
 .stepper-form {
-    overflow: hidden; 
+    overflow: hidden;
     padding: 0 20px;
-    margin-top: 10px;
-    // Create Order
+    margin-top: 10px; // Create Order
     .label-container {
         img {
             max-width: 30px;
@@ -657,10 +657,28 @@ header {
     } // Item
 }
 
+.order-list-container{
+    padding: 0 20px;
+    margin-top: 10px;
+}
 .order-list {
     margin-bottom: 10px;
     .opacity {
         opacity: 0.5;
+    }
+    .order-items-container {
+        border: 1px solid #dedede;
+        margin-bottom: 10px;
+        h4 {
+            font-size: 14px;
+            padding: 8px 10px;
+            background-color: #dedede;
+        }
+        table.table thead th{
+            border-top: none;
+            padding-top: 0;
+            padding-bottom: 5px;
+        }
     }
     .card-title {
         font-size: 18px;
@@ -769,7 +787,7 @@ header {
                 align-items: center;
                 justify-content: center;
             }
-            .icon-img{
+            .icon-img {
                 max-width: 30px !important;
                 border-radius: 0 !important
             }
@@ -832,7 +850,7 @@ header {
     }
 }
 
-.varient-container{
+.varient-container {
     position: fixed;
     bottom: -100%;
     transition: 0.3s ease-in-out;
@@ -840,25 +858,25 @@ header {
     width: 100%;
     height: 100%;
     background: #fff;
-    &.show-varient{
+    &.show-varient {
         bottom: 0;
     }
-    .varient-content{
+    .varient-content {
         padding: 0 20px;
         margin-top: 10px;
-        h1{
+        h1 {
             font-size: 15px;
         }
     }
-    .modal-header{
+    .modal-header {
         padding: 15px 0;
-        .back-btn{
+        .back-btn {
             padding: 0 10px;
         }
-        .header-title{
+        .header-title {
             width: 100%;
             text-align: center;
-            button{
+            button {
                 float: right;
                 margin-right: 10px;
                 background-color: #3fb34f;
@@ -870,7 +888,7 @@ header {
     }
 }
 
-.order-btn{
+.order-btn {
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -881,30 +899,30 @@ header {
     padding: 15px 0;
 }
 
-.tabs-btn{
+.tabs-btn {
     display: flex;
-    button{
+    button {
         width: 50%;
         border: none;
         margin: 0;
         padding: 10px 0;
-        &.active{
+        &.active {
             background-color: #4b473f;
             color: #fff;
         }
     }
 }
 
-.steps-container{
-    ul{
+.steps-container {
+    ul {
         margin: 0;
         padding: 0;
         list-style: none;
         background-color: #4b473f;
-        li{
+        li {
             display: inline-block;
             color: #fff;
-            &.active{
+            &.active {
                 color: #fbab0e;
                 background-color: transparent;
             }

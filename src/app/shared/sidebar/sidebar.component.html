@@ -1,6 +1,7 @@
 <div class="sidebar" [class.sidebartoggle]="appService.sidebarToggle">
     <div class="sidebar-user-detail">
-        <img src="assets/images/test1.png" alt="" />
+        <img *ngIf="!authGuard.getCurrentUser().picture.small" src="assets/images/test1.png" alt="" />
+        <img *ngIf="authGuard.getCurrentUser().picture.small" [src]="authGuard.getCurrentUser().picture.small" alt="" />        
         <p>{{authGuard.getCurrentUser().firstName}}
             <span *ngIf="authGuard.getCurrentUser().lastName">&nbsp;{{authGuard.getCurrentUser().lastName}}</span>
         </p>

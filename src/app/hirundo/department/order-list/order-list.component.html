@@ -1,6 +1,6 @@
 <div>
     <div class="text-center" *ngIf="loadingOrders">Loading...</div>
-    <div *ngIf="!loadingOrders">
+    <div *ngIf="!loadingOrders" class="order-list-container">
         <div class="card order-list" *ngFor="let order of orders | orderby: '-created_at'">
             <div class="card-body" [class.opacity]="order.status == 3">
                 <h4 class="card-title">
@@ -17,6 +17,23 @@
                     </p>
                     <p>
                         <i class="far fa-user"></i> {{order.noOfPeople}}</p>
+                </div>
+                <div class="order-items-container">
+                    <h4>Item list</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let items of item">
+                                <td>{{items.id.name}}</td>
+                                <td>{{items.quantity}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="btn-container d-flex justify-content-between">
                     <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 3)">Cancel</button>

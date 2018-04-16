@@ -3,7 +3,7 @@ webpackJsonp(["profile.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/profile/profile.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\">\r\n    <div class=\"card\">\r\n      <input type=\"file\" name=\"myImage\" accept=\"image/*\" (change)=\"fileChangeEvent($event)\" placeholder=\"Upload file...\"/>      \r\n      <div>\r\n        <button type=\"submit\" class=\"btn btn-default waves-light\" mdbRippleRadius (click)=\"uploadProfilePic()\" ng-disabled=\"uploadPicRequest\">Update</button>\r\n      </div>\r\n      <div class=\"view hm-white-slight waves-light\" mdbRippleRadius>\r\n        <!-- <img src=\"assets/images/profile-placeholder.jpg\" class=\"img-fluid\" alt=\"\"> -->\r\n        <img *ngIf=\"!previewImage\" src=\"assets/images/profile-placeholder.jpg\" class=\"img-fluid\" alt=\"\">\r\n        <img *ngIf=\"previewImage\" [src]=\"previewImage\" class=\"img-fluid\" alt=\"\">       \r\n        <a>\r\n          <div class=\"mask\"></div>\r\n        </a>\r\n      </div>\r\n      <div class=\"card-body\">\r\n        <form [formGroup]=\"profileForm\" (ngSubmit)=\"updateProfile(profileForm.value)\">\r\n          <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>\r\n          <div class=\"alert-success\" *ngIf=\"success\">{{successMsg}}</div>        \r\n          <div class=\"md-form\">\r\n            <i class=\"fa fa-user-o prefix grey-text\"></i>\r\n            <input type=\"text\" id=\"firstName\" name=\"firstName\" formControlName=\"firstName\" class=\"form-control\" mdbActive>\r\n            <label for=\"Name\">First Name</label>\r\n          </div>  \r\n          <div class=\"md-form\">\r\n            <i class=\"fa fa-user-o prefix grey-text\"></i>\r\n            <input type=\"text\"  id=\"lastName\" name=\"lastName\" formControlName=\"lastName\" class=\"form-control\" mdbActive>\r\n            <label for=\"Name\">Last Name</label>\r\n          </div>     \r\n          <div class=\"text-center\">\r\n            <button  type=\"submit\" class=\"btn btn-default waves-light\" mdbRippleRadius [disabled]=\"!profileForm.valid || activeRequest\">Update</button>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  "
+module.exports = "<div class=\"container-fluid\">\r\n    <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>\r\n    <div class=\"alert-success\" *ngIf=\"success\">{{successMsg}}</div>  \r\n    <div class=\"card\">\r\n      <input type=\"file\" #myInput name=\"myImage\" accept=\"image/*\" (change)=\"fileChangeEvent($event)\" placeholder=\"Upload file...\"/>      \r\n      <div>\r\n        <button type=\"submit\" class=\"btn btn-default waves-light\" mdbRippleRadius (click)=\"uploadProfilePic()\" ng-disabled=\"uploadPicRequest\">Update</button>\r\n      </div>\r\n      <div class=\"view hm-white-slight waves-light\" mdbRippleRadius>\r\n        <img *ngIf=\"!previewImage && !ProfileData.picture.original\" src=\"assets/images/profile-placeholder.jpg\" class=\"img-fluid\" alt=\"\">\r\n        <img *ngIf=\"previewImage\" [src]=\"previewImage\" class=\"img-fluid\" alt=\"\">\r\n        <img *ngIf=\"!previewImage && ProfileData.picture.original\" [src]=\"ProfileData.picture.original\" class=\"img-fluid\" alt=\"\">               \r\n        <a>\r\n          <div class=\"mask\"></div>\r\n        </a>\r\n      </div>\r\n      <div class=\"card-body\">\r\n        <form [formGroup]=\"profileForm\" (ngSubmit)=\"updateProfile(profileForm.value)\">      \r\n          <div class=\"md-form\">\r\n            <i class=\"fa fa-user-o prefix grey-text\"></i>\r\n            <input type=\"text\" id=\"firstName\" name=\"firstName\" formControlName=\"firstName\" class=\"form-control\" mdbActive>\r\n            <label for=\"Name\">First Name</label>\r\n          </div>  \r\n          <div class=\"md-form\">\r\n            <i class=\"fa fa-user-o prefix grey-text\"></i>\r\n            <input type=\"text\"  id=\"lastName\" name=\"lastName\" formControlName=\"lastName\" class=\"form-control\" mdbActive>\r\n            <label for=\"Name\">Last Name</label>\r\n          </div>     \r\n          <div class=\"text-center\">\r\n            <button  type=\"submit\" class=\"btn btn-default waves-light\" mdbRippleRadius [disabled]=\"!profileForm.valid || activeRequest\">Update</button>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  "
 
 /***/ }),
 
@@ -58,10 +58,6 @@ var ProfileComponent = /** @class */ (function () {
         this.success = false;
         this.successMsg = '';
         this.uploadPicRequest = false;
-        this.picerror = false;
-        this.picerrorMsg = '';
-        this.picsuccess = false;
-        this.picsuccessMsg = '';
         this.previewImage = '';
     }
     ProfileComponent.prototype.ngOnInit = function () {
@@ -83,6 +79,7 @@ var ProfileComponent = /** @class */ (function () {
         this.User.firstName = user.firstName;
         this.User.lastName = user.lastName;
         this.profileService.updateProfile(this.User).then(function (data) {
+            window.scrollTo(0, 0);
             _this.activeRequest = false;
             _this.ProfileData = data.data;
             localStorage.setItem('currentUser', JSON.stringify(data.data));
@@ -96,6 +93,7 @@ var ProfileComponent = /** @class */ (function () {
                 _this.successMsg = '';
             }, 4000);
         }).catch(function (error) {
+            window.scrollTo(0, 0);
             _this.activeRequest = false;
             _this.error = true;
             _this.errorMsg = error;
@@ -127,31 +125,37 @@ var ProfileComponent = /** @class */ (function () {
     };
     ProfileComponent.prototype.uploadProfilePic = function () {
         var _this = this;
-        console.log('this.profilePic', this.profilePic);
         var opts = {
             picture: this.profilePic
         };
         this.uploadPicRequest = true;
         this.profileService.updateProfilePicture(opts).then(function (data) {
-            console.log('data', data);
+            window.scrollTo(0, 0);
             _this.uploadPicRequest = false;
+            localStorage.setItem('currentUser', JSON.stringify(data.data));
             _this.profilePic = '';
+            _this.myInputVariable.nativeElement.value = "";
             _this.success = true;
             _this.successMsg = data.message;
             setTimeout(function () {
-                _this.picsuccess = false;
-                _this.picsuccessMsg = '';
+                _this.success = false;
+                _this.successMsg = '';
             }, 4000);
         }).catch(function (error) {
+            window.scrollTo(0, 0);
             _this.uploadPicRequest = false;
             _this.error = true;
             _this.errorMsg = error;
             setTimeout(function () {
-                _this.picerror = false;
-                _this.picerrorMsg = '';
+                _this.error = false;
+                _this.errorMsg = '';
             }, 4000);
         });
     };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_17" /* ViewChild */])('myInput'),
+        __metadata("design:type", Object)
+    ], ProfileComponent.prototype, "myInputVariable", void 0);
     ProfileComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
             selector: 'app-profile',
