@@ -83,9 +83,19 @@ var ProfileService = /** @class */ (function () {
         for (var key in opts) {
             fd.append(key, opts[key]);
         }
-        return this.http.post(url, fd).toPromise()
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]();
+        headers.append('Authorization', 'Bearer ' + this.getCookie('session'));
+        headers.append('privatekey', 'BbZJjyoXAdr8BUZuiKKARWimKfrSmQ6fv8kZ7OFfc');
+        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({ headers: headers });
+        return this.http.post('http://localhost:5051/' + url, fd, options).toPromise()
             .then(this.extractData)
             .catch(this.handleErrorPromise);
+    };
+    ProfileService.prototype.getCookie = function (name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length == 2)
+            return parts.pop().split(";").shift();
     };
     ProfileService.prototype.extractData = function (res) {
         var body = res.json();
@@ -107,7 +117,7 @@ var ProfileService = /** @class */ (function () {
             return Promise.reject(body.message || error);
         }
         else {
-            this.logout();
+            return Promise.reject(body.message || error);
         }
     };
     ProfileService.prototype.logout = function () {

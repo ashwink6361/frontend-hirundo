@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ProfileService } from './profile.service';
 import { AuthGuard } from '../../../shared/guard/auth.guard';
@@ -8,6 +8,8 @@ import { AuthGuard } from '../../../shared/guard/auth.guard';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  @ViewChild('myInput')
+  myInputVariable: any;
   profileForm: FormGroup;
   User: any = {};
   ProfileData: any;
@@ -17,10 +19,6 @@ export class ProfileComponent implements OnInit {
   success: boolean = false;
   successMsg: string = '';
   uploadPicRequest: boolean = false;
-  picerror: boolean = false;
-  picerrorMsg: string = '';
-  picsuccess: boolean = false;
-  picsuccessMsg: string = '';
   previewImage = '';
   public profilePic;
   constructor(private profileService: ProfileService, private authGuard: AuthGuard) { }
@@ -45,6 +43,7 @@ export class ProfileComponent implements OnInit {
     this.User.firstName = user.firstName;
     this.User.lastName = user.lastName;
     this.profileService.updateProfile(this.User).then(data => {
+      window.scrollTo(0, 0);
       this.activeRequest = false;
       this.ProfileData = data.data;
       localStorage.setItem('currentUser', JSON.stringify(data.data));
@@ -58,6 +57,7 @@ export class ProfileComponent implements OnInit {
         this.successMsg = '';
       }, 4000);
     }).catch(error => {
+      window.scrollTo(0, 0);
       this.activeRequest = false;
       this.error = true;
       this.errorMsg = error;
@@ -89,28 +89,30 @@ export class ProfileComponent implements OnInit {
   }
 
   public uploadProfilePic() {
-    console.log('this.profilePic', this.profilePic);
     let opts = {
       picture: this.profilePic
     }
     this.uploadPicRequest = true;
     this.profileService.updateProfilePicture(opts).then(data => {
-      console.log('data',data);
+      window.scrollTo(0, 0);
       this.uploadPicRequest = false;
+      localStorage.setItem('currentUser', JSON.stringify(data.data));      
       this.profilePic = '';
+      this.myInputVariable.nativeElement.value = "";
       this.success = true;
       this.successMsg = data.message;
       setTimeout(() => {
-        this.picsuccess = false;
-        this.picsuccessMsg = '';
+        this.success = false;
+        this.successMsg = '';
       }, 4000);
     }).catch(error => {
+      window.scrollTo(0, 0);
       this.uploadPicRequest = false;
       this.error = true;
       this.errorMsg = error;
       setTimeout(() => {
-        this.picerror = false;
-        this.picerrorMsg = '';
+        this.error = false;
+        this.errorMsg = '';
       }, 4000);
     });
   }

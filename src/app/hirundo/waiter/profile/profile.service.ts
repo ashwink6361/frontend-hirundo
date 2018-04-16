@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, Headers,RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
@@ -18,13 +18,23 @@ export class ProfileService {
     let url = "api/user/picture/upload";
     var fd = new FormData();
     for (var key in opts) {
-        fd.append(key, opts[key]);
+      fd.append(key, opts[key]);
     }
-    return this.http.post(url, fd ).toPromise()
+    var headers = new Headers();
+    headers.append('Authorization', 'Bearer ' + this.getCookie('session'));
+    headers.append('privatekey', 'BbZJjyoXAdr8BUZuiKKARWimKfrSmQ6fv8kZ7OFfc');
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post('http://localhost:5051/' + url, fd, options).toPromise()
       .then(this.extractData)
       .catch(this.handleErrorPromise);
   }
-  
+
+  getCookie(name) {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+  }
+
   public extractData(res: Response) {
     let body = res.json();
     if (body.hasOwnProperty('error')) {
@@ -44,7 +54,7 @@ export class ProfileService {
       return Promise.reject(body.message || error);
     }
     else {
-      this.logout();
+      return Promise.reject(body.message || error);
     }
   }
 
