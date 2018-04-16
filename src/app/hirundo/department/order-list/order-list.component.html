@@ -28,9 +28,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let items of item">
-                                <td>{{items.id.name}}</td>
-                                <td>{{items.quantity}}</td>
+                            <tr *ngFor="let item of order.item">
+                                <span *ngIf="item.category == authGuard.getCurrentUser().category">
+                                    <td>{{item.id.name}}</td>
+                                    <td>{{item.quantity}}</td>
+                                </span>
                             </tr>
                         </tbody>
                     </table>

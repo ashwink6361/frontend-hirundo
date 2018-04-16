@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { OrderByPipe } from '../../orderby';
 import { OrderListService } from './order-list.service';
 import { WebsocketService } from '../../../service/websocket.service';
+import { AuthGuard } from '../../../shared/guard/auth.guard';
 
 @Component({
     selector: 'app-order-list',
@@ -14,7 +15,7 @@ export class OrderListComponent implements OnInit {
     public clock: any;
     public tick: any;
     public loadingOrders: boolean = true;
-    constructor(public websocketService: WebsocketService) {
+    constructor(public websocketService: WebsocketService, public authGuard: AuthGuard) {
         //websocketService.connect();
     }
 
