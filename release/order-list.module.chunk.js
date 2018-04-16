@@ -3,7 +3,7 @@ webpackJsonp(["order-list.module"],{
 /***/ "../../../../../src/app/hirundo/department/order-list/order-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n    <div class=\"text-center\" *ngIf=\"loadingOrders\">Loading...</div>\n    <div *ngIf=\"!loadingOrders\" class=\"order-list-container\">\n        <div class=\"card order-list\" *ngFor=\"let order of orders | orderby: '-created_at'\">\n            <div class=\"card-body\" [class.opacity]=\"order.status == 3\">\n                <h4 class=\"card-title\">\n                    <div>\n                        <i class=\"far fa-clock\"></i> {{order.created_at | date:'hh:mm a'}}</div>\n                    <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div>\n                </h4>\n                <div class=\"card-text\">\n                    <p>\n                        <i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\n                    <p>\n                        <img src=\"assets/images/table.png\" alt=\"\">\n                        <span>Table 2</span>\n                    </p>\n                    <p>\n                        <i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\n                </div>\n                <div class=\"order-items-container\">\n                    <h4>Item list</h4>\n                    <table class=\"table\">\n                        <thead>\n                            <tr>\n                                <th>Name</th>\n                                <th>Quantity</th>\n                            </tr>\n                        </thead>\n                        <tbody>\n                            <tr *ngFor=\"let items of item\">\n                                <td>{{items.id.name}}</td>\n                                <td>{{items.quantity}}</td>\n                            </tr>\n                        </tbody>\n                    </table>\n                </div>\n                <div class=\"btn-container d-flex justify-content-between\">\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 3)\">Cancel</button>\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 4)\">In Progress</button>\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 2)\">Done</button>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "<div>\n    <div class=\"text-center\" *ngIf=\"loadingOrders\">Loading...</div>\n    <div *ngIf=\"!loadingOrders\" class=\"order-list-container\">\n        <div class=\"card order-list\" *ngFor=\"let order of orders | orderby: '-created_at'\">\n            <div class=\"card-body\" [class.opacity]=\"order.status == 3\">\n                <h4 class=\"card-title\">\n                    <div>\n                        <i class=\"far fa-clock\"></i> {{order.created_at | date:'hh:mm a'}}</div>\n                    <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div>\n                </h4>\n                <div class=\"card-text\">\n                    <p>\n                        <i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\n                    <p>\n                        <img src=\"assets/images/table.png\" alt=\"\">\n                        <span>Table 2</span>\n                    </p>\n                    <p>\n                        <i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\n                </div>\n                <div class=\"order-items-container\">\n                    <h4>Item list</h4>\n                    <table class=\"table\">\n                        <thead>\n                            <tr>\n                                <th>Name</th>\n                                <th>Quantity</th>\n                            </tr>\n                        </thead>\n                        <tbody>\n                            <tr *ngFor=\"let item of order.item\">\n                                <span *ngIf=\"item.category == authGuard.getCurrentUser().category\">\n                                    <td>{{item.id.name}}</td>\n                                    <td>{{item.quantity}}</td>\n                                </span>\n                            </tr>\n                        </tbody>\n                    </table>\n                </div>\n                <div class=\"btn-container d-flex justify-content-between\">\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 3)\">Cancel</button>\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 4)\">In Progress</button>\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 2)\">Done</button>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -32,6 +32,7 @@ module.exports = module.exports.toString();
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return OrderListComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__service_websocket_service__ = __webpack_require__("../../../../../src/app/service/websocket.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_guard_auth_guard__ = __webpack_require__("../../../../../src/app/shared/guard/auth.guard.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -43,9 +44,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 var OrderListComponent = /** @class */ (function () {
-    function OrderListComponent(websocketService) {
+    function OrderListComponent(websocketService, authGuard) {
         this.websocketService = websocketService;
+        this.authGuard = authGuard;
         this.orders = [];
         this.loadingOrders = true;
         //websocketService.connect();
@@ -100,10 +103,10 @@ var OrderListComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/hirundo/department/order-list/order-list.component.html"),
             styles: [__webpack_require__("../../../../../src/app/hirundo/department/order-list/order-list.component.scss")]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__service_websocket_service__["a" /* WebsocketService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__service_websocket_service__["a" /* WebsocketService */]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__service_websocket_service__["a" /* WebsocketService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__service_websocket_service__["a" /* WebsocketService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__shared_guard_auth_guard__["a" /* AuthGuard */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__shared_guard_auth_guard__["a" /* AuthGuard */]) === "function" && _b || Object])
     ], OrderListComponent);
     return OrderListComponent;
-    var _a;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=order-list.component.js.map
