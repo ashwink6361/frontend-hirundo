@@ -22,9 +22,11 @@
                 <i class="fas fa-chevron-left"></i>
             </li>
             <li>All</li>
-            <li *ngFor="let subCategory of data.selectedCategory.subCategory">
-                {{subCategory}}
-            </li>
+            <span *ngIf="data.selectedCategory.subCategory.length">
+                <li *ngFor="let subCategory of data.selectedCategory.subCategory">
+                    {{subCategory}}
+                </li>
+            </span>
             <li class="next">
                 <i class="fas fa-chevron-right"></i>
             </li>

@@ -69,8 +69,8 @@ export class ChooseCategoryComponent implements OnInit {
     this.orderService.getCategoryItem().then(data => {
       for (let i = 0; i < data.data.length; i++) {
         if (data.data[i].category._id == category._id) {
-          orderdata.categoryItems = data.data[i].items;
-          this.orderService.setOrderData(orderdata);
+        orderdata.categoryItems = data.data[i].items;
+        this.orderService.setOrderData(orderdata);
         }
       }
       this.router.navigate(['/waiter/order/:id/choose-item']);
