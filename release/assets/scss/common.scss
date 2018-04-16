@@ -75,6 +75,7 @@ body {
             overflow: hidden;
             white-space: nowrap;
             text-align: center;
+            cursor: pointer;
             &.prev {
                 position: absolute;
                 width: 20px;
@@ -83,11 +84,13 @@ body {
                 background-color: #4b473f;
                 color: #fff;
                 box-shadow: 0 0 22px #ddd;
+                cursor: pointer;
             }
             &.next {
                 @extend .prev;
                 left: inherit;
                 right: 0;
+                cursor: pointer;
             }
             &.active {
                 background-color: #faaa02
