@@ -9,23 +9,23 @@
     <div class="sidebar-nav">
         <ul>
             <li>
-                <a class="waves-effect" *ngIf="userType == 3" mdbRippleRadius (click)="hideSidebar()" routerLink="/waiter">
+                <a class="waves-effect" *ngIf="authGuard.getCurrentUser().userType == 3" mdbRippleRadius (click)="hideSidebar()" routerLink="/waiter">
                     <i class="fas fa-tachometer-alt"></i> Home</a>
             </li>
             <li>
-                <a class="waves-effect" *ngIf="userType == 3" mdbRippleRadius (click)="hideSidebar()" routerLink="/waiter/profile">
+                <a class="waves-effect" *ngIf="authGuard.getCurrentUser().userType == 3" mdbRippleRadius (click)="hideSidebar()" routerLink="/waiter/profile">
                     <i class="far fa-user"></i> Profile</a>
-                <a class="waves-effect" *ngIf="userType == 4" mdbRippleRadius (click)="hideSidebar()" routerLink="/department/profile">
+                <a class="waves-effect" *ngIf="authGuard.getCurrentUser().userType == 4" mdbRippleRadius (click)="hideSidebar()" routerLink="/department/profile">
                     <i class="far fa-user"></i> Profile</a>
             </li>
-            <li *ngIf="userType == 4">
+            <li *ngIf="authGuard.getCurrentUser().userType == 4">
                 <a class="waves-effect" mdbRippleRadius (click)="hideSidebar()" routerLink="/department">
                     <i class="fas fa-cart-plus"></i> Orders</a>
             </li>
             <li>
-                <a class="waves-effect" *ngIf="userType == 3" mdbRippleRadius (click)="hideSidebar()" routerLink="/waiter/change-password">
+                <a class="waves-effect" *ngIf="authGuard.getCurrentUser().userType == 3" mdbRippleRadius (click)="hideSidebar()" routerLink="/waiter/change-password">
                     <i class="fas fa-cog"></i> Change Password</a>
-                <a class="waves-effect" *ngIf="userType == 4" mdbRippleRadius (click)="hideSidebar()" routerLink="/department/change-password">
+                <a class="waves-effect" *ngIf="authGuard.getCurrentUser().userType == 4" mdbRippleRadius (click)="hideSidebar()" routerLink="/department/change-password">
                     <i class="fas fa-cog"></i> Change Password</a>
             </li>
             <li>
