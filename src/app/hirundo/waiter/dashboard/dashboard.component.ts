@@ -32,7 +32,12 @@ export class DashboardComponent implements OnInit {
   createOrder(table) {
     localStorage.setItem('tabledata', JSON.stringify(table));
     let room = JSON.parse(localStorage.getItem('roomdata'));
-    this.router.navigate(['/waiter/order', room._id]);
+    // if(table.status == 1){
+    //   this.router.navigate(['/waiter/order/:id/cart']);
+    // }else{
+      this.router.navigate(['/waiter/order', room._id]);
+    // }
+    
   }
 
   getTables(room, index) {

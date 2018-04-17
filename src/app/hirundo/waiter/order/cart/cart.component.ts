@@ -14,7 +14,9 @@ export class CartComponent implements OnInit {
   constructor(private orderService: OrderService, private router: Router) { }
 
   ngOnInit() {
-    this.items = this.orderService.getOrderData().selectedItems;
+    if (this.orderService.getOrderData().selectedItems) {
+      this.items = this.orderService.getOrderData().selectedItems;
+    }
   }
 
   createOrder() {
@@ -48,14 +50,14 @@ export class CartComponent implements OnInit {
       });
   }
 
-  deleteItemFromCart(article){
+  deleteItemFromCart(article) {
     let data = this.orderService.getOrderData();
-    for(let i=0;i<data.selectedItems.length;i++){
-      if(data.selectedItems[i]._id == article._id){
-        data.selectedItems.splice(i,1);
+    for (let i = 0; i < data.selectedItems.length; i++) {
+      if (data.selectedItems[i]._id == article._id) {
+        data.selectedItems.splice(i, 1);
       }
-    this.orderService.setOrderData(data);      
-    this.items = this.orderService.getOrderData().selectedItems;
+      this.orderService.setOrderData(data);
+      this.items = this.orderService.getOrderData().selectedItems;
     }
   }
 }
