@@ -14,6 +14,13 @@ export class ProfileService {
       .catch(this.handleErrorPromise);
   }
 
+  getCurrentUser(): Promise<any> {
+    let url = "api/user";
+    return this.http.get(url).toPromise()
+      .then(this.extractData)
+      .catch(this.handleErrorPromise);
+  }
+
   updateProfilePicture(opts): Promise<any> {
     let url = "api/user/picture/upload";
     var fd = new FormData();

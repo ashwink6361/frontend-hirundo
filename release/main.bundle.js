@@ -238,6 +238,107 @@ var AppModule = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "../../../../../src/app/hirundo/department/department-profile/department-profile.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DepartmentProfileService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var DepartmentProfileService = /** @class */ (function () {
+    function DepartmentProfileService(http) {
+        this.http = http;
+    }
+    DepartmentProfileService.prototype.updateProfile = function (opts) {
+        var url = "api/user";
+        return this.http.put(url, opts).toPromise()
+            .then(this.extractData)
+            .catch(this.handleErrorPromise);
+    };
+    DepartmentProfileService.prototype.getCurrentUser = function () {
+        var url = "api/user";
+        return this.http.get(url).toPromise()
+            .then(this.extractData)
+            .catch(this.handleErrorPromise);
+    };
+    DepartmentProfileService.prototype.updateProfilePicture = function (opts) {
+        var url = "api/user/picture/upload";
+        var fd = new FormData();
+        for (var key in opts) {
+            fd.append(key, opts[key]);
+        }
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]();
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+        headers.append('privatekey', 'BbZJjyoXAdr8BUZuiKKARWimKfrSmQ6fv8kZ7OFfc');
+        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({ headers: headers });
+        return this.http.post('http://localhost:5051/' + url, fd, options).toPromise()
+            .then(this.extractData)
+            .catch(this.handleErrorPromise);
+    };
+    DepartmentProfileService.prototype.getCookie = function (name) {
+        console.log('localStorage.getItem', localStorage.getItem('token'));
+        console.log('document.cookie', document.cookie);
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length == 2)
+            return parts.pop().split(";").shift();
+    };
+    DepartmentProfileService.prototype.extractData = function (res) {
+        var body = res.json();
+        if (body.hasOwnProperty('error')) {
+            if (body.error.message === 'Token is required') {
+                this.logout();
+            }
+            else {
+                return Promise.resolve(body || {});
+            }
+        }
+        else {
+            return Promise.resolve(body || {});
+        }
+    };
+    DepartmentProfileService.prototype.handleErrorPromise = function (error) {
+        var body = error.json();
+        if (error.status === 400 || error.status === 401) {
+            return Promise.reject(body.message || error);
+        }
+        else {
+            return Promise.reject(body.message || error);
+        }
+    };
+    DepartmentProfileService.prototype.logout = function () {
+        localStorage.removeItem('isLoggedin');
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
+        document.cookie = "token=" + '';
+        window.location.href = '/';
+    };
+    DepartmentProfileService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Injectable */])(),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
+    ], DepartmentProfileService);
+    return DepartmentProfileService;
+    var _a;
+}());
+
+//# sourceMappingURL=department-profile.service.js.map
+
+/***/ }),
+
 /***/ "../../../../../src/app/hirundo/global.service.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -630,18 +731,32 @@ var WebsocketService = /** @class */ (function () {
                 }
             }
         });
+        // let url = '/api/department/orders/'+this.authGuard.getCurrentUser()._id;
+        // this.http.get(url).toPromise()
+        //     .then(data => {
+        //         let res = data.json();
+        //         this._orders = res.data;
+        //     })
+        //     .catch(error => {
+        //         this._orders = [];
+        //     });
+    };
+    // public getOrders() {
+    //     return this._orders;
+    // }
+    WebsocketService.prototype.getOrders = function () {
+        var _this = this;
         var url = '/api/department/orders/' + this.authGuard.getCurrentUser()._id;
-        this.http.get(url).toPromise()
+        return this.http.get(url).toPromise()
             .then(function (data) {
             var res = data.json();
             _this._orders = res.data;
+            return _this._orders;
         })
             .catch(function (error) {
             _this._orders = [];
+            return error;
         });
-    };
-    WebsocketService.prototype.getOrders = function () {
-        return this._orders;
     };
     WebsocketService.prototype.getRooms = function () {
         var _this = this;
@@ -841,6 +956,7 @@ module.exports = module.exports.toString();
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HeaderLoginComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__service_app_service__ = __webpack_require__("../../../../../src/app/service/app.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__hirundo_department_department_profile_department_profile_service__ = __webpack_require__("../../../../../src/app/hirundo/department/department-profile/department-profile.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -852,14 +968,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 var HeaderLoginComponent = /** @class */ (function () {
-    function HeaderLoginComponent(appservice) {
+    function HeaderLoginComponent(appservice, profileService) {
         this.appservice = appservice;
+        this.profileService = profileService;
     }
     HeaderLoginComponent.prototype.ngOnInit = function () {
     };
     HeaderLoginComponent.prototype.sidebar = function () {
         this.appservice.sidebarToggle = !this.appservice.sidebarToggle;
+        this.profileService.getCurrentUser().then(function (data) {
+            localStorage.setItem('currentUser', JSON.stringify(data.data));
+        }).catch(function (error) {
+            console.log("error", error);
+        });
     };
     HeaderLoginComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
@@ -867,10 +990,10 @@ var HeaderLoginComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/shared/header-login/header-login.component.html"),
             styles: [__webpack_require__("../../../../../src/app/shared/header-login/header-login.component.scss")]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__service_app_service__["a" /* AppService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__service_app_service__["a" /* AppService */]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__service_app_service__["a" /* AppService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__service_app_service__["a" /* AppService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__hirundo_department_department_profile_department_profile_service__["a" /* DepartmentProfileService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__hirundo_department_department_profile_department_profile_service__["a" /* DepartmentProfileService */]) === "function" && _b || Object])
     ], HeaderLoginComponent);
     return HeaderLoginComponent;
-    var _a;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=header-login.component.js.map
@@ -1027,12 +1150,14 @@ var FilterPipe = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__shared_pipes_filter_pipe__ = __webpack_require__("../../../../../src/app/shared/pipes/filter.pipe.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__service_app_service__ = __webpack_require__("../../../../../src/app/service/app.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__hirundo_department_department_profile_department_profile_service__ = __webpack_require__("../../../../../src/app/hirundo/department/department-profile/department-profile.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -1064,7 +1189,8 @@ var SharedModule = /** @class */ (function () {
             ngModule: SharedModule_1,
             providers: [
                 __WEBPACK_IMPORTED_MODULE_10__user_change_passowrd_user_change_password_service__["a" /* UserChangePasswordService */],
-                __WEBPACK_IMPORTED_MODULE_13__service_app_service__["a" /* AppService */]
+                __WEBPACK_IMPORTED_MODULE_13__service_app_service__["a" /* AppService */],
+                __WEBPACK_IMPORTED_MODULE_14__hirundo_department_department_profile_department_profile_service__["a" /* DepartmentProfileService */]
             ],
         };
     };
@@ -1094,7 +1220,7 @@ var SharedModule = /** @class */ (function () {
 /***/ "../../../../../src/app/shared/sidebar/sidebar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"sidebar\" [class.sidebartoggle]=\"appService.sidebarToggle\">\r\n    <div class=\"sidebar-user-detail\">\r\n        <img *ngIf=\"!authGuard.getCurrentUser().picture.small\" src=\"assets/images/test1.png\" alt=\"\" />\r\n        <img *ngIf=\"authGuard.getCurrentUser().picture.small\" [src]=\"authGuard.getCurrentUser().picture.small\" alt=\"\" />        \r\n        <p>{{authGuard.getCurrentUser().firstName}}\r\n            <span *ngIf=\"authGuard.getCurrentUser().lastName\">&nbsp;{{authGuard.getCurrentUser().lastName}}</span>\r\n        </p>\r\n    </div>\r\n    <div class=\"sidebar-nav\">\r\n        <ul>\r\n            <li>\r\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter\">\r\n                    <i class=\"fas fa-tachometer-alt\"></i> Home</a>\r\n            </li>\r\n            <li>\r\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter/profile\">\r\n                    <i class=\"far fa-user\"></i> Profile</a>\r\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 4\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department/profile\">\r\n                    <i class=\"far fa-user\"></i> Profile</a>\r\n            </li>\r\n            <li *ngIf=\"authGuard.getCurrentUser().userType == 4\">\r\n                <a class=\"waves-effect\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department\">\r\n                    <i class=\"fas fa-cart-plus\"></i> Orders</a>\r\n            </li>\r\n            <li>\r\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter/change-password\">\r\n                    <i class=\"fas fa-cog\"></i> Change Password</a>\r\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 4\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department/change-password\">\r\n                    <i class=\"fas fa-cog\"></i> Change Password</a>\r\n            </li>\r\n            <li>\r\n                <a class=\"waves-effect\" mdbRippleRadius (click)=\"appService.logout()\">\r\n                    <i class=\"fas fa-power-off\"></i> Logout</a>\r\n            </li>\r\n        </ul>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<div class=\"sidebar\" [class.sidebartoggle]=\"appService.sidebarToggle\">\r\n    <div class=\"sidebar-user-detail\">\r\n        <img *ngIf=\"!authGuard.getCurrentUser().picture.small\" src=\"assets/images/profile-placeholder.jpg\" alt=\"\" />\r\n        <img *ngIf=\"authGuard.getCurrentUser().picture.small\" [src]=\"authGuard.getCurrentUser().picture.small\" alt=\"\" />        \r\n        <p>{{authGuard.getCurrentUser().firstName}}\r\n            <span *ngIf=\"authGuard.getCurrentUser().lastName\">&nbsp;{{authGuard.getCurrentUser().lastName}}</span>\r\n        </p>\r\n    </div>\r\n    <div class=\"sidebar-nav\">\r\n        <ul>\r\n            <li>\r\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter\">\r\n                    <i class=\"fas fa-tachometer-alt\"></i> Home</a>\r\n            </li>\r\n            <li>\r\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter/profile\">\r\n                    <i class=\"far fa-user\"></i> Profile</a>\r\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 4\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department/profile\">\r\n                    <i class=\"far fa-user\"></i> Profile</a>\r\n            </li>\r\n            <li *ngIf=\"authGuard.getCurrentUser().userType == 4\">\r\n                <a class=\"waves-effect\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department\">\r\n                    <i class=\"fas fa-cart-plus\"></i> Orders</a>\r\n            </li>\r\n            <li>\r\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter/change-password\">\r\n                    <i class=\"fas fa-cog\"></i> Change Password</a>\r\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 4\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department/change-password\">\r\n                    <i class=\"fas fa-cog\"></i> Change Password</a>\r\n            </li>\r\n            <li>\r\n                <a class=\"waves-effect\" mdbRippleRadius (click)=\"appService.logout()\">\r\n                    <i class=\"fas fa-power-off\"></i> Logout</a>\r\n            </li>\r\n        </ul>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -1124,6 +1250,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__service_app_service__ = __webpack_require__("../../../../../src/app/service/app.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__guard_auth_guard__ = __webpack_require__("../../../../../src/app/shared/guard/auth.guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__hirundo_department_department_profile_department_profile_service__ = __webpack_require__("../../../../../src/app/hirundo/department/department-profile/department-profile.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1136,14 +1263,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var SidebarComponent = /** @class */ (function () {
-    function SidebarComponent(appService, authGuard) {
+    function SidebarComponent(appService, authGuard, profileService) {
         this.appService = appService;
         this.authGuard = authGuard;
+        this.profileService = profileService;
     }
     SidebarComponent.prototype.ngOnInit = function () {
-        var data = this.authGuard.getCurrentUser();
-        this.userType = data.userType;
+        this.profileService.getCurrentUser().then(function (data) {
+            localStorage.setItem('currentUser', JSON.stringify(data.data));
+        }).catch(function (error) {
+            console.log("error", error);
+        });
     };
     SidebarComponent.prototype.hideSidebar = function () {
         this.appService.sidebarToggle = false;
@@ -1154,10 +1286,10 @@ var SidebarComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/shared/sidebar/sidebar.component.html"),
             styles: [__webpack_require__("../../../../../src/app/shared/sidebar/sidebar.component.scss")]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__service_app_service__["a" /* AppService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__service_app_service__["a" /* AppService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__guard_auth_guard__["a" /* AuthGuard */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__guard_auth_guard__["a" /* AuthGuard */]) === "function" && _b || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__service_app_service__["a" /* AppService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__service_app_service__["a" /* AppService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__guard_auth_guard__["a" /* AuthGuard */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__guard_auth_guard__["a" /* AuthGuard */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__hirundo_department_department_profile_department_profile_service__["a" /* DepartmentProfileService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__hirundo_department_department_profile_department_profile_service__["a" /* DepartmentProfileService */]) === "function" && _c || Object])
     ], SidebarComponent);
     return SidebarComponent;
-    var _a, _b;
+    var _a, _b, _c;
 }());
 
 //# sourceMappingURL=sidebar.component.js.map

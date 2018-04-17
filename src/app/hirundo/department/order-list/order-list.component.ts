@@ -20,11 +20,19 @@ export class OrderListComponent implements OnInit {
     }
 
     ngOnInit() {
-        setTimeout(()=>{
-            this.orders = this.websocketService.getOrders();
-            this.loadingOrders = false;
-            //console.log('this.orders ', this.orders);
-        }, 5000);
+        this.websocketService.getOrders().then(data => {
+            this.orders = data;
+            this.loadingOrders = false;            
+          })
+            .catch(error => {
+              console.log('error', error);
+            });
+
+        // setTimeout(()=>{
+        //     this.orders = this.websocketService.getOrders();
+        //     this.loadingOrders = false;
+        //     //console.log('this.orders ', this.orders);
+        // }, 5000);
 
         this.tick = setInterval(() => {
             this.clock = Date.now();

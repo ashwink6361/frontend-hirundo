@@ -77,6 +77,12 @@ var ProfileService = /** @class */ (function () {
             .then(this.extractData)
             .catch(this.handleErrorPromise);
     };
+    ProfileService.prototype.getCurrentUser = function () {
+        var url = "api/user";
+        return this.http.get(url).toPromise()
+            .then(this.extractData)
+            .catch(this.handleErrorPromise);
+    };
     ProfileService.prototype.updateProfilePicture = function (opts) {
         var url = "api/user/picture/upload";
         var fd = new FormData();
