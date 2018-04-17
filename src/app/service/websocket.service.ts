@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Http, Response } from '@angular/http';
 import * as Rx from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
+import { AuthGuard } from '../shared/guard/auth.guard';
 
 @Injectable()
 export class WebsocketService {
@@ -11,7 +12,7 @@ export class WebsocketService {
     private socket;
     public _orders: Array<any> = [];
     public _rooms: Array<any> = [];    
-    constructor( private http: Http ) {
+    constructor( private http: Http, private authGuard: AuthGuard ) {
         this.connect();
     }
     connect() {
@@ -46,7 +47,7 @@ export class WebsocketService {
                 }
             }
         });
-        let url = '/api/department/orders';
+        let url = '/api/department/orders/'+this.authGuard.getCurrentUser()._id;
         this.http.get(url).toPromise()
             .then(data => {
                 let res = data.json();
