@@ -1,36 +1,42 @@
-<div class="container-fluid">
+<div class="container-fluid profile-container">
     <div class="alert-danger" *ngIf="error">{{errorMsg}}</div>
-    <div class="alert-success" *ngIf="success">{{successMsg}}</div>  
+    <div class="alert-success" *ngIf="success">{{successMsg}}</div>
     <div class="card">
-      <input type="file" #myInput name="myImage" accept="image/*" (change)="fileChangeEvent($event)" placeholder="Upload file..."/>      
-      <div>
-        <button type="submit" class="btn btn-default waves-light" mdbRippleRadius (click)="uploadProfilePic()" ng-disabled="uploadPicRequest">Update</button>
-      </div>
-      <div class="view hm-white-slight waves-light" mdbRippleRadius>
-        <img *ngIf="!previewImage && !ProfileData.picture.original" src="assets/images/profile-placeholder.jpg" class="img-fluid" alt="">
-        <img *ngIf="previewImage" [src]="previewImage" class="img-fluid" alt="">
-        <img *ngIf="!previewImage && ProfileData.picture.original" [src]="ProfileData.picture.original" class="img-fluid" alt="">               
-        <a>
-          <div class="mask"></div>
-        </a>
-      </div>
-      <div class="card-body">
-        <form [formGroup]="profileForm" (ngSubmit)="updateProfile(profileForm.value)">      
-          <div class="md-form">
-            <i class="fa fa-user-o prefix grey-text"></i>
-            <input type="text" id="firstName" name="firstName" formControlName="firstName" class="form-control" mdbActive>
-            <label for="Name">First Name</label>
-          </div>  
-          <div class="md-form">
-            <i class="fa fa-user-o prefix grey-text"></i>
-            <input type="text"  id="lastName" name="lastName" formControlName="lastName" class="form-control" mdbActive>
-            <label for="Name">Last Name</label>
-          </div>     
-          <div class="text-center">
-            <button  type="submit" class="btn btn-default waves-light" mdbRippleRadius [disabled]="!profileForm.valid || activeRequest">Update</button>
-          </div>
-        </form>
-      </div>
+        <div class="view hm-white-slight waves-light" mdbRippleRadius>
+            <img *ngIf="!previewImage && !ProfileData.picture.original" src="assets/images/profile-placeholder.jpg" class="img-fluid"
+                alt="">
+            <img *ngIf="previewImage" [src]="previewImage" class="img-fluid" alt="">
+            <img *ngIf="!previewImage && ProfileData.picture.original" [src]="ProfileData.picture.original" class="img-fluid" alt="">
+            <a>
+                <div class="mask"></div>
+            </a>
+        </div>
+        <div class="btn-container d-flex justify-content-between">
+            <label class="cabinet btn">
+                <i class="far fa-image"></i>
+                <input type="file" class="file" #myInput name="myImage" accept="image/*" (change)="fileChangeEvent($event)" placeholder="Upload file..."
+                />
+            </label>
+            <button type="submit" class="btn btn-default waves-light" mdbRippleRadius (click)="uploadProfilePic()" ng-disabled="uploadPicRequest">
+                <i class="fas fa-upload"></i>
+            </button>
+        </div>
+        <div class="card-body">
+            <form [formGroup]="profileForm" (ngSubmit)="updateProfile(profileForm.value)">
+                <div class="md-form">
+                    <i class="fa fa-user-o prefix grey-text"></i>
+                    <input type="text" id="firstName" name="firstName" formControlName="firstName" class="form-control" mdbActive>
+                    <label for="Name">First Name</label>
+                </div>
+                <div class="md-form">
+                    <i class="fa fa-user-o prefix grey-text"></i>
+                    <input type="text" id="lastName" name="lastName" formControlName="lastName" class="form-control" mdbActive>
+                    <label for="Name">Last Name</label>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-default waves-light" mdbRippleRadius [disabled]="!profileForm.valid || activeRequest">Update</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
-  
+</div>

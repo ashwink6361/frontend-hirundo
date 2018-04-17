@@ -660,10 +660,11 @@ header {
     } // Item
 }
 
-.order-list-container{
+.order-list-container {
     padding: 0 20px;
     margin-top: 10px;
 }
+
 .order-list {
     margin-bottom: 10px;
     .opacity {
@@ -677,7 +678,7 @@ header {
             padding: 8px 10px;
             background-color: #dedede;
         }
-        table.table thead th{
+        table.table thead th {
             border-top: none;
             padding-top: 0;
             padding-bottom: 5px;
@@ -932,3 +933,24 @@ header {
         }
     }
 }
+
+.profile-container{
+    margin-top: 20px;
+    label.cabinet {
+        width: 79px;
+        background: $primary;
+        display: block;
+        overflow: hidden;
+        cursor: pointer;
+        input.file {
+            position: relative;
+            height: 100%;
+            width: auto;
+            opacity: 0;
+            -moz-opacity: 0;
+            display: none;
+            filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+        }
+    }
+}
+
