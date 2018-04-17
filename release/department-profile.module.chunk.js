@@ -3,7 +3,7 @@ webpackJsonp(["department-profile.module"],{
 /***/ "../../../../../src/app/hirundo/department/department-profile/department-profile.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\">\n    <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>\n    <div class=\"alert-success\" *ngIf=\"success\">{{successMsg}}</div> \n    <div class=\"card\">\n      <input type=\"file\" #myInput name=\"myImage\" accept=\"image/*\" (change)=\"fileChangeEvent($event)\" placeholder=\"Upload file...\"\n      />\n      <div>\n        <button type=\"submit\" class=\"btn btn-default waves-light\" mdbRippleRadius (click)=\"uploadProfilePic()\" ng-disabled=\"uploadPicRequest\">Update</button>\n      </div>\n      <div class=\"view hm-white-slight waves-light\" mdbRippleRadius>\n        <img *ngIf=\"!previewImage && !ProfileData.picture.original\" src=\"assets/images/profile-placeholder.jpg\" class=\"img-fluid\" alt=\"\">\n        <img *ngIf=\"previewImage\" [src]=\"previewImage\" class=\"img-fluid\" alt=\"\">\n        <img *ngIf=\"!previewImage && ProfileData.picture.original\" [src]=\"ProfileData.picture.original\" class=\"img-fluid\" alt=\"\">               \n        <a>\n          <div class=\"mask\"></div>\n        </a>\n      </div>\n      <div class=\"card-body\">\n        <form [formGroup]=\"profileForm\" (ngSubmit)=\"updateProfile(profileForm.value)\">\n          <div class=\"md-form\">\n            <i class=\"fa fa-user-o prefix grey-text\"></i>\n            <input type=\"text\" id=\"firstName\" name=\"firstName\" formControlName=\"firstName\" class=\"form-control\" mdbActive>\n            <label for=\"Name\">Name</label>\n          </div>             \n          <div class=\"text-center\">\n            <button  type=\"submit\" class=\"btn btn-default waves-light\" mdbRippleRadius [disabled]=\"!profileForm.valid || activeRequest\">Update</button>\n          </div>\n        </form>\n      </div>\n    </div>\n  </div>\n  "
+module.exports = "<div class=\"container-fluid\">\n    <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>\n    <div class=\"alert-success\" *ngIf=\"success\">{{successMsg}}</div> \n    <div class=\"card\" *ngIf=\"ProfileData\">\n      <input type=\"file\" #myInput name=\"myImage\" accept=\"image/*\" (change)=\"fileChangeEvent($event)\" placeholder=\"Upload file...\"\n      />\n      <div>\n        <button type=\"submit\" class=\"btn btn-default waves-light\" mdbRippleRadius (click)=\"uploadProfilePic()\" ng-disabled=\"uploadPicRequest\">Update</button>\n      </div>\n      <div class=\"view hm-white-slight waves-light\" mdbRippleRadius>\n        <img *ngIf=\"!previewImage && !ProfileData.picture.original\" src=\"assets/images/profile-placeholder.jpg\" class=\"img-fluid\" alt=\"\">\n        <img *ngIf=\"previewImage\" [src]=\"previewImage\" class=\"img-fluid\" alt=\"\">\n        <img *ngIf=\"!previewImage && ProfileData.picture.original\" [src]=\"ProfileData.picture.original\" class=\"img-fluid\" alt=\"\">               \n        <a>\n          <div class=\"mask\"></div>\n        </a>\n      </div>\n      <div class=\"card-body\">\n        <form [formGroup]=\"profileForm\" (ngSubmit)=\"updateProfile(profileForm.value)\">\n          <div class=\"md-form\">\n            <i class=\"fa fa-user-o prefix grey-text\"></i>\n            <input type=\"text\" id=\"firstName\" name=\"firstName\" formControlName=\"firstName\" class=\"form-control\" mdbActive>\n            <label for=\"Name\">Name</label>\n          </div>             \n          <div class=\"text-center\">\n            <button  type=\"submit\" class=\"btn btn-default waves-light\" mdbRippleRadius [disabled]=\"!profileForm.valid || activeRequest\">Update</button>\n          </div>\n        </form>\n      </div>\n    </div>\n  </div>\n  "
 
 /***/ }),
 
@@ -61,11 +61,15 @@ var DepartmentProfileComponent = /** @class */ (function () {
         this.previewImage = '';
     }
     DepartmentProfileComponent.prototype.ngOnInit = function () {
-        this.ProfileData = this.authGuard.getCurrentUser();
-        console.log('this.ProfileData', this.ProfileData);
-        if (this.ProfileData) {
-            this.createProfileForm();
-        }
+        var _this = this;
+        this.profileService.getCurrentUser().then(function (data) {
+            _this.ProfileData = data.data;
+            if (_this.ProfileData) {
+                _this.createProfileForm();
+            }
+        }).catch(function (error) {
+            console.log("error", error);
+        });
     };
     DepartmentProfileComponent.prototype.createProfileForm = function () {
         this.profileForm = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormGroup */]({
@@ -235,99 +239,6 @@ var routes = [
 ];
 var DepartmentProfileRouting = __WEBPACK_IMPORTED_MODULE_0__angular_router__["b" /* RouterModule */].forChild(routes);
 //# sourceMappingURL=department-profile.routes.js.map
-
-/***/ }),
-
-/***/ "../../../../../src/app/hirundo/department/department-profile/department-profile.service.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DepartmentProfileService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-var DepartmentProfileService = /** @class */ (function () {
-    function DepartmentProfileService(http) {
-        this.http = http;
-    }
-    DepartmentProfileService.prototype.updateProfile = function (opts) {
-        var url = "api/user";
-        return this.http.put(url, opts).toPromise()
-            .then(this.extractData)
-            .catch(this.handleErrorPromise);
-    };
-    DepartmentProfileService.prototype.updateProfilePicture = function (opts) {
-        var url = "api/user/picture/upload";
-        var fd = new FormData();
-        for (var key in opts) {
-            fd.append(key, opts[key]);
-        }
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]();
-        headers.append('Authorization', 'Bearer ' + this.getCookie('session'));
-        headers.append('privatekey', 'BbZJjyoXAdr8BUZuiKKARWimKfrSmQ6fv8kZ7OFfc');
-        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({ headers: headers });
-        return this.http.post('http://localhost:5051/' + url, fd, options).toPromise()
-            .then(this.extractData)
-            .catch(this.handleErrorPromise);
-    };
-    DepartmentProfileService.prototype.getCookie = function (name) {
-        var value = "; " + document.cookie;
-        var parts = value.split("; " + name + "=");
-        if (parts.length == 2)
-            return parts.pop().split(";").shift();
-    };
-    DepartmentProfileService.prototype.extractData = function (res) {
-        var body = res.json();
-        if (body.hasOwnProperty('error')) {
-            if (body.error.message === 'Token is required') {
-                this.logout();
-            }
-            else {
-                return Promise.resolve(body || {});
-            }
-        }
-        else {
-            return Promise.resolve(body || {});
-        }
-    };
-    DepartmentProfileService.prototype.handleErrorPromise = function (error) {
-        var body = error.json();
-        if (error.status === 400 || error.status === 401) {
-            return Promise.reject(body.message || error);
-        }
-        else {
-            return Promise.reject(body.message || error);
-        }
-    };
-    DepartmentProfileService.prototype.logout = function () {
-        localStorage.removeItem('isLoggedin');
-        localStorage.removeItem('currentUser');
-        localStorage.removeItem('token');
-        document.cookie = "token=" + '';
-        window.location.href = '/';
-    };
-    DepartmentProfileService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Injectable */])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
-    ], DepartmentProfileService);
-    return DepartmentProfileService;
-    var _a;
-}());
-
-//# sourceMappingURL=department-profile.service.js.map
 
 /***/ })
 

@@ -47,19 +47,32 @@ export class WebsocketService {
                 }
             }
         });
+        // let url = '/api/department/orders/'+this.authGuard.getCurrentUser()._id;
+        // this.http.get(url).toPromise()
+        //     .then(data => {
+        //         let res = data.json();
+        //         this._orders = res.data;
+        //     })
+        //     .catch(error => {
+        //         this._orders = [];
+        //     });
+    }
+
+    // public getOrders() {
+    //     return this._orders;
+    // }
+    public getOrders(): Promise<any> {
         let url = '/api/department/orders/'+this.authGuard.getCurrentUser()._id;
-        this.http.get(url).toPromise()
+        return this.http.get(url).toPromise()
             .then(data => {
                 let res = data.json();
                 this._orders = res.data;
+                return this._orders;
             })
             .catch(error => {
                 this._orders = [];
+                return error;
             });
-    }
-
-    public getOrders() {
-        return this._orders;
     }
     public getRooms(): Promise<any> {
         let url1 = '/api/rooms';

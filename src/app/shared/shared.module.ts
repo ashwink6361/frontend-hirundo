@@ -12,6 +12,8 @@ import { UserChangePasswordService } from './user-change-passowrd/user-change-pa
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FilterPipe } from '../shared/pipes/filter.pipe';
 import { AppService} from '../service/app.service';
+import { DepartmentProfileService } from '../hirundo/department/department-profile/department-profile.service';
+
 const NGA_COMPONENTS = [
   HeaderComponent,
   FooterComponent,
@@ -42,7 +44,8 @@ export class SharedModule {
       ngModule: SharedModule,
       providers: [
         UserChangePasswordService,
-        AppService
+        AppService,
+        DepartmentProfileService
       ],
     };
   }

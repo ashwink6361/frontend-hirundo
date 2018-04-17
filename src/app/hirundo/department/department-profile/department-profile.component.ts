@@ -24,11 +24,14 @@ export class DepartmentProfileComponent implements OnInit {
   constructor(private profileService: DepartmentProfileService, private authGuard: AuthGuard) { }
 
   ngOnInit() {
-    this.ProfileData = this.authGuard.getCurrentUser();
-    console.log('this.ProfileData', this.ProfileData);
-    if (this.ProfileData) {
-      this.createProfileForm();
-    }
+    this.profileService.getCurrentUser().then(data => {
+      this.ProfileData = data.data;
+      if (this.ProfileData) {
+        this.createProfileForm();
+      }
+    }).catch(error => {
+      console.log("error", error);
+    });
   }
 
   private createProfileForm() {

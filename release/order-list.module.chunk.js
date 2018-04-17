@@ -55,11 +55,18 @@ var OrderListComponent = /** @class */ (function () {
     }
     OrderListComponent.prototype.ngOnInit = function () {
         var _this = this;
-        setTimeout(function () {
-            _this.orders = _this.websocketService.getOrders();
+        this.websocketService.getOrders().then(function (data) {
+            _this.orders = data;
             _this.loadingOrders = false;
-            //console.log('this.orders ', this.orders);
-        }, 5000);
+        })
+            .catch(function (error) {
+            console.log('error', error);
+        });
+        // setTimeout(()=>{
+        //     this.orders = this.websocketService.getOrders();
+        //     this.loadingOrders = false;
+        //     //console.log('this.orders ', this.orders);
+        // }, 5000);
         this.tick = setInterval(function () {
             _this.clock = Date.now();
         }, 1000);
