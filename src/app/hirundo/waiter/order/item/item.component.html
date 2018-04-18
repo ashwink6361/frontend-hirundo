@@ -1,4 +1,4 @@
-<header class="page-content-header">
+<header class="page-content-header" [ngStyle]="{'background-color' : orderService.getOrderData().selectedCategory.color}">
     <div class="back-btn">
         <a routerLink="/waiter/order/:id/choose-category">
             <i class="fas fa-angle-left"></i>
@@ -9,13 +9,6 @@
     </div>
 </header>
 <div class="page-content">
-    <div class="tabs-container steps-container">
-        <ul>
-            <li class="active">Uscita 1</li>
-            <li>Uscita 2</li>
-            <li>Uscita 3</li>
-        </ul>
-    </div>
     <div class="tabs-container">
         <ul>
             <li class="prev">
@@ -30,6 +23,13 @@
             <li class="next">
                 <i class="fas fa-chevron-right"></i>
             </li>
+        </ul>
+    </div>
+    <div class="tabs-container steps-container">
+        <ul>
+            <li class="active">Uscita 1</li>
+            <li>Uscita 2</li>
+            <li>Uscita 3</li>
         </ul>
     </div>
     <div class="item-container">

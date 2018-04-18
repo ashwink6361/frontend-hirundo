@@ -63,7 +63,6 @@ body {
         overflow: hidden;
         position: relative;
         margin: 0;
-        margin-bottom: 10px;
         padding: 0 20px;
         background: #4b473f;
         span {
@@ -112,7 +111,9 @@ body {
         a {
             color: #fff;
             font-size: 40px;
-            padding: 0px 25px;
+            padding: 0px 20px 0 10px;
+            display: inline-block;
+            margin-right: 5px;
             &:hover {
                 color: #fff;
             }
@@ -564,6 +565,7 @@ header {
 // Waiter Dashboard
 .room-container {
     padding: 0 20px;
+    margin-top: 10px;
     .room-name {
         font-size: 20px;
         font-weight: bold;
