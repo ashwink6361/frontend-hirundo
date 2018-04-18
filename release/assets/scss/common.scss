@@ -65,8 +65,8 @@ body {
         margin: 0;
         margin-bottom: 10px;
         padding: 0 20px;
-        background: #c5c8cd;
-        span{
+        background: #4b473f;
+        span {
             display: inline;
         }
         li {
@@ -79,6 +79,7 @@ body {
             white-space: nowrap;
             text-align: center;
             cursor: pointer;
+            color: #fff;
             &.prev {
                 position: absolute;
                 width: 20px;
@@ -86,7 +87,7 @@ body {
                 min-width: 20px;
                 background-color: #4b473f;
                 color: #fff;
-                box-shadow: 0 0 22px #ddd;
+                box-shadow: 0 0 22px rgba(0, 0, 0, 0.5);
                 cursor: pointer;
             }
             &.next {
@@ -96,7 +97,9 @@ body {
                 cursor: pointer;
             }
             &.active {
-                background-color: #faaa02
+                color: #faaa02;
+                border-bottom: 3px solid #faaa02;
+                height: 40px;
             }
         }
     }
@@ -119,7 +122,7 @@ body {
         color: #fff;
         font-size: 20px;
         width: 100%;
-        .add-article-btn{
+        .add-article-btn {
             float: right;
             margin-right: 15px;
         }
@@ -475,7 +478,7 @@ header {
     display: flex;
     align-items: center;
     padding: 0px 0;
-    background-color: #757473;
+    background-color: #4b473f;
     position: fixed;
     width: 100%;
     top: 0;
@@ -499,7 +502,7 @@ header {
 .sidebar {
     max-width: 250px;
     margin-left: - 260px;
-    background: #4b473f;
+    background: #757473;
     position: fixed;
     left: 0;
     top: 60px;
@@ -942,7 +945,7 @@ header {
     }
 }
 
-.profile-container{
+.profile-container {
     margin-top: 20px;
     label.cabinet {
         width: 79px;
@@ -962,10 +965,9 @@ header {
     }
 }
 
-.add-article{
+.add-article {
     @extend .varient-container;
-    &.showarticle{
+    &.showarticle {
         @extend .show-varient;
     }
 }
-
