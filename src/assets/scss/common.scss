@@ -60,14 +60,13 @@ body {
         max-width: calc(100% + 40px);
         flex-direction: row;
         flex-wrap: nowrap;
-        overflow: hidden;
+        overflow-y: auto;
         position: relative;
         margin: 0;
-        margin-bottom: 10px;
-        padding: 0 20px;
-        background: #c5c8cd;
-        span{
-            display: inline;
+        padding: 0;
+        background: #4b473f;
+        span {
+            display: flex;
         }
         li {
             padding: 8px 5px;
@@ -79,6 +78,7 @@ body {
             white-space: nowrap;
             text-align: center;
             cursor: pointer;
+            color: #fff;
             &.prev {
                 position: absolute;
                 width: 20px;
@@ -86,7 +86,7 @@ body {
                 min-width: 20px;
                 background-color: #4b473f;
                 color: #fff;
-                box-shadow: 0 0 22px #ddd;
+                box-shadow: 0 0 22px rgba(0, 0, 0, 0.5);
                 cursor: pointer;
             }
             &.next {
@@ -96,7 +96,9 @@ body {
                 cursor: pointer;
             }
             &.active {
-                background-color: #faaa02
+                color: #faaa02;
+                border-bottom: 3px solid #faaa02;
+                height: 40px;
             }
         }
     }
@@ -109,7 +111,9 @@ body {
         a {
             color: #fff;
             font-size: 40px;
-            padding: 0px 25px;
+            padding: 0px 20px 0 10px;
+            display: inline-block;
+            margin-right: 5px;
             &:hover {
                 color: #fff;
             }
@@ -119,7 +123,7 @@ body {
         color: #fff;
         font-size: 20px;
         width: 100%;
-        .add-article-btn{
+        .add-article-btn {
             float: right;
             margin-right: 15px;
         }
@@ -475,7 +479,7 @@ header {
     display: flex;
     align-items: center;
     padding: 0px 0;
-    background-color: #757473;
+    background-color: #4b473f;
     position: fixed;
     width: 100%;
     top: 0;
@@ -499,7 +503,7 @@ header {
 .sidebar {
     max-width: 250px;
     margin-left: - 260px;
-    background: #4b473f;
+    background: #757473;
     position: fixed;
     left: 0;
     top: 60px;
@@ -561,6 +565,7 @@ header {
 // Waiter Dashboard
 .room-container {
     padding: 0 20px;
+    margin-top: 10px;
     .room-name {
         font-size: 20px;
         font-weight: bold;
@@ -681,6 +686,22 @@ header {
     .order-items-container {
         border: 1px solid #dedede;
         margin-bottom: 10px;
+        .order-item {
+            display: flex;
+            padding: 5px 10px;
+            .order-item-detail{
+                width: 100%;
+                margin-right: 10px;
+                ul{
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    li{
+                        display: block;
+                    }
+                }
+            }
+        }
         h4 {
             font-size: 14px;
             padding: 8px 10px;
@@ -942,7 +963,7 @@ header {
     }
 }
 
-.profile-container{
+.profile-container {
     margin-top: 20px;
     label.cabinet {
         width: 79px;
@@ -962,10 +983,9 @@ header {
     }
 }
 
-.add-article{
+.add-article {
     @extend .varient-container;
-    &.showarticle{
+    &.showarticle {
         @extend .show-varient;
     }
 }
-
