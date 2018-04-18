@@ -1,14 +1,14 @@
 <div class="tabs-container">
     <ul>
-        <li class="prev">
+        <!-- <li class="prev">
           <i class="fas fa-chevron-left"></i>
-        </li>
+        </li> -->
         <li *ngFor="let room of roomData; let i= index" [class.active]="activeRoom[i]" (click)="getTables(room,i)">
             {{room.name}}
         </li>
-        <li class="next">
+        <!-- <li class="next">
           <i class="fas fa-chevron-right"></i>
-        </li>
+        </li> -->
       </ul>
 </div>
 <!-- <input class="form-control" [(ngModel)]="searchText" type="text" placeholder="Search Room" /> -->

@@ -22,6 +22,8 @@ export class ItemComponent implements OnInit {
   public showVarient:  boolean = false;
   public activeTab: boolean = false;
   public data: any;
+  public articleAdd: boolean = false;
+  
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
@@ -149,5 +151,13 @@ export class ItemComponent implements OnInit {
 
   tabActive(){
     this.activeTab = !this.activeTab;
+  }
+
+  addArticle(){
+    this.articleAdd = true;
+  }
+
+  hideArticle(){
+    this.articleAdd = false;
   }
 }

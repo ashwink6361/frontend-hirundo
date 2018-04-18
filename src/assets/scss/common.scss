@@ -60,13 +60,13 @@ body {
         max-width: calc(100% + 40px);
         flex-direction: row;
         flex-wrap: nowrap;
-        overflow: hidden;
+        overflow-y: auto;
         position: relative;
         margin: 0;
-        padding: 0 20px;
+        padding: 0;
         background: #4b473f;
         span {
-            display: inline;
+            display: flex;
         }
         li {
             padding: 8px 5px;
