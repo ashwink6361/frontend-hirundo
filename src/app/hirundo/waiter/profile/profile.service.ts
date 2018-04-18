@@ -28,7 +28,7 @@ export class ProfileService {
       fd.append(key, opts[key]);
     }
     var headers = new Headers();
-    headers.append('Authorization', 'Bearer ' + this.getCookie('session'));
+    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
     headers.append('privatekey', 'BbZJjyoXAdr8BUZuiKKARWimKfrSmQ6fv8kZ7OFfc');
     let options = new RequestOptions({ headers: headers });
     return this.http.post('http://localhost:5051/' + url, fd, options).toPromise()

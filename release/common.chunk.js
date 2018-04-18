@@ -90,7 +90,7 @@ var ProfileService = /** @class */ (function () {
             fd.append(key, opts[key]);
         }
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]();
-        headers.append('Authorization', 'Bearer ' + this.getCookie('session'));
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
         headers.append('privatekey', 'BbZJjyoXAdr8BUZuiKKARWimKfrSmQ6fv8kZ7OFfc');
         var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({ headers: headers });
         return this.http.post('http://localhost:5051/' + url, fd, options).toPromise()
