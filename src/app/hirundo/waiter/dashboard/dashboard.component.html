@@ -20,7 +20,7 @@
     </form> -->
     <!-- <div class="room-name">{{room.name}}</div> -->
     <div class="d-flex flex-wrap ">
-        <div class="room" (click)="createOrder(table)" *ngFor="let table of tables" [ngStyle]="table.status == 0 ? {'background-color':'green'} : table.status == 1 ? {'background-color':'yellow'} : {'background-color':'red'}">
+        <div class="room" (click)="createOrder(table)" *ngFor="let table of tables" [ngStyle]="table.status == 0 ? {'background-color':'green'} : table.status == 1 ? {'background-color':'red'} : {'background-color':'yellow'}">
             <div class="table">
                 <span>{{table.name}}</span>
             </div>
