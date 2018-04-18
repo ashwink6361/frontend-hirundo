@@ -6,6 +6,9 @@
     </div>
     <div class="header-title">
         Choose Category
+        <span class="add-article-btn" (click)="addArticle()">
+            <i class="fas fa-pencil-alt"></i>
+        </span>
     </div>
 </header>
 <div class="page-content">
@@ -15,7 +18,7 @@
             <li>Uscita 2</li>
             <li>Uscita 3</li>
         </ul>
-    </div>    
+    </div>
     <div class="category-list">
         <div class="d-flex flex-wrap">
             <div class="d-flex align-items-center justify-content-between search-category w-100">
@@ -28,6 +31,20 @@
                 <img class="icon-img" *ngIf="category.isIcon" [src]="category.icon" alt="" />
                 <p class="name">{{category.name}}</p>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="add-article" [class.showarticle]="articleAdd">
+    <div class="modal-header">
+        <div class="back-btn">
+            <a (click)="hideVarient()">
+                <i class="fas fa-times"></i>
+            </a>
+        </div>
+        <div class="header-title">
+            New Article
+            <button>Save</button>
         </div>
     </div>
 </div>

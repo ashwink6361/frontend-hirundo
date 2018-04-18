@@ -66,6 +66,9 @@ body {
         margin-bottom: 10px;
         padding: 0 20px;
         background: #c5c8cd;
+        span{
+            display: inline;
+        }
         li {
             padding: 8px 5px;
             display: inline-block;
@@ -115,6 +118,11 @@ body {
     .header-title {
         color: #fff;
         font-size: 20px;
+        width: 100%;
+        .add-article-btn{
+            float: right;
+            margin-right: 15px;
+        }
     }
 }
 
@@ -951,6 +959,13 @@ header {
             display: none;
             filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
         }
+    }
+}
+
+.add-article{
+    @extend .varient-container;
+    &.showarticle{
+        @extend .show-varient;
     }
 }
 

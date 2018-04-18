@@ -42,6 +42,9 @@
                 placeholder="Search Category"></ng2-completer> -->
         </div>
         <div class="alert-danger" *ngIf="error">{{errorMsg}}</div>
+        <div *ngIf="!articles.length" class="text-center">
+            No Item Found
+        </div>
         <div *ngIf="articles.length">
             <div class="item-list align-items-center" *ngFor="let article of articles | filter : searchText ; let i = index">
                 <div class="item" [ngStyle]="{'background-color': article.category.color}">

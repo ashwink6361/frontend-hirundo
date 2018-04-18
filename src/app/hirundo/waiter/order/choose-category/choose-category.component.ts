@@ -19,6 +19,7 @@ export class ChooseCategoryComponent implements OnInit {
   protected selectedCategory = {};
   private categoryItems = [];
   public showItem: boolean = false;
+  public articleAdd: boolean = false;
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
@@ -78,6 +79,14 @@ export class ChooseCategoryComponent implements OnInit {
       .catch(error => {
         console.log('error', error);
       });
+  }
+
+  addArticle(){
+    this.articleAdd = true;
+  }
+
+  hideVarient(){
+    this.articleAdd = false;
   }
 
   // showItems(id, name) {
