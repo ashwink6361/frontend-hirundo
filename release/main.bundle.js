@@ -720,6 +720,7 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('tablestatus', function (data) {
+            console.log('data', data);
             for (var i = 0; i < _this._rooms.length; i++) {
                 if (data.room == _this._rooms[i]._id) {
                     for (var j = 0; j < _this._rooms[i].tables.length; j++) {
@@ -746,7 +747,7 @@ var WebsocketService = /** @class */ (function () {
     // }
     WebsocketService.prototype.getOrders = function () {
         var _this = this;
-        var url = '/api/department/orders/' + this.authGuard.getCurrentUser()._id;
+        var url = '/api/department/orders/' + this.authGuard.getCurrentUser().category;
         return this.http.get(url).toPromise()
             .then(function (data) {
             var res = data.json();

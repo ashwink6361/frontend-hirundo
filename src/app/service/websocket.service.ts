@@ -36,6 +36,7 @@ export class WebsocketService {
             }
         });
         this.socket.on('tablestatus', (data) => {
+            console.log('data',data);
             for (var i = 0; i < this._rooms.length; i++) {
                 if (data.room == this._rooms[i]._id) {
                     for (var j = 0; j < this._rooms[i].tables.length; j++) {
@@ -62,7 +63,7 @@ export class WebsocketService {
     //     return this._orders;
     // }
     public getOrders(): Promise<any> {
-        let url = '/api/department/orders/'+this.authGuard.getCurrentUser()._id;
+        let url = '/api/department/orders/'+this.authGuard.getCurrentUser().category;
         return this.http.get(url).toPromise()
             .then(data => {
                 let res = data.json();
