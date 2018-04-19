@@ -1,23 +1,5 @@
 webpackJsonp(["change-password.module"],{
 
-/***/ "../../../../../src/app/hirundo/waiter/change-password/change-password.component.scss":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "", ""]);
-
-// exports
-
-
-/*** EXPORTS FROM exports-loader ***/
-module.exports = module.exports.toString();
-
-/***/ }),
-
 /***/ "../../../../../src/app/hirundo/waiter/change-password/change-password.component.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -43,7 +25,6 @@ var ChangePasswordComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
             selector: 'app-change-password',
             template: '<app-user-change-passowrd></app-user-change-passowrd>',
-            styles: [__webpack_require__("../../../../../src/app/hirundo/waiter/change-password/change-password.component.scss")]
         }),
         __metadata("design:paramtypes", [])
     ], ChangePasswordComponent);

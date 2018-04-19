@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FilterPipe } from '../shared/pipes/filter.pipe';
 import { AppService} from '../service/app.service';
 import { DepartmentProfileService } from '../hirundo/department/department-profile/department-profile.service';
+import { StepsComponent } from './steps/steps.component';
 
 const NGA_COMPONENTS = [
   HeaderComponent,
@@ -20,7 +21,8 @@ const NGA_COMPONENTS = [
   HeaderLoginComponent,
   SidebarComponent,
   UserChangePassowrdComponent,
-  FilterPipe
+  FilterPipe,
+  StepsComponent
 ];
 
 @NgModule({

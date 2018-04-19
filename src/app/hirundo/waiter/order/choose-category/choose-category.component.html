@@ -5,22 +5,19 @@
         </a>
     </div>
     <div class="header-title">
-        Choose Category        
+        Choose Category
     </div>
 </header>
 <div class="page-content">
-    <div class="tabs-container steps-container">
-        <ul>
-            <li class="active">Uscita 1</li>
-            <li>Uscita 2</li>
-            <li>Uscita 3</li>
-        </ul>
-    </div>
+    <app-steps></app-steps>
     <div class="category-list">
         <div class="d-flex flex-wrap">
             <div class="d-flex align-items-center justify-content-between search-category w-100">
                 <!-- <ng2-completer [(ngModel)]="searchStr" [datasource]="dataService" [minSearchLength]="0" (selected)="onSelected($event)" placeholder="Search Category"></ng2-completer> -->
-                <input class="form-control" [(ngModel)]="searchText" type="text" placeholder="Search Category" />
+                <div class="md-form search">
+                    <i class="fas fa-search prefix"></i>
+                    <input class="form-control" [(ngModel)]="searchText" type="text" placeholder="Search Category" />
+                </div>
             </div>
             <div class="category" *ngFor="let category of categoryList | filter : searchText" [ngStyle]="{'background-color': category.color}"
                 (click)="showItems(category)">
@@ -31,5 +28,3 @@
         </div>
     </div>
 </div>
-
-

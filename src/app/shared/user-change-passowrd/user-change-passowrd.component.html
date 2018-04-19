@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid change-password-container">
   <div class="card">
     <div class="card-body">
       <div class="row">
@@ -8,17 +8,14 @@
             <div class="alert-danger" *ngIf="changePasswordError">{{changePasswordErrorMsg}}</div>
             <div class="alert-success" *ngIf="changePasswordSuccess">{{changePasswordSuccessMsg}}</div>            
             <div class="md-form">
-              <i class="fa fa-lock prefix grey-text"></i>
               <input type="password" id="old-pass" class="form-control" [(ngModel)]="changePasswordData.oldPassword" mdbActive>
               <label for="old-pass">Old Password</label>
             </div>
             <div class="md-form">
-              <i class="fa fa-lock prefix grey-text"></i>
               <input type="password" id="new-pass" class="form-control" [(ngModel)]="changePasswordData.newPassword" mdbActive>
               <label for="new-pass">New Password</label>
             </div>
             <div class="md-form">
-              <i class="fa fa-lock prefix grey-text"></i>
               <input type="password" id="confirm-pass" class="form-control" [(ngModel)]="changePasswordData.confirmPassword" mdbActive>
               <label for="confirm-pass">Confirm Password</label>
             </div>

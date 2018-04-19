@@ -1,23 +1,5 @@
 webpackJsonp(["department-change-password.module"],{
 
-/***/ "../../../../../src/app/hirundo/department/department-change-password/department-change-password.component.scss":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "", ""]);
-
-// exports
-
-
-/*** EXPORTS FROM exports-loader ***/
-module.exports = module.exports.toString();
-
-/***/ }),
-
 /***/ "../../../../../src/app/hirundo/department/department-change-password/department-change-password.component.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -42,8 +24,7 @@ var DepartmentChangePasswordComponent = /** @class */ (function () {
     DepartmentChangePasswordComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
             selector: 'app-department-change-password',
-            template: '<app-user-change-passowrd></app-user-change-passowrd>',
-            styles: [__webpack_require__("../../../../../src/app/hirundo/department/department-change-password/department-change-password.component.scss")]
+            template: '<app-user-change-passowrd></app-user-change-passowrd>'
         }),
         __metadata("design:paramtypes", [])
     ], DepartmentChangePasswordComponent);

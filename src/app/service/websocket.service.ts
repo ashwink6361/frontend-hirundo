@@ -75,6 +75,19 @@ export class WebsocketService {
                 return error;
             });
     }
+    public getWaiterOrders(): Promise<any> {
+        let url = '/api/waiter/orders';
+        return this.http.get(url).toPromise()
+            .then(data => {
+                let res = data.json();
+                this._orders = res.data;
+                return this._orders;
+            })
+            .catch(error => {
+                this._orders = [];
+                return error;
+            });
+    }
     public getRooms(): Promise<any> {
         let url1 = '/api/rooms';
         return this.http.get(url1).toPromise()

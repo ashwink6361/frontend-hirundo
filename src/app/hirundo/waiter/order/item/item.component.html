@@ -28,19 +28,16 @@
             </li> -->
         </ul>
     </div>
-    <div class="tabs-container steps-container">
-        <ul>
-            <li class="active">Uscita 1</li>
-            <li>Uscita 2</li>
-            <li>Uscita 3</li>
-        </ul>
-    </div>
+    <app-steps></app-steps>
     <div class="item-container">
         <div class="search-category w-100">
-            <input class="form-control" [(ngModel)]="searchText" type="text" placeholder="Search Item" />
-            <button type="button" class="btn-cart" (click)="viewCart()">
-                <i class="fas fa-shopping-cart"></i>
-            </button>
+            <div class="md-form search">
+                <i class="fas fa-search prefix"></i>
+                <input class="form-control" [(ngModel)]="searchText" type="text" placeholder="Search Item" />
+                <button type="button" class="btn-cart" (click)="viewCart()">
+                    <i class="fas fa-shopping-cart"></i> 3 | € 9.00
+                </button>
+            </div>
             <!-- <ng2-completer [(ngModel)]="searchStr" class="form-control" [datasource]="dataService" [minSearchLength]="0" (selected)="onSelected($event)"
                 placeholder="Search Category"></ng2-completer> -->
         </div>
@@ -91,6 +88,18 @@
         </div>
     </div>
     <div class="varient-content">
+        <div class="input-quantity-container">
+            <h1>Quantity</h1>
+            <div class="input-prepend-append d-flex">
+                <button type="button" id="decrease" value="Decrease Value">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <div class="text-center input-value"></div>
+                <button type="button" id="increase" value="Increase Value">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
         <h1>Varient and Notes</h1>
         <div class="tabs-btn">
             <button type="button" (click)="tabActive()" [class.active]="!activeTab">Varients</button>

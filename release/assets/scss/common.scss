@@ -100,6 +100,12 @@ body {
                 border-bottom: 3px solid #faaa02;
                 height: 40px;
             }
+            &.add-step {
+                position: absolute;
+                right: 0;
+                min-width: 10px;
+                width: 30px;
+            }
         }
     }
 }
@@ -483,7 +489,7 @@ header {
     position: fixed;
     width: 100%;
     top: 0;
-    height: 60px;
+    height: 50px;
     z-index: 6;
     .menu-btn {
         font-size: 26px;
@@ -494,7 +500,7 @@ header {
     }
     .logo {
         img {
-            max-width: 75%;
+            max-width: 55%;
         }
     }
 }
@@ -506,7 +512,7 @@ header {
     background: #757473;
     position: fixed;
     left: 0;
-    top: 60px;
+    top: 50px;
     width: 100%;
     height: 100%;
     z-index: 100;
@@ -559,7 +565,7 @@ header {
 // Page-content
 .page-content {
     position: relative;
-    top: 60px;
+    top: 50px;
 }
 
 // Waiter Dashboard
@@ -627,13 +633,14 @@ header {
     .btn-cart {
         position: absolute;
         right: 16px;
-        top: 15px;
-        background-color: #daa22f;
+        top: 10px;
+        background-color: #266abd;
         border: none;
         color: #fff;
-        border-radius: 50%;
-        width: 30px;
+        border-radius: 3px;
+        width: 100px;
         height: 30px;
+        text-align: left;
         font-size: 12px;
         cursor: pointer;
     }
@@ -689,17 +696,21 @@ header {
         .order-item {
             display: flex;
             padding: 5px 10px;
-            .order-item-detail{
+            .order-item-detail {
                 width: 100%;
                 margin-right: 10px;
-                ul{
+                ul {
                     margin: 0;
                     padding: 0;
                     list-style: none;
-                    li{
+                    li {
                         display: block;
                     }
                 }
+            }
+            .order-quantity{
+                width: 50px;
+                text-align: right;
             }
         }
         h4 {
@@ -900,6 +911,25 @@ header {
         h1 {
             font-size: 15px;
         }
+        .input-quantity-container {
+            margin-bottom: 15px;
+            .input-prepend-append {
+                border: 1px solid #dedede;
+                border-radius: 5px;
+                button {
+                    background-color: transparent;
+                    border: none;
+                    height: 40px;
+                    width: 113px;
+                    i {
+                        color: $primary;
+                    }
+                }
+                .input-value {
+                    width: 100%;
+                }
+            }
+        }
     }
     .modal-header {
         padding: 15px 0;
@@ -964,7 +994,7 @@ header {
 }
 
 .profile-container {
-    margin-top: 20px;
+    margin-top: 10px;
     label.cabinet {
         width: 79px;
         background: $primary;
@@ -987,5 +1017,23 @@ header {
     @extend .varient-container;
     &.showarticle {
         @extend .show-varient;
+    }
+}
+
+.change-password-container{
+    margin-top: 10px;
+}
+
+
+.md-form{
+    &.search{
+        margin: 0;
+        i.prefix{
+            color: #dedede;
+            font-size: 21px;
+            top: 16px;
+            left: 11px;
+            width: 40px;
+        }
     }
 }

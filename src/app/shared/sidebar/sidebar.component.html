@@ -13,6 +13,10 @@
                     <i class="fas fa-tachometer-alt"></i> Home</a>
             </li>
             <li>
+                <a class="waves-effect" *ngIf="authGuard.getCurrentUser().userType == 3" mdbRippleRadius (click)="hideSidebar()" routerLink="/waiter/list">
+                    <i class="fas fa-tags"></i> Order List</a>
+            </li>
+            <li>
                 <a class="waves-effect" *ngIf="authGuard.getCurrentUser().userType == 3" mdbRippleRadius (click)="hideSidebar()" routerLink="/waiter/profile">
                     <i class="far fa-user"></i> Profile</a>
                 <a class="waves-effect" *ngIf="authGuard.getCurrentUser().userType == 4" mdbRippleRadius (click)="hideSidebar()" routerLink="/department/profile">
