@@ -1323,7 +1323,7 @@ var SidebarComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/shared/steps/steps.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"tabs-container steps-container\">\n    <ul>\n        <li class=\"active\">Uscita 1</li>\n        <li>Uscita 2</li>\n        <li class=\"add-step\" (click)=\"addStep()\"><i class=\"fa fa-plus\"></i></li>\n    </ul>\n</div>"
+module.exports = "<div class=\"tabs-container steps-container\">\r\n    <ul>\r\n        <li class=\"active\">Uscita 1</li>\r\n        <li>Uscita 2</li>\r\n        <li class=\"add-step\" (click)=\"addStep()\"><i class=\"fa fa-plus\"></i></li>\r\n    </ul>\r\n</div>"
 
 /***/ }),
 
