@@ -1034,6 +1034,13 @@ header {
             top: 16px;
             left: 11px;
             width: 40px;
+            ~input{
+                max-width: 196px;
+                @include respond-to($phone-md){
+                    max-width: 196px;
+                    width: 100%;
+                }
+            }
         }
     }
 }
