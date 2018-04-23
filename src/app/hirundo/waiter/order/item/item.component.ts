@@ -23,7 +23,8 @@ export class ItemComponent implements OnInit {
   public activeTab: boolean = false;
   public data: any;
   public articleAdd: boolean = false;
-  
+  protected subcategory: string;
+  public selectedSubcategory: boolean[] = [false];
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
@@ -41,6 +42,7 @@ export class ItemComponent implements OnInit {
       }
       this.orderService.setOrderData(this.data);
       this.articles = this.orderService.getOrderData().categoryItems;
+      this.selectedSubcategory[-1] = true;
     }
     // this.searchStr = this.orderService.getOrderData().searchStr;
     // this.orderService.getCategory()
@@ -67,13 +69,6 @@ export class ItemComponent implements OnInit {
       .catch(error => {
         console.log('error', error);
       });
-      // this.orderService.getNotes()
-      // .then(data => {
-      //   this.noteList = data.data;
-      // })
-      // .catch(error => {
-      //   console.log('error', error);
-      // });
   }
 
   increaseValue(article) {
@@ -159,5 +154,24 @@ export class ItemComponent implements OnInit {
 
   hideArticle(){
     this.articleAdd = false;
+  }
+
+  filterBySubcategory(subcategory, index){
+    this.subcategory = subcategory;
+    if(typeof index !== 'undefined'){
+      this.selectedSubcategory[index] = true;
+      this.selectedSubcategory[-1] = false;
+      for (let i = 0; i < this.selectedSubcategory.length; i++) {
+        if (index != i) {
+          this.selectedSubcategory[i] = false;
+        }
+      }
+    }
+    else{
+      this.selectedSubcategory[-1] = true;
+      for (let i = 0; i < this.selectedSubcategory.length; i++) {
+          this.selectedSubcategory[i] = false;
+      }
+    }
   }
 }

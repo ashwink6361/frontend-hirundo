@@ -1043,3 +1043,11 @@ header {
         }
     }
 }
+
+.subcategory-tabs{
+    li{
+        &.subcategory-active{
+            border-bottom: 2px solid #fff;
+        }
+    }
+}
