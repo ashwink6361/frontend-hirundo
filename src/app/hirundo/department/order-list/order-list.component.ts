@@ -21,7 +21,16 @@ export class OrderListComponent implements OnInit {
 
     ngOnInit() {
         this.websocketService.getOrders().then(data => {
-            this.orders = data;  
+            this.orders = data;
+            // for(let i = 0; i<this.orders.length; i++){
+            //     this.itemsStore = [];
+            //     for(let j = 0; j<this.orders[i].item.length; j++){
+            //         if(this.orders[i].item[j].category == this.authGuard.getCurrentUser().category){
+            //             this.itemsStore.push(this.orders[i].item[j]);
+            //         }
+            //         this.orders[i].itemsStore = this.itemsStore;
+            //     }
+            // }  
             this.loadingOrders = false;            
           })
             .catch(error => {

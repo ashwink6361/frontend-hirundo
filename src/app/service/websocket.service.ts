@@ -24,7 +24,12 @@ export class WebsocketService {
         let user = JSON.parse(localStorage.getItem('currentUser'));
         this.socket.on('neworder', (data) => {
             console.log("Received Order from Websocket Server", data);
-            this._orders.push(data);
+            for (let j = 0; j < data.item.length; j++) {
+                if (data.item[j].category == this.authGuard.getCurrentUser().category) {
+                    this._orders.unshift(data);
+                    break;
+                }
+            }
         });
         this.socket.on('orderstatus', (data) => {
             if(data.by.id !== user._id) {

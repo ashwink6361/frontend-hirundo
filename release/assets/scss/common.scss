@@ -1037,8 +1037,7 @@ header {
             ~input{
                 max-width: 196px;
                 @include respond-to($phone-md){
-                    max-width: 196px;
-                    width: 100%;
+                    width: calc(100% - 11.5rem);
                 }
             }
         }
