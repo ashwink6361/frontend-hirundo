@@ -715,9 +715,16 @@ var WebsocketService = /** @class */ (function () {
         this.socket.on('neworder', function (data) {
             console.log("Received Order from Websocket Server", data);
             for (var j = 0; j < data.item.length; j++) {
-                if (data.item[j].category == _this.authGuard.getCurrentUser().category) {
+                var userType = _this.authGuard.getCurrentUser().userType;
+                if (userType == 3) {
                     _this._orders.unshift(data);
                     break;
+                }
+                else if (userType == 4) {
+                    if (data.item[j].category == _this.authGuard.getCurrentUser().category) {
+                        _this._orders.unshift(data);
+                        break;
+                    }
                 }
             }
         });
@@ -731,7 +738,6 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('tablestatus', function (data) {
-            console.log('data', data);
             for (var i = 0; i < _this._rooms.length; i++) {
                 if (data.room == _this._rooms[i]._id) {
                     for (var j = 0; j < _this._rooms[i].tables.length; j++) {
@@ -743,19 +749,7 @@ var WebsocketService = /** @class */ (function () {
                 }
             }
         });
-        // let url = '/api/department/orders/'+this.authGuard.getCurrentUser()._id;
-        // this.http.get(url).toPromise()
-        //     .then(data => {
-        //         let res = data.json();
-        //         this._orders = res.data;
-        //     })
-        //     .catch(error => {
-        //         this._orders = [];
-        //     });
     };
-    // public getOrders() {
-    //     return this._orders;
-    // }
     WebsocketService.prototype.getOrders = function () {
         var _this = this;
         var url = '/api/department/orders/' + this.authGuard.getCurrentUser().category;
@@ -797,8 +791,6 @@ var WebsocketService = /** @class */ (function () {
             _this._rooms = [];
             return error;
         });
-        // console.log('this._rooms 1',this._rooms);        
-        // return this._rooms;
     };
     WebsocketService.prototype.updateOrder = function (id, opts) {
         var url = '/api/department/orders/' + id;
