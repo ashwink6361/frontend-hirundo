@@ -19,7 +19,8 @@
             </li> -->
             <li [class.subcategory-active]="selectedSubcategory[-1]" (click)="filterBySubcategory()">All</li>
             <span *ngIf="data.selectedCategory.subCategory.length">
-                <li *ngFor="let subCategory of data.selectedCategory.subCategory; let j = index" [class.subcategory-active]="selectedSubcategory[j]" (click)="filterBySubcategory(subCategory,j)">
+                <li *ngFor="let subCategory of data.selectedCategory.subCategory; let j = index" [class.subcategory-active]="selectedSubcategory[j]"
+                    (click)="filterBySubcategory(subCategory,j)">
                     {{subCategory}}
                 </li>
             </span>
@@ -169,6 +170,61 @@
         <div class="header-title">
             New Article
             <button>Save</button>
+        </div>
+    </div>
+    <div class="modal-body varient-content">
+        <div class="md-form">
+            <label for="exampleForm2">Default input</label>
+            <input type="text" id="exampleForm2" class="form-control">
+        </div>
+        <div class="input-quantity-container">
+            <h1>Quantity</h1>
+            <div class="input-prepend-append d-flex">
+                <button type="button" id="decrease" value="Decrease Value">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <div class="text-center input-value"></div>
+                <button type="button" id="increase" value="Increase Value">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="md-form">
+            <i class="fa fa-envelope prefix"></i>
+            <input type="text" id="inputIconEx1" class="form-control">
+            <label for="inputIconEx1">E-mail address</label>
+        </div>
+        <div >
+            <h1>Varient and Notes</h1>
+            <div class="tabs-btn">
+                <button type="button" (click)="tabActive()" [class.active]="!activeTab">Varients</button>
+                <button type="button" (click)="tabActive()" [class.active]="activeTab">Notes</button>
+            </div>
+            <div class="varient-list" *ngIf="!activeTab">
+                <table class="table">
+                    <tbody>
+                        <tr *ngFor="let varient of variantList">
+                            <td>{{varient.name}}</td>
+                            <td>{{varient.price}}</td>
+                            <td>
+                                <input type="checkbox" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="varient-list" *ngIf="activeTab">
+                <table class="table">
+                    <tbody>
+                        <tr *ngFor="let note of noteList">
+                            <td>{{note.notes}}</td>
+                            <td>
+                                <input type="checkbox" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
