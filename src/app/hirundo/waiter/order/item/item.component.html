@@ -121,10 +121,10 @@
         </div>
         <h1>Varient and Notes</h1>
         <div class="tabs-btn">
-            <button type="button" (click)="tabActive()" [class.active]="!activeTab">Varients</button>
-            <button type="button" (click)="tabActive()" [class.active]="activeTab">Notes</button>
+            <button type="button" (click)="tabActive(1)" [class.active]="activeTab[0]">Varients</button>
+            <button type="button" (click)="tabActive(2)" [class.active]="activeTab[1]">Notes</button>
         </div>
-        <div class="varient-list" *ngIf="!activeTab">
+        <div class="varient-list" *ngIf="activeTab[0]">
             <table class="table">
                 <tbody>
                     <tr *ngFor="let varient of variantList">
@@ -137,7 +137,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="varient-list" *ngIf="activeTab">
+        <div class="varient-list" *ngIf="activeTab[1]">
             <table class="table">
                 <tbody>
                     <tr *ngFor="let note of noteList">

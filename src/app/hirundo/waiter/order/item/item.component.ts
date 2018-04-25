@@ -20,7 +20,7 @@ export class ItemComponent implements OnInit {
   private variantList = [];
   private noteList = [];
   public showVarient:  boolean = false;
-  public activeTab: boolean = false;
+  public activeTab: boolean[] = [true,false];
   public data: any;
   public articleAdd: boolean = false;
   protected subcategory: string;
@@ -127,8 +127,15 @@ export class ItemComponent implements OnInit {
     this.showVarient = false;
   }
 
-  tabActive(){
-    this.activeTab = !this.activeTab;
+  tabActive(tab) {
+    if (tab == 1) {
+      this.activeTab[0] = true;
+      this.activeTab[1] = false;
+    }
+    else {
+      this.activeTab[1] = true;
+      this.activeTab[0] = false;
+    }
   }
 
   addArticle(){
