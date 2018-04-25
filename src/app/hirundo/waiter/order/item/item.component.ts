@@ -25,11 +25,11 @@ export class ItemComponent implements OnInit {
   public articleAdd: boolean = false;
   protected subcategory: string;
   public selectedSubcategory: boolean[] = [false];
+  // public cartTotalPrice: number = 0;  
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
     this.data = this.orderService.getOrderData();
-    console.log('data.data', this.data );
     if (this.data.categoryItems) {
       for (let i = 0; i < this.data.categoryItems.length; i++) {
         if (this.data.selectedItems.length) {
@@ -44,23 +44,6 @@ export class ItemComponent implements OnInit {
       this.articles = this.orderService.getOrderData().categoryItems;
       this.selectedSubcategory[-1] = true;
     }
-    // this.searchStr = this.orderService.getOrderData().searchStr;
-    // this.orderService.getCategory()
-    //   .then(data => {
-    //     this.categoryList = data.data;
-    //     if (this.categoryList.length) {
-    //       for (var i = 0; i < this.categoryList.length; i++) {
-    //         this.categorySearchData.push({
-    //           _id: this.categoryList[i]._id,
-    //           name: this.categoryList[i].name,
-    //         });
-    //       }
-    //       this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.log('error', error);
-    //   });
       this.orderService.getVariantAndNotes()
       .then(data => {
         this.variantList = data.data.variants;
@@ -83,6 +66,11 @@ export class ItemComponent implements OnInit {
       }
     }
     data.selectedItems.push(article);
+    let cp = 0;
+    for (let i = 0; i < data.selectedItems.length; i++) {
+      cp += data.selectedItems[i].price * data.selectedItems[i].quantity;
+      data.cartTotalPrice = cp;
+    }
     this.orderService.setOrderData(data);
   }
 
@@ -108,30 +96,19 @@ export class ItemComponent implements OnInit {
         }
       }
     }
+    let cp = 0;
+    if (data.selectedItems.length) {
+      for (let i = 0; i < data.selectedItems.length; i++) {
+        cp += data.selectedItems[i].price * data.selectedItems[i].quantity;
+        data.cartTotalPrice = cp;
+      }
+    }
+    else {
+      data.cartTotalPrice = 0;
+    }
     this.orderService.setOrderData(data);
   }
 
-  onSelected(item) {
-    let orderdata1 = this.orderService.getOrderData();
-    orderdata1.selectedCategory = item ? item.originalObject : {};
-    orderdata1.searchStr = this.searchStr;
-    if (orderdata1.selectedCategory) {
-      this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
-      this.orderService.getCategoryItem().then(data => {
-        for (let i = 0; i < data.data.length; i++) {
-          if (data.data[i].category._id == orderdata1.selectedCategory["_id"]) {
-            orderdata1.categoryItems = data.data[i].items;
-            this.orderService.setOrderData(orderdata1);
-            this.articles = this.orderService.getOrderData().categoryItems;
-          }
-        }
-        this.router.navigate(['/waiter/order/:id/choose-item']);
-      })
-        .catch(error => {
-          console.log('error', error);
-        });
-    }
-  }
   viewCart() {
     this.router.navigate(['/waiter/order/:id/cart']);
   }

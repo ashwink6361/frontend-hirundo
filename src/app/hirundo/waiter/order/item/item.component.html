@@ -14,9 +14,6 @@
 <div class="page-content">
     <div class="tabs-container subcategory-tabs">
         <ul [ngStyle]="{'background-color' : orderService.getOrderData().selectedCategory.color}">
-            <!-- <li class="prev">
-                <i class="fas fa-chevron-left"></i>
-            </li> -->
             <li [class.subcategory-active]="selectedSubcategory[-1]" (click)="filterBySubcategory()">All</li>
             <span *ngIf="data.selectedCategory.subCategory.length">
                 <li *ngFor="let subCategory of data.selectedCategory.subCategory; let j = index" [class.subcategory-active]="selectedSubcategory[j]"
@@ -24,9 +21,6 @@
                     {{subCategory}}
                 </li>
             </span>
-            <!-- <li class="next">
-                <i class="fas fa-chevron-right"></i>
-            </li> -->
         </ul>
     </div>
     <app-steps></app-steps>
@@ -36,11 +30,9 @@
                 <i class="fas fa-search prefix"></i>
                 <input class="form-control" [(ngModel)]="searchText" type="text" placeholder="Search Item" />
                 <button type="button" class="btn-cart" (click)="viewCart()">
-                    <i class="fas fa-shopping-cart"></i> 3 | € 9.00
+                    <i class="fas fa-shopping-cart"></i> {{orderService.getOrderData().selectedItems.length}} | &euro;{{orderService.getOrderData().cartTotalPrice}}
                 </button>
             </div>
-            <!-- <ng2-completer [(ngModel)]="searchStr" class="form-control" [datasource]="dataService" [minSearchLength]="0" (selected)="onSelected($event)"
-                placeholder="Search Category"></ng2-completer> -->
         </div>
         <div class="alert-danger" *ngIf="error">{{errorMsg}}</div>
         <div *ngIf="!articles.length" class="text-center">
@@ -58,7 +50,7 @@
                     </div>
                     <div class="item-name">
                         <p class="name m-0">{{article.name}}</p>
-                        <p class="name m-0">&euro; {{article.price}}</p>
+                        <p class="name m-0">&euro;{{article.price}}</p>
                     </div>
                     <div class="input-prepend-append">
                         <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue(article)" value="Decrease Value">
@@ -82,7 +74,7 @@
                     </div>
                     <div class="item-name">
                         <p class="name m-0">{{article.name}}</p>
-                        <p class="name m-0">&euro; {{article.price}}</p>
+                        <p class="name m-0">&euro;{{article.price}}</p>
                     </div>
                     <div class="input-prepend-append">
                         <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue(article)" value="Decrease Value">
@@ -137,7 +129,7 @@
                 <tbody>
                     <tr *ngFor="let varient of variantList">
                         <td>{{varient.name}}</td>
-                        <td>{{varient.price}}</td>
+                        <td>&euro;{{varient.price}}</td>
                         <td>
                             <input type="checkbox" />
                         </td>
@@ -205,7 +197,7 @@
                     <tbody>
                         <tr *ngFor="let varient of variantList">
                             <td>{{varient.name}}</td>
-                            <td>{{varient.price}}</td>
+                            <td>&euro;{{varient.price}}</td>
                             <td>
                                 <input type="checkbox" />
                             </td>

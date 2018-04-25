@@ -63,7 +63,8 @@ export class CreateOrderComponent implements OnInit {
         roomId: this.roomData["_id"],
         tableId: this.tableData["_id"],
         numberOfPerson: this.numberOfPerson,
-        selectedItems: []
+        selectedItems: [],
+        cartTotalPrice : 0
       }
       this.orderService.setOrderData(data);
       this.router.navigate(['/waiter/order/:id/choose-category']);

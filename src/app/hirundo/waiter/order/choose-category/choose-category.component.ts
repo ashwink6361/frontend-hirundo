@@ -40,28 +40,6 @@ export class ChooseCategoryComponent implements OnInit {
       });
   }
 
-  onSelected(item) {
-    this.selectedCategory = item ? item.originalObject : {};
-    let orderdata1 = this.orderService.getOrderData();
-    orderdata1.selectedCategory = this.selectedCategory;
-    orderdata1.searchStr = this.searchStr;
-    if (this.selectedCategory) {
-      this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
-      this.orderService.getCategoryItem().then(data => {
-        for (let i = 0; i < data.data.length; i++) {
-          if (data.data[i].category._id == this.selectedCategory["_id"]) {
-            orderdata1.categoryItems = data.data[i].items;
-            this.orderService.setOrderData(orderdata1);
-          }
-        }
-        this.router.navigate(['/waiter/order/:id/choose-item']);
-      })
-        .catch(error => {
-          console.log('error', error);
-        });
-    }
-  }
-
   showItems(category) {
     let orderdata = this.orderService.getOrderData();
     orderdata.selectedCategory = category;
@@ -79,31 +57,4 @@ export class ChooseCategoryComponent implements OnInit {
         console.log('error', error);
       });
   }
-
-
-
-  // showItems(id, name) {
-  //   let obj = {
-  //     _id: id,
-  //     name: name
-  //   }
-  //   this.selectedCategory = obj;
-  //   if (this.selectedCategory) {
-  //     this.searchStr = this.selectedCategory["name"];
-  //     this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
-  //     this.categoryItems = [];
-  //     this.orderService.getCategoryItem().then(data => {
-  //       for (let i = 0; i < data.data.length; i++) {
-  //         if (data.data[i].category._id == this.selectedCategory["_id"]) {
-  //           this.categoryItems.push(data.data[i].items[0]);
-  //         }
-  //       }
-  //     })
-  //       .catch(error => {
-  //         console.log('error', error);
-  //       });
-  //       this.router.navigate(['/waiter/order/:id/choose-item']);
-  //   }
-  // }
-
 }
