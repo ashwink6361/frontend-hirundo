@@ -3,7 +3,7 @@ webpackJsonp(["order.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/order/cart/cart.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header class=\"page-content-header\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter/order/:id/choose-item\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\">\r\n        Create Order\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <div class=\"item-container\">\r\n        <div class=\"text-center\" *ngIf=\"!(items && items.length)\">No Item Add</div>\r\n        <div *ngIf=\"(items && items.length)\">\r\n            <div class=\"item-list align-items-center\" *ngFor=\"let article of items\">\r\n                <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                    <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                    <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                        alt=\"Category Logo\" />\r\n                    <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                    <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\r\n                </div>\r\n                <div class=\"item-name mw-160\">\r\n                    <p class=\"name m-0\">{{article.name}}</p>\r\n                    <p class=\"name m-0\">&euro; {{article.price}}</p>\r\n                </div>\r\n                <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"deleteItemFromCart(article)\">\r\n                    <i class=\"fas fa-times\"></i>\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <button type=\"submit\" class=\"order-btn waves-light\" (click)=\"createOrder()\">\r\n            Create Order\r\n        </button>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<header class=\"page-content-header\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter/order/:id/choose-item\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\">\r\n        Create Order\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <div class=\"item-container\">\r\n        <div class=\"text-center\" *ngIf=\"!(items && items.length)\">No Item Add</div>\r\n        <div *ngIf=\"(items && items.length)\">\r\n            <div class=\"item-list align-items-center\" *ngFor=\"let article of items\">\r\n                <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                    <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                    <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                        alt=\"Category Logo\" />\r\n                    <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                    <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\r\n                </div>\r\n                <div class=\"item-name mw-160\">\r\n                    <p class=\"name m-0\">{{article.name}}</p>\r\n                    <p class=\"name m-0\">&euro;{{article.price}}</p>\r\n                </div>\r\n                <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"deleteItemFromCart(article)\">\r\n                    <i class=\"fas fa-times\"></i>\r\n                </button>\r\n            </div>\r\n            <div class=\"total-amount\">\r\n                Sub Total: &euro;{{orderService.getOrderData().cartTotalPrice}}\r\n            </div>\r\n        </div>\r\n        <button type=\"submit\" class=\"order-btn waves-light\" [disabled]=\"!orderService.getOrderData().selectedItems.length\" (click)=\"createOrder()\">\r\n            Create Order\r\n        </button>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -96,6 +96,20 @@ var CartComponent = /** @class */ (function () {
             if (data.selectedItems[i]._id == article._id) {
                 data.selectedItems.splice(i, 1);
             }
+            var cp = 0;
+            var itemno = 0;
+            if (data.selectedItems.length) {
+                for (var i_1 = 0; i_1 < data.selectedItems.length; i_1++) {
+                    itemno += data.selectedItems[i_1].quantity;
+                    cp += data.selectedItems[i_1].price * data.selectedItems[i_1].quantity;
+                    data.cartTotalPrice = cp;
+                    data.cartTotalItem = itemno;
+                }
+            }
+            else {
+                data.cartTotalPrice = 0;
+                data.cartTotalItem = 0;
+            }
             this.orderService.setOrderData(data);
             this.items = this.orderService.getOrderData().selectedItems;
         }
@@ -119,7 +133,7 @@ var CartComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/hirundo/waiter/order/choose-category/choose-category.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header class=\"page-content-header\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter/order/:id\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\">\r\n        Choose Category\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <app-steps></app-steps>\r\n    <div class=\"category-list\">\r\n        <div class=\"d-flex flex-wrap\">\r\n            <div class=\"d-flex align-items-center justify-content-between search-category w-100\">\r\n                <!-- <ng2-completer [(ngModel)]=\"searchStr\" [datasource]=\"dataService\" [minSearchLength]=\"0\" (selected)=\"onSelected($event)\" placeholder=\"Search Category\"></ng2-completer> -->\r\n                <div class=\"md-form search\">\r\n                    <i class=\"fas fa-search prefix\"></i>\r\n                    <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Category\" />\r\n                </div>\r\n            </div>\r\n            <div class=\"category\" *ngFor=\"let category of categoryList | filter : searchText\" [ngStyle]=\"{'background-color': category.color}\"\r\n                (click)=\"showItems(category)\">\r\n                <img *ngIf=\"!category.isIcon\" [src]=\"category.logo.small\" alt=\"\" />\r\n                <img class=\"icon-img\" *ngIf=\"category.isIcon\" [src]=\"category.icon\" alt=\"\" />\r\n                <p class=\"name\">{{category.name}}</p>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<header class=\"page-content-header\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter/order/:id\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\">\r\n        Choose Category\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <app-steps></app-steps>\r\n    <div class=\"category-list\">\r\n        <div class=\"d-flex flex-wrap\">\r\n            <div class=\"d-flex align-items-center justify-content-between search-category w-100\">\r\n                <div class=\"md-form search\">\r\n                    <i class=\"fas fa-search prefix\"></i>\r\n                    <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Category\" />\r\n                </div>\r\n            </div>\r\n            <div class=\"category\" *ngFor=\"let category of categoryList | filter : searchText\" [ngStyle]=\"{'background-color': category.color}\"\r\n                (click)=\"showItems(category)\">\r\n                <img *ngIf=\"!category.isIcon\" [src]=\"category.logo.small\" alt=\"\" />\r\n                <img class=\"icon-img\" *ngIf=\"category.isIcon\" [src]=\"category.icon\" alt=\"\" />\r\n                <p class=\"name\">{{category.name}}</p>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -198,28 +212,6 @@ var ChooseCategoryComponent = /** @class */ (function () {
             .catch(function (error) {
             console.log('error', error);
         });
-    };
-    ChooseCategoryComponent.prototype.onSelected = function (item) {
-        var _this = this;
-        this.selectedCategory = item ? item.originalObject : {};
-        var orderdata1 = this.orderService.getOrderData();
-        orderdata1.selectedCategory = this.selectedCategory;
-        orderdata1.searchStr = this.searchStr;
-        if (this.selectedCategory) {
-            this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
-            this.orderService.getCategoryItem().then(function (data) {
-                for (var i = 0; i < data.data.length; i++) {
-                    if (data.data[i].category._id == _this.selectedCategory["_id"]) {
-                        orderdata1.categoryItems = data.data[i].items;
-                        _this.orderService.setOrderData(orderdata1);
-                    }
-                }
-                _this.router.navigate(['/waiter/order/:id/choose-item']);
-            })
-                .catch(function (error) {
-                console.log('error', error);
-            });
-        }
     };
     ChooseCategoryComponent.prototype.showItems = function (category) {
         var _this = this;
@@ -358,7 +350,9 @@ var CreateOrderComponent = /** @class */ (function () {
                 roomId: this.roomData["_id"],
                 tableId: this.tableData["_id"],
                 numberOfPerson: this.numberOfPerson,
-                selectedItems: []
+                selectedItems: [],
+                cartTotalPrice: 0,
+                cartTotalItem: 0
             };
             this.orderService.setOrderData(data);
             this.router.navigate(['/waiter/order/:id/choose-category']);
@@ -391,7 +385,7 @@ var CreateOrderComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/hirundo/waiter/order/item/item.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header class=\"page-content-header\" [ngStyle]=\"{'background-color' : orderService.getOrderData().selectedCategory.color}\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter/order/:id/choose-category\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\r\n        {{orderService.getOrderData().selectedCategory.name}}\r\n        <span class=\"add-article-btn\" (click)=\"addArticle()\">\r\n            <i class=\"fas fa-pencil-alt\"></i>\r\n        </span>\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <div class=\"tabs-container\">\r\n        <ul [ngStyle]=\"{'background-color' : orderService.getOrderData().selectedCategory.color}\">\r\n            <!-- <li class=\"prev\">\r\n                <i class=\"fas fa-chevron-left\"></i>\r\n            </li> -->\r\n            <li>All</li>\r\n            <span *ngIf=\"data.selectedCategory.subCategory.length\">\r\n                <li *ngFor=\"let subCategory of data.selectedCategory.subCategory\">\r\n                    {{subCategory}}\r\n                </li>\r\n            </span>\r\n            <!-- <li class=\"next\">\r\n                <i class=\"fas fa-chevron-right\"></i>\r\n            </li> -->\r\n        </ul>\r\n    </div>\r\n    <app-steps></app-steps>\r\n    <div class=\"item-container\">\r\n        <div class=\"search-category w-100\">\r\n            <div class=\"md-form search\">\r\n                <i class=\"fas fa-search prefix\"></i>\r\n                <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Item\" />\r\n                <button type=\"button\" class=\"btn-cart\" (click)=\"viewCart()\">\r\n                    <i class=\"fas fa-shopping-cart\"></i> 3 | € 9.00\r\n                </button>\r\n            </div>\r\n            <!-- <ng2-completer [(ngModel)]=\"searchStr\" class=\"form-control\" [datasource]=\"dataService\" [minSearchLength]=\"0\" (selected)=\"onSelected($event)\"\r\n                placeholder=\"Search Category\"></ng2-completer> -->\r\n        </div>\r\n        <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>\r\n        <div *ngIf=\"!articles.length\" class=\"text-center\">\r\n            No Item Found\r\n        </div>\r\n        <div *ngIf=\"articles.length\">\r\n            <div class=\"item-list align-items-center\" *ngFor=\"let article of articles | filter : searchText ; let i = index\">\r\n                <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                    <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                    <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                        alt=\"Category Logo\" />\r\n                    <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                    <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\r\n                </div>\r\n                <div class=\"item-name\">\r\n                    <p class=\"name m-0\">{{article.name}}</p>\r\n                    <p class=\"name m-0\">&euro; {{article.price}}</p>\r\n                </div>\r\n                <div class=\"input-prepend-append\">\r\n                    <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue(article)\" value=\"Decrease Value\">\r\n                        <i class=\"fas fa-minus\"></i>\r\n                    </button>\r\n                    <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue(article)\" value=\"Increase Value\">\r\n                        <i class=\"fas fa-plus\"></i>\r\n                    </button>\r\n                </div>\r\n                <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"viewVarient()\">\r\n                    <i class=\"fas fa-pencil-alt\"></i>\r\n                </button>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n\r\n<div class=\"varient-container\" [class.show-varient]=\"showVarient\">\r\n    <div class=\"modal-header\">\r\n        <div class=\"back-btn\">\r\n            <a (click)=\"hideVarient()\">\r\n                <i class=\"fas fa-times\"></i>\r\n            </a>\r\n        </div>\r\n        <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\r\n            Choose Varient\r\n            <button>Save</button>\r\n        </div>\r\n    </div>\r\n    <div class=\"varient-content\">\r\n        <div class=\"input-quantity-container\">\r\n            <h1>Quantity</h1>\r\n            <div class=\"input-prepend-append d-flex\">\r\n                <button type=\"button\" id=\"decrease\" value=\"Decrease Value\">\r\n                    <i class=\"fas fa-minus\"></i>\r\n                </button>\r\n                <div class=\"text-center input-value\"></div>\r\n                <button type=\"button\" id=\"increase\" value=\"Increase Value\">\r\n                    <i class=\"fas fa-plus\"></i>\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <h1>Varient and Notes</h1>\r\n        <div class=\"tabs-btn\">\r\n            <button type=\"button\" (click)=\"tabActive()\" [class.active]=\"!activeTab\">Varients</button>\r\n            <button type=\"button\" (click)=\"tabActive()\" [class.active]=\"activeTab\">Notes</button>\r\n        </div>\r\n        <div class=\"varient-list\" *ngIf=\"!activeTab\">\r\n            <table class=\"table\">\r\n                <tbody>\r\n                    <tr *ngFor=\"let varient of variantList\">\r\n                        <td>{{varient.name}}</td>\r\n                        <td>{{varient.price}}</td>\r\n                        <td>\r\n                            <input type=\"checkbox\" />\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n        </div>\r\n        <div class=\"varient-list\" *ngIf=\"activeTab\">\r\n            <table class=\"table\">\r\n                <tbody>\r\n                    <tr *ngFor=\"let note of noteList\">\r\n                        <td>{{note.notes}}</td>\r\n                        <td>\r\n                            <input type=\"checkbox\" />\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<div class=\"add-article\" [class.showarticle]=\"articleAdd\">\r\n    <div class=\"modal-header\">\r\n        <div class=\"back-btn\">\r\n            <a (click)=\"hideArticle()\">\r\n                <i class=\"fas fa-times\"></i>\r\n            </a>\r\n        </div>\r\n        <div class=\"header-title\">\r\n            New Article\r\n            <button>Save</button>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<header class=\"page-content-header\" [ngStyle]=\"{'background-color' : orderService.getOrderData().selectedCategory.color}\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter/order/:id/choose-category\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\r\n        {{orderService.getOrderData().selectedCategory.name}}\r\n        <span class=\"add-article-btn\" (click)=\"addArticle()\">\r\n            <i class=\"fas fa-pencil-alt\"></i>\r\n        </span>\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <div class=\"tabs-container subcategory-tabs\">\r\n        <ul [ngStyle]=\"{'background-color' : orderService.getOrderData().selectedCategory.color}\">\r\n            <li [class.subcategory-active]=\"selectedSubcategory[-1]\" (click)=\"filterBySubcategory()\">All</li>\r\n            <span *ngIf=\"data.selectedCategory.subCategory.length\">\r\n                <li *ngFor=\"let subCategory of data.selectedCategory.subCategory; let j = index\" [class.subcategory-active]=\"selectedSubcategory[j]\"\r\n                    (click)=\"filterBySubcategory(subCategory,j)\">\r\n                    {{subCategory}}\r\n                </li>\r\n            </span>\r\n        </ul>\r\n    </div>\r\n    <app-steps></app-steps>\r\n    <div class=\"item-container\">\r\n        <div class=\"search-category w-100\">\r\n            <div class=\"md-form search\">\r\n                <i class=\"fas fa-search prefix\"></i>\r\n                <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Item\" />\r\n                <button type=\"button\" class=\"btn-cart\" (click)=\"viewCart()\">\r\n                    <i class=\"fas fa-shopping-cart\"></i> {{orderService.getOrderData().cartTotalItem}} | &euro;{{orderService.getOrderData().cartTotalPrice}}\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>\r\n        <div *ngIf=\"!articles.length\" class=\"text-center\">\r\n            No Item Found\r\n        </div>\r\n        <div *ngIf=\"articles.length\">\r\n            <div *ngFor=\"let article of articles | filter : searchText ; let i = index\">\r\n                <div class=\"item-list align-items-center\" *ngIf=\"subcategory && (article.subCategory == subcategory)\">\r\n                    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                            alt=\"Category Logo\" />\r\n                        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                        <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\r\n                    </div>\r\n                    <div class=\"item-name\">\r\n                        <p class=\"name m-0\">{{article.name}}</p>\r\n                        <p class=\"name m-0\">&euro;{{article.price}}</p>\r\n                    </div>\r\n                    <div class=\"input-prepend-append\">\r\n                        <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue(article)\" value=\"Decrease Value\">\r\n                            <i class=\"fas fa-minus\"></i>\r\n                        </button>\r\n                        <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue(article)\" value=\"Increase Value\">\r\n                            <i class=\"fas fa-plus\"></i>\r\n                        </button>\r\n                    </div>\r\n                    <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"viewVarient()\">\r\n                        <i class=\"fas fa-pencil-alt\"></i>\r\n                    </button>\r\n                </div>\r\n                <div class=\"item-list align-items-center\" *ngIf=\"!subcategory\">\r\n                    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                            alt=\"Category Logo\" />\r\n                        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                        <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\r\n                    </div>\r\n                    <div class=\"item-name\">\r\n                        <p class=\"name m-0\">{{article.name}}</p>\r\n                        <p class=\"name m-0\">&euro;{{article.price}}</p>\r\n                    </div>\r\n                    <div class=\"input-prepend-append\">\r\n                        <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue(article)\" value=\"Decrease Value\">\r\n                            <i class=\"fas fa-minus\"></i>\r\n                        </button>\r\n                        <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue(article)\" value=\"Increase Value\">\r\n                            <i class=\"fas fa-plus\"></i>\r\n                        </button>\r\n                    </div>\r\n                    <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"viewVarient()\">\r\n                        <i class=\"fas fa-pencil-alt\"></i>\r\n                    </button>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n\r\n<div class=\"varient-container\" [class.show-varient]=\"showVarient\">\r\n    <div class=\"modal-header\">\r\n        <div class=\"back-btn\">\r\n            <a (click)=\"hideVarient()\">\r\n                <i class=\"fas fa-times\"></i>\r\n            </a>\r\n        </div>\r\n        <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\r\n            Choose Varient\r\n            <button>Save</button>\r\n        </div>\r\n    </div>\r\n    <div class=\"varient-content\">\r\n        <div class=\"input-quantity-container\">\r\n            <h1>Quantity</h1>\r\n            <div class=\"input-prepend-append d-flex\">\r\n                <button type=\"button\" id=\"decrease\" value=\"Decrease Value\">\r\n                    <i class=\"fas fa-minus\"></i>\r\n                </button>\r\n                <div class=\"text-center input-value\"></div>\r\n                <button type=\"button\" id=\"increase\" value=\"Increase Value\">\r\n                    <i class=\"fas fa-plus\"></i>\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <h1>Varient and Notes</h1>\r\n        <div class=\"tabs-btn\">\r\n            <button type=\"button\" (click)=\"tabActive(1)\" [class.active]=\"activeTab[0]\">Varients</button>\r\n            <button type=\"button\" (click)=\"tabActive(2)\" [class.active]=\"activeTab[1]\">Notes</button>\r\n        </div>\r\n        <div class=\"varient-list\" *ngIf=\"activeTab[0]\">\r\n            <table class=\"table\">\r\n                <tbody>\r\n                    <tr *ngFor=\"let varient of variantList\">\r\n                        <td>{{varient.name}}</td>\r\n                        <td>&euro;{{varient.price}}</td>\r\n                        <td>\r\n                            <input type=\"checkbox\" />\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n        </div>\r\n        <div class=\"varient-list\" *ngIf=\"activeTab[1]\">\r\n            <table class=\"table\">\r\n                <tbody>\r\n                    <tr *ngFor=\"let note of noteList\">\r\n                        <td>{{note.notes}}</td>\r\n                        <td>\r\n                            <input type=\"checkbox\" />\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<div class=\"add-article\" [class.showarticle]=\"articleAdd\">\r\n    <div class=\"modal-header\">\r\n        <div class=\"back-btn\">\r\n            <a (click)=\"hideArticle()\">\r\n                <i class=\"fas fa-times\"></i>\r\n            </a>\r\n        </div>\r\n        <div class=\"header-title\">\r\n            New Article\r\n            <button>Save</button>\r\n        </div>\r\n    </div>\r\n    <div class=\"modal-body varient-content\">\r\n        <div class=\"md-form\">\r\n            <label for=\"exampleForm2\">Default input</label>\r\n            <input type=\"text\" id=\"exampleForm2\" class=\"form-control\">\r\n        </div>\r\n        <div class=\"input-quantity-container\">\r\n            <h1>Quantity</h1>\r\n            <div class=\"input-prepend-append d-flex\">\r\n                <button type=\"button\" id=\"decrease\" value=\"Decrease Value\">\r\n                    <i class=\"fas fa-minus\"></i>\r\n                </button>\r\n                <div class=\"text-center input-value\"></div>\r\n                <button type=\"button\" id=\"increase\" value=\"Increase Value\">\r\n                    <i class=\"fas fa-plus\"></i>\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <div class=\"md-form\">\r\n            <i class=\"fa fa-envelope prefix\"></i>\r\n            <input type=\"text\" id=\"inputIconEx1\" class=\"form-control\">\r\n            <label for=\"inputIconEx1\">E-mail address</label>\r\n        </div>\r\n        <div >\r\n            <h1>Varient and Notes</h1>\r\n            <div class=\"tabs-btn\">\r\n                <button type=\"button\" (click)=\"tabActive()\" [class.active]=\"!activeTab\">Varients</button>\r\n                <button type=\"button\" (click)=\"tabActive()\" [class.active]=\"activeTab\">Notes</button>\r\n            </div>\r\n            <div class=\"varient-list\" *ngIf=\"!activeTab\">\r\n                <table class=\"table\">\r\n                    <tbody>\r\n                        <tr *ngFor=\"let varient of variantList\">\r\n                            <td>{{varient.name}}</td>\r\n                            <td>&euro;{{varient.price}}</td>\r\n                            <td>\r\n                                <input type=\"checkbox\" />\r\n                            </td>\r\n                        </tr>\r\n                    </tbody>\r\n                </table>\r\n            </div>\r\n            <div class=\"varient-list\" *ngIf=\"activeTab\">\r\n                <table class=\"table\">\r\n                    <tbody>\r\n                        <tr *ngFor=\"let note of noteList\">\r\n                            <td>{{note.notes}}</td>\r\n                            <td>\r\n                                <input type=\"checkbox\" />\r\n                            </td>\r\n                        </tr>\r\n                    </tbody>\r\n                </table>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -453,13 +447,13 @@ var ItemComponent = /** @class */ (function () {
         this.variantList = [];
         this.noteList = [];
         this.showVarient = false;
-        this.activeTab = false;
+        this.activeTab = [true, false];
         this.articleAdd = false;
+        this.selectedSubcategory = [false];
     }
     ItemComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.data = this.orderService.getOrderData();
-        console.log('data.data', this.data);
         if (this.data.categoryItems) {
             for (var i = 0; i < this.data.categoryItems.length; i++) {
                 if (this.data.selectedItems.length) {
@@ -472,24 +466,8 @@ var ItemComponent = /** @class */ (function () {
             }
             this.orderService.setOrderData(this.data);
             this.articles = this.orderService.getOrderData().categoryItems;
+            this.selectedSubcategory[-1] = true;
         }
-        // this.searchStr = this.orderService.getOrderData().searchStr;
-        // this.orderService.getCategory()
-        //   .then(data => {
-        //     this.categoryList = data.data;
-        //     if (this.categoryList.length) {
-        //       for (var i = 0; i < this.categoryList.length; i++) {
-        //         this.categorySearchData.push({
-        //           _id: this.categoryList[i]._id,
-        //           name: this.categoryList[i].name,
-        //         });
-        //       }
-        //       this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
-        //     }
-        //   })
-        //   .catch(error => {
-        //     console.log('error', error);
-        //   });
         this.orderService.getVariantAndNotes()
             .then(function (data) {
             _this.variantList = data.data.variants;
@@ -498,13 +476,6 @@ var ItemComponent = /** @class */ (function () {
             .catch(function (error) {
             console.log('error', error);
         });
-        // this.orderService.getNotes()
-        // .then(data => {
-        //   this.noteList = data.data;
-        // })
-        // .catch(error => {
-        //   console.log('error', error);
-        // });
     };
     ItemComponent.prototype.increaseValue = function (article) {
         var value = article.quantity;
@@ -518,6 +489,14 @@ var ItemComponent = /** @class */ (function () {
             }
         }
         data.selectedItems.push(article);
+        var cp = 0;
+        var itemno = 0;
+        for (var i = 0; i < data.selectedItems.length; i++) {
+            itemno += data.selectedItems[i].quantity;
+            cp += data.selectedItems[i].price * data.selectedItems[i].quantity;
+            data.cartTotalPrice = cp;
+            data.cartTotalItem = itemno;
+        }
         this.orderService.setOrderData(data);
     };
     ItemComponent.prototype.decreaseValue = function (article) {
@@ -542,29 +521,21 @@ var ItemComponent = /** @class */ (function () {
                 }
             }
         }
-        this.orderService.setOrderData(data);
-    };
-    ItemComponent.prototype.onSelected = function (item) {
-        var _this = this;
-        var orderdata1 = this.orderService.getOrderData();
-        orderdata1.selectedCategory = item ? item.originalObject : {};
-        orderdata1.searchStr = this.searchStr;
-        if (orderdata1.selectedCategory) {
-            this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
-            this.orderService.getCategoryItem().then(function (data) {
-                for (var i = 0; i < data.data.length; i++) {
-                    if (data.data[i].category._id == orderdata1.selectedCategory["_id"]) {
-                        orderdata1.categoryItems = data.data[i].items;
-                        _this.orderService.setOrderData(orderdata1);
-                        _this.articles = _this.orderService.getOrderData().categoryItems;
-                    }
-                }
-                _this.router.navigate(['/waiter/order/:id/choose-item']);
-            })
-                .catch(function (error) {
-                console.log('error', error);
-            });
+        var cp = 0;
+        var itemno = 0;
+        if (data.selectedItems.length) {
+            for (var i = 0; i < data.selectedItems.length; i++) {
+                itemno += data.selectedItems[i].quantity;
+                cp += data.selectedItems[i].price * data.selectedItems[i].quantity;
+                data.cartTotalPrice = cp;
+                data.cartTotalItem = itemno;
+            }
         }
+        else {
+            data.cartTotalPrice = 0;
+            data.cartTotalItem = 0;
+        }
+        this.orderService.setOrderData(data);
     };
     ItemComponent.prototype.viewCart = function () {
         this.router.navigate(['/waiter/order/:id/cart']);
@@ -575,14 +546,39 @@ var ItemComponent = /** @class */ (function () {
     ItemComponent.prototype.hideVarient = function () {
         this.showVarient = false;
     };
-    ItemComponent.prototype.tabActive = function () {
-        this.activeTab = !this.activeTab;
+    ItemComponent.prototype.tabActive = function (tab) {
+        if (tab == 1) {
+            this.activeTab[0] = true;
+            this.activeTab[1] = false;
+        }
+        else {
+            this.activeTab[1] = true;
+            this.activeTab[0] = false;
+        }
     };
     ItemComponent.prototype.addArticle = function () {
         this.articleAdd = true;
     };
     ItemComponent.prototype.hideArticle = function () {
         this.articleAdd = false;
+    };
+    ItemComponent.prototype.filterBySubcategory = function (subcategory, index) {
+        this.subcategory = subcategory;
+        if (typeof index !== 'undefined') {
+            this.selectedSubcategory[index] = true;
+            this.selectedSubcategory[-1] = false;
+            for (var i = 0; i < this.selectedSubcategory.length; i++) {
+                if (index != i) {
+                    this.selectedSubcategory[i] = false;
+                }
+            }
+        }
+        else {
+            this.selectedSubcategory[-1] = true;
+            for (var i = 0; i < this.selectedSubcategory.length; i++) {
+                this.selectedSubcategory[i] = false;
+            }
+        }
     };
     ItemComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({

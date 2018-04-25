@@ -12,20 +12,15 @@
     </div>
 </header>
 <div class="page-content">
-    <div class="tabs-container">
+    <div class="tabs-container subcategory-tabs">
         <ul [ngStyle]="{'background-color' : orderService.getOrderData().selectedCategory.color}">
-            <!-- <li class="prev">
-                <i class="fas fa-chevron-left"></i>
-            </li> -->
-            <li>All</li>
+            <li [class.subcategory-active]="selectedSubcategory[-1]" (click)="filterBySubcategory()">All</li>
             <span *ngIf="data.selectedCategory.subCategory.length">
-                <li *ngFor="let subCategory of data.selectedCategory.subCategory">
+                <li *ngFor="let subCategory of data.selectedCategory.subCategory; let j = index" [class.subcategory-active]="selectedSubcategory[j]"
+                    (click)="filterBySubcategory(subCategory,j)">
                     {{subCategory}}
                 </li>
             </span>
-            <!-- <li class="next">
-                <i class="fas fa-chevron-right"></i>
-            </li> -->
         </ul>
     </div>
     <app-steps></app-steps>
@@ -35,40 +30,64 @@
                 <i class="fas fa-search prefix"></i>
                 <input class="form-control" [(ngModel)]="searchText" type="text" placeholder="Search Item" />
                 <button type="button" class="btn-cart" (click)="viewCart()">
-                    <i class="fas fa-shopping-cart"></i> 3 | € 9.00
+                    <i class="fas fa-shopping-cart"></i> {{orderService.getOrderData().cartTotalItem}} | &euro;{{orderService.getOrderData().cartTotalPrice}}
                 </button>
             </div>
-            <!-- <ng2-completer [(ngModel)]="searchStr" class="form-control" [datasource]="dataService" [minSearchLength]="0" (selected)="onSelected($event)"
-                placeholder="Search Category"></ng2-completer> -->
         </div>
         <div class="alert-danger" *ngIf="error">{{errorMsg}}</div>
         <div *ngIf="!articles.length" class="text-center">
             No Item Found
         </div>
         <div *ngIf="articles.length">
-            <div class="item-list align-items-center" *ngFor="let article of articles | filter : searchText ; let i = index">
-                <div class="item" [ngStyle]="{'background-color': article.category.color}">
-                    <img *ngIf="!article.logo.small && article.category.isIcon" class="icon-img" [src]="article.category.icon" alt="" />
-                    <img *ngIf="!article.logo.small && !article.category.isIcon && article.category.logo.small" [src]="article.category.logo.small"
-                        alt="Category Logo" />
-                    <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
-                    <span class="item-quantity" *ngIf="article.quantity>0">{{article.quantity}}</span>
-                </div>
-                <div class="item-name">
-                    <p class="name m-0">{{article.name}}</p>
-                    <p class="name m-0">&euro; {{article.price}}</p>
-                </div>
-                <div class="input-prepend-append">
-                    <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue(article)" value="Decrease Value">
-                        <i class="fas fa-minus"></i>
+            <div *ngFor="let article of articles | filter : searchText ; let i = index">
+                <div class="item-list align-items-center" *ngIf="subcategory && (article.subCategory == subcategory)">
+                    <div class="item" [ngStyle]="{'background-color': article.category.color}">
+                        <img *ngIf="!article.logo.small && article.category.isIcon" class="icon-img" [src]="article.category.icon" alt="" />
+                        <img *ngIf="!article.logo.small && !article.category.isIcon && article.category.logo.small" [src]="article.category.logo.small"
+                            alt="Category Logo" />
+                        <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
+                        <span class="item-quantity" *ngIf="article.quantity>0">{{article.quantity}}</span>
+                    </div>
+                    <div class="item-name">
+                        <p class="name m-0">{{article.name}}</p>
+                        <p class="name m-0">&euro;{{article.price}}</p>
+                    </div>
+                    <div class="input-prepend-append">
+                        <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue(article)" value="Decrease Value">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-append btn-success" id="increase" (click)="increaseValue(article)" value="Increase Value">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <button type="submit" class="btn btn-floating waves-light" (click)="viewVarient()">
+                        <i class="fas fa-pencil-alt"></i>
                     </button>
-                    <button type="button" class="btn btn-append btn-success" id="increase" (click)="increaseValue(article)" value="Increase Value">
-                        <i class="fas fa-plus"></i>
+                </div>
+                <div class="item-list align-items-center" *ngIf="!subcategory">
+                    <div class="item" [ngStyle]="{'background-color': article.category.color}">
+                        <img *ngIf="!article.logo.small && article.category.isIcon" class="icon-img" [src]="article.category.icon" alt="" />
+                        <img *ngIf="!article.logo.small && !article.category.isIcon && article.category.logo.small" [src]="article.category.logo.small"
+                            alt="Category Logo" />
+                        <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
+                        <span class="item-quantity" *ngIf="article.quantity>0">{{article.quantity}}</span>
+                    </div>
+                    <div class="item-name">
+                        <p class="name m-0">{{article.name}}</p>
+                        <p class="name m-0">&euro;{{article.price}}</p>
+                    </div>
+                    <div class="input-prepend-append">
+                        <button type="button" class="btn btn-prepend btn-danger" id="decrease" (click)="decreaseValue(article)" value="Decrease Value">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-append btn-success" id="increase" (click)="increaseValue(article)" value="Increase Value">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <button type="submit" class="btn btn-floating waves-light" (click)="viewVarient()">
+                        <i class="fas fa-pencil-alt"></i>
                     </button>
                 </div>
-                <button type="submit" class="btn btn-floating waves-light" (click)="viewVarient()">
-                    <i class="fas fa-pencil-alt"></i>
-                </button>
             </div>
         </div>
     </div>
@@ -102,15 +121,15 @@
         </div>
         <h1>Varient and Notes</h1>
         <div class="tabs-btn">
-            <button type="button" (click)="tabActive()" [class.active]="!activeTab">Varients</button>
-            <button type="button" (click)="tabActive()" [class.active]="activeTab">Notes</button>
+            <button type="button" (click)="tabActive(1)" [class.active]="activeTab[0]">Varients</button>
+            <button type="button" (click)="tabActive(2)" [class.active]="activeTab[1]">Notes</button>
         </div>
-        <div class="varient-list" *ngIf="!activeTab">
+        <div class="varient-list" *ngIf="activeTab[0]">
             <table class="table">
                 <tbody>
                     <tr *ngFor="let varient of variantList">
                         <td>{{varient.name}}</td>
-                        <td>{{varient.price}}</td>
+                        <td>&euro;{{varient.price}}</td>
                         <td>
                             <input type="checkbox" />
                         </td>
@@ -118,7 +137,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="varient-list" *ngIf="activeTab">
+        <div class="varient-list" *ngIf="activeTab[1]">
             <table class="table">
                 <tbody>
                     <tr *ngFor="let note of noteList">
@@ -143,6 +162,61 @@
         <div class="header-title">
             New Article
             <button>Save</button>
+        </div>
+    </div>
+    <div class="modal-body varient-content">
+        <div class="md-form">
+            <label for="exampleForm2">Default input</label>
+            <input type="text" id="exampleForm2" class="form-control">
+        </div>
+        <div class="input-quantity-container">
+            <h1>Quantity</h1>
+            <div class="input-prepend-append d-flex">
+                <button type="button" id="decrease" value="Decrease Value">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <div class="text-center input-value"></div>
+                <button type="button" id="increase" value="Increase Value">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="md-form">
+            <i class="fa fa-envelope prefix"></i>
+            <input type="text" id="inputIconEx1" class="form-control">
+            <label for="inputIconEx1">E-mail address</label>
+        </div>
+        <div >
+            <h1>Varient and Notes</h1>
+            <div class="tabs-btn">
+                <button type="button" (click)="tabActive()" [class.active]="!activeTab">Varients</button>
+                <button type="button" (click)="tabActive()" [class.active]="activeTab">Notes</button>
+            </div>
+            <div class="varient-list" *ngIf="!activeTab">
+                <table class="table">
+                    <tbody>
+                        <tr *ngFor="let varient of variantList">
+                            <td>{{varient.name}}</td>
+                            <td>&euro;{{varient.price}}</td>
+                            <td>
+                                <input type="checkbox" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="varient-list" *ngIf="activeTab">
+                <table class="table">
+                    <tbody>
+                        <tr *ngFor="let note of noteList">
+                            <td>{{note.notes}}</td>
+                            <td>
+                                <input type="checkbox" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

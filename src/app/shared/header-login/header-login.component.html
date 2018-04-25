@@ -1,11 +1,21 @@
 <header>
-  <div class="menu-btn" (click)="sidebar()">
-    <i class="fas fa-bars"></i>
-  </div>
-  <div class="logo">
-    <img src="assets/images/logo.png" alt="" />
-  </div>
-  <!-- <div class="cart">
-    <a routerLink="/waiter/cart"><i class="fas fa-shopping-cart"></i></a>
-  </div> -->
+    <div class="menu-btn" (click)="sidebar()">
+        <i class="fas fa-bars"></i>
+    </div>
+    <div class="logo">
+        <img src="assets/images/logo.png" alt="" />
+    </div>
+    <div class="language-option">
+        <a class="dropdown-toggle" id="language" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img src="assets/images/flags/English.png" *ngIf="(currentLan=='en')" alt="" title="">
+            <img src="assets/images/flags/Italian.png" *ngIf="(currentLan=='it')" alt="" title="">
+            <span class="fa fa-chevron-down" aria-hidden="true"></span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="language">
+            <a class="dropdown-item" (click)="changeLang('en')">
+                <img src="assets/images/flags/English.png"> English</a>
+            <a class="dropdown-item" (click)="changeLang('it')">
+                <img src="assets/images/flags/Italian.png"> Italian</a>
+        </div>
+    </div>
 </header>

@@ -56,6 +56,20 @@ export class CartComponent implements OnInit {
       if (data.selectedItems[i]._id == article._id) {
         data.selectedItems.splice(i, 1);
       }
+      let cp = 0;
+      let itemno = 0;                                    
+      if(data.selectedItems.length){
+        for (let i = 0; i < data.selectedItems.length; i++) {
+          itemno += data.selectedItems[i].quantity;                                        
+          cp += data.selectedItems[i].price * data.selectedItems[i].quantity;
+          data.cartTotalPrice = cp;
+          data.cartTotalItem = itemno;                                                        
+        }
+      }
+      else{
+        data.cartTotalPrice = 0;
+        data.cartTotalItem = 0;                                                        
+      }
       this.orderService.setOrderData(data);
       this.items = this.orderService.getOrderData().selectedItems;
     }

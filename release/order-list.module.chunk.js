@@ -57,6 +57,15 @@ var OrderListComponent = /** @class */ (function () {
         var _this = this;
         this.websocketService.getOrders().then(function (data) {
             _this.orders = data;
+            // for(let i = 0; i<this.orders.length; i++){
+            //     this.itemsStore = [];
+            //     for(let j = 0; j<this.orders[i].item.length; j++){
+            //         if(this.orders[i].item[j].category == this.authGuard.getCurrentUser().category){
+            //             this.itemsStore.push(this.orders[i].item[j]);
+            //         }
+            //         this.orders[i].itemsStore = this.itemsStore;
+            //     }
+            // }  
             _this.loadingOrders = false;
         })
             .catch(function (error) {
@@ -97,8 +106,18 @@ var OrderListComponent = /** @class */ (function () {
     ;
     OrderListComponent.prototype.updateOrder = function (order, status) {
         order.status = status;
-        this.websocketService.updateOrder(order._id, { status: status }).then(function (data) {
-            console.log("Order updated", data);
+        var items = [];
+        for (var i = 0; i < order.item.length; i++) {
+            if (order.item[i].category == this.authGuard.getCurrentUser().category) {
+                items.push(order.item[i].id._id);
+            }
+        }
+        var opts = {
+            status: status,
+            itemId: items
+        };
+        this.websocketService.updateOrder(order._id, opts).then(function (data) {
+            console.log("dept Order updated", data);
         }).catch(function (error) {
             console.log("error", error);
         });

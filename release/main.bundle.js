@@ -714,7 +714,31 @@ var WebsocketService = /** @class */ (function () {
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.socket.on('neworder', function (data) {
             console.log("Received Order from Websocket Server", data);
-            _this._orders.push(data);
+            // for (let j = 0; j < data.item.length; j++) {
+            //     let userType = this.authGuard.getCurrentUser().userType;
+            //     if(userType == 3){
+            //         this._orders.unshift(data);                    
+            //         break;                    
+            //     }
+            //     else if(userType == 4){
+            //         if (data.item[j].category == this.authGuard.getCurrentUser().category) {
+            //             this._orders.unshift(data);
+            //             break;
+            //         }
+            //     }
+            // }
+            var userType = _this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                _this._orders.unshift(data);
+            }
+            else if (userType == 4) {
+                for (var j = 0; j < data.item.length; j++) {
+                    if (data.item[j].category == _this.authGuard.getCurrentUser().category) {
+                        _this._orders.unshift(data);
+                        break;
+                    }
+                }
+            }
         });
         this.socket.on('orderstatus', function (data) {
             if (data.by.id !== user._id) {
@@ -726,7 +750,6 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('tablestatus', function (data) {
-            console.log('data', data);
             for (var i = 0; i < _this._rooms.length; i++) {
                 if (data.room == _this._rooms[i]._id) {
                     for (var j = 0; j < _this._rooms[i].tables.length; j++) {
@@ -738,19 +761,7 @@ var WebsocketService = /** @class */ (function () {
                 }
             }
         });
-        // let url = '/api/department/orders/'+this.authGuard.getCurrentUser()._id;
-        // this.http.get(url).toPromise()
-        //     .then(data => {
-        //         let res = data.json();
-        //         this._orders = res.data;
-        //     })
-        //     .catch(error => {
-        //         this._orders = [];
-        //     });
     };
-    // public getOrders() {
-    //     return this._orders;
-    // }
     WebsocketService.prototype.getOrders = function () {
         var _this = this;
         var url = '/api/department/orders/' + this.authGuard.getCurrentUser().category;
@@ -792,11 +803,19 @@ var WebsocketService = /** @class */ (function () {
             _this._rooms = [];
             return error;
         });
-        // console.log('this._rooms 1',this._rooms);        
-        // return this._rooms;
     };
     WebsocketService.prototype.updateOrder = function (id, opts) {
         var url = '/api/department/orders/' + id;
+        return this.http.put(url, opts).toPromise()
+            .then(function (data) {
+            return data.json();
+        })
+            .catch(function (error) {
+            return error;
+        });
+    };
+    WebsocketService.prototype.updateWaiterOrder = function (id, opts) {
+        var url = '/api/waiter/orders/' + id;
         return this.http.put(url, opts).toPromise()
             .then(function (data) {
             return data.json();
@@ -948,7 +967,7 @@ var AuthGuard = /** @class */ (function () {
 /***/ "../../../../../src/app/shared/header-login/header-login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header>\r\n  <div class=\"menu-btn\" (click)=\"sidebar()\">\r\n    <i class=\"fas fa-bars\"></i>\r\n  </div>\r\n  <div class=\"logo\">\r\n    <img src=\"assets/images/logo.png\" alt=\"\" />\r\n  </div>\r\n  <!-- <div class=\"cart\">\r\n    <a routerLink=\"/waiter/cart\"><i class=\"fas fa-shopping-cart\"></i></a>\r\n  </div> -->\r\n</header>\r\n"
+module.exports = "<header>\r\n    <div class=\"menu-btn\" (click)=\"sidebar()\">\r\n        <i class=\"fas fa-bars\"></i>\r\n    </div>\r\n    <div class=\"logo\">\r\n        <img src=\"assets/images/logo.png\" alt=\"\" />\r\n    </div>\r\n    <div class=\"language-option\">\r\n        <a class=\"dropdown-toggle\" id=\"language\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\r\n            <img src=\"assets/images/flags/English.png\" *ngIf=\"(currentLan=='en')\" alt=\"\" title=\"\">\r\n            <img src=\"assets/images/flags/Italian.png\" *ngIf=\"(currentLan=='it')\" alt=\"\" title=\"\">\r\n            <span class=\"fa fa-chevron-down\" aria-hidden=\"true\"></span>\r\n        </a>\r\n        <div class=\"dropdown-menu\" aria-labelledby=\"language\">\r\n            <a class=\"dropdown-item\" (click)=\"changeLang('en')\">\r\n                <img src=\"assets/images/flags/English.png\"> English</a>\r\n            <a class=\"dropdown-item\" (click)=\"changeLang('it')\">\r\n                <img src=\"assets/images/flags/Italian.png\"> Italian</a>\r\n        </div>\r\n    </div>\r\n</header>\r\n"
 
 /***/ }),
 
@@ -978,6 +997,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__service_app_service__ = __webpack_require__("../../../../../src/app/service/app.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__hirundo_department_department_profile_department_profile_service__ = __webpack_require__("../../../../../src/app/hirundo/department/department-profile/department-profile.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ngx_translate_core__ = __webpack_require__("../../../../@ngx-translate/core/index.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -990,10 +1010,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var HeaderLoginComponent = /** @class */ (function () {
-    function HeaderLoginComponent(appservice, profileService) {
+    function HeaderLoginComponent(appservice, profileService, translate) {
         this.appservice = appservice;
         this.profileService = profileService;
+        this.translate = translate;
+        this.currentLan = 'it';
     }
     HeaderLoginComponent.prototype.ngOnInit = function () {
     };
@@ -1005,16 +1028,20 @@ var HeaderLoginComponent = /** @class */ (function () {
             console.log("error", error);
         });
     };
+    HeaderLoginComponent.prototype.changeLang = function (language) {
+        this.currentLan = language;
+        this.translate.use(language);
+    };
     HeaderLoginComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
             selector: 'app-header-login',
             template: __webpack_require__("../../../../../src/app/shared/header-login/header-login.component.html"),
             styles: [__webpack_require__("../../../../../src/app/shared/header-login/header-login.component.scss")]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__service_app_service__["a" /* AppService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__service_app_service__["a" /* AppService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__hirundo_department_department_profile_department_profile_service__["a" /* DepartmentProfileService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__hirundo_department_department_profile_department_profile_service__["a" /* DepartmentProfileService */]) === "function" && _b || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__service_app_service__["a" /* AppService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__service_app_service__["a" /* AppService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__hirundo_department_department_profile_department_profile_service__["a" /* DepartmentProfileService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__hirundo_department_department_profile_department_profile_service__["a" /* DepartmentProfileService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__ngx_translate_core__["c" /* TranslateService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ngx_translate_core__["c" /* TranslateService */]) === "function" && _c || Object])
     ], HeaderLoginComponent);
     return HeaderLoginComponent;
-    var _a, _b;
+    var _a, _b, _c;
 }());
 
 //# sourceMappingURL=header-login.component.js.map

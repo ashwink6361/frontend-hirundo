@@ -22,14 +22,17 @@
                 </div>
                 <div class="item-name mw-160">
                     <p class="name m-0">{{article.name}}</p>
-                    <p class="name m-0">&euro; {{article.price}}</p>
+                    <p class="name m-0">&euro;{{article.price}}</p>
                 </div>
                 <button type="submit" class="btn btn-floating waves-light" (click)="deleteItemFromCart(article)">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
+            <div class="total-amount">
+                Sub Total: &euro;{{orderService.getOrderData().cartTotalPrice}}
+            </div>
         </div>
-        <button type="submit" class="order-btn waves-light" (click)="createOrder()">
+        <button type="submit" class="order-btn waves-light" [disabled]="!orderService.getOrderData().selectedItems.length" (click)="createOrder()">
             Create Order
         </button>
     </div>

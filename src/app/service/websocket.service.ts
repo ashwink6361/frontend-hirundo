@@ -24,7 +24,31 @@ export class WebsocketService {
         let user = JSON.parse(localStorage.getItem('currentUser'));
         this.socket.on('neworder', (data) => {
             console.log("Received Order from Websocket Server", data);
-            this._orders.push(data);
+            // for (let j = 0; j < data.item.length; j++) {
+            //     let userType = this.authGuard.getCurrentUser().userType;
+            //     if(userType == 3){
+            //         this._orders.unshift(data);                    
+            //         break;                    
+            //     }
+            //     else if(userType == 4){
+            //         if (data.item[j].category == this.authGuard.getCurrentUser().category) {
+            //             this._orders.unshift(data);
+            //             break;
+            //         }
+            //     }
+            // }
+            let userType = this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                this._orders.unshift(data);
+            }
+            else if (userType == 4) {
+                for (let j = 0; j < data.item.length; j++) {
+                    if (data.item[j].category == this.authGuard.getCurrentUser().category) {
+                        this._orders.unshift(data);
+                        break;
+                    }
+                }
+            }
         });
         this.socket.on('orderstatus', (data) => {
             if(data.by.id !== user._id) {
@@ -36,7 +60,6 @@ export class WebsocketService {
             }
         });
         this.socket.on('tablestatus', (data) => {
-            console.log('data',data);
             for (var i = 0; i < this._rooms.length; i++) {
                 if (data.room == this._rooms[i]._id) {
                     for (var j = 0; j < this._rooms[i].tables.length; j++) {
@@ -48,20 +71,8 @@ export class WebsocketService {
                 }
             }
         });
-        // let url = '/api/department/orders/'+this.authGuard.getCurrentUser()._id;
-        // this.http.get(url).toPromise()
-        //     .then(data => {
-        //         let res = data.json();
-        //         this._orders = res.data;
-        //     })
-        //     .catch(error => {
-        //         this._orders = [];
-        //     });
     }
 
-    // public getOrders() {
-    //     return this._orders;
-    // }
     public getOrders(): Promise<any> {
         let url = '/api/department/orders/'+this.authGuard.getCurrentUser().category;
         return this.http.get(url).toPromise()
@@ -100,11 +111,19 @@ export class WebsocketService {
                 this._rooms = [];
                 return error;
             });
-        // console.log('this._rooms 1',this._rooms);        
-        // return this._rooms;
     }
     public updateOrder(id, opts): Promise<any> {
         let url = '/api/department/orders/'+id;
+        return this.http.put(url,opts).toPromise()
+          .then(data => {
+            return data.json();
+          })
+          .catch(error => {
+            return error;
+          });
+    }
+    public updateWaiterOrder(id, opts): Promise<any> {
+        let url = '/api/waiter/orders/'+id;
         return this.http.put(url,opts).toPromise()
           .then(data => {
             return data.json();

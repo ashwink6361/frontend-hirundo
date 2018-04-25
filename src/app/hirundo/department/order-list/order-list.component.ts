@@ -21,7 +21,16 @@ export class OrderListComponent implements OnInit {
 
     ngOnInit() {
         this.websocketService.getOrders().then(data => {
-            this.orders = data;  
+            this.orders = data;
+            // for(let i = 0; i<this.orders.length; i++){
+            //     this.itemsStore = [];
+            //     for(let j = 0; j<this.orders[i].item.length; j++){
+            //         if(this.orders[i].item[j].category == this.authGuard.getCurrentUser().category){
+            //             this.itemsStore.push(this.orders[i].item[j]);
+            //         }
+            //         this.orders[i].itemsStore = this.itemsStore;
+            //     }
+            // }  
             this.loadingOrders = false;            
           })
             .catch(error => {
@@ -61,8 +70,18 @@ export class OrderListComponent implements OnInit {
 
     public updateOrder(order, status) {
         order.status = status;
-        this.websocketService.updateOrder(order._id, { status: status }).then(data => {
-            console.log("Order updated", data);
+        let items = [];
+        for (let i = 0; i < order.item.length; i++) {
+            if(order.item[i].category == this.authGuard.getCurrentUser().category){
+                items.push(order.item[i].id._id)
+            }
+        }
+        let opts = {
+            status: status,
+            itemId: items
+        };
+        this.websocketService.updateOrder(order._id, opts).then(data => {
+            console.log("dept Order updated", data);
         }).catch(error => {
             console.log("error", error);
         });
