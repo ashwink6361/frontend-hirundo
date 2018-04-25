@@ -499,8 +499,20 @@ header {
         margin-right: 20px;
     }
     .logo {
+        width: 100%;
         img {
-            max-width: 55%;
+            max-width: 146px;
+        }
+    }
+    .language-option{
+        width: 86px;
+        span{
+            color: #fff;
+        }
+        .dropdown-toggle{
+            &:after{
+                display: none;
+            }
         }
     }
 }
@@ -638,7 +650,6 @@ header {
         border: none;
         color: #fff;
         border-radius: 3px;
-        width: 100px;
         height: 30px;
         text-align: left;
         font-size: 12px;
@@ -804,6 +815,11 @@ header {
     transition: 0.3s;
     padding: 0 10px;
     margin-top: 10px;
+    .total-amount{
+        position: fixed;
+        bottom: 60px;
+        right: 10px;
+    }
     .item-list {
         display: flex;
         justify-content: space-between;
