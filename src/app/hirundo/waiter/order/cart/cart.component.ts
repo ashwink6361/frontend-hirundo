@@ -56,6 +56,16 @@ export class CartComponent implements OnInit {
       if (data.selectedItems[i]._id == article._id) {
         data.selectedItems.splice(i, 1);
       }
+      let cp = 0;
+      if(data.selectedItems.length){
+        for (let i = 0; i < data.selectedItems.length; i++) {
+          cp += data.selectedItems[i].price * data.selectedItems[i].quantity;
+          data.cartTotalPrice = cp;
+        }
+      }
+      else{
+        data.cartTotalPrice = 0;
+      }
       this.orderService.setOrderData(data);
       this.items = this.orderService.getOrderData().selectedItems;
     }

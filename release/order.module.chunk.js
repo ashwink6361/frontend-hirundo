@@ -96,6 +96,16 @@ var CartComponent = /** @class */ (function () {
             if (data.selectedItems[i]._id == article._id) {
                 data.selectedItems.splice(i, 1);
             }
+            var cp = 0;
+            if (data.selectedItems.length) {
+                for (var i_1 = 0; i_1 < data.selectedItems.length; i_1++) {
+                    cp += data.selectedItems[i_1].price * data.selectedItems[i_1].quantity;
+                    data.cartTotalPrice = cp;
+                }
+            }
+            else {
+                data.cartTotalPrice = 0;
+            }
             this.orderService.setOrderData(data);
             this.items = this.orderService.getOrderData().selectedItems;
         }
