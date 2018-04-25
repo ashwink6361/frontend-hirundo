@@ -714,13 +714,25 @@ var WebsocketService = /** @class */ (function () {
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.socket.on('neworder', function (data) {
             console.log("Received Order from Websocket Server", data);
-            for (var j = 0; j < data.item.length; j++) {
-                var userType = _this.authGuard.getCurrentUser().userType;
-                if (userType == 3) {
-                    _this._orders.unshift(data);
-                    break;
-                }
-                else if (userType == 4) {
+            // for (let j = 0; j < data.item.length; j++) {
+            //     let userType = this.authGuard.getCurrentUser().userType;
+            //     if(userType == 3){
+            //         this._orders.unshift(data);                    
+            //         break;                    
+            //     }
+            //     else if(userType == 4){
+            //         if (data.item[j].category == this.authGuard.getCurrentUser().category) {
+            //             this._orders.unshift(data);
+            //             break;
+            //         }
+            //     }
+            // }
+            var userType = _this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                _this._orders.unshift(data);
+            }
+            else if (userType == 4) {
+                for (var j = 0; j < data.item.length; j++) {
                     if (data.item[j].category == _this.authGuard.getCurrentUser().category) {
                         _this._orders.unshift(data);
                         break;
@@ -794,6 +806,16 @@ var WebsocketService = /** @class */ (function () {
     };
     WebsocketService.prototype.updateOrder = function (id, opts) {
         var url = '/api/department/orders/' + id;
+        return this.http.put(url, opts).toPromise()
+            .then(function (data) {
+            return data.json();
+        })
+            .catch(function (error) {
+            return error;
+        });
+    };
+    WebsocketService.prototype.updateWaiterOrder = function (id, opts) {
+        var url = '/api/waiter/orders/' + id;
         return this.http.put(url, opts).toPromise()
             .then(function (data) {
             return data.json();

@@ -106,8 +106,18 @@ var OrderListComponent = /** @class */ (function () {
     ;
     OrderListComponent.prototype.updateOrder = function (order, status) {
         order.status = status;
-        this.websocketService.updateOrder(order._id, { status: status }).then(function (data) {
-            console.log("Order updated", data);
+        var items = [];
+        for (var i = 0; i < order.item.length; i++) {
+            if (order.item[i].category == this.authGuard.getCurrentUser().category) {
+                items.push(order.item[i].id._id);
+            }
+        }
+        var opts = {
+            status: status,
+            itemId: items
+        };
+        this.websocketService.updateOrder(order._id, opts).then(function (data) {
+            console.log("dept Order updated", data);
         }).catch(function (error) {
             console.log("error", error);
         });

@@ -70,8 +70,18 @@ export class OrderListComponent implements OnInit {
 
     public updateOrder(order, status) {
         order.status = status;
-        this.websocketService.updateOrder(order._id, { status: status }).then(data => {
-            console.log("Order updated", data);
+        let items = [];
+        for (let i = 0; i < order.item.length; i++) {
+            if(order.item[i].category == this.authGuard.getCurrentUser().category){
+                items.push(order.item[i].id._id)
+            }
+        }
+        let opts = {
+            status: status,
+            itemId: items
+        };
+        this.websocketService.updateOrder(order._id, opts).then(data => {
+            console.log("dept Order updated", data);
         }).catch(error => {
             console.log("error", error);
         });
