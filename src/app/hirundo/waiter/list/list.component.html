@@ -32,9 +32,9 @@
                     </div>
                 </div>
                 <div class="btn-container d-flex justify-content-between">
-                    <button class="btn btn-primary waves-light" mdbRippleRadius>Cancel</button>
+                    <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 3)">Cancel</button>
                     <!-- <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 4)">In Progress</button> -->
-                    <button class="btn btn-primary waves-light" mdbRippleRadius>Delivered</button>
+                    <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 1)">Delivered</button>
                 </div>
             </div>
         </div>

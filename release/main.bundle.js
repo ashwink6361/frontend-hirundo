@@ -714,13 +714,25 @@ var WebsocketService = /** @class */ (function () {
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.socket.on('neworder', function (data) {
             console.log("Received Order from Websocket Server", data);
-            for (var j = 0; j < data.item.length; j++) {
-                var userType = _this.authGuard.getCurrentUser().userType;
-                if (userType == 3) {
-                    _this._orders.unshift(data);
-                    break;
-                }
-                else if (userType == 4) {
+            // for (let j = 0; j < data.item.length; j++) {
+            //     let userType = this.authGuard.getCurrentUser().userType;
+            //     if(userType == 3){
+            //         this._orders.unshift(data);                    
+            //         break;                    
+            //     }
+            //     else if(userType == 4){
+            //         if (data.item[j].category == this.authGuard.getCurrentUser().category) {
+            //             this._orders.unshift(data);
+            //             break;
+            //         }
+            //     }
+            // }
+            var userType = _this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                _this._orders.unshift(data);
+            }
+            else if (userType == 4) {
+                for (var j = 0; j < data.item.length; j++) {
                     if (data.item[j].category == _this.authGuard.getCurrentUser().category) {
                         _this._orders.unshift(data);
                         break;
@@ -794,6 +806,16 @@ var WebsocketService = /** @class */ (function () {
     };
     WebsocketService.prototype.updateOrder = function (id, opts) {
         var url = '/api/department/orders/' + id;
+        return this.http.put(url, opts).toPromise()
+            .then(function (data) {
+            return data.json();
+        })
+            .catch(function (error) {
+            return error;
+        });
+    };
+    WebsocketService.prototype.updateWaiterOrder = function (id, opts) {
+        var url = '/api/waiter/orders/' + id;
         return this.http.put(url, opts).toPromise()
             .then(function (data) {
             return data.json();
@@ -945,7 +967,7 @@ var AuthGuard = /** @class */ (function () {
 /***/ "../../../../../src/app/shared/header-login/header-login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header>\r\n    <div class=\"menu-btn\" (click)=\"sidebar()\">\r\n        <i class=\"fas fa-bars\"></i>\r\n    </div>\r\n    <div class=\"logo\">\r\n        <img src=\"assets/images/logo.png\" alt=\"\" />\r\n    </div>\r\n    <div class=\"text-right language-option\">\r\n        <a class=\"dropdown-toggle\" id=\"language\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\r\n            <img src=\"assets/images/flags/English.png\" *ngIf=\"(currentLan=='en')\" alt=\"\" title=\"\">\r\n            <img src=\"assets/images/flags/Italian.png\" *ngIf=\"(currentLan=='it')\" alt=\"\" title=\"\">\r\n            <span class=\"fa fa-chevron-down\" aria-hidden=\"true\"></span>\r\n        </a>\r\n        <div class=\"dropdown-menu\" aria-labelledby=\"language\">\r\n            <a class=\"dropdown-item\" (click)=\"changeLang('en')\">\r\n                <img src=\"assets/images/flags/English.png\"> English</a>\r\n            <a class=\"dropdown-item\" (click)=\"changeLang('it')\">\r\n                <img src=\"assets/images/flags/Italian.png\"> Italian</a>\r\n        </div>\r\n    </div>\r\n</header>\r\n"
+module.exports = "<header>\r\n    <div class=\"menu-btn\" (click)=\"sidebar()\">\r\n        <i class=\"fas fa-bars\"></i>\r\n    </div>\r\n    <div class=\"logo\">\r\n        <img src=\"assets/images/logo.png\" alt=\"\" />\r\n    </div>\r\n    <div class=\"language-option\">\r\n        <a class=\"dropdown-toggle\" id=\"language\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\r\n            <img src=\"assets/images/flags/English.png\" *ngIf=\"(currentLan=='en')\" alt=\"\" title=\"\">\r\n            <img src=\"assets/images/flags/Italian.png\" *ngIf=\"(currentLan=='it')\" alt=\"\" title=\"\">\r\n            <span class=\"fa fa-chevron-down\" aria-hidden=\"true\"></span>\r\n        </a>\r\n        <div class=\"dropdown-menu\" aria-labelledby=\"language\">\r\n            <a class=\"dropdown-item\" (click)=\"changeLang('en')\">\r\n                <img src=\"assets/images/flags/English.png\"> English</a>\r\n            <a class=\"dropdown-item\" (click)=\"changeLang('it')\">\r\n                <img src=\"assets/images/flags/Italian.png\"> Italian</a>\r\n        </div>\r\n    </div>\r\n</header>\r\n"
 
 /***/ }),
 

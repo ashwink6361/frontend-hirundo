@@ -3,7 +3,7 @@ webpackJsonp(["list.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/list/list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!loadingOrders\" class=\"order-list-container\">\r\n    <div class=\"card order-list\" *ngFor=\"let order of orders\">        \r\n            <div class=\"card-body\" [class.opacity]=\"order.status == 3\">\r\n                <h4 class=\"card-title\">\r\n                    <div>\r\n                        <i class=\"far fa-clock\"></i> {{order.created_at | date:'hh:mm a'}}</div>\r\n                    <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div>\r\n                </h4>\r\n                <div class=\"card-text\">\r\n                    <p>\r\n                        <i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\r\n                    <p>\r\n                        <img src=\"assets/images/table.png\" alt=\"\">\r\n                        <span>{{order.tableName}}</span>\r\n                    </p>\r\n                    <p>\r\n                        <i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\r\n                </div>\r\n                <div class=\"order-items-container\">\r\n                    <div class=\"order-item\" *ngFor=\"let item of order.item\">\r\n                        <div class=\"order-item-detail\">\r\n                            {{item.id.name}}\r\n                            <ul>\r\n                                <li *ngFor=\"let varient of item.id.variant\">\r\n                                    {{varient.name}}\r\n                                </li>\r\n                            </ul>\r\n                        </div>\r\n                        <div class=\"order-quantity\">\r\n                            x {{item.quantity}}\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n                <div class=\"btn-container d-flex justify-content-between\">\r\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius>Cancel</button>\r\n                    <!-- <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 4)\">In Progress</button> -->\r\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius>Delivered</button>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n"
+module.exports = "<div *ngIf=\"!loadingOrders\" class=\"order-list-container\">\r\n    <div class=\"card order-list\" *ngFor=\"let order of orders\">        \r\n            <div class=\"card-body\" [class.opacity]=\"order.status == 3\">\r\n                <h4 class=\"card-title\">\r\n                    <div>\r\n                        <i class=\"far fa-clock\"></i> {{order.created_at | date:'hh:mm a'}}</div>\r\n                    <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div>\r\n                </h4>\r\n                <div class=\"card-text\">\r\n                    <p>\r\n                        <i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\r\n                    <p>\r\n                        <img src=\"assets/images/table.png\" alt=\"\">\r\n                        <span>{{order.tableName}}</span>\r\n                    </p>\r\n                    <p>\r\n                        <i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\r\n                </div>\r\n                <div class=\"order-items-container\">\r\n                    <div class=\"order-item\" *ngFor=\"let item of order.item\">\r\n                        <div class=\"order-item-detail\">\r\n                            {{item.id.name}}\r\n                            <ul>\r\n                                <li *ngFor=\"let varient of item.id.variant\">\r\n                                    {{varient.name}}\r\n                                </li>\r\n                            </ul>\r\n                        </div>\r\n                        <div class=\"order-quantity\">\r\n                            x {{item.quantity}}\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n                <div class=\"btn-container d-flex justify-content-between\">\r\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 3)\">Cancel</button>\r\n                    <!-- <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 4)\">In Progress</button> -->\r\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 1)\">Delivered</button>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n"
 
 /***/ }),
 
@@ -90,6 +90,23 @@ var ListComponent = /** @class */ (function () {
                 break;
         }
         return str;
+    };
+    ;
+    ListComponent.prototype.updateOrder = function (order, status) {
+        order.status = status;
+        var items = [];
+        for (var i = 0; i < order.item.length; i++) {
+            items.push(order.item[i].id._id);
+        }
+        var opts = {
+            status: status,
+            itemId: items
+        };
+        this.websocketService.updateWaiterOrder(order._id, opts).then(function (data) {
+            console.log("waiter Order updated", data);
+        }).catch(function (error) {
+            console.log("error", error);
+        });
     };
     ;
     ListComponent = __decorate([
