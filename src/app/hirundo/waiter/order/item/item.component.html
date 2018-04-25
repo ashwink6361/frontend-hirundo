@@ -30,7 +30,7 @@
                 <i class="fas fa-search prefix"></i>
                 <input class="form-control" [(ngModel)]="searchText" type="text" placeholder="Search Item" />
                 <button type="button" class="btn-cart" (click)="viewCart()">
-                    <i class="fas fa-shopping-cart"></i> {{orderService.getOrderData().selectedItems.length}} | &euro;{{orderService.getOrderData().cartTotalPrice}}
+                    <i class="fas fa-shopping-cart"></i> {{orderService.getOrderData().cartTotalItem}} | &euro;{{orderService.getOrderData().cartTotalPrice}}
                 </button>
             </div>
         </div>
