@@ -24,6 +24,13 @@
                 <div class="item-name mw-160">
                     <p class="name m-0">{{article.name}}</p>
                     <p class="name m-0">&euro;{{article.price}}</p>
+                    <!-- <span *ngIf="article.variant && article.variant.length">
+                        <span *ngFor="let variant of article.variant">
+                            <span *ngIf="variant.status == 0">- {{variant.name}} </span>
+                            <span *ngIf="variant.status == 1">+ {{variant.name}} {{variant.price}}</span>
+                        </span>
+                    </span>
+                    <span *ngIf="article.notes">{{article.notes}}</span>                                             -->
                 </div>
                 <button type="submit" class="btn btn-floating waves-light" (click)="deleteItemFromCart(article)">
                     <i class="fas fa-times"></i>
