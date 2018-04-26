@@ -755,6 +755,7 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('orderstatus', function (data) {
+            console.log(data, 'order status');
             if (data.by.id !== user._id) {
                 for (var i = 0; i < _this._orders.length; i++) {
                     if (data.id === _this._orders[i]._id) {
@@ -1422,6 +1423,11 @@ var StepsComponent = /** @class */ (function () {
         else {
             this.activetab[0] = true;
         }
+        var stepdata = {
+            tab: 0,
+            step: this.stepArray[0]
+        };
+        this.globalService.setTabData(stepdata);
     };
     StepsComponent.prototype.addStep = function () {
         var count = this.stepArray.length + 1;

@@ -18,6 +18,7 @@ export class CartComponent implements OnInit {
       this.items = this.orderService.getOrderData().selectedItems;
       console.log('this.items',this.items);
     }
+    console.log(this.globalService.getTabData(), 'sdafs')
   }
 
   createOrder() {

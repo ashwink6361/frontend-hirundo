@@ -5,24 +5,24 @@ import { GlobalService } from '../../global.service'
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 @Component({
-  selector: 'app-list',
-  templateUrl: './list.component.html',
-  styleUrls: ['./list.component.scss']
+    selector: 'app-list',
+    templateUrl: './list.component.html',
+    styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-  public orders: Array<any> = [];
-  public loadingOrders: boolean = true;
-  constructor( public websocketService: WebsocketService, private globalService: GlobalService, public router: Router) { }
+    public orders: Array<any> = [];
+    public loadingOrders: boolean = true;
+    constructor(public websocketService: WebsocketService, private globalService: GlobalService, public router: Router) { }
 
-  ngOnInit() {
-    this.websocketService.getWaiterOrders().then(data => {
-      this.orders = data;
-      this.loadingOrders = false;
-    })
-      .catch(error => {
-        console.log('error', error);
-      });
-  }
+    ngOnInit() {
+        this.websocketService.getWaiterOrders().then(data => {
+            this.orders = data;
+            this.loadingOrders = false;
+        })
+            .catch(error => {
+                console.log('error', error);
+            });
+    }
 
     public getOrderStatus(status) {
         var str = 'In progress';
@@ -54,7 +54,22 @@ export class ListComponent implements OnInit {
             status: status,
             itemId: items
         };
-        this.websocketService.updateWaiterOrder(order._id, opts).then(data => {
+        this.websocketService.updateOrder(order._id, opts).then(data => {
+            console.log("dept Order updated", data);
+        }).catch(error => {
+            console.log("error", error);
+        });
+    };
+
+    public updateItem(item, order, status) {
+        item.status = status;
+        let items = [];
+        items.push(item.id._id)
+        let opts = {
+            status: status,
+            itemId: items
+        };
+        this.websocketService.updateWaiterOrder(order, opts).then(data => {
             console.log("waiter Order updated", data);
         }).catch(error => {
             console.log("error", error);

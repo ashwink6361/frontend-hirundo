@@ -62,6 +62,7 @@ var CartComponent = /** @class */ (function () {
             this.items = this.orderService.getOrderData().selectedItems;
             console.log('this.items', this.items);
         }
+        console.log(this.globalService.getTabData(), 'sdafs');
     };
     CartComponent.prototype.createOrder = function () {
         var _this = this;

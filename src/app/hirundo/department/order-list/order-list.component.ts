@@ -87,4 +87,19 @@ export class OrderListComponent implements OnInit {
         });
     };
 
+    public updateItem(item, order, status) {
+        item.status = status;
+        let items = [];
+        items.push(item.id._id)
+        let opts = {
+            status: status,
+            itemId: items
+        };
+        this.websocketService.updateOrder(order, opts).then(data => {
+            console.log("dept item updated", data);
+        }).catch(error => {
+            console.log("error", error);
+        });
+    };
+
 }

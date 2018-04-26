@@ -19,24 +19,38 @@
                         <i class="far fa-user"></i> {{order.noOfPeople}}</p>
                 </div>
                 <div class="order-items-container">
-                    <div class="order-item" *ngFor="let item of order.item">
-                        <div class="order-item-detail" *ngIf="item.category == authGuard.getCurrentUser().category">
-                            {{item.id.name}}
-                            <ul>
-                                <li *ngFor="let varient of item.id.variant">
-                                    {{varient.name}}
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="order-quantity" *ngIf="item.category == authGuard.getCurrentUser().category">
-                            x {{item.quantity}}
-                        </div>
-                        <div class="btn-container">
-                            <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 3)">Cancel</button>
-                            <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 4)">In Progress</button>
-                            <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 2)">Done</button>
+                    <div *ngFor="let item of order.item">
+                        <div class="order-item" *ngIf="item.category == authGuard.getCurrentUser().category">
+                            <label class="label item-status">{{getOrderStatus(item.status)}}</label>
+                            <div class="order-item-img">
+                                {{item.quantity}} X
+                            </div>
+                            <div class="order-item-detail">
+                                {{item.id.name}}
+                                <ul>
+                                    <li *ngFor="let varient of item.id.variant">
+                                        {{varient.name}}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="order-quantity d-flex w-105">
+                                <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 2)">
+                                    <img src="assets/images/order-deliver.png" alt="" />
+                                </button>
+                                <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 4)">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                                <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 3)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div class="btn-container">
+                    <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 3)">Cancel</button>
+                    <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 4)">In Progress</button>
+                    <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 2)">Done</button>
                 </div>
             </div>
         </div>

@@ -22,6 +22,11 @@ export class StepsComponent implements OnInit {
     else {
       this.activetab[0] = true;
     }
+    let stepdata = {
+      tab: 0,
+      step: this.stepArray[0]
+    }
+    this.globalService.setTabData(stepdata);
   }
 
   addStep() {
