@@ -11,12 +11,14 @@ import 'rxjs/Rx';
 })
 export class CartComponent implements OnInit {
   private items = [];
-  constructor(private orderService: OrderService, private router: Router) { }
+  constructor(private orderService: OrderService, private router: Router, private globalService: GlobalService) { }
 
   ngOnInit() {
     if (this.orderService.getOrderData().selectedItems) {
       this.items = this.orderService.getOrderData().selectedItems;
+      console.log('this.items',this.items);
     }
+    console.log(this.globalService.getTabData(), 'sdafs')
   }
 
   createOrder() {
@@ -37,7 +39,8 @@ export class CartComponent implements OnInit {
       room: data.roomId,
       table: data.tableId,
       noOfPeople: data.numberOfPerson,
-      item: itemarray
+      item: itemarray,
+      step: this.globalService.getTabData().step
     }
     console.log('createorder', createorder);
     this.orderService.createOrder(createorder)

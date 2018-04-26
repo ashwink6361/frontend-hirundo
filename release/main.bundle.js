@@ -428,6 +428,20 @@ var GlobalService = /** @class */ (function () {
             // window.location.href = '/';
         }
     };
+    GlobalService.prototype.setStepData = function (data) {
+        localStorage.setItem('stepData', JSON.stringify(data));
+    };
+    GlobalService.prototype.getStepData = function () {
+        var data = localStorage.getItem('stepData');
+        return JSON.parse(data);
+    };
+    GlobalService.prototype.setTabData = function (data) {
+        localStorage.setItem('tabData', JSON.stringify(data));
+    };
+    GlobalService.prototype.getTabData = function () {
+        var data = localStorage.getItem('tabData');
+        return JSON.parse(data);
+    };
     GlobalService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Injectable */])(),
         __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object])
@@ -741,6 +755,7 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('orderstatus', function (data) {
+            console.log(data, 'order status');
             if (data.by.id !== user._id) {
                 for (var i = 0; i < _this._orders.length; i++) {
                     if (data.id === _this._orders[i]._id) {
@@ -1350,7 +1365,7 @@ var SidebarComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/shared/steps/steps.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"tabs-container steps-container\">\r\n    <ul>\r\n        <li class=\"active\">Uscita 1</li>\r\n        <li>Uscita 2</li>\r\n        <li class=\"add-step\" (click)=\"addStep()\"><i class=\"fa fa-plus\"></i></li>\r\n    </ul>\r\n</div>"
+module.exports = "<div class=\"tabs-container steps-container\">\r\n    <ul>\r\n        <!-- <li class=\"active\">Uscita 1</li> -->\r\n        <li *ngFor=\"let step of stepArray; let i = index;\" [class.active]=\"activetab[i]\" (click)=\"selectedTab(stepArray[i],i)\">{{step}}</li>\r\n        <li class=\"add-step\" (click)=\"addStep()\"><i class=\"fa fa-plus\"></i></li>\r\n    </ul>\r\n</div>"
 
 /***/ }),
 
@@ -1378,6 +1393,7 @@ module.exports = module.exports.toString();
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return StepsComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__hirundo_global_service__ = __webpack_require__("../../../../../src/app/hirundo/global.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1388,13 +1404,48 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var StepsComponent = /** @class */ (function () {
-    function StepsComponent() {
-        this.stepArray = [];
+    function StepsComponent(globalService) {
+        this.globalService = globalService;
+        this.stepArray = ['Uscita 1', 'Uscita 2'];
+        this.activetab = [];
     }
     StepsComponent.prototype.ngOnInit = function () {
+        var step = this.globalService.getStepData();
+        var data = this.globalService.getTabData();
+        if (step && step.length) {
+            this.stepArray = step;
+        }
+        if (data && data.tab) {
+            this.activetab[data.tab] = true;
+        }
+        else {
+            this.activetab[0] = true;
+        }
+        var stepdata = {
+            tab: 0,
+            step: this.stepArray[0]
+        };
+        this.globalService.setTabData(stepdata);
     };
     StepsComponent.prototype.addStep = function () {
+        var count = this.stepArray.length + 1;
+        this.stepArray.push('Uscita ' + count);
+        this.globalService.setStepData(this.stepArray);
+    };
+    StepsComponent.prototype.selectedTab = function (step, tab) {
+        this.activetab[tab] = true;
+        for (var i = 0; i < this.activetab.length; i++) {
+            if (i != tab) {
+                this.activetab[i] = false;
+            }
+        }
+        var data = {
+            tab: tab,
+            step: step
+        };
+        this.globalService.setTabData(data);
     };
     StepsComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
@@ -1402,9 +1453,10 @@ var StepsComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/shared/steps/steps.component.html"),
             styles: [__webpack_require__("../../../../../src/app/shared/steps/steps.component.scss")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__hirundo_global_service__["a" /* GlobalService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__hirundo_global_service__["a" /* GlobalService */]) === "function" && _a || Object])
     ], StepsComponent);
     return StepsComponent;
+    var _a;
 }());
 
 //# sourceMappingURL=steps.component.js.map
