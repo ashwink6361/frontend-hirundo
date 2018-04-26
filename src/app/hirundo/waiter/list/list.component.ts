@@ -44,17 +44,17 @@ export class ListComponent implements OnInit {
         return str;
     };
 
-    public updateOrder(order, status) {
-        order.status = status;
+    public updateOrder(item, order, status) {
+        item.status = status;
         let items = [];
-        for (let i = 0; i < order.item.length; i++) {
-            items.push(order.item[i].id._id)
-        }
+        // for (let i = 0; i < order.item.length; i++) {
+            items.push(item.id._id)
+        // }
         let opts = {
             status: status,
             itemId: items
         };
-        this.websocketService.updateWaiterOrder(order._id, opts).then(data => {
+        this.websocketService.updateWaiterOrder(order, opts).then(data => {
             console.log("waiter Order updated", data);
         }).catch(error => {
             console.log("error", error);

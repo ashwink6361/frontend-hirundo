@@ -12,7 +12,7 @@ body {
 }
 
 .update-order-btn{
-    width: 30px;
+    min-width: 30px;
     padding: 0;
     border-radius: 50%;
     height: 30px;
@@ -713,6 +713,7 @@ header {
         .order-item {
             display: flex;
             padding: 5px 10px;
+            align-items: center;
             .order-item-detail {
                 width: 100%;
                 margin-right: 10px;
@@ -726,7 +727,7 @@ header {
                 }
             }
             .order-quantity{
-                width: 50px;
+                width: 75px;
                 text-align: right;
             }
         }

@@ -19,7 +19,8 @@
                 <div class="order-items-container">
                     <div class="order-item" *ngFor="let item of order.item">
                         <div class="order-item-detail">
-                            {{item.quantity}} <i class="fas fa-times"></i> {{item.id.name}}
+                            <label class="label">{{getOrderStatus(item.status)}}</label>
+                            {{item.quantity}} <i class="fas fa-times"></i> {{item.id.name}} 
                             <ul>
                                 <li *ngFor="let varient of item.id.variant">
                                      {{varient.name}}
@@ -27,10 +28,10 @@
                             </ul>
                         </div>
                         <div class="order-quantity d-flex">
-                            <button type="button" class="btn btn-floting update-order-btn">
+                            <button type="button" class="btn btn-floting update-order-btn" (click)="updateOrder(item, order._id, 1)">
                                 <img src="assets/images/order-deliver.png" alt="" />
                             </button>
-                            <button type="button" class="btn btn-floting update-order-btn">
+                            <button type="button" class="btn btn-floting update-order-btn" (click)="updateOrder(item, order._id, 3)">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
