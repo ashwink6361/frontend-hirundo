@@ -1,47 +1,49 @@
 <div *ngIf="!loadingOrders" class="order-list-container">
-    <div class="card order-list" *ngFor="let order of orders">        
-            <div class="card-body" [class.opacity]="order.status == 3">
-                <h4 class="card-title">
-                    <div>
-                        <i class="far fa-clock"></i> {{order.created_at | date:'hh:mm a'}}</div>
-                    <div class="status" [class.bg-red]="order.status == 0" [class.bg-green]="order.status == 2" [class.bg-yellow]="order.status == 4">{{getOrderStatus(order.status)}}</div>
-                </h4>
-                <div class="card-text">
-                    <p>
-                        <i class="fas fa-cube"></i> {{order.room.name}}</p>
-                    <p>
-                        <img src="assets/images/table.png" alt="">
-                        <span>{{order.tableName}}</span>
-                    </p>
-                    <p>
-                        <i class="far fa-user"></i> {{order.noOfPeople}}</p>
-                </div>
-                <div class="order-items-container">
-                    <div class="order-item" *ngFor="let item of order.item">
-                        <div class="order-item-detail">
-                            <label class="label">{{getOrderStatus(item.status)}}</label>
-                            {{item.quantity}} <i class="fas fa-times"></i> {{item.id.name}} 
-                            <ul>
-                                <li *ngFor="let varient of item.id.variant">
-                                     {{varient.name}}
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="order-quantity d-flex">
-                            <button type="button" class="btn btn-floting update-order-btn" (click)="updateOrder(item, order._id, 1)">
-                                <img src="assets/images/order-deliver.png" alt="" />
-                            </button>
-                            <button type="button" class="btn btn-floting update-order-btn" (click)="updateOrder(item, order._id, 3)">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
+    <div class="card order-list" *ngFor="let order of orders">
+        <div class="card-body" [class.opacity]="order.status == 3">
+            <h4 class="card-title">
+                <div>
+                    <i class="far fa-clock"></i> {{order.created_at | date:'hh:mm a'}}</div>
+                <div class="status" [class.bg-red]="order.status == 0" [class.bg-green]="order.status == 2" [class.bg-yellow]="order.status == 4">{{getOrderStatus(order.status)}}</div>
+            </h4>
+            <div class="card-text">
+                <p>
+                    <i class="fas fa-cube"></i> {{order.room.name}}</p>
+                <p>
+                    <img src="assets/images/table.png" alt="">
+                    <span>{{order.tableName}}</span>
+                </p>
+                <p>
+                    <i class="far fa-user"></i> {{order.noOfPeople}}</p>
+            </div>
+            <div class="order-items-container">
+                <div class="order-item" *ngFor="let item of order.item">
+                    <label class="label item-status">{{getOrderStatus(item.status)}}</label>
+                    <div class="order-item-img">
+                        {{item.quantity}} X
+                    </div>
+                    <div class="order-item-detail">
+                        {{item.id.name}}
+                        <ul>
+                            <li *ngFor="let varient of item.id.variant">
+                                {{varient.name}}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="order-quantity d-flex">
+                        <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 1)">
+                            <img src="assets/images/order-deliver.png" alt="" />
+                        </button>
+                        <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 3)">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 </div>
-                <div class="btn-container d-flex justify-content-between">
-                    <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 3)">Cancel</button>
-                    <!-- <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 4)">In Progress</button> -->
-                    <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 1)">Delivered</button>
-                </div>
+            </div>
+            <div class="btn-container d-flex justify-content-between">
+                <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 3)">Cancel</button>
+                <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 1)">Delivered</button>
             </div>
         </div>
     </div>
+</div>

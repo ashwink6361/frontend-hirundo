@@ -51,6 +51,7 @@ export class WebsocketService {
             }
         });
         this.socket.on('orderstatus', (data) => {
+            console.log(data, 'order status');
             if(data.by.id !== user._id) {
                 for(var i=0; i<this._orders.length; i++) {
                     if(data.id === this._orders[i]._id) {

@@ -3,7 +3,7 @@ webpackJsonp(["order.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/order/cart/cart.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header class=\"page-content-header\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter/order/:id/choose-item\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\">\r\n        Create Order\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <div class=\"item-container\">\r\n        <div class=\"text-center\" *ngIf=\"!(items && items.length)\">No Item Add</div>\r\n        <div *ngIf=\"(items && items.length)\">\r\n            <div class=\"item-list align-items-center\" *ngFor=\"let article of items\">\r\n                <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                    <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                    <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                        alt=\"Category Logo\" />\r\n                    <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                    <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\r\n                </div>\r\n                <div class=\"item-name mw-160\">\r\n                    <p class=\"name m-0\">{{article.name}}</p>\r\n                    <p class=\"name m-0\">&euro;{{article.price}}</p>\r\n                </div>\r\n                <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"deleteItemFromCart(article)\">\r\n                    <i class=\"fas fa-times\"></i>\r\n                </button>\r\n            </div>\r\n            <div class=\"total-amount\">\r\n                Sub Total: &euro;{{orderService.getOrderData().cartTotalPrice}}\r\n            </div>\r\n        </div>\r\n        <button type=\"submit\" class=\"order-btn waves-light\" [disabled]=\"!orderService.getOrderData().selectedItems.length\" (click)=\"createOrder()\">\r\n            Create Order\r\n        </button>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<header class=\"page-content-header\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter/order/:id/choose-item\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\">\r\n        Create Order\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n<app-steps></app-steps>    \r\n    <div class=\"item-container\">\r\n        <div class=\"text-center\" *ngIf=\"!(items && items.length)\">No Item Add</div>\r\n        <div *ngIf=\"(items && items.length)\">\r\n            <div class=\"item-list align-items-center\" *ngFor=\"let article of items\">\r\n                <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                    <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                    <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                        alt=\"Category Logo\" />\r\n                    <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                    <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\r\n                </div>\r\n                <div class=\"item-name mw-160\">\r\n                    <p class=\"name m-0\">{{article.name}}</p>\r\n                    <p class=\"name m-0\">&euro;{{article.price}}</p>\r\n                </div>\r\n                <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"deleteItemFromCart(article)\">\r\n                    <i class=\"fas fa-times\"></i>\r\n                </button>\r\n            </div>\r\n            <div class=\"total-amount\">\r\n                Sub Total: &euro;{{orderService.getOrderData().cartTotalPrice}}\r\n            </div>\r\n        </div>\r\n        <button type=\"submit\" class=\"order-btn waves-light\" [disabled]=\"!orderService.getOrderData().selectedItems.length\" (click)=\"createOrder()\">\r\n            Create Order\r\n        </button>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -33,8 +33,9 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__order_service__ = __webpack_require__("../../../../../src/app/hirundo/waiter/order/order.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Rx__ = __webpack_require__("../../../../rxjs/Rx.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Rx__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__global_service__ = __webpack_require__("../../../../../src/app/hirundo/global.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__ = __webpack_require__("../../../../rxjs/Rx.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -48,16 +49,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var CartComponent = /** @class */ (function () {
-    function CartComponent(orderService, router) {
+    function CartComponent(orderService, router, globalService) {
         this.orderService = orderService;
         this.router = router;
+        this.globalService = globalService;
         this.items = [];
     }
     CartComponent.prototype.ngOnInit = function () {
         if (this.orderService.getOrderData().selectedItems) {
             this.items = this.orderService.getOrderData().selectedItems;
+            console.log('this.items', this.items);
         }
+        console.log(this.globalService.getTabData(), 'sdafs');
     };
     CartComponent.prototype.createOrder = function () {
         var _this = this;
@@ -78,7 +83,8 @@ var CartComponent = /** @class */ (function () {
             room: data.roomId,
             table: data.tableId,
             noOfPeople: data.numberOfPerson,
-            item: itemarray
+            item: itemarray,
+            step: this.globalService.getTabData().step
         };
         console.log('createorder', createorder);
         this.orderService.createOrder(createorder)
@@ -120,10 +126,10 @@ var CartComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/hirundo/waiter/order/cart/cart.component.html"),
             styles: [__webpack_require__("../../../../../src/app/hirundo/waiter/order/cart/cart.component.scss")]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__order_service__["a" /* OrderService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__order_service__["a" /* OrderService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */]) === "function" && _b || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__order_service__["a" /* OrderService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__order_service__["a" /* OrderService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__global_service__["a" /* GlobalService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__global_service__["a" /* GlobalService */]) === "function" && _c || Object])
     ], CartComponent);
     return CartComponent;
-    var _a, _b;
+    var _a, _b, _c;
 }());
 
 //# sourceMappingURL=cart.component.js.map
@@ -321,6 +327,8 @@ var CreateOrderComponent = /** @class */ (function () {
     }
     CreateOrderComponent.prototype.ngOnInit = function () {
         var _this = this;
+        localStorage.removeItem('tabData');
+        localStorage.removeItem('stepData');
         if (this.orderService.getOrderData()) {
             this.numberOfPerson = this.orderService.getOrderData().numberOfPerson;
         }
