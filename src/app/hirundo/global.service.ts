@@ -75,4 +75,20 @@ export class GlobalService {
             // window.location.href = '/';
         }
     }
+
+    public setStepData(data: any) {
+        localStorage.setItem('stepData', JSON.stringify(data));
+    }
+
+    public getStepData() {
+        let data = localStorage.getItem('stepData');
+        return JSON.parse(data);
+    }
+    public setTabData(data: any) {
+        localStorage.setItem('tabData', JSON.stringify(data));        
+    }
+    public getTabData() {
+        let data = localStorage.getItem('tabData');
+        return JSON.parse(data);
+    }
 }

@@ -31,12 +31,12 @@
                         <div class="order-quantity" *ngIf="item.category == authGuard.getCurrentUser().category">
                             x {{item.quantity}}
                         </div>
+                        <div class="btn-container">
+                            <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 3)">Cancel</button>
+                            <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 4)">In Progress</button>
+                            <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 2)">Done</button>
+                        </div>
                     </div>
-                </div>
-                <div class="btn-container d-flex justify-content-between">
-                    <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 3)">Cancel</button>
-                    <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 4)">In Progress</button>
-                    <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 2)">Done</button>
                 </div>
             </div>
         </div>

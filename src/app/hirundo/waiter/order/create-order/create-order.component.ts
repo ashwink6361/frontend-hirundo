@@ -34,6 +34,8 @@ export class CreateOrderComponent implements OnInit {
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
+    localStorage.removeItem('tabData');
+    localStorage.removeItem('stepData');    
     if (this.orderService.getOrderData()) {
       this.numberOfPerson = this.orderService.getOrderData().numberOfPerson;
     }
