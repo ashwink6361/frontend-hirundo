@@ -25,6 +25,14 @@ export class ItemComponent implements OnInit {
   public articleAdd: boolean = false;
   protected subcategory: string;
   public selectedSubcategory: boolean[] = [false];
+  public variantData = {
+    quantity : 0,
+    variant : [],
+    notes: ''
+  }
+  public notes = [];
+  public variantError = '';
+  public articleData: any;
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
@@ -119,12 +127,18 @@ export class ItemComponent implements OnInit {
     this.router.navigate(['/waiter/order/:id/cart']);
   }
 
-  viewVarient() {
+  viewVarient(article) {
     this.showVarient = true;
+    this.articleData = article;
   }
 
   hideVarient(){
     this.showVarient = false;
+    this.variantData = {
+      quantity : 0,
+      variant : [],
+      notes: ''
+    }
   }
 
   tabActive(tab) {
@@ -163,5 +177,78 @@ export class ItemComponent implements OnInit {
           this.selectedSubcategory[i] = false;
       }
     }
+  }
+
+  decreaseQty(){
+    let value = this.variantData.quantity;
+    value = isNaN(value) ? 0 : value;
+    value < 1 ? value = 1 : '';
+    value--;
+    this.variantData.quantity = value;
+  }
+
+  increaseQty(){
+    let value = this.variantData.quantity;
+    value = isNaN(value) ? 0 : value;
+    value++;
+    this.variantData.quantity = value;
+  }
+
+  addRemoveVariant(variant,status){
+    if(status == 0){
+      variant.status = 0;
+    }
+    else{
+      variant.status = 1;      
+    }
+    for (let i = 0; i < this.variantData.variant.length; i++) {
+      if (this.variantData.variant[i]._id == variant._id) {
+        this.variantData.variant.splice(i, 1);
+      }
+    }
+    this.variantData.variant.push(variant);
+    console.log('this.variantData',this.variantData);
+  }
+
+  addNote(event, note, i) {
+    console.log('event', event);
+    console.log('note', note);
+    if (event.target.checked) {
+      this.notes.push(note);
+    }
+    else {
+      for (let i = 0; i < this.notes.length; i++) {
+        if (this.notes[i] == note) {
+          this.notes.splice(i, 1);
+        }
+      }
+    }
+    console.log('this.notes', this.notes);
+    this.variantData.notes = this.notes.toString();
+    console.log('this.variantData.notes', this.variantData.notes);    
+  }
+
+  saveVariantData(){
+    console.log('this.variantData', this.variantData);
+    if(this.variantData.quantity == 0){
+      this.variantError = 'Please enter quantity';
+      setTimeout(() => {
+        this.variantError = '';
+      }, 4000);
+    }
+    else if(this.variantData.quantity > 0 && !this.variantData.variant.length && !this.variantData.notes){
+      this.variantError = 'Please select variants/notes';
+      setTimeout(() => {
+        this.variantError = '';
+      }, 4000);
+    }
+    else{
+      this.articleData.quantity = this.variantData.quantity;
+      this.articleData.variant = this.variantData.variant;
+      this.articleData.notes = this.variantData.notes;
+      this.data.selectedItems.push(this.articleData);
+      this.orderService.setOrderData(this.data);
+      this.hideVarient(); 
+    }        
   }
 }

@@ -84,7 +84,7 @@
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
-                    <button type="submit" class="btn btn-floating waves-light" (click)="viewVarient()">
+                    <button type="submit" class="btn btn-floating waves-light" (click)="viewVarient(article)">
                         <img src="assets/images/icon_edit.png" alt="" />
                     </button>
                 </div>
@@ -103,18 +103,19 @@
         </div>
         <div class="header-title" *ngIf="orderService.getOrderData().selectedCategory">
             Choose Varient
-            <button>Save</button>
+            <button (click)="saveVariantData()">Save</button>
         </div>
     </div>
     <div class="varient-content">
+        <div *ngIf="variantError">{{variantError}}</div>
         <div class="input-quantity-container">
             <h1>Quantity</h1>
             <div class="input-prepend-append d-flex">
-                <button type="button" id="decrease" value="Decrease Value">
+                <button type="button" id="decrease" value="Decrease Value" (click)="decreaseQty()">
                     <i class="fas fa-minus"></i>
                 </button>
-                <div class="text-center input-value"></div>
-                <button type="button" id="increase" value="Increase Value">
+                <div class="text-center input-value">{{variantData.quantity}}</div>
+                <button type="button" id="increase" value="Increase Value" (click)="increaseQty()">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
@@ -131,7 +132,12 @@
                         <td>{{varient.name}}</td>
                         <td>&euro;{{varient.price}}</td>
                         <td>
-                            <input type="checkbox" />
+                            <button type="button" id="decrease" value="Decrease Value" (click)="addRemoveVariant(varient,0)">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" id="increase" value="Increase Value" (click)="addRemoveVariant(varient,1)">
+                                <i class="fas fa-plus"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>
@@ -140,10 +146,10 @@
         <div class="varient-list" *ngIf="activeTab[1]">
             <table class="table">
                 <tbody>
-                    <tr *ngFor="let note of noteList">
+                    <tr *ngFor="let note of noteList; let i = index">
                         <td>{{note.notes}}</td>
                         <td>
-                            <input type="checkbox" />
+                            <input type="checkbox" (change)="addNote($event, note.notes, i)" />
                         </td>
                     </tr>
                 </tbody>
