@@ -19,15 +19,20 @@
                 <div class="order-items-container">
                     <div class="order-item" *ngFor="let item of order.item">
                         <div class="order-item-detail">
-                            {{item.id.name}}
+                            {{item.quantity}} <i class="fas fa-times"></i> {{item.id.name}}
                             <ul>
                                 <li *ngFor="let varient of item.id.variant">
-                                    {{varient.name}}
+                                     {{varient.name}}
                                 </li>
                             </ul>
                         </div>
-                        <div class="order-quantity">
-                            x {{item.quantity}}
+                        <div class="order-quantity d-flex">
+                            <button type="button" class="btn btn-floting update-order-btn">
+                                <img src="assets/images/order-deliver.png" alt="" />
+                            </button>
+                            <button type="button" class="btn btn-floting update-order-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
