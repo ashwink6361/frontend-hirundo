@@ -11,6 +11,14 @@ body {
     max-width: 160px !important;
 }
 
+.update-order-btn{
+    width: 30px;
+    padding: 0;
+    border-radius: 50%;
+    height: 30px;
+    background-color: $primary;
+}
+
 .bg-red {
     background-color: red;
 }
@@ -71,8 +79,6 @@ body {
         li {
             padding: 8px 5px;
             display: inline-block;
-            min-width: 80px;
-            width: 80px;
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
