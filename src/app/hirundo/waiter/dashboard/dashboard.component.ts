@@ -32,11 +32,11 @@ export class DashboardComponent implements OnInit {
   createOrder(table) {
     localStorage.setItem('tabledata', JSON.stringify(table));
     let room = JSON.parse(localStorage.getItem('roomdata'));
-    // if(table.status == 1){
-    //   this.router.navigate(['/waiter/order/:id/cart']);
-    // }else{
+    if(table.status == 1){
+      this.router.navigate(['/waiter/order/:id/cart']);
+    }else{
       this.router.navigate(['/waiter/order', room._id]);
-    // }
+    }
     
   }
 
