@@ -106,8 +106,7 @@
             <button (click)="saveVariantData()">Save</button>
         </div>
     </div>
-    <div class="varient-content">
-        <div *ngIf="variantError">{{variantError}}</div>
+    <div class="varient-content">        
         <div class="input-quantity-container">
             <h1>Quantity</h1>
             <div class="input-prepend-append d-flex">
@@ -119,6 +118,7 @@
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
+            <div *ngIf="variantError" class="color-red">{{variantError}}</div>
         </div>
         <h1>Varient and Notes</h1>
         <div class="tabs-btn">
@@ -132,10 +132,10 @@
                         <td>{{varient.name}}</td>
                         <td>&euro;{{varient.price}}</td>
                         <td>
-                            <button type="button" id="decrease" value="Decrease Value" (click)="addRemoveVariant(varient,0)">
+                            <button type="button" class="add-varient-btn" [class.variant-remove]="varient.status == 0" id="decrease" value="Decrease Value" (click)="addRemoveVariant(varient,0)">
                                 <i class="fas fa-minus"></i>
                             </button>
-                            <button type="button" id="increase" value="Increase Value" (click)="addRemoveVariant(varient,1)">
+                            <button type="button" class="add-varient-btn" [class.variant-added]="varient.status == 1"  id="increase" value="Increase Value" (click)="addRemoveVariant(varient,1)">
                                 <i class="fas fa-plus"></i>
                             </button>
                         </td>

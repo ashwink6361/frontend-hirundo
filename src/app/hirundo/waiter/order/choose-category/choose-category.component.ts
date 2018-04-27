@@ -47,7 +47,16 @@ export class ChooseCategoryComponent implements OnInit {
     this.orderService.getCategoryItem().then(data => {
       for (let i = 0; i < data.data.length; i++) {
         if (data.data[i].category._id == category._id) {
+          // for (let j = 0; j < data.data[i].subcategory.length; j++) {
+          //   for (let k = 0; k < data.data[i].subcategory[j].items.length; k++) {
+          //     orderdata.categoryItems.push(data.data[i].subcategory[j].items[k]);
+          //     this.orderService.setOrderData(orderdata);
+          //   }
+          // }
         orderdata.categoryItems = data.data[i].items;
+        for(let j = 0; j<orderdata.categoryItems.length;j++){
+          orderdata.categoryItems[j].quantity = 0;
+        }
         this.orderService.setOrderData(orderdata);
         }
       }

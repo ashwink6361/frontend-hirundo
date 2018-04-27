@@ -31,7 +31,8 @@ export class CartComponent implements OnInit {
         quantity: data.selectedItems[i].quantity,
         price: data.selectedItems[i].price,
         notes: '',
-        variant: []
+        variant: [],
+        step: data.selectedItems[i].step
       }
       itemarray.push(item);
     }
@@ -39,8 +40,7 @@ export class CartComponent implements OnInit {
       room: data.roomId,
       table: data.tableId,
       noOfPeople: data.numberOfPerson,
-      item: itemarray,
-      step: this.globalService.getTabData().step
+      item: itemarray
     }
     console.log('createorder', createorder);
     this.orderService.createOrder(createorder)
@@ -56,8 +56,17 @@ export class CartComponent implements OnInit {
   deleteItemFromCart(article) {
     let data = this.orderService.getOrderData();
     for (let i = 0; i < data.selectedItems.length; i++) {
-      if (data.selectedItems[i]._id == article._id) {
-        data.selectedItems.splice(i, 1);
+      if (data.selectedItems[i]._id == article._id && !article.variant) {
+        //non variant type data
+        if (!data.selectedItems[i].variant) {
+          data.selectedItems.splice(i, 1);
+        }
+      }
+      else if (data.selectedItems[i]._id == article._id && article.variant) {
+        //variant type data
+        if (data.selectedItems[i].variant) {
+          data.selectedItems.splice(i, 1);
+        }
       }
       let cp = 0;
       let itemno = 0;                                    
