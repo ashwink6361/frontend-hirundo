@@ -732,6 +732,14 @@ var ItemComponent = /** @class */ (function () {
             this.articleData.step = this.globalService.getTabData().step;
             var data = this.orderService.getOrderData();
             data.selectedItems.push(this.articleData);
+            var cp = 0;
+            var itemno = 0;
+            for (var i = 0; i < data.selectedItems.length; i++) {
+                itemno += data.selectedItems[i].quantity;
+                cp += data.selectedItems[i].price * data.selectedItems[i].quantity;
+                data.cartTotalPrice = cp;
+                data.cartTotalItem = itemno;
+            }
             this.orderService.setOrderData(data);
             this.hideVarient();
             console.log('variant this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());

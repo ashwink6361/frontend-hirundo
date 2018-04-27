@@ -302,6 +302,14 @@ export class ItemComponent implements OnInit {
       this.articleData.step = this.globalService.getTabData().step;    
       let data = this.orderService.getOrderData();
       data.selectedItems.push(this.articleData);
+      let cp = 0;
+      let itemno = 0;                                    
+      for (let i = 0; i < data.selectedItems.length; i++) {
+        itemno += data.selectedItems[i].quantity;                                        
+        cp += data.selectedItems[i].price * data.selectedItems[i].quantity;
+        data.cartTotalPrice = cp;
+        data.cartTotalItem = itemno;                                                        
+      }
       this.orderService.setOrderData(data);
       this.hideVarient(); 
     console.log('variant this.orderService.setOrderData(this.data);.',this.orderService.getOrderData());            
