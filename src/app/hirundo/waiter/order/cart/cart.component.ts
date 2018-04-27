@@ -69,11 +69,19 @@ export class CartComponent implements OnInit {
         }
       }
       let cp = 0;
-      let itemno = 0;                                    
+      let itemno = 0;    
+      let varicost = 0;                                                                                                                                              
       if(data.selectedItems.length){
         for (let i = 0; i < data.selectedItems.length; i++) {
-          itemno += data.selectedItems[i].quantity;                                        
-          cp += data.selectedItems[i].price * data.selectedItems[i].quantity;
+          itemno += data.selectedItems[i].quantity; 
+          if (data.selectedItems[i].variant) {
+            for (let j = 0; j < data.selectedItems[i].variant.length; j++) {
+              if (data.selectedItems[i].variant[j].status == 1) {
+                varicost += data.selectedItems[i].variant[j].price;
+              }
+            }
+          }                                       
+          cp += (data.selectedItems[i].price + varicost) * data.selectedItems[i].quantity;
           data.cartTotalPrice = cp;
           data.cartTotalItem = itemno;                                                        
         }
