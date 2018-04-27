@@ -105,25 +105,28 @@ export class ItemComponent implements OnInit {
 
 
   increaseValue(article) {
-    console.log('article inc',article);  
-      // let value = article.quantity;
-      // value = isNaN(value) ? 0 : value;
-      // value++;
-      // article.quantity = value;
     let data = this.orderService.getOrderData();
-    if(data.selectedItems.length){
+    if (data.selectedItems.length) {
+      let isExist = true;
+      let isarr = [];
       for (let i = 0; i < data.selectedItems.length; i++) {
         if (data.selectedItems[i]._id == article._id && !data.selectedItems[i].variant) {
-          // if(!data.selectedItems[i].variant){
-            data.selectedItems[i].quantity = data.selectedItems[i].quantity + 1;
-          // }
+          data.selectedItems[i].quantity += 1;
+          isarr.push(data.selectedItems[i]._id);
         }
-    }
+        if (data.selectedItems[i]._id != article._id) {
+          isExist = false;
+        }
+      }
+      if( !isExist && isarr.indexOf(article._id) < 0) {
+        article.quantity = article.quantity + 1;
+        data.selectedItems.push(article);
+      }
     }
     else{
+      article.quantity = article.quantity + 1;
       data.selectedItems.push(article);
     }
-    
     let cp = 0;
     let itemno = 0;                                    
     for (let i = 0; i < data.selectedItems.length; i++) {
@@ -138,35 +141,18 @@ export class ItemComponent implements OnInit {
 
   decreaseValue(article) {
     console.log('article dec',article);
-      // let value = article.quantity;
-      // value = isNaN(value) ? 0 : value;
-      // value < 1 ? value = 1 : '';
-      // value--;
-      // article.quantity = value;
     let data = this.orderService.getOrderData();
     for (let i = 0; i < data.selectedItems.length; i++) {
       if (data.selectedItems[i]._id == article._id && !data.selectedItems[i].variant) {
-        // if(!data.selectedItems[i].variant){
           if(data.selectedItems[i].quantity>1){
             data.selectedItems[i].quantity =  data.selectedItems[i].quantity - 1;
         }
           else{
+            article.quantity = 0;
           data.selectedItems.splice(i, 1);            
         }
-          // data.selectedItems.splice(i, 1);
-        // }
       }
     }
-    // if(article.quantity > 0){
-    //   data.selectedItems.push(article);
-    // }
-    // else if(article.quantity == 0){
-      // for (let i = 0; i < data.categoryItems.length; i++) {
-      //   if (data.categoryItems[i]._id == article._id) {
-      //     delete data.categoryItems[i].quantity;
-      //   }
-      // }
-    // }
     let cp = 0;
     let itemno = 0;                                        
     if (data.selectedItems.length) {
