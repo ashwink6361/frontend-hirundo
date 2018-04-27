@@ -3,7 +3,7 @@ webpackJsonp(["order.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/order/cart/cart.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header class=\"page-content-header\">\n    <div class=\"back-btn\">\n        <a routerLink=\"/waiter/order/:id/choose-item\">\n            <i class=\"fas fa-angle-left\"></i>\n        </a>\n    </div>\n    <div class=\"header-title\">\n        Create Order\n    </div>\n</header>\n<div class=\"page-content\">\n<app-steps></app-steps>    \n    <div class=\"item-container\">\n        <div class=\"text-center\" *ngIf=\"!(items && items.length)\">No Item Add</div>\n        <div *ngIf=\"(items && items.length)\">\n            <div class=\"item-list align-items-center\" *ngFor=\"let article of items\">\n                <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\n                    <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\n                    <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\n                        alt=\"Category Logo\" />\n                    <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\n                    <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\n                </div>\n                <div class=\"item-name mw-160\">\n                    <p class=\"name m-0\">{{article.name}}</p>\n                    <p class=\"name m-0\">&euro;{{article.price}}</p>\n                    <!-- <span *ngIf=\"article.variant && article.variant.length\">\n                        <span *ngFor=\"let variant of article.variant\">\n                            <span *ngIf=\"variant.status == 0\">- {{variant.name}} </span>\n                            <span *ngIf=\"variant.status == 1\">+ {{variant.name}} {{variant.price}}</span>\n                        </span>\n                    </span>\n                    <span *ngIf=\"article.notes\">{{article.notes}}</span>                                             -->\n                </div>\n                <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"deleteItemFromCart(article)\">\n                    <i class=\"fas fa-times\"></i>\n                </button>\n            </div>\n            <div class=\"total-amount\">\n                Sub Total: &euro;{{orderService.getOrderData().cartTotalPrice}}\n            </div>\n        </div>\n        <button type=\"submit\" class=\"order-btn waves-light\" [disabled]=\"!orderService.getOrderData().selectedItems.length\" (click)=\"createOrder()\">\n            Create Order\n        </button>\n    </div>\n</div>\n"
+module.exports = "<header class=\"page-content-header\">\n    <div class=\"back-btn\">\n        <a routerLink=\"/waiter/order/:id/choose-item\">\n            <i class=\"fas fa-angle-left\"></i>\n        </a>\n    </div>\n    <div class=\"header-title\">\n        Create Order\n    </div>\n</header>\n<div class=\"page-content\">\n<app-steps></app-steps>    \n    <div class=\"item-container\">\n        <div class=\"text-center\" *ngIf=\"!(items && items.length)\">No Item Add</div>\n        <div *ngIf=\"(items && items.length)\">\n            <div class=\"item-list align-items-center\" *ngFor=\"let article of items\">\n                <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\n                    <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\n                    <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\n                        alt=\"Category Logo\" />\n                    <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\n                    <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\n                </div>\n                <div class=\"item-name mw-160\">\n                    <p class=\"name m-0\">{{article.name}}</p>\n                    <p class=\"name m-0\">&euro;{{article.price}}</p>\n                    <span *ngIf=\"article.variant && article.variant.length\">\n                        <span *ngFor=\"let variant of article.variant\">\n                            <span *ngIf=\"variant.status == 0\">- {{variant.name}} </span>\n                            <span *ngIf=\"variant.status == 1\">+ {{variant.name}} &euro;{{variant.price}}</span>\n                        </span>\n                    </span>\n                    <span *ngIf=\"article.notes\">{{article.notes}}</span>                                            \n                </div>\n                <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"deleteItemFromCart(article)\">\n                    <i class=\"fas fa-times\"></i>\n                </button>\n            </div>\n            <div class=\"total-amount\">\n                Sub Total: &euro;{{orderService.getOrderData().cartTotalPrice}}\n            </div>\n        </div>\n        <button type=\"submit\" class=\"order-btn waves-light\" [disabled]=\"!orderService.getOrderData().selectedItems.length\" (click)=\"createOrder()\">\n            Create Order\n        </button>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -99,8 +99,17 @@ var CartComponent = /** @class */ (function () {
     CartComponent.prototype.deleteItemFromCart = function (article) {
         var data = this.orderService.getOrderData();
         for (var i = 0; i < data.selectedItems.length; i++) {
-            if (data.selectedItems[i]._id == article._id) {
-                data.selectedItems.splice(i, 1);
+            if (data.selectedItems[i]._id == article._id && !article.variant) {
+                //non variant type data
+                if (!data.selectedItems[i].variant) {
+                    data.selectedItems.splice(i, 1);
+                }
+            }
+            else if (data.selectedItems[i]._id == article._id && article.variant) {
+                //variant type data
+                if (data.selectedItems[i].variant) {
+                    data.selectedItems.splice(i, 1);
+                }
             }
             var cp = 0;
             var itemno = 0;
@@ -227,6 +236,12 @@ var ChooseCategoryComponent = /** @class */ (function () {
         this.orderService.getCategoryItem().then(function (data) {
             for (var i = 0; i < data.data.length; i++) {
                 if (data.data[i].category._id == category._id) {
+                    // for (let j = 0; j < data.data[i].subcategory.length; j++) {
+                    //   for (let k = 0; k < data.data[i].subcategory[j].items.length; k++) {
+                    //     orderdata.categoryItems.push(data.data[i].subcategory[j].items[k]);
+                    //     this.orderService.setOrderData(orderdata);
+                    //   }
+                    // }
                     orderdata.categoryItems = data.data[i].items;
                     _this.orderService.setOrderData(orderdata);
                 }
@@ -469,6 +484,7 @@ var ItemComponent = /** @class */ (function () {
     ItemComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.data = this.orderService.getOrderData();
+        console.log('this.data', this.data);
         if (this.data.categoryItems) {
             for (var i = 0; i < this.data.categoryItems.length; i++) {
                 if (this.data.selectedItems.length) {
@@ -492,18 +508,61 @@ var ItemComponent = /** @class */ (function () {
             console.log('error', error);
         });
     };
+    // increaseValue(article) {
+    //   let value = article.quantity;
+    //   value = isNaN(value) ? 0 : value;
+    //   value++;
+    //   article.quantity = value;
+    //   let data = this.orderService.getOrderData();
+    //   for (let i = 0; i < data.selectedItems.length; i++) {
+    //     if (data.selectedItems[i]._id == article._id) {
+    //       data.selectedItems.splice(i, 1);
+    //     }
+    //   }
+    //   data.selectedItems.push(article);
+    //   let cp = 0;
+    //   let itemno = 0;                                    
+    //   for (let i = 0; i < data.selectedItems.length; i++) {
+    //     itemno += data.selectedItems[i].quantity;                                        
+    //     cp += data.selectedItems[i].price * data.selectedItems[i].quantity;
+    //     data.cartTotalPrice = cp;
+    //     data.cartTotalItem = itemno;                                                        
+    //   }
+    //   this.orderService.setOrderData(data);
+    // }
+    // decreaseValue(article) {
+    //   let value = article.quantity;
+    //   value = isNaN(value) ? 0 : value;
+    //   value < 1 ? value = 1 : '';
+    //   value--;
+    //   article.quantity = value;
+    //   let data = this.orderService.getOrderData();
+    //   for (let i = 0; i < data.selectedItems.length; i++) {
+    //     if (data.selectedItems[i]._id == article._id) {
+    //       data.selectedItems.splice(i, 1);
+    //     }
+    //   }
+    //   this.orderService.setOrderData(data);
+    // }
     ItemComponent.prototype.increaseValue = function (article) {
-        var value = article.quantity;
-        value = isNaN(value) ? 0 : value;
-        value++;
-        article.quantity = value;
+        console.log('article inc', article);
+        // let value = article.quantity;
+        // value = isNaN(value) ? 0 : value;
+        // value++;
+        // article.quantity = value;
         var data = this.orderService.getOrderData();
-        for (var i = 0; i < data.selectedItems.length; i++) {
-            if (data.selectedItems[i]._id == article._id) {
-                data.selectedItems.splice(i, 1);
+        if (data.selectedItems.length) {
+            for (var i = 0; i < data.selectedItems.length; i++) {
+                if (data.selectedItems[i]._id == article._id && !data.selectedItems[i].variant) {
+                    // if(!data.selectedItems[i].variant){
+                    data.selectedItems[i].quantity = data.selectedItems[i].quantity + 1;
+                    // }
+                }
             }
         }
-        data.selectedItems.push(article);
+        else {
+            data.selectedItems.push(article);
+        }
         var cp = 0;
         var itemno = 0;
         for (var i = 0; i < data.selectedItems.length; i++) {
@@ -513,29 +572,39 @@ var ItemComponent = /** @class */ (function () {
             data.cartTotalItem = itemno;
         }
         this.orderService.setOrderData(data);
+        console.log('inc this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
     };
     ItemComponent.prototype.decreaseValue = function (article) {
-        var value = article.quantity;
-        value = isNaN(value) ? 0 : value;
-        value < 1 ? value = 1 : '';
-        value--;
-        article.quantity = value;
+        console.log('article dec', article);
+        // let value = article.quantity;
+        // value = isNaN(value) ? 0 : value;
+        // value < 1 ? value = 1 : '';
+        // value--;
+        // article.quantity = value;
         var data = this.orderService.getOrderData();
         for (var i = 0; i < data.selectedItems.length; i++) {
-            if (data.selectedItems[i]._id == article._id) {
-                data.selectedItems.splice(i, 1);
-            }
-        }
-        if (article.quantity > 0) {
-            data.selectedItems.push(article);
-        }
-        else if (article.quantity == 0) {
-            for (var i = 0; i < data.categoryItems.length; i++) {
-                if (data.categoryItems[i]._id == article._id) {
-                    delete data.categoryItems[i].quantity;
+            if (data.selectedItems[i]._id == article._id && !data.selectedItems[i].variant) {
+                // if(!data.selectedItems[i].variant){
+                if (data.selectedItems[i].quantity > 1) {
+                    data.selectedItems[i].quantity = data.selectedItems[i].quantity - 1;
                 }
+                else {
+                    data.selectedItems.splice(i, 1);
+                }
+                // data.selectedItems.splice(i, 1);
+                // }
             }
         }
+        // if(article.quantity > 0){
+        //   data.selectedItems.push(article);
+        // }
+        // else if(article.quantity == 0){
+        // for (let i = 0; i < data.categoryItems.length; i++) {
+        //   if (data.categoryItems[i]._id == article._id) {
+        //     delete data.categoryItems[i].quantity;
+        //   }
+        // }
+        // }
         var cp = 0;
         var itemno = 0;
         if (data.selectedItems.length) {
@@ -551,6 +620,7 @@ var ItemComponent = /** @class */ (function () {
             data.cartTotalItem = 0;
         }
         this.orderService.setOrderData(data);
+        console.log('dec this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
     };
     ItemComponent.prototype.viewCart = function () {
         this.router.navigate(['/waiter/order/:id/cart']);
@@ -566,6 +636,7 @@ var ItemComponent = /** @class */ (function () {
             variant: [],
             notes: ''
         };
+        this.notes = [];
     };
     ItemComponent.prototype.tabActive = function (tab) {
         if (tab == 1) {
@@ -665,9 +736,11 @@ var ItemComponent = /** @class */ (function () {
             this.articleData.quantity = this.variantData.quantity;
             this.articleData.variant = this.variantData.variant;
             this.articleData.notes = this.variantData.notes;
-            this.data.selectedItems.push(this.articleData);
-            this.orderService.setOrderData(this.data);
+            var data = this.orderService.getOrderData();
+            data.selectedItems.push(this.articleData);
+            this.orderService.setOrderData(data);
             this.hideVarient();
+            console.log('variant this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
         }
     };
     ItemComponent = __decorate([
