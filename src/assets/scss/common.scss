@@ -34,6 +34,10 @@ body {
     background-color: green;
 }
 
+.color-red{
+    color: red;
+}
+
 .bg-yellow {
     background-color: yellow;
 }
@@ -82,9 +86,6 @@ body {
         li {
             padding: 8px 5px;
             display: inline-block;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
             text-align: center;
             cursor: pointer;
             color: #fff;
@@ -879,6 +880,9 @@ header {
             .name {
                 font-weight: bold;
             }
+            .added-variand-name{
+                font-size: 12px;
+            }
         }
         .input-prepend-append {
             max-width: 35%;
@@ -944,6 +948,20 @@ header {
         h1 {
             font-size: 15px;
         }
+        .add-varient-btn{
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #4b473f;
+            border: none;
+            color: #fff;
+            &.variant-added{
+                background-color: green;
+            }
+            &.variant-remove{
+                background-color: red;
+            }
+        }
         .input-quantity-container {
             margin-bottom: 15px;
             .input-prepend-append {
@@ -960,6 +978,7 @@ header {
                 }
                 .input-value {
                     width: 100%;
+                    padding: 8px 0;
                 }
             }
         }
@@ -1015,6 +1034,7 @@ header {
         padding: 0;
         list-style: none;
         background-color: #4b473f;
+        padding-right: 35px;
         li {
             display: inline-block;
             color: #fff;
@@ -1069,9 +1089,6 @@ header {
             width: 40px;
             ~input{
                 max-width: 196px;
-                @include respond-to($phone-md){
-                    width: calc(100% - 11.5rem);
-                }
             }
         }
     }
