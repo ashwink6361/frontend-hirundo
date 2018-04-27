@@ -46,7 +46,7 @@ export class CartComponent implements OnInit {
     this.orderService.createOrder(createorder)
       .then(data => {
         console.log('data', data);
-        // this.router.navigate(['/waiter/list'])
+        this.router.navigate(['/waiter/list'])
       })
       .catch(error => {
         console.log('error', error);

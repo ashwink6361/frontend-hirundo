@@ -65,6 +65,7 @@ var CartComponent = /** @class */ (function () {
         console.log(this.globalService.getTabData(), 'sdafs');
     };
     CartComponent.prototype.createOrder = function () {
+        var _this = this;
         var data = this.orderService.getOrderData();
         var itemarray = [];
         for (var i = 0; i < data.selectedItems.length; i++) {
@@ -89,7 +90,7 @@ var CartComponent = /** @class */ (function () {
         this.orderService.createOrder(createorder)
             .then(function (data) {
             console.log('data', data);
-            // this.router.navigate(['/waiter/list'])
+            _this.router.navigate(['/waiter/list']);
         })
             .catch(function (error) {
             console.log('error', error);
@@ -573,9 +574,17 @@ var ItemComponent = /** @class */ (function () {
         }
         var cp = 0;
         var itemno = 0;
+        var varicost = 0;
         for (var i = 0; i < data.selectedItems.length; i++) {
             itemno += data.selectedItems[i].quantity;
-            cp += data.selectedItems[i].price * data.selectedItems[i].quantity;
+            if (data.selectedItems[i].variant) {
+                for (var j = 0; j < data.selectedItems[i].variant.length; j++) {
+                    if (data.selectedItems[i].variant[j].status == 1) {
+                        varicost += data.selectedItems[i].variant[j].price;
+                    }
+                }
+            }
+            cp += (data.selectedItems[i].price + varicost) * data.selectedItems[i].quantity;
             data.cartTotalPrice = cp;
             data.cartTotalItem = itemno;
         }
@@ -599,10 +608,18 @@ var ItemComponent = /** @class */ (function () {
         }
         var cp = 0;
         var itemno = 0;
+        var varicost = 0;
         if (data.selectedItems.length) {
             for (var i = 0; i < data.selectedItems.length; i++) {
                 itemno += data.selectedItems[i].quantity;
-                cp += data.selectedItems[i].price * data.selectedItems[i].quantity;
+                if (data.selectedItems[i].variant) {
+                    for (var j = 0; j < data.selectedItems[i].variant.length; j++) {
+                        if (data.selectedItems[i].variant[j].status == 1) {
+                            varicost += data.selectedItems[i].variant[j].price;
+                        }
+                    }
+                }
+                cp += (data.selectedItems[i].price + varicost) * data.selectedItems[i].quantity;
                 data.cartTotalPrice = cp;
                 data.cartTotalItem = itemno;
             }
@@ -734,9 +751,17 @@ var ItemComponent = /** @class */ (function () {
             data.selectedItems.push(this.articleData);
             var cp = 0;
             var itemno = 0;
+            var varicost = 0;
             for (var i = 0; i < data.selectedItems.length; i++) {
                 itemno += data.selectedItems[i].quantity;
-                cp += data.selectedItems[i].price * data.selectedItems[i].quantity;
+                if (data.selectedItems[i].variant) {
+                    for (var j = 0; j < data.selectedItems[i].variant.length; j++) {
+                        if (data.selectedItems[i].variant[j].status == 1) {
+                            varicost += data.selectedItems[i].variant[j].price;
+                        }
+                    }
+                }
+                cp += (data.selectedItems[i].price + varicost) * data.selectedItems[i].quantity;
                 data.cartTotalPrice = cp;
                 data.cartTotalItem = itemno;
             }
