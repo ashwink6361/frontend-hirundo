@@ -31,7 +31,8 @@ export class CartComponent implements OnInit {
         quantity: data.selectedItems[i].quantity,
         price: data.selectedItems[i].price,
         notes: '',
-        variant: []
+        variant: [],
+        step: data.selectedItems[i].step
       }
       itemarray.push(item);
     }
@@ -39,8 +40,7 @@ export class CartComponent implements OnInit {
       room: data.roomId,
       table: data.tableId,
       noOfPeople: data.numberOfPerson,
-      item: itemarray,
-      step: this.globalService.getTabData().step
+      item: itemarray
     }
     console.log('createorder', createorder);
     this.orderService.createOrder(createorder)

@@ -72,12 +72,11 @@ var DashboardComponent = /** @class */ (function () {
     DashboardComponent.prototype.createOrder = function (table) {
         localStorage.setItem('tabledata', JSON.stringify(table));
         var room = JSON.parse(localStorage.getItem('roomdata'));
-        if (table.status == 1) {
-            this.router.navigate(['/waiter/order/:id/cart']);
-        }
-        else {
-            this.router.navigate(['/waiter/order', room._id]);
-        }
+        // if(table.status == 1){
+        //   this.router.navigate(['/waiter/order/:id/cart']);
+        // }else{
+        this.router.navigate(['/waiter/order', room._id]);
+        // }
     };
     DashboardComponent.prototype.getTables = function (room, index) {
         localStorage.setItem('roomdata', JSON.stringify(room));

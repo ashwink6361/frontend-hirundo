@@ -75,7 +75,8 @@ var CartComponent = /** @class */ (function () {
                 quantity: data.selectedItems[i].quantity,
                 price: data.selectedItems[i].price,
                 notes: '',
-                variant: []
+                variant: [],
+                step: data.selectedItems[i].step
             };
             itemarray.push(item);
         }
@@ -83,8 +84,7 @@ var CartComponent = /** @class */ (function () {
             room: data.roomId,
             table: data.tableId,
             noOfPeople: data.numberOfPerson,
-            item: itemarray,
-            step: this.globalService.getTabData().step
+            item: itemarray
         };
         console.log('createorder', createorder);
         this.orderService.createOrder(createorder)
@@ -243,6 +243,9 @@ var ChooseCategoryComponent = /** @class */ (function () {
                     //   }
                     // }
                     orderdata.categoryItems = data.data[i].items;
+                    for (var j = 0; j < orderdata.categoryItems.length; j++) {
+                        orderdata.categoryItems[j].quantity = 0;
+                    }
                     _this.orderService.setOrderData(orderdata);
                 }
             }
@@ -546,21 +549,27 @@ var ItemComponent = /** @class */ (function () {
     // }
     ItemComponent.prototype.increaseValue = function (article) {
         console.log('article inc', article);
-        // let value = article.quantity;
-        // value = isNaN(value) ? 0 : value;
-        // value++;
-        // article.quantity = value;
+        article.step = this.globalService.getTabData().step;
         var data = this.orderService.getOrderData();
         if (data.selectedItems.length) {
+            var isExist = true;
+            var isarr = [];
             for (var i = 0; i < data.selectedItems.length; i++) {
                 if (data.selectedItems[i]._id == article._id && !data.selectedItems[i].variant) {
-                    // if(!data.selectedItems[i].variant){
-                    data.selectedItems[i].quantity = data.selectedItems[i].quantity + 1;
-                    // }
+                    data.selectedItems[i].quantity += 1;
+                    isarr.push(data.selectedItems[i]._id);
                 }
+                if (data.selectedItems[i]._id != article._id) {
+                    isExist = false;
+                }
+            }
+            if (!isExist && isarr.indexOf(article._id) < 0) {
+                article.quantity = article.quantity + 1;
+                data.selectedItems.push(article);
             }
         }
         else {
+            article.quantity = article.quantity + 1;
             data.selectedItems.push(article);
         }
         var cp = 0;
@@ -576,35 +585,19 @@ var ItemComponent = /** @class */ (function () {
     };
     ItemComponent.prototype.decreaseValue = function (article) {
         console.log('article dec', article);
-        // let value = article.quantity;
-        // value = isNaN(value) ? 0 : value;
-        // value < 1 ? value = 1 : '';
-        // value--;
-        // article.quantity = value;
+        article.step = this.globalService.getTabData().step;
         var data = this.orderService.getOrderData();
         for (var i = 0; i < data.selectedItems.length; i++) {
             if (data.selectedItems[i]._id == article._id && !data.selectedItems[i].variant) {
-                // if(!data.selectedItems[i].variant){
                 if (data.selectedItems[i].quantity > 1) {
                     data.selectedItems[i].quantity = data.selectedItems[i].quantity - 1;
                 }
                 else {
+                    article.quantity = 0;
                     data.selectedItems.splice(i, 1);
                 }
-                // data.selectedItems.splice(i, 1);
-                // }
             }
         }
-        // if(article.quantity > 0){
-        //   data.selectedItems.push(article);
-        // }
-        // else if(article.quantity == 0){
-        // for (let i = 0; i < data.categoryItems.length; i++) {
-        //   if (data.categoryItems[i]._id == article._id) {
-        //     delete data.categoryItems[i].quantity;
-        //   }
-        // }
-        // }
         var cp = 0;
         var itemno = 0;
         if (data.selectedItems.length) {
@@ -637,6 +630,7 @@ var ItemComponent = /** @class */ (function () {
             notes: ''
         };
         this.notes = [];
+        this.articleData = {};
     };
     ItemComponent.prototype.tabActive = function (tab) {
         if (tab == 1) {
@@ -736,6 +730,7 @@ var ItemComponent = /** @class */ (function () {
             this.articleData.quantity = this.variantData.quantity;
             this.articleData.variant = this.variantData.variant;
             this.articleData.notes = this.variantData.notes;
+            this.articleData.step = this.globalService.getTabData().step;
             var data = this.orderService.getOrderData();
             data.selectedItems.push(this.articleData);
             this.orderService.setOrderData(data);
