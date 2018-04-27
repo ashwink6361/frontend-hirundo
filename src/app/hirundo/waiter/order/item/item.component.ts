@@ -105,6 +105,8 @@ export class ItemComponent implements OnInit {
 
 
   increaseValue(article) {
+    console.log('article inc',article);    
+    article.step = this.globalService.getTabData().step;
     let data = this.orderService.getOrderData();
     if (data.selectedItems.length) {
       let isExist = true;
@@ -141,6 +143,7 @@ export class ItemComponent implements OnInit {
 
   decreaseValue(article) {
     console.log('article dec',article);
+    article.step = this.globalService.getTabData().step;    
     let data = this.orderService.getOrderData();
     for (let i = 0; i < data.selectedItems.length; i++) {
       if (data.selectedItems[i]._id == article._id && !data.selectedItems[i].variant) {
@@ -188,6 +191,7 @@ export class ItemComponent implements OnInit {
       notes: ''
     };
     this.notes = [];
+    this.articleData = {};
   }
 
   tabActive(tab) {
@@ -295,6 +299,7 @@ export class ItemComponent implements OnInit {
       this.articleData.quantity = this.variantData.quantity;
       this.articleData.variant = this.variantData.variant;
       this.articleData.notes = this.variantData.notes;
+      this.articleData.step = this.globalService.getTabData().step;    
       let data = this.orderService.getOrderData();
       data.selectedItems.push(this.articleData);
       this.orderService.setOrderData(data);

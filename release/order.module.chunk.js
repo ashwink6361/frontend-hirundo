@@ -75,7 +75,8 @@ var CartComponent = /** @class */ (function () {
                 quantity: data.selectedItems[i].quantity,
                 price: data.selectedItems[i].price,
                 notes: '',
-                variant: []
+                variant: [],
+                step: data.selectedItems[i].step
             };
             itemarray.push(item);
         }
@@ -83,8 +84,7 @@ var CartComponent = /** @class */ (function () {
             room: data.roomId,
             table: data.tableId,
             noOfPeople: data.numberOfPerson,
-            item: itemarray,
-            step: this.globalService.getTabData().step
+            item: itemarray
         };
         console.log('createorder', createorder);
         this.orderService.createOrder(createorder)
@@ -548,6 +548,8 @@ var ItemComponent = /** @class */ (function () {
     //   this.orderService.setOrderData(data);
     // }
     ItemComponent.prototype.increaseValue = function (article) {
+        console.log('article inc', article);
+        article.step = this.globalService.getTabData().step;
         var data = this.orderService.getOrderData();
         if (data.selectedItems.length) {
             var isExist = true;
@@ -583,6 +585,7 @@ var ItemComponent = /** @class */ (function () {
     };
     ItemComponent.prototype.decreaseValue = function (article) {
         console.log('article dec', article);
+        article.step = this.globalService.getTabData().step;
         var data = this.orderService.getOrderData();
         for (var i = 0; i < data.selectedItems.length; i++) {
             if (data.selectedItems[i]._id == article._id && !data.selectedItems[i].variant) {
@@ -627,6 +630,7 @@ var ItemComponent = /** @class */ (function () {
             notes: ''
         };
         this.notes = [];
+        this.articleData = {};
     };
     ItemComponent.prototype.tabActive = function (tab) {
         if (tab == 1) {
@@ -726,6 +730,7 @@ var ItemComponent = /** @class */ (function () {
             this.articleData.quantity = this.variantData.quantity;
             this.articleData.variant = this.variantData.variant;
             this.articleData.notes = this.variantData.notes;
+            this.articleData.step = this.globalService.getTabData().step;
             var data = this.orderService.getOrderData();
             data.selectedItems.push(this.articleData);
             this.orderService.setOrderData(data);
