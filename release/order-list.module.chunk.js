@@ -81,6 +81,7 @@ var OrderListComponent = /** @class */ (function () {
         }, 1000);
     };
     OrderListComponent.prototype.getOrderStatus = function (status) {
+        console.log('dept getOrderStatus+++++++++++++++++++++', status);
         var str = 'In progress';
         switch (status) {
             case 0:
@@ -122,7 +123,7 @@ var OrderListComponent = /** @class */ (function () {
             itemId: items
         };
         this.websocketService.updateOrder(order._id, opts).then(function (data) {
-            console.log("dept Order updated", data);
+            console.log("updateOrder dept Order updated++++++++++++++++", data);
         }).catch(function (error) {
             console.log("error", error);
         });
@@ -137,7 +138,7 @@ var OrderListComponent = /** @class */ (function () {
             itemId: items
         };
         this.websocketService.updateOrder(order, opts).then(function (data) {
-            console.log("dept item updated", data);
+            console.log("updateItem dept item updated+++++++++++++", data);
         }).catch(function (error) {
             console.log("error", error);
         });
