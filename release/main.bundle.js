@@ -1427,15 +1427,25 @@ var StepsComponent = /** @class */ (function () {
         }
         if (data && data.tab) {
             this.activetab[data.tab] = true;
+            var stepdata = {
+                tab: data.tab,
+                step: data.step
+            };
+            this.globalService.setTabData(stepdata);
         }
         else {
             this.activetab[0] = true;
+            var stepdata = {
+                tab: 0,
+                step: this.stepArray[0]
+            };
+            this.globalService.setTabData(stepdata);
         }
-        var stepdata = {
-            tab: 0,
-            step: this.stepArray[0]
-        };
-        this.globalService.setTabData(stepdata);
+        // let stepdata = {
+        //   tab: 0,
+        //   step: this.stepArray[0]
+        // }
+        // this.globalService.setTabData(stepdata);
     };
     StepsComponent.prototype.addStep = function () {
         var count = this.stepArray.length + 1;
