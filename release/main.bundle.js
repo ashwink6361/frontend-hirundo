@@ -728,19 +728,6 @@ var WebsocketService = /** @class */ (function () {
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.socket.on('neworder', function (data) {
             console.log("Received Order from Websocket Server", data);
-            // for (let j = 0; j < data.item.length; j++) {
-            //     let userType = this.authGuard.getCurrentUser().userType;
-            //     if(userType == 3){
-            //         this._orders.unshift(data);                    
-            //         break;                    
-            //     }
-            //     else if(userType == 4){
-            //         if (data.item[j].category == this.authGuard.getCurrentUser().category) {
-            //             this._orders.unshift(data);
-            //             break;
-            //         }
-            //     }
-            // }
             var userType = _this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
                 _this._orders.unshift(data);
@@ -764,6 +751,7 @@ var WebsocketService = /** @class */ (function () {
                             if (data.order.itemId === _this._orders[i].item[j].id._id) {
                                 _this._orders[i].item[j].status = data.order.status;
                             }
+                            console.log('this._orders[i]', _this._orders[i]);
                         }
                     }
                     console.log(_this._orders[i], 'this._orders[i]');

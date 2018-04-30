@@ -50,6 +50,7 @@ export class OrderListComponent implements OnInit {
     }
 
     public getOrderStatus(status) {
+        console.log('dept getOrderStatus+++++++++++++++++++++',status);
         var str = 'In progress';
         switch (status) {
             case 0:
@@ -87,7 +88,7 @@ export class OrderListComponent implements OnInit {
             itemId: items
         };
         this.websocketService.updateOrder(order._id, opts).then(data => {
-            console.log("dept Order updated", data);
+            console.log("updateOrder dept Order updated++++++++++++++++", data);
         }).catch(error => {
             console.log("error", error);
         });
@@ -102,7 +103,7 @@ export class OrderListComponent implements OnInit {
             itemId: items
         };
         this.websocketService.updateOrder(order, opts).then(data => {
-            console.log("dept item updated", data);
+            console.log("updateItem dept item updated+++++++++++++", data);
         }).catch(error => {
             console.log("error", error);
         });

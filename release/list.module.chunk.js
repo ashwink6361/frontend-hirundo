@@ -62,7 +62,6 @@ var ListComponent = /** @class */ (function () {
         var _this = this;
         this.websocketService.getWaiterOrders().then(function (data) {
             _this.orders = data;
-            console.log(_this.orders, 'this.orer');
             _this.loadingOrders = false;
         })
             .catch(function (error) {
@@ -70,7 +69,6 @@ var ListComponent = /** @class */ (function () {
         });
     };
     ListComponent.prototype.getOrderStatus = function (status) {
-        console.log(status, 'order status');
         var str = 'In progress';
         switch (status) {
             case 0:
@@ -105,7 +103,6 @@ var ListComponent = /** @class */ (function () {
             itemId: items
         };
         this.websocketService.updateOrder(order._id, opts).then(function (data) {
-            console.log("dept Order updated", data);
         }).catch(function (error) {
             console.log("error", error);
         });
@@ -120,7 +117,6 @@ var ListComponent = /** @class */ (function () {
             itemId: items
         };
         this.websocketService.updateWaiterOrder(order, opts).then(function (data) {
-            console.log("waiter Order updated", data);
         }).catch(function (error) {
             console.log("error", error);
         });

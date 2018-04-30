@@ -282,8 +282,8 @@ var ChooseCategoryComponent = /** @class */ (function () {
                         orderdata.categoryItems[j].quantity = 0;
                         orderdata.categoryItems[j].itemTotal = 0;
                     }
-                    _this.orderService.setOrderData(orderdata);
                 }
+                _this.orderService.setOrderData(orderdata);
             }
             _this.router.navigate(['/waiter/order/:id/choose-item']);
         })
