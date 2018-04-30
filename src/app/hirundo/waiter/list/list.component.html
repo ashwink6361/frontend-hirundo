@@ -1,6 +1,6 @@
 <div *ngIf="!loadingOrders" class="order-list-container">
     <div class="card order-list" *ngFor="let order of orders">
-        <div class="card-body" [class.opacity]="order.status == 3">
+        <div class="card-body" [class.opacity]="order.status == 3" [class.disabled]="order.status == 1 || order.status == 3">
             <h4 class="card-title">
                 <div>
                     <i class="far fa-clock"></i> {{order.created_at | date:'hh:mm a'}}</div>
@@ -25,8 +25,8 @@
                     <div class="order-item-detail">
                         {{item.id.name}}
                         <ul>
-                            <li *ngFor="let varient of item.id.variant">
-                                {{varient.name}}
+                            <li *ngFor="let varient of item.variant">
+                                <i *ngIf="varient.status == 1">+</i><i *ngIf="varient.status == 0">-</i> {{varient.name}}
                             </li>
                         </ul>
                     </div>
@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="btn-container d-flex justify-content-between">
-                <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 3)">Cancel</button>
+                <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 3)" >Cancel</button>
                 <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 1)">Delivered</button>
             </div>
         </div>

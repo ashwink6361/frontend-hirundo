@@ -56,6 +56,11 @@ export class WebsocketService {
                 for(var i=0; i<this._orders.length; i++) {
                     if(data.id === this._orders[i]._id) {
                         this._orders[i].status = data.status;
+                        for(var j=0; j<this._orders[i].item.length; j++) {
+                            if(data.order.itemId === this._orders[i].item[j].id._id) {
+                                this._orders[i].item[j].status = data.order.status;
+                            }
+                        }
                     }
                 }
             }

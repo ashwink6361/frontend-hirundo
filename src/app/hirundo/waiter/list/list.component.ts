@@ -25,6 +25,7 @@ export class ListComponent implements OnInit {
     }
 
     public getOrderStatus(status) {
+        console.log(status, 'order status')
         var str = 'In progress';
         switch (status) {
             case 0:
