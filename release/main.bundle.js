@@ -747,7 +747,7 @@ var WebsocketService = /** @class */ (function () {
             }
             else if (userType == 4) {
                 for (var j = 0; j < data.item.length; j++) {
-                    if (data.item[j].category == _this.authGuard.getCurrentUser().category) {
+                    if (_this.authGuard.getCurrentUser().category.indexOf(data.item[j].category) > -1) {
                         _this._orders.unshift(data);
                         break;
                     }
@@ -785,8 +785,11 @@ var WebsocketService = /** @class */ (function () {
     };
     WebsocketService.prototype.getOrders = function () {
         var _this = this;
-        var url = '/api/department/orders/' + this.authGuard.getCurrentUser().category;
-        return this.http.get(url).toPromise()
+        var url = '/api/department/orders';
+        var opts = {
+            category: this.authGuard.getCurrentUser().category
+        };
+        return this.http.post(url, opts).toPromise()
             .then(function (data) {
             var res = data.json();
             _this._orders = res.data;
