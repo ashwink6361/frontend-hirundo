@@ -25,13 +25,29 @@ export class CartComponent implements OnInit {
     let data = this.orderService.getOrderData();
     var itemarray = [];
     for (let i = 0; i < data.selectedItems.length; i++) {
+      var vararray = [];
+      if(data.selectedItems[i].variant){
+        for (let j = 0; j < data.selectedItems[i].variant.length; j++) {
+          var catarray = [];
+          for (let k = 0; k < data.selectedItems[i].variant[j].category.length; k++) {
+            catarray.push(data.selectedItems[i].variant[j].category[k]._id);
+          }
+          var vari = {
+            name: data.selectedItems[i].variant[j].name,
+            category: catarray,
+            price: data.selectedItems[i].variant[j].price,
+            status: data.selectedItems[i].variant[j].status          
+          }
+          vararray.push(vari);
+        }
+      }
       var item = {
         id: data.selectedItems[i]._id,
         category: data.selectedItems[i].category._id,
         quantity: data.selectedItems[i].quantity,
         price: data.selectedItems[i].price,
-        notes: '',
-        variant: [],
+        notes: data.selectedItems[i].ordernote ? data.selectedItems[i].ordernote : '',
+        variant: vararray,
         step: data.selectedItems[i].step
       }
       itemarray.push(item);

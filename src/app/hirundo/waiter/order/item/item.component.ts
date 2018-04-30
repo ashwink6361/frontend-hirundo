@@ -314,7 +314,7 @@ export class ItemComponent implements OnInit {
     else{
       this.articleData.quantity = this.variantData.quantity;
       this.articleData.variant = this.variantData.variant;
-      this.articleData.notes = this.variantData.notes;
+      this.articleData.ordernote = this.variantData.notes;
       this.articleData.step = this.globalService.getTabData().step;    
       let data = this.orderService.getOrderData();
       data.selectedItems.push(this.articleData);
