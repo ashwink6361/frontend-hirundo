@@ -70,8 +70,15 @@ export class CartComponent implements OnInit {
   }
 
   deleteItemFromCart(article) {
+    console.log('article', article);
+    
     let data = this.orderService.getOrderData();
     for (let i = 0; i < data.selectedItems.length; i++) {
+      // for(let m=0;m<data.categoryItems.length;m++){
+      //   if(data.categoryItems[m]._id == article._id){
+      //   data.categoryItems[m].itemTotal = data.categoryItems[m].itemTotal - article.quantity;
+      //   }
+      // } 
       if (data.selectedItems[i]._id == article._id && !article.variant) {
         //non variant type data
         if (!data.selectedItems[i].variant) {
@@ -89,6 +96,11 @@ export class CartComponent implements OnInit {
       let varicost = 0;                                                                                                                                              
       if(data.selectedItems.length){
         for (let i = 0; i < data.selectedItems.length; i++) {
+          // for(let k=0;k<data.categoryItems.length;k++){
+          //   if(data.categoryItems[k]._id == data.selectedItems[i]._id){
+          //     data.categoryItems[k].itemTotal = data.selectedItems[i].quantity;
+          //   }
+          // }
           itemno += data.selectedItems[i].quantity; 
           if (data.selectedItems[i].variant) {
             for (let j = 0; j < data.selectedItems[i].variant.length; j++) {
