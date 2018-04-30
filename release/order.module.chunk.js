@@ -3,7 +3,7 @@ webpackJsonp(["order.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/order/cart/cart.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header class=\"page-content-header\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter/order/:id/choose-item\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\">\r\n        Create Order\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n<app-steps></app-steps>    \r\n    <div class=\"item-container\">\r\n        <div class=\"text-center\" *ngIf=\"!(items && items.length)\">No Item Add</div>\r\n        <div *ngIf=\"(items && items.length)\">\r\n            <div  *ngFor=\"let article of items\">\r\n                <div class=\"item-list align-items-center\" *ngIf=\"article.step == globalService.getTabData().step\">\r\n                    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                            alt=\"Category Logo\" />\r\n                        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                        <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\r\n                    </div>\r\n                    <div class=\"item-name mw-160\">\r\n                        <p class=\"name m-0\">{{article.name}}</p>\r\n                        <p class=\"name m-0\">&euro;{{article.price}}</p>\r\n                        <span *ngIf=\"article.variant && article.variant.length\">\r\n                            <span *ngFor=\"let variant of article.variant\" class=\"d-flex added-variand-name\">\r\n                                <span *ngIf=\"variant.status == 0\">- {{variant.name}} </span>\r\n                                <span *ngIf=\"variant.status == 1\">+ {{variant.name}} &euro;{{variant.price}}</span>\r\n                            </span>\r\n                        </span>\r\n                        <span *ngIf=\"article.notes\" class=\"d-flex added-variand-name\">{{article.notes}}</span>\r\n                    </div>\r\n                    <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"deleteItemFromCart(article)\">\r\n                        <i class=\"fas fa-times\"></i>\r\n                    </button>\r\n                </div>\r\n            </div>\r\n            <div class=\"total-amount\">\r\n                Sub Total: &euro;{{orderService.getOrderData().cartTotalPrice}}\r\n            </div>\r\n        </div>\r\n        <button type=\"submit\" class=\"order-btn waves-light\" [disabled]=\"!orderService.getOrderData().selectedItems.length\" (click)=\"createOrder()\">\r\n            Create Order\r\n        </button>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<header class=\"page-content-header\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter/order/:id/choose-item\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\">\r\n        Create Order\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n<app-steps></app-steps>    \r\n    <div class=\"item-container\">\r\n        <div class=\"text-center\" *ngIf=\"!(items && items.length)\">No Item Add</div>\r\n        <div *ngIf=\"(items && items.length)\">\r\n            <div  *ngFor=\"let article of items\">\r\n                <div class=\"item-list align-items-center\" *ngIf=\"article.step == globalService.getTabData().step\">\r\n                    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                            alt=\"Category Logo\" />\r\n                        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                        <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\r\n                    </div>\r\n                    <div class=\"item-name mw-160\">\r\n                        <p class=\"name m-0\">{{article.name}}</p>\r\n                        <p class=\"name m-0\">&euro;{{article.price}}</p>\r\n                        <span *ngIf=\"article.variant && article.variant.length\">\r\n                            <span *ngFor=\"let variant of article.variant\" class=\"d-flex added-variand-name\">\r\n                                <span *ngIf=\"variant.status == 0\">- {{variant.name}} </span>\r\n                                <span *ngIf=\"variant.status == 1\">+ {{variant.name}} &euro;{{variant.price}}</span>\r\n                            </span>\r\n                        </span>\r\n                        <span *ngIf=\"article.ordernote\" class=\"d-flex added-variand-name\">{{article.ordernote}}</span>\r\n                    </div>\r\n                    <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"deleteItemFromCart(article)\">\r\n                        <i class=\"fas fa-times\"></i>\r\n                    </button>\r\n                </div>\r\n            </div>\r\n            <div class=\"total-amount\">\r\n                Sub Total: &euro;{{orderService.getOrderData().cartTotalPrice}}\r\n            </div>\r\n        </div>\r\n        <button type=\"submit\" class=\"order-btn waves-light\" [disabled]=\"!orderService.getOrderData().selectedItems.length\" (click)=\"createOrder()\">\r\n            Create Order\r\n        </button>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -69,13 +69,29 @@ var CartComponent = /** @class */ (function () {
         var data = this.orderService.getOrderData();
         var itemarray = [];
         for (var i = 0; i < data.selectedItems.length; i++) {
+            var vararray = [];
+            if (data.selectedItems[i].variant) {
+                for (var j = 0; j < data.selectedItems[i].variant.length; j++) {
+                    var catarray = [];
+                    for (var k = 0; k < data.selectedItems[i].variant[j].category.length; k++) {
+                        catarray.push(data.selectedItems[i].variant[j].category[k]._id);
+                    }
+                    var vari = {
+                        name: data.selectedItems[i].variant[j].name,
+                        category: catarray,
+                        price: data.selectedItems[i].variant[j].price,
+                        status: data.selectedItems[i].variant[j].status
+                    };
+                    vararray.push(vari);
+                }
+            }
             var item = {
                 id: data.selectedItems[i]._id,
                 category: data.selectedItems[i].category._id,
                 quantity: data.selectedItems[i].quantity,
                 price: data.selectedItems[i].price,
-                notes: '',
-                variant: [],
+                notes: data.selectedItems[i].ordernote ? data.selectedItems[i].ordernote : '',
+                variant: vararray,
                 step: data.selectedItems[i].step
             };
             itemarray.push(item);
@@ -97,8 +113,14 @@ var CartComponent = /** @class */ (function () {
         });
     };
     CartComponent.prototype.deleteItemFromCart = function (article) {
+        console.log('article', article);
         var data = this.orderService.getOrderData();
         for (var i = 0; i < data.selectedItems.length; i++) {
+            // for(let m=0;m<data.categoryItems.length;m++){
+            //   if(data.categoryItems[m]._id == article._id){
+            //   data.categoryItems[m].itemTotal = data.categoryItems[m].itemTotal - article.quantity;
+            //   }
+            // } 
             if (data.selectedItems[i]._id == article._id && !article.variant) {
                 //non variant type data
                 if (!data.selectedItems[i].variant) {
@@ -116,6 +138,11 @@ var CartComponent = /** @class */ (function () {
             var varicost = 0;
             if (data.selectedItems.length) {
                 for (var i_1 = 0; i_1 < data.selectedItems.length; i_1++) {
+                    // for(let k=0;k<data.categoryItems.length;k++){
+                    //   if(data.categoryItems[k]._id == data.selectedItems[i]._id){
+                    //     data.categoryItems[k].itemTotal = data.selectedItems[i].quantity;
+                    //   }
+                    // }
                     itemno += data.selectedItems[i_1].quantity;
                     if (data.selectedItems[i_1].variant) {
                         for (var j = 0; j < data.selectedItems[i_1].variant.length; j++) {
@@ -253,9 +280,10 @@ var ChooseCategoryComponent = /** @class */ (function () {
                     orderdata.categoryItems = data.data[i].items;
                     for (var j = 0; j < orderdata.categoryItems.length; j++) {
                         orderdata.categoryItems[j].quantity = 0;
+                        orderdata.categoryItems[j].itemTotal = 0;
                     }
-                    _this.orderService.setOrderData(orderdata);
                 }
+                _this.orderService.setOrderData(orderdata);
             }
             _this.router.navigate(['/waiter/order/:id/choose-item']);
         })
@@ -584,6 +612,11 @@ var ItemComponent = /** @class */ (function () {
         var itemno = 0;
         var varicost = 0;
         for (var i = 0; i < data.selectedItems.length; i++) {
+            // for(let j=0;j<data.categoryItems.length;j++){
+            //   if(data.categoryItems[j]._id == data.selectedItems[i]._id){
+            //     data.categoryItems[j].itemTotal = data.selectedItems[i].quantity;
+            //   }
+            // }
             itemno += data.selectedItems[i].quantity;
             if (data.selectedItems[i].variant) {
                 for (var j = 0; j < data.selectedItems[i].variant.length; j++) {
@@ -598,6 +631,7 @@ var ItemComponent = /** @class */ (function () {
         }
         this.orderService.setOrderData(data);
         console.log('inc this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
+        // this.articles = this.orderService.getOrderData().categoryItems; 
     };
     ItemComponent.prototype.decreaseValue = function (article) {
         console.log('article dec', article);
@@ -607,9 +641,19 @@ var ItemComponent = /** @class */ (function () {
             if (data.selectedItems[i]._id == article._id && !data.selectedItems[i].variant) {
                 if (data.selectedItems[i].quantity > 1) {
                     data.selectedItems[i].quantity = data.selectedItems[i].quantity - 1;
+                    // for(let j=0;j<data.categoryItems.length;j++){
+                    //   if(data.categoryItems[j]._id == data.selectedItems[i]._id){
+                    //     data.categoryItems[j].itemTotal = data.categoryItems[j].itemTotal - data.selectedItems[i].quantity;
+                    //   }
+                    // }
                 }
                 else {
                     article.quantity = 0;
+                    // for(let j=0;j<data.categoryItems.length;j++){
+                    //   if(data.categoryItems[j]._id == data.selectedItems[i]._id){
+                    //     data.categoryItems[j].itemTotal = data.categoryItems[j].itemTotal - article.quantity;
+                    //   }
+                    // }
                     data.selectedItems.splice(i, 1);
                 }
             }
@@ -638,6 +682,7 @@ var ItemComponent = /** @class */ (function () {
         }
         this.orderService.setOrderData(data);
         console.log('dec this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
+        // this.articles = this.orderService.getOrderData().categoryItems;  
     };
     ItemComponent.prototype.viewCart = function () {
         this.router.navigate(['/waiter/order/:id/cart']);
@@ -753,10 +798,15 @@ var ItemComponent = /** @class */ (function () {
         else {
             this.articleData.quantity = this.variantData.quantity;
             this.articleData.variant = this.variantData.variant;
-            this.articleData.notes = this.variantData.notes;
+            this.articleData.ordernote = this.variantData.notes;
             this.articleData.step = this.globalService.getTabData().step;
             var data = this.orderService.getOrderData();
             data.selectedItems.push(this.articleData);
+            // for(let i=0;i<data.categoryItems.length;i++){
+            //   if(data.categoryItems[i]._id == this.articleData._id){
+            //   data.categoryItems[i].itemTotal = data.categoryItems[i].itemTotal + this.articleData.quantity;
+            //   }
+            // }
             var cp = 0;
             var itemno = 0;
             var varicost = 0;
@@ -776,6 +826,7 @@ var ItemComponent = /** @class */ (function () {
             this.orderService.setOrderData(data);
             this.hideVarient();
             console.log('variant this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
+            // this.articles = this.orderService.getOrderData().categoryItems;    
         }
     };
     ItemComponent = __decorate([

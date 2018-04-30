@@ -47,6 +47,11 @@ body {
     min-height: 409px;
 }
 
+.disabled{
+    pointer-events: none !important;
+    cursor: not-allowed;
+}
+
 .btn.btn-floating {
     background: #c5c8cd;
     border: none;
@@ -739,6 +744,7 @@ header {
                     list-style: none;
                     li {
                         display: block;
+                        font-size: 12px;
                     }
                 }
             }

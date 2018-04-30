@@ -20,6 +20,7 @@ export class OrderListComponent implements OnInit {
     }
 
     ngOnInit() {
+       
         this.websocketService.getOrders().then(data => {
             this.orders = data;
             // for(let i = 0; i<this.orders.length; i++){
@@ -49,6 +50,7 @@ export class OrderListComponent implements OnInit {
     }
 
     public getOrderStatus(status) {
+        console.log('dept getOrderStatus+++++++++++++++++++++',status);
         var str = 'In progress';
         switch (status) {
             case 0:
@@ -72,16 +74,21 @@ export class OrderListComponent implements OnInit {
         order.status = status;
         let items = [];
         for (let i = 0; i < order.item.length; i++) {
-            if(order.item[i].category == this.authGuard.getCurrentUser().category){
-                items.push(order.item[i].id._id)
+            for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
+                if (order.item[i].category == this.authGuard.getCurrentUser().category[k]) {
+                    items.push(order.item[i].id._id)
+                }
             }
+            // if(order.item[i].category == this.authGuard.getCurrentUser().category){
+            //     items.push(order.item[i].id._id)
+            // }
         }
         let opts = {
             status: status,
             itemId: items
         };
         this.websocketService.updateOrder(order._id, opts).then(data => {
-            console.log("dept Order updated", data);
+            console.log("updateOrder dept Order updated++++++++++++++++", data);
         }).catch(error => {
             console.log("error", error);
         });
@@ -96,7 +103,7 @@ export class OrderListComponent implements OnInit {
             itemId: items
         };
         this.websocketService.updateOrder(order, opts).then(data => {
-            console.log("dept item updated", data);
+            console.log("updateItem dept item updated+++++++++++++", data);
         }).catch(error => {
             console.log("error", error);
         });

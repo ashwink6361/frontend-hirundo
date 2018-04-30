@@ -24,26 +24,13 @@ export class WebsocketService {
         let user = JSON.parse(localStorage.getItem('currentUser'));
         this.socket.on('neworder', (data) => {
             console.log("Received Order from Websocket Server", data);
-            // for (let j = 0; j < data.item.length; j++) {
-            //     let userType = this.authGuard.getCurrentUser().userType;
-            //     if(userType == 3){
-            //         this._orders.unshift(data);                    
-            //         break;                    
-            //     }
-            //     else if(userType == 4){
-            //         if (data.item[j].category == this.authGuard.getCurrentUser().category) {
-            //             this._orders.unshift(data);
-            //             break;
-            //         }
-            //     }
-            // }
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
                 this._orders.unshift(data);
             }
             else if (userType == 4) {
                 for (let j = 0; j < data.item.length; j++) {
-                    if (data.item[j].category == this.authGuard.getCurrentUser().category) {
+                    if (this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)>-1) {
                         this._orders.unshift(data);
                         break;
                     }
@@ -56,7 +43,14 @@ export class WebsocketService {
                 for(var i=0; i<this._orders.length; i++) {
                     if(data.id === this._orders[i]._id) {
                         this._orders[i].status = data.status;
+                        for(var j=0; j<this._orders[i].item.length; j++) {
+                            if(data.order.itemId === this._orders[i].item[j].id._id) {
+                                this._orders[i].item[j].status = data.order.status;
+                            }
+                            console.log('this._orders[i]',this._orders[i]);
+                        }
                     }
+                    console.log(this._orders[i], 'this._orders[i]')
                 }
             }
         });
@@ -75,8 +69,11 @@ export class WebsocketService {
     }
 
     public getOrders(): Promise<any> {
-        let url = '/api/department/orders/'+this.authGuard.getCurrentUser().category;
-        return this.http.get(url).toPromise()
+        let url = '/api/department/orders';
+        let opts = {
+            category : this.authGuard.getCurrentUser().category
+        }
+        return this.http.post(url,opts).toPromise()
             .then(data => {
                 let res = data.json();
                 this._orders = res.data;

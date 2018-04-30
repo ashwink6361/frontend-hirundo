@@ -1,5 +1,5 @@
 <div>
-    <div class="text-center" *ngIf="loadingOrders">Loading...</div>
+    <div class="text-center" *ngIf="loadingOrders">No Order Found</div>
     <div *ngIf="!loadingOrders" class="order-list-container">
         <div class="card order-list" *ngFor="let order of orders | orderby: '-created_at'">
             <div class="card-body" [class.opacity]="order.status == 3">
@@ -20,7 +20,7 @@
                 </div>
                 <div class="order-items-container">
                     <div *ngFor="let item of order.item">
-                        <div class="order-item" *ngIf="item.category == authGuard.getCurrentUser().category">
+                        <div class="order-item" *ngIf="this.authGuard.getCurrentUser().category.indexOf(item.category)>-1">
                             <label class="label item-status">{{getOrderStatus(item.status)}}</label>
                             <div class="order-item-img">
                                 {{item.quantity}} X
@@ -28,8 +28,8 @@
                             <div class="order-item-detail">
                                 {{item.id.name}}
                                 <ul>
-                                    <li *ngFor="let varient of item.id.variant">
-                                        {{varient.name}}
+                                    <li *ngFor="let varient of item.variant">
+                                        <i *ngIf="varient.status == 1">+</i><i *ngIf="varient.status == 0">-</i> {{varient.name}}
                                     </li>
                                 </ul>
                             </div>

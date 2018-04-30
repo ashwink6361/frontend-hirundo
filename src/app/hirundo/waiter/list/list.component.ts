@@ -55,7 +55,6 @@ export class ListComponent implements OnInit {
             itemId: items
         };
         this.websocketService.updateOrder(order._id, opts).then(data => {
-            console.log("dept Order updated", data);
         }).catch(error => {
             console.log("error", error);
         });
@@ -70,7 +69,6 @@ export class ListComponent implements OnInit {
             itemId: items
         };
         this.websocketService.updateWaiterOrder(order, opts).then(data => {
-            console.log("waiter Order updated", data);
         }).catch(error => {
             console.log("error", error);
         });

@@ -728,26 +728,13 @@ var WebsocketService = /** @class */ (function () {
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.socket.on('neworder', function (data) {
             console.log("Received Order from Websocket Server", data);
-            // for (let j = 0; j < data.item.length; j++) {
-            //     let userType = this.authGuard.getCurrentUser().userType;
-            //     if(userType == 3){
-            //         this._orders.unshift(data);                    
-            //         break;                    
-            //     }
-            //     else if(userType == 4){
-            //         if (data.item[j].category == this.authGuard.getCurrentUser().category) {
-            //             this._orders.unshift(data);
-            //             break;
-            //         }
-            //     }
-            // }
             var userType = _this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
                 _this._orders.unshift(data);
             }
             else if (userType == 4) {
                 for (var j = 0; j < data.item.length; j++) {
-                    if (data.item[j].category == _this.authGuard.getCurrentUser().category) {
+                    if (_this.authGuard.getCurrentUser().category.indexOf(data.item[j].category) > -1) {
                         _this._orders.unshift(data);
                         break;
                     }
@@ -760,7 +747,14 @@ var WebsocketService = /** @class */ (function () {
                 for (var i = 0; i < _this._orders.length; i++) {
                     if (data.id === _this._orders[i]._id) {
                         _this._orders[i].status = data.status;
+                        for (var j = 0; j < _this._orders[i].item.length; j++) {
+                            if (data.order.itemId === _this._orders[i].item[j].id._id) {
+                                _this._orders[i].item[j].status = data.order.status;
+                            }
+                            console.log('this._orders[i]', _this._orders[i]);
+                        }
                     }
+                    console.log(_this._orders[i], 'this._orders[i]');
                 }
             }
         });
@@ -779,8 +773,11 @@ var WebsocketService = /** @class */ (function () {
     };
     WebsocketService.prototype.getOrders = function () {
         var _this = this;
-        var url = '/api/department/orders/' + this.authGuard.getCurrentUser().category;
-        return this.http.get(url).toPromise()
+        var url = '/api/department/orders';
+        var opts = {
+            category: this.authGuard.getCurrentUser().category
+        };
+        return this.http.post(url, opts).toPromise()
             .then(function (data) {
             var res = data.json();
             _this._orders = res.data;
@@ -1419,15 +1416,20 @@ var StepsComponent = /** @class */ (function () {
         }
         if (data && data.tab) {
             this.activetab[data.tab] = true;
+            var stepdata = {
+                tab: data.tab,
+                step: data.step
+            };
+            this.globalService.setTabData(stepdata);
         }
         else {
             this.activetab[0] = true;
+            var stepdata = {
+                tab: 0,
+                step: this.stepArray[0]
+            };
+            this.globalService.setTabData(stepdata);
         }
-        var stepdata = {
-            tab: 0,
-            step: this.stepArray[0]
-        };
-        this.globalService.setTabData(stepdata);
     };
     StepsComponent.prototype.addStep = function () {
         var count = this.stepArray.length + 1;

@@ -133,6 +133,11 @@ export class ItemComponent implements OnInit {
     let itemno = 0;   
     let varicost = 0;                                 
     for (let i = 0; i < data.selectedItems.length; i++) {
+      // for(let j=0;j<data.categoryItems.length;j++){
+      //   if(data.categoryItems[j]._id == data.selectedItems[i]._id){
+      //     data.categoryItems[j].itemTotal = data.selectedItems[i].quantity;
+      //   }
+      // }
       itemno += data.selectedItems[i].quantity;
       if (data.selectedItems[i].variant) {
         for (let j = 0; j < data.selectedItems[i].variant.length; j++) {
@@ -147,6 +152,7 @@ export class ItemComponent implements OnInit {
     }
     this.orderService.setOrderData(data);
     console.log('inc this.orderService.setOrderData(this.data);.',this.orderService.getOrderData());      
+    // this.articles = this.orderService.getOrderData().categoryItems; 
   }
 
   decreaseValue(article) {
@@ -155,12 +161,22 @@ export class ItemComponent implements OnInit {
     let data = this.orderService.getOrderData();
     for (let i = 0; i < data.selectedItems.length; i++) {
       if (data.selectedItems[i]._id == article._id && !data.selectedItems[i].variant) {
-          if(data.selectedItems[i].quantity>1){
-            data.selectedItems[i].quantity =  data.selectedItems[i].quantity - 1;
+        if (data.selectedItems[i].quantity > 1) {
+          data.selectedItems[i].quantity = data.selectedItems[i].quantity - 1;
+          // for(let j=0;j<data.categoryItems.length;j++){
+          //   if(data.categoryItems[j]._id == data.selectedItems[i]._id){
+          //     data.categoryItems[j].itemTotal = data.categoryItems[j].itemTotal - data.selectedItems[i].quantity;
+          //   }
+          // }
         }
-          else{
-            article.quantity = 0;
-          data.selectedItems.splice(i, 1);            
+        else {
+          article.quantity = 0;
+          // for(let j=0;j<data.categoryItems.length;j++){
+          //   if(data.categoryItems[j]._id == data.selectedItems[i]._id){
+          //     data.categoryItems[j].itemTotal = data.categoryItems[j].itemTotal - article.quantity;
+          //   }
+          // }
+          data.selectedItems.splice(i, 1);
         }
       }
     }
@@ -188,6 +204,7 @@ export class ItemComponent implements OnInit {
     }
     this.orderService.setOrderData(data);
     console.log('dec this.orderService.setOrderData(this.data);.',this.orderService.getOrderData());          
+    // this.articles = this.orderService.getOrderData().categoryItems;  
   }
 
   viewCart() {
@@ -314,10 +331,15 @@ export class ItemComponent implements OnInit {
     else{
       this.articleData.quantity = this.variantData.quantity;
       this.articleData.variant = this.variantData.variant;
-      this.articleData.notes = this.variantData.notes;
+      this.articleData.ordernote = this.variantData.notes;
       this.articleData.step = this.globalService.getTabData().step;    
       let data = this.orderService.getOrderData();
       data.selectedItems.push(this.articleData);
+      // for(let i=0;i<data.categoryItems.length;i++){
+      //   if(data.categoryItems[i]._id == this.articleData._id){
+      //   data.categoryItems[i].itemTotal = data.categoryItems[i].itemTotal + this.articleData.quantity;
+      //   }
+      // }
       let cp = 0;
       let itemno = 0;
       let varicost = 0;                                                                                                        
@@ -336,7 +358,8 @@ export class ItemComponent implements OnInit {
       }
       this.orderService.setOrderData(data);
       this.hideVarient(); 
-    console.log('variant this.orderService.setOrderData(this.data);.',this.orderService.getOrderData());            
-    }        
+      console.log('variant this.orderService.setOrderData(this.data);.',this.orderService.getOrderData());            
+      // this.articles = this.orderService.getOrderData().categoryItems;    
+  }        
   }
 }
