@@ -755,7 +755,7 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('orderstatus', function (data) {
-            // console.log(data, 'order status');
+            console.log(data, 'order status');
             if (data.by.id !== user._id) {
                 for (var i = 0; i < _this._orders.length; i++) {
                     if (data.id === _this._orders[i]._id) {
@@ -766,7 +766,7 @@ var WebsocketService = /** @class */ (function () {
                             }
                         }
                     }
-                    // console.log(this._orders[i], 'this._orders[i]')
+                    console.log(_this._orders[i], 'this._orders[i]');
                 }
             }
         });
@@ -1428,15 +1428,20 @@ var StepsComponent = /** @class */ (function () {
         }
         if (data && data.tab) {
             this.activetab[data.tab] = true;
+            var stepdata = {
+                tab: data.tab,
+                step: data.step
+            };
+            this.globalService.setTabData(stepdata);
         }
         else {
             this.activetab[0] = true;
+            var stepdata = {
+                tab: 0,
+                step: this.stepArray[0]
+            };
+            this.globalService.setTabData(stepdata);
         }
-        var stepdata = {
-            tab: 0,
-            step: this.stepArray[0]
-        };
-        this.globalService.setTabData(stepdata);
     };
     StepsComponent.prototype.addStep = function () {
         var count = this.stepArray.length + 1;

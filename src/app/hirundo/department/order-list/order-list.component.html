@@ -1,5 +1,5 @@
 <div>
-    <div class="text-center" *ngIf="loadingOrders">Loading...</div>
+    <div class="text-center" *ngIf="loadingOrders">No Order Found</div>
     <div *ngIf="!loadingOrders" class="order-list-container">
         <div class="card order-list" *ngFor="let order of orders | orderby: '-created_at'">
             <div class="card-body" [class.opacity]="order.status == 3">

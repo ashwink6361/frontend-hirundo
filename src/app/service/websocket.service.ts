@@ -51,7 +51,7 @@ export class WebsocketService {
             }
         });
         this.socket.on('orderstatus', (data) => {
-            // console.log(data, 'order status');
+            console.log(data, 'order status');
             if(data.by.id !== user._id) {
                 for(var i=0; i<this._orders.length; i++) {
                     if(data.id === this._orders[i]._id) {
@@ -62,7 +62,7 @@ export class WebsocketService {
                             }
                         }
                     }
-                    // console.log(this._orders[i], 'this._orders[i]')
+                    console.log(this._orders[i], 'this._orders[i]')
                 }
             }
         });
