@@ -760,6 +760,11 @@ var WebsocketService = /** @class */ (function () {
                 for (var i = 0; i < _this._orders.length; i++) {
                     if (data.id === _this._orders[i]._id) {
                         _this._orders[i].status = data.status;
+                        for (var j = 0; j < _this._orders[i].item.length; j++) {
+                            if (data.order.itemId === _this._orders[i].item[j].id._id) {
+                                _this._orders[i].item[j].status = data.order.status;
+                            }
+                        }
                     }
                 }
             }

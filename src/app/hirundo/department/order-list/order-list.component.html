@@ -28,8 +28,8 @@
                             <div class="order-item-detail">
                                 {{item.id.name}}
                                 <ul>
-                                    <li *ngFor="let varient of item.id.variant">
-                                        {{varient.name}}
+                                    <li *ngFor="let varient of item.variant">
+                                        <i *ngIf="varient.status == 1">+</i><i *ngIf="varient.status == 0">-</i> {{varient.name}}
                                     </li>
                                 </ul>
                             </div>
