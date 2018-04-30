@@ -205,6 +205,11 @@ body {
     .navbar-collapse {
         .language-option {
             position: relative;
+            &.show{
+                .dropdown-menu{
+                    top : 14px !important;
+                }
+            }
             .dropdown-toggle {
                 &:after {
                     display: none;
