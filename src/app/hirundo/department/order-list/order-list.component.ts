@@ -20,6 +20,7 @@ export class OrderListComponent implements OnInit {
     }
 
     ngOnInit() {
+       
         this.websocketService.getOrders().then(data => {
             this.orders = data;
             // for(let i = 0; i<this.orders.length; i++){
@@ -72,9 +73,14 @@ export class OrderListComponent implements OnInit {
         order.status = status;
         let items = [];
         for (let i = 0; i < order.item.length; i++) {
-            if(order.item[i].category == this.authGuard.getCurrentUser().category){
-                items.push(order.item[i].id._id)
+            for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
+                if (order.item[i].category == this.authGuard.getCurrentUser().category[k]) {
+                    items.push(order.item[i].id._id)
+                }
             }
+            // if(order.item[i].category == this.authGuard.getCurrentUser().category){
+            //     items.push(order.item[i].id._id)
+            // }
         }
         let opts = {
             status: status,

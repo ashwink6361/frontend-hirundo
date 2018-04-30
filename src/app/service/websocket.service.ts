@@ -43,7 +43,7 @@ export class WebsocketService {
             }
             else if (userType == 4) {
                 for (let j = 0; j < data.item.length; j++) {
-                    if (data.item[j].category == this.authGuard.getCurrentUser().category) {
+                    if (this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)>-1) {
                         this._orders.unshift(data);
                         break;
                     }
@@ -80,8 +80,11 @@ export class WebsocketService {
     }
 
     public getOrders(): Promise<any> {
-        let url = '/api/department/orders/'+this.authGuard.getCurrentUser().category;
-        return this.http.get(url).toPromise()
+        let url = '/api/department/orders';
+        let opts = {
+            category : this.authGuard.getCurrentUser().category
+        }
+        return this.http.post(url,opts).toPromise()
             .then(data => {
                 let res = data.json();
                 this._orders = res.data;
