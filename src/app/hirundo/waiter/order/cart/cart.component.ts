@@ -16,9 +16,7 @@ export class CartComponent implements OnInit {
   ngOnInit() {
     if (this.orderService.getOrderData().selectedItems) {
       this.items = this.orderService.getOrderData().selectedItems;
-      console.log('this.items',this.items);
     }
-    console.log(this.globalService.getTabData(), 'sdafs')
   }
 
   createOrder() {
@@ -26,7 +24,7 @@ export class CartComponent implements OnInit {
     var itemarray = [];
     for (let i = 0; i < data.selectedItems.length; i++) {
       var vararray = [];
-      if(data.selectedItems[i].variant){
+      if (data.selectedItems[i].variant) {
         for (let j = 0; j < data.selectedItems[i].variant.length; j++) {
           var catarray = [];
           for (let k = 0; k < data.selectedItems[i].variant[j].category.length; k++) {
@@ -36,7 +34,7 @@ export class CartComponent implements OnInit {
             name: data.selectedItems[i].variant[j].name,
             category: catarray,
             price: data.selectedItems[i].variant[j].price,
-            status: data.selectedItems[i].variant[j].status          
+            status: data.selectedItems[i].variant[j].status
           }
           vararray.push(vari);
         }
@@ -58,10 +56,8 @@ export class CartComponent implements OnInit {
       noOfPeople: data.numberOfPerson,
       item: itemarray
     }
-    console.log('createorder', createorder);
     this.orderService.createOrder(createorder)
       .then(data => {
-        console.log('data', data);
         this.router.navigate(['/waiter/list'])
       })
       .catch(error => {
@@ -70,53 +66,51 @@ export class CartComponent implements OnInit {
   }
 
   deleteItemFromCart(article) {
-    console.log('article', article);
-    
     let data = this.orderService.getOrderData();
     for (let i = 0; i < data.selectedItems.length; i++) {
-      // for(let m=0;m<data.categoryItems.length;m++){
-      //   if(data.categoryItems[m]._id == article._id){
-      //   data.categoryItems[m].itemTotal = data.categoryItems[m].itemTotal - article.quantity;
-      //   }
-      // } 
       if (data.selectedItems[i]._id == article._id && !article.variant) {
         //non variant type data
+        for (let m = 0; m < data.categoryItems.length; m++) {
+          if (data.categoryItems[m]._id == data.selectedItems[i]._id) {
+            data.categoryItems[m].itemTotal = data.categoryItems[m].itemTotal - data.selectedItems[i].quantity;
+          }
+        }
         if (!data.selectedItems[i].variant) {
           data.selectedItems.splice(i, 1);
         }
       }
       else if (data.selectedItems[i]._id == article._id && article.variant) {
         //variant type data
+        for (let m = 0; m < data.categoryItems.length; m++) {
+          if (data.categoryItems[m]._id == data.selectedItems[i]._id) {
+            data.categoryItems[m].itemTotal = data.categoryItems[m].itemTotal - data.selectedItems[i].quantity;
+          }
+        }
         if (data.selectedItems[i].variant) {
           data.selectedItems.splice(i, 1);
         }
       }
       let cp = 0;
-      let itemno = 0;    
-      let varicost = 0;                                                                                                                                              
-      if(data.selectedItems.length){
+      let itemno = 0;
+      let varicost = 0;
+      if (data.selectedItems.length) {
         for (let i = 0; i < data.selectedItems.length; i++) {
-          // for(let k=0;k<data.categoryItems.length;k++){
-          //   if(data.categoryItems[k]._id == data.selectedItems[i]._id){
-          //     data.categoryItems[k].itemTotal = data.selectedItems[i].quantity;
-          //   }
-          // }
-          itemno += data.selectedItems[i].quantity; 
+          itemno += data.selectedItems[i].quantity;
           if (data.selectedItems[i].variant) {
             for (let j = 0; j < data.selectedItems[i].variant.length; j++) {
               if (data.selectedItems[i].variant[j].status == 1) {
                 varicost += data.selectedItems[i].variant[j].price;
               }
             }
-          }                                       
+          }
           cp += (data.selectedItems[i].price + varicost) * data.selectedItems[i].quantity;
           data.cartTotalPrice = cp;
-          data.cartTotalItem = itemno;                                                        
+          data.cartTotalItem = itemno;
         }
       }
-      else{
+      else {
         data.cartTotalPrice = 0;
-        data.cartTotalItem = 0;                                                        
+        data.cartTotalItem = 0;
       }
       this.orderService.setOrderData(data);
       this.items = this.orderService.getOrderData().selectedItems;

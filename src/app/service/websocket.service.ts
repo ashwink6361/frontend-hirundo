@@ -39,7 +39,7 @@ export class WebsocketService {
         });
         this.socket.on('orderstatus', (data) => {
             console.log(data, 'order status');
-            if(data.by.id !== user._id) {
+            // if(data.by.id !== user._id) {
                 for(var i=0; i<this._orders.length; i++) {
                     if(data.id === this._orders[i]._id) {
                         this._orders[i].status = data.status;
@@ -52,7 +52,7 @@ export class WebsocketService {
                     }
                     console.log(this._orders[i], 'this._orders[i]')
                 }
-            }
+            // }
         });
         this.socket.on('tablestatus', (data) => {
             for (var i = 0; i < this._rooms.length; i++) {

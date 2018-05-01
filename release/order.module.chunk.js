@@ -60,9 +60,7 @@ var CartComponent = /** @class */ (function () {
     CartComponent.prototype.ngOnInit = function () {
         if (this.orderService.getOrderData().selectedItems) {
             this.items = this.orderService.getOrderData().selectedItems;
-            console.log('this.items', this.items);
         }
-        console.log(this.globalService.getTabData(), 'sdafs');
     };
     CartComponent.prototype.createOrder = function () {
         var _this = this;
@@ -102,10 +100,8 @@ var CartComponent = /** @class */ (function () {
             noOfPeople: data.numberOfPerson,
             item: itemarray
         };
-        console.log('createorder', createorder);
         this.orderService.createOrder(createorder)
             .then(function (data) {
-            console.log('data', data);
             _this.router.navigate(['/waiter/list']);
         })
             .catch(function (error) {
@@ -113,22 +109,26 @@ var CartComponent = /** @class */ (function () {
         });
     };
     CartComponent.prototype.deleteItemFromCart = function (article) {
-        console.log('article', article);
         var data = this.orderService.getOrderData();
         for (var i = 0; i < data.selectedItems.length; i++) {
-            // for(let m=0;m<data.categoryItems.length;m++){
-            //   if(data.categoryItems[m]._id == article._id){
-            //   data.categoryItems[m].itemTotal = data.categoryItems[m].itemTotal - article.quantity;
-            //   }
-            // } 
             if (data.selectedItems[i]._id == article._id && !article.variant) {
                 //non variant type data
+                for (var m = 0; m < data.categoryItems.length; m++) {
+                    if (data.categoryItems[m]._id == data.selectedItems[i]._id) {
+                        data.categoryItems[m].itemTotal = data.categoryItems[m].itemTotal - data.selectedItems[i].quantity;
+                    }
+                }
                 if (!data.selectedItems[i].variant) {
                     data.selectedItems.splice(i, 1);
                 }
             }
             else if (data.selectedItems[i]._id == article._id && article.variant) {
                 //variant type data
+                for (var m = 0; m < data.categoryItems.length; m++) {
+                    if (data.categoryItems[m]._id == data.selectedItems[i]._id) {
+                        data.categoryItems[m].itemTotal = data.categoryItems[m].itemTotal - data.selectedItems[i].quantity;
+                    }
+                }
                 if (data.selectedItems[i].variant) {
                     data.selectedItems.splice(i, 1);
                 }
@@ -138,11 +138,6 @@ var CartComponent = /** @class */ (function () {
             var varicost = 0;
             if (data.selectedItems.length) {
                 for (var i_1 = 0; i_1 < data.selectedItems.length; i_1++) {
-                    // for(let k=0;k<data.categoryItems.length;k++){
-                    //   if(data.categoryItems[k]._id == data.selectedItems[i]._id){
-                    //     data.categoryItems[k].itemTotal = data.selectedItems[i].quantity;
-                    //   }
-                    // }
                     itemno += data.selectedItems[i_1].quantity;
                     if (data.selectedItems[i_1].variant) {
                         for (var j = 0; j < data.selectedItems[i_1].variant.length; j++) {
@@ -447,7 +442,7 @@ var CreateOrderComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/hirundo/waiter/order/item/item.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header class=\"page-content-header\" [ngStyle]=\"{'background-color' : orderService.getOrderData().selectedCategory.color}\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter/order/:id/choose-category\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\r\n        {{orderService.getOrderData().selectedCategory.name}}\r\n        <span class=\"add-article-btn\" (click)=\"addArticle()\">\r\n            <i class=\"fas fa-pencil-alt\"></i>\r\n        </span>\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <div class=\"tabs-container subcategory-tabs\">\r\n        <ul [ngStyle]=\"{'background-color' : orderService.getOrderData().selectedCategory.color}\">\r\n            <li [class.subcategory-active]=\"selectedSubcategory[-1]\" (click)=\"filterBySubcategory()\">All</li>\r\n            <span *ngIf=\"data.selectedCategory.subCategory.length\">\r\n                <li *ngFor=\"let subCategory of data.selectedCategory.subCategory; let j = index\" [class.subcategory-active]=\"selectedSubcategory[j]\"\r\n                    (click)=\"filterBySubcategory(subCategory,j)\">\r\n                    {{subCategory}}\r\n                </li>\r\n            </span>\r\n        </ul>\r\n    </div>\r\n    <app-steps></app-steps>\r\n    <div class=\"item-container\">\r\n        <div class=\"search-category w-100\">\r\n            <div class=\"md-form search\">\r\n                <i class=\"fas fa-search prefix\"></i>\r\n                <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Item\" />\r\n                <button type=\"button\" class=\"btn-cart\" (click)=\"viewCart()\">\r\n                    <i class=\"fas fa-shopping-cart\"></i> {{orderService.getOrderData().cartTotalItem}} | &euro;{{orderService.getOrderData().cartTotalPrice}}\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>\r\n        <div *ngIf=\"!articles.length\" class=\"text-center\">\r\n            No Item Found\r\n        </div>\r\n        <div *ngIf=\"articles.length\">\r\n            <div *ngFor=\"let article of articles | filter : searchText ; let i = index\">\r\n                <div class=\"item-list align-items-center\" *ngIf=\"subcategory && (article.subCategory == subcategory)\">\r\n                    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                            alt=\"Category Logo\" />\r\n                        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                        <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\r\n                    </div>\r\n                    <div class=\"item-name\">\r\n                        <p class=\"name m-0\">{{article.name}}</p>\r\n                        <p class=\"name m-0\">&euro;{{article.price}}</p>\r\n                    </div>\r\n                    <div class=\"input-prepend-append\">\r\n                        <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue(article)\" value=\"Decrease Value\">\r\n                            <i class=\"fas fa-minus\"></i>\r\n                        </button>\r\n                        <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue(article)\" value=\"Increase Value\">\r\n                            <i class=\"fas fa-plus\"></i>\r\n                        </button>\r\n                    </div>\r\n                    <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"viewVarient()\">\r\n                        <img src=\"assets/images/icon_edit.png\" alt=\"\" />\r\n                    </button>\r\n                </div>\r\n                <div class=\"item-list align-items-center\" *ngIf=\"!subcategory\">\r\n                    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                            alt=\"Category Logo\" />\r\n                        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                        <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\r\n                    </div>\r\n                    <div class=\"item-name\">\r\n                        <p class=\"name m-0\">{{article.name}}</p>\r\n                        <p class=\"name m-0\">&euro;{{article.price}}</p>\r\n                    </div>\r\n                    <div class=\"input-prepend-append\">\r\n                        <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue(article)\" value=\"Decrease Value\">\r\n                            <i class=\"fas fa-minus\"></i>\r\n                        </button>\r\n                        <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue(article)\" value=\"Increase Value\">\r\n                            <i class=\"fas fa-plus\"></i>\r\n                        </button>\r\n                    </div>\r\n                    <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"viewVarient(article)\">\r\n                        <img src=\"assets/images/icon_edit.png\" alt=\"\" />\r\n                    </button>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n\r\n<div class=\"varient-container\" [class.show-varient]=\"showVarient\">\r\n    <div class=\"modal-header\">\r\n        <div class=\"back-btn\">\r\n            <a (click)=\"hideVarient()\">\r\n                <i class=\"fas fa-times\"></i>\r\n            </a>\r\n        </div>\r\n        <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\r\n            Choose Varient\r\n            <button (click)=\"saveVariantData()\">Save</button>\r\n        </div>\r\n    </div>\r\n    <div class=\"varient-content\">        \r\n        <div class=\"input-quantity-container\">\r\n            <h1>Quantity</h1>\r\n            <div class=\"input-prepend-append d-flex\">\r\n                <button type=\"button\" id=\"decrease\" value=\"Decrease Value\" (click)=\"decreaseQty()\">\r\n                    <i class=\"fas fa-minus\"></i>\r\n                </button>\r\n                <div class=\"text-center input-value\">{{variantData.quantity}}</div>\r\n                <button type=\"button\" id=\"increase\" value=\"Increase Value\" (click)=\"increaseQty()\">\r\n                    <i class=\"fas fa-plus\"></i>\r\n                </button>\r\n            </div>\r\n            <div *ngIf=\"variantError\" class=\"color-red\">{{variantError}}</div>\r\n        </div>\r\n        <h1>Varient and Notes</h1>\r\n        <div class=\"tabs-btn\">\r\n            <button type=\"button\" (click)=\"tabActive(1)\" [class.active]=\"activeTab[0]\">Varients</button>\r\n            <button type=\"button\" (click)=\"tabActive(2)\" [class.active]=\"activeTab[1]\">Notes</button>\r\n        </div>\r\n        <div class=\"varient-list\" *ngIf=\"activeTab[0]\">\r\n            <table class=\"table\">\r\n                <tbody>\r\n                    <tr *ngFor=\"let varient of variantList\">\r\n                        <td>{{varient.name}}</td>\r\n                        <td>&euro;{{varient.price}}</td>\r\n                        <td>\r\n                            <button type=\"button\" class=\"add-varient-btn\" [class.variant-remove]=\"varient.status == 0\" id=\"decrease\" value=\"Decrease Value\" (click)=\"addRemoveVariant(varient,0)\">\r\n                                <i class=\"fas fa-minus\"></i>\r\n                            </button>\r\n                            <button type=\"button\" class=\"add-varient-btn\" [class.variant-added]=\"varient.status == 1\"  id=\"increase\" value=\"Increase Value\" (click)=\"addRemoveVariant(varient,1)\">\r\n                                <i class=\"fas fa-plus\"></i>\r\n                            </button>\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n        </div>\r\n        <div class=\"varient-list\" *ngIf=\"activeTab[1]\">\r\n            <table class=\"table\">\r\n                <tbody>\r\n                    <tr *ngFor=\"let note of noteList; let i = index\">\r\n                        <td>{{note.notes}}</td>\r\n                        <td>\r\n                            <input type=\"checkbox\" (change)=\"addNote($event, note.notes, i)\" />\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<div class=\"add-article\" [class.showarticle]=\"articleAdd\">\r\n    <div class=\"modal-header\">\r\n        <div class=\"back-btn\">\r\n            <a (click)=\"hideArticle()\">\r\n                <i class=\"fas fa-times\"></i>\r\n            </a>\r\n        </div>\r\n        <div class=\"header-title\">\r\n            New Article\r\n            <button>Save</button>\r\n        </div>\r\n    </div>\r\n    <div class=\"modal-body varient-content\">\r\n        <div class=\"md-form\">\r\n            <label for=\"exampleForm2\">Default input</label>\r\n            <input type=\"text\" id=\"exampleForm2\" class=\"form-control\">\r\n        </div>\r\n        <div class=\"input-quantity-container\">\r\n            <h1>Quantity</h1>\r\n            <div class=\"input-prepend-append d-flex\">\r\n                <button type=\"button\" id=\"decrease\" value=\"Decrease Value\">\r\n                    <i class=\"fas fa-minus\"></i>\r\n                </button>\r\n                <div class=\"text-center input-value\"></div>\r\n                <button type=\"button\" id=\"increase\" value=\"Increase Value\">\r\n                    <i class=\"fas fa-plus\"></i>\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <div class=\"md-form\">\r\n            <i class=\"fa fa-envelope prefix\"></i>\r\n            <input type=\"text\" id=\"inputIconEx1\" class=\"form-control\">\r\n            <label for=\"inputIconEx1\">E-mail address</label>\r\n        </div>\r\n        <div >\r\n            <h1>Varient and Notes</h1>\r\n            <div class=\"tabs-btn\">\r\n                <button type=\"button\" (click)=\"tabActive()\" [class.active]=\"!activeTab\">Varients</button>\r\n                <button type=\"button\" (click)=\"tabActive()\" [class.active]=\"activeTab\">Notes</button>\r\n            </div>\r\n            <div class=\"varient-list\" *ngIf=\"!activeTab\">\r\n                <table class=\"table\">\r\n                    <tbody>\r\n                        <tr *ngFor=\"let varient of variantList\">\r\n                            <td>{{varient.name}}</td>\r\n                            <td>&euro;{{varient.price}}</td>\r\n                            <td>\r\n                                <input type=\"checkbox\" />\r\n                            </td>\r\n                        </tr>\r\n                    </tbody>\r\n                </table>\r\n            </div>\r\n            <div class=\"varient-list\" *ngIf=\"activeTab\">\r\n                <table class=\"table\">\r\n                    <tbody>\r\n                        <tr *ngFor=\"let note of noteList\">\r\n                            <td>{{note.notes}}</td>\r\n                            <td>\r\n                                <input type=\"checkbox\" />\r\n                            </td>\r\n                        </tr>\r\n                    </tbody>\r\n                </table>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<header class=\"page-content-header\" [ngStyle]=\"{'background-color' : orderService.getOrderData().selectedCategory.color}\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter/order/:id/choose-category\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\r\n        {{orderService.getOrderData().selectedCategory.name}}\r\n        <span class=\"add-article-btn\" (click)=\"addArticle()\">\r\n            <i class=\"fas fa-pencil-alt\"></i>\r\n        </span>\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <div class=\"tabs-container subcategory-tabs\">\r\n        <ul [ngStyle]=\"{'background-color' : orderService.getOrderData().selectedCategory.color}\">\r\n            <li [class.subcategory-active]=\"selectedSubcategory[-1]\" (click)=\"filterBySubcategory()\">All</li>\r\n            <span *ngIf=\"data.selectedCategory.subCategory.length\">\r\n                <li *ngFor=\"let subCategory of data.selectedCategory.subCategory; let j = index\" [class.subcategory-active]=\"selectedSubcategory[j]\"\r\n                    (click)=\"filterBySubcategory(subCategory,j)\">\r\n                    {{subCategory}}\r\n                </li>\r\n            </span>\r\n        </ul>\r\n    </div>\r\n    <app-steps></app-steps>\r\n    <div class=\"item-container\">\r\n        <div class=\"search-category w-100\">\r\n            <div class=\"md-form search\">\r\n                <i class=\"fas fa-search prefix\"></i>\r\n                <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Item\" />\r\n                <button type=\"button\" class=\"btn-cart\" (click)=\"viewCart()\">\r\n                    <i class=\"fas fa-shopping-cart\"></i> {{orderService.getOrderData().cartTotalItem}} | &euro;{{orderService.getOrderData().cartTotalPrice}}\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>\r\n        <div *ngIf=\"!articles.length\" class=\"text-center\">\r\n            No Item Found\r\n        </div>\r\n        <div *ngIf=\"articles.length\">\r\n            <div *ngFor=\"let article of articles | filter : searchText ; let i = index\">\r\n                <div class=\"item-list align-items-center\" *ngIf=\"subcategory && (article.subCategory == subcategory)\">\r\n                    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                            alt=\"Category Logo\" />\r\n                        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                        <span class=\"item-quantity\" *ngIf=\"article.itemTotal>0\">{{article.itemTotal}}</span>\r\n                    </div>\r\n                    <div class=\"item-name\">\r\n                        <p class=\"name m-0\">{{article.name}}</p>\r\n                        <p class=\"name m-0\">&euro;{{article.price}}</p>\r\n                    </div>\r\n                    <div class=\"input-prepend-append\">\r\n                        <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue(article)\" value=\"Decrease Value\">\r\n                            <i class=\"fas fa-minus\"></i>\r\n                        </button>\r\n                        <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue(article)\" value=\"Increase Value\">\r\n                            <i class=\"fas fa-plus\"></i>\r\n                        </button>\r\n                    </div>\r\n                    <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"viewVarient()\">\r\n                        <img src=\"assets/images/icon_edit.png\" alt=\"\" />\r\n                    </button>\r\n                </div>\r\n                <div class=\"item-list align-items-center\" *ngIf=\"!subcategory\">\r\n                    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                            alt=\"Category Logo\" />\r\n                        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                        <span class=\"item-quantity\" *ngIf=\"article.itemTotal>0\">{{article.itemTotal}}</span>\r\n                    </div>\r\n                    <div class=\"item-name\">\r\n                        <p class=\"name m-0\">{{article.name}}</p>\r\n                        <p class=\"name m-0\">&euro;{{article.price}}</p>\r\n                    </div>\r\n                    <div class=\"input-prepend-append\">\r\n                        <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue(article)\" value=\"Decrease Value\">\r\n                            <i class=\"fas fa-minus\"></i>\r\n                        </button>\r\n                        <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue(article)\" value=\"Increase Value\">\r\n                            <i class=\"fas fa-plus\"></i>\r\n                        </button>\r\n                    </div>\r\n                    <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"viewVarient(article)\">\r\n                        <img src=\"assets/images/icon_edit.png\" alt=\"\" />\r\n                    </button>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n\r\n<div class=\"varient-container\" [class.show-varient]=\"showVarient\">\r\n    <div class=\"modal-header\">\r\n        <div class=\"back-btn\">\r\n            <a (click)=\"hideVarient()\">\r\n                <i class=\"fas fa-times\"></i>\r\n            </a>\r\n        </div>\r\n        <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\r\n            Choose Varient\r\n            <button (click)=\"saveVariantData()\">Save</button>\r\n        </div>\r\n    </div>\r\n    <div class=\"varient-content\">        \r\n        <div class=\"input-quantity-container\">\r\n            <h1>Quantity</h1>\r\n            <div class=\"input-prepend-append d-flex\">\r\n                <button type=\"button\" id=\"decrease\" value=\"Decrease Value\" (click)=\"decreaseQty()\">\r\n                    <i class=\"fas fa-minus\"></i>\r\n                </button>\r\n                <div class=\"text-center input-value\">{{variantData.quantity}}</div>\r\n                <button type=\"button\" id=\"increase\" value=\"Increase Value\" (click)=\"increaseQty()\">\r\n                    <i class=\"fas fa-plus\"></i>\r\n                </button>\r\n            </div>\r\n            <div *ngIf=\"variantError\" class=\"color-red\">{{variantError}}</div>\r\n        </div>\r\n        <h1>Varient and Notes</h1>\r\n        <div class=\"tabs-btn\">\r\n            <button type=\"button\" (click)=\"tabActive(1)\" [class.active]=\"activeTab[0]\">Varients</button>\r\n            <button type=\"button\" (click)=\"tabActive(2)\" [class.active]=\"activeTab[1]\">Notes</button>\r\n        </div>\r\n        <div class=\"varient-list\" *ngIf=\"activeTab[0]\">\r\n            <table class=\"table\">\r\n                <tbody>\r\n                    <tr *ngFor=\"let varient of variantList\">\r\n                        <td>{{varient.name}}</td>\r\n                        <td>&euro;{{varient.price}}</td>\r\n                        <td>\r\n                            <button type=\"button\" class=\"add-varient-btn\" [class.variant-remove]=\"varient.status == 0\" id=\"decrease\" value=\"Decrease Value\" (click)=\"addRemoveVariant(varient,0)\">\r\n                                <i class=\"fas fa-minus\"></i>\r\n                            </button>\r\n                            <button type=\"button\" class=\"add-varient-btn\" [class.variant-added]=\"varient.status == 1\"  id=\"increase\" value=\"Increase Value\" (click)=\"addRemoveVariant(varient,1)\">\r\n                                <i class=\"fas fa-plus\"></i>\r\n                            </button>\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n        </div>\r\n        <div class=\"varient-list\" *ngIf=\"activeTab[1]\">\r\n            <table class=\"table\">\r\n                <tbody>\r\n                    <tr *ngFor=\"let note of noteList; let i = index\">\r\n                        <td>{{note.notes}}</td>\r\n                        <td>\r\n                            <input type=\"checkbox\" (change)=\"addNote($event, note.notes, i)\" />\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<div class=\"add-article\" [class.showarticle]=\"articleAdd\">\r\n    <div class=\"modal-header\">\r\n        <div class=\"back-btn\">\r\n            <a (click)=\"hideArticle()\">\r\n                <i class=\"fas fa-times\"></i>\r\n            </a>\r\n        </div>\r\n        <div class=\"header-title\">\r\n            New Article\r\n            <button>Save</button>\r\n        </div>\r\n    </div>\r\n    <div class=\"modal-body varient-content\">\r\n        <div class=\"md-form\">\r\n            <label for=\"exampleForm2\">Default input</label>\r\n            <input type=\"text\" id=\"exampleForm2\" class=\"form-control\">\r\n        </div>\r\n        <div class=\"input-quantity-container\">\r\n            <h1>Quantity</h1>\r\n            <div class=\"input-prepend-append d-flex\">\r\n                <button type=\"button\" id=\"decrease\" value=\"Decrease Value\">\r\n                    <i class=\"fas fa-minus\"></i>\r\n                </button>\r\n                <div class=\"text-center input-value\"></div>\r\n                <button type=\"button\" id=\"increase\" value=\"Increase Value\">\r\n                    <i class=\"fas fa-plus\"></i>\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <div class=\"md-form\">\r\n            <i class=\"fa fa-envelope prefix\"></i>\r\n            <input type=\"text\" id=\"inputIconEx1\" class=\"form-control\">\r\n            <label for=\"inputIconEx1\">E-mail address</label>\r\n        </div>\r\n        <div >\r\n            <h1>Varient and Notes</h1>\r\n            <div class=\"tabs-btn\">\r\n                <button type=\"button\" (click)=\"tabActive()\" [class.active]=\"!activeTab\">Varients</button>\r\n                <button type=\"button\" (click)=\"tabActive()\" [class.active]=\"activeTab\">Notes</button>\r\n            </div>\r\n            <div class=\"varient-list\" *ngIf=\"!activeTab\">\r\n                <table class=\"table\">\r\n                    <tbody>\r\n                        <tr *ngFor=\"let varient of variantList\">\r\n                            <td>{{varient.name}}</td>\r\n                            <td>&euro;{{varient.price}}</td>\r\n                            <td>\r\n                                <input type=\"checkbox\" />\r\n                            </td>\r\n                        </tr>\r\n                    </tbody>\r\n                </table>\r\n            </div>\r\n            <div class=\"varient-list\" *ngIf=\"activeTab\">\r\n                <table class=\"table\">\r\n                    <tbody>\r\n                        <tr *ngFor=\"let note of noteList\">\r\n                            <td>{{note.notes}}</td>\r\n                            <td>\r\n                                <input type=\"checkbox\" />\r\n                            </td>\r\n                        </tr>\r\n                    </tbody>\r\n                </table>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -526,10 +521,12 @@ var ItemComponent = /** @class */ (function () {
         console.log('this.data', this.data);
         if (this.data.categoryItems) {
             for (var i = 0; i < this.data.categoryItems.length; i++) {
+                this.data.categoryItems[i].itemTotal = 0;
                 if (this.data.selectedItems.length) {
                     for (var j = 0; j < this.data.selectedItems.length; j++) {
                         if (this.data.selectedItems[j]._id == this.data.categoryItems[i]._id) {
                             this.data.categoryItems[i].quantity = this.data.selectedItems[j].quantity;
+                            this.data.categoryItems[i].itemTotal = this.data.categoryItems[i].itemTotal + this.data.selectedItems[j].quantity;
                         }
                     }
                 }
@@ -584,16 +581,29 @@ var ItemComponent = /** @class */ (function () {
     //   this.orderService.setOrderData(data);
     // }
     ItemComponent.prototype.increaseValue = function (article) {
-        console.log('article inc', article);
         article.step = this.globalService.getTabData().step;
         var data = this.orderService.getOrderData();
         if (data.selectedItems.length) {
             var isExist = true;
             var isarr = [];
             for (var i = 0; i < data.selectedItems.length; i++) {
-                if (data.selectedItems[i]._id == article._id && !data.selectedItems[i].variant) {
-                    data.selectedItems[i].quantity += 1;
-                    isarr.push(data.selectedItems[i]._id);
+                if (data.selectedItems[i]._id == article._id) {
+                    if (!data.selectedItems[i].variant) {
+                        data.selectedItems[i].quantity += 1;
+                        isarr.push(data.selectedItems[i]._id);
+                        for (var j = 0; j < data.categoryItems.length; j++) {
+                            if (data.categoryItems[j]._id == data.selectedItems[i]._id) {
+                                data.categoryItems[j].itemTotal = data.selectedItems[i].quantity;
+                            }
+                        }
+                    }
+                    else {
+                        for (var j = 0; j < data.categoryItems.length; j++) {
+                            if (data.categoryItems[j]._id == data.selectedItems[i]._id) {
+                                data.categoryItems[j].itemTotal = data.categoryItems[j].itemTotal + data.selectedItems[i].quantity;
+                            }
+                        }
+                    }
                 }
                 if (data.selectedItems[i]._id != article._id) {
                     isExist = false;
@@ -601,22 +611,27 @@ var ItemComponent = /** @class */ (function () {
             }
             if (!isExist && isarr.indexOf(article._id) < 0) {
                 article.quantity = article.quantity + 1;
+                for (var j = 0; j < data.categoryItems.length; j++) {
+                    if (data.categoryItems[j]._id == article._id) {
+                        data.categoryItems[j].itemTotal = article.quantity;
+                    }
+                }
                 data.selectedItems.push(article);
             }
         }
         else {
             article.quantity = article.quantity + 1;
+            for (var j = 0; j < data.categoryItems.length; j++) {
+                if (data.categoryItems[j]._id == article._id) {
+                    data.categoryItems[j].itemTotal = article.quantity;
+                }
+            }
             data.selectedItems.push(article);
         }
         var cp = 0;
         var itemno = 0;
         var varicost = 0;
         for (var i = 0; i < data.selectedItems.length; i++) {
-            // for(let j=0;j<data.categoryItems.length;j++){
-            //   if(data.categoryItems[j]._id == data.selectedItems[i]._id){
-            //     data.categoryItems[j].itemTotal = data.selectedItems[i].quantity;
-            //   }
-            // }
             itemno += data.selectedItems[i].quantity;
             if (data.selectedItems[i].variant) {
                 for (var j = 0; j < data.selectedItems[i].variant.length; j++) {
@@ -631,7 +646,7 @@ var ItemComponent = /** @class */ (function () {
         }
         this.orderService.setOrderData(data);
         console.log('inc this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
-        // this.articles = this.orderService.getOrderData().categoryItems; 
+        this.articles = this.orderService.getOrderData().categoryItems;
     };
     ItemComponent.prototype.decreaseValue = function (article) {
         console.log('article dec', article);
@@ -641,19 +656,19 @@ var ItemComponent = /** @class */ (function () {
             if (data.selectedItems[i]._id == article._id && !data.selectedItems[i].variant) {
                 if (data.selectedItems[i].quantity > 1) {
                     data.selectedItems[i].quantity = data.selectedItems[i].quantity - 1;
-                    // for(let j=0;j<data.categoryItems.length;j++){
-                    //   if(data.categoryItems[j]._id == data.selectedItems[i]._id){
-                    //     data.categoryItems[j].itemTotal = data.categoryItems[j].itemTotal - data.selectedItems[i].quantity;
-                    //   }
-                    // }
+                    for (var j = 0; j < data.categoryItems.length; j++) {
+                        if (data.categoryItems[j]._id == data.selectedItems[i]._id) {
+                            data.categoryItems[j].itemTotal = data.categoryItems[j].itemTotal - 1;
+                        }
+                    }
                 }
                 else {
                     article.quantity = 0;
-                    // for(let j=0;j<data.categoryItems.length;j++){
-                    //   if(data.categoryItems[j]._id == data.selectedItems[i]._id){
-                    //     data.categoryItems[j].itemTotal = data.categoryItems[j].itemTotal - article.quantity;
-                    //   }
-                    // }
+                    for (var j = 0; j < data.categoryItems.length; j++) {
+                        if (data.categoryItems[j]._id == data.selectedItems[i]._id) {
+                            data.categoryItems[j].itemTotal = data.categoryItems[j].itemTotal - 1;
+                        }
+                    }
                     data.selectedItems.splice(i, 1);
                 }
             }
@@ -682,7 +697,7 @@ var ItemComponent = /** @class */ (function () {
         }
         this.orderService.setOrderData(data);
         console.log('dec this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
-        // this.articles = this.orderService.getOrderData().categoryItems;  
+        this.articles = this.orderService.getOrderData().categoryItems;
     };
     ItemComponent.prototype.viewCart = function () {
         this.router.navigate(['/waiter/order/:id/cart']);
@@ -764,8 +779,6 @@ var ItemComponent = /** @class */ (function () {
         console.log('this.variantData', this.variantData);
     };
     ItemComponent.prototype.addNote = function (event, note, i) {
-        console.log('event', event);
-        console.log('note', note);
         if (event.target.checked) {
             this.notes.push(note);
         }
@@ -776,13 +789,10 @@ var ItemComponent = /** @class */ (function () {
                 }
             }
         }
-        console.log('this.notes', this.notes);
         this.variantData.notes = this.notes.toString();
-        console.log('this.variantData.notes', this.variantData.notes);
     };
     ItemComponent.prototype.saveVariantData = function () {
         var _this = this;
-        console.log('this.variantData', this.variantData);
         if (this.variantData.quantity == 0) {
             this.variantError = 'Please enter quantity';
             setTimeout(function () {
@@ -802,11 +812,11 @@ var ItemComponent = /** @class */ (function () {
             this.articleData.step = this.globalService.getTabData().step;
             var data = this.orderService.getOrderData();
             data.selectedItems.push(this.articleData);
-            // for(let i=0;i<data.categoryItems.length;i++){
-            //   if(data.categoryItems[i]._id == this.articleData._id){
-            //   data.categoryItems[i].itemTotal = data.categoryItems[i].itemTotal + this.articleData.quantity;
-            //   }
-            // }
+            for (var i = 0; i < data.categoryItems.length; i++) {
+                if (data.categoryItems[i]._id == this.articleData._id) {
+                    data.categoryItems[i].itemTotal = data.categoryItems[i].itemTotal + this.articleData.quantity;
+                }
+            }
             var cp = 0;
             var itemno = 0;
             var varicost = 0;
@@ -826,7 +836,7 @@ var ItemComponent = /** @class */ (function () {
             this.orderService.setOrderData(data);
             this.hideVarient();
             console.log('variant this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
-            // this.articles = this.orderService.getOrderData().categoryItems;    
+            this.articles = this.orderService.getOrderData().categoryItems;
         }
     };
     ItemComponent = __decorate([

@@ -743,20 +743,20 @@ var WebsocketService = /** @class */ (function () {
         });
         this.socket.on('orderstatus', function (data) {
             console.log(data, 'order status');
-            if (data.by.id !== user._id) {
-                for (var i = 0; i < _this._orders.length; i++) {
-                    if (data.id === _this._orders[i]._id) {
-                        _this._orders[i].status = data.status;
-                        for (var j = 0; j < _this._orders[i].item.length; j++) {
-                            if (data.order.itemId === _this._orders[i].item[j].id._id) {
-                                _this._orders[i].item[j].status = data.order.status;
-                            }
-                            console.log('this._orders[i]', _this._orders[i]);
+            // if(data.by.id !== user._id) {
+            for (var i = 0; i < _this._orders.length; i++) {
+                if (data.id === _this._orders[i]._id) {
+                    _this._orders[i].status = data.status;
+                    for (var j = 0; j < _this._orders[i].item.length; j++) {
+                        if (data.order.itemId === _this._orders[i].item[j].id._id) {
+                            _this._orders[i].item[j].status = data.order.status;
                         }
+                        console.log('this._orders[i]', _this._orders[i]);
                     }
-                    console.log(_this._orders[i], 'this._orders[i]');
                 }
+                console.log(_this._orders[i], 'this._orders[i]');
             }
+            // }
         });
         this.socket.on('tablestatus', function (data) {
             for (var i = 0; i < _this._rooms.length; i++) {
