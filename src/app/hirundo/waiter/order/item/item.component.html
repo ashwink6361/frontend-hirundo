@@ -46,7 +46,7 @@
                         <img *ngIf="!article.logo.small && !article.category.isIcon && article.category.logo.small" [src]="article.category.logo.small"
                             alt="Category Logo" />
                         <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
-                        <span class="item-quantity" *ngIf="article.quantity>0">{{article.quantity}}</span>
+                        <span class="item-quantity" *ngIf="article.itemTotal>0">{{article.itemTotal}}</span>
                     </div>
                     <div class="item-name">
                         <p class="name m-0">{{article.name}}</p>
@@ -70,7 +70,7 @@
                         <img *ngIf="!article.logo.small && !article.category.isIcon && article.category.logo.small" [src]="article.category.logo.small"
                             alt="Category Logo" />
                         <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
-                        <span class="item-quantity" *ngIf="article.quantity>0">{{article.quantity}}</span>
+                        <span class="item-quantity" *ngIf="article.itemTotal>0">{{article.itemTotal}}</span>
                     </div>
                     <div class="item-name">
                         <p class="name m-0">{{article.name}}</p>

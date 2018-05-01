@@ -3,7 +3,7 @@ webpackJsonp(["order-list.module"],{
 /***/ "../../../../../src/app/hirundo/department/order-list/order-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n    <div class=\"text-center\" *ngIf=\"loadingOrders\">No Order Found</div>\n    <div *ngIf=\"!loadingOrders\" class=\"order-list-container\">\n        <div class=\"card order-list\" *ngFor=\"let order of orders | orderby: '-created_at'\">\n            <div class=\"card-body\" [class.opacity]=\"order.status == 3\">\n                <h4 class=\"card-title\">\n                    <div>\n                        <i class=\"far fa-clock\"></i> {{order.created_at | date:'hh:mm a'}}</div>\n                    <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div>\n                </h4>\n                <div class=\"card-text\">\n                    <p>\n                        <i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\n                    <p>\n                        <img src=\"assets/images/table.png\" alt=\"\">\n                        <span>{{order.tableName}}</span>\n                    </p>\n                    <p>\n                        <i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\n                </div>\n                <div class=\"order-items-container\">\n                    <div *ngFor=\"let item of order.item\">\n                        <div class=\"order-item\" *ngIf=\"this.authGuard.getCurrentUser().category.indexOf(item.category)>-1\">\n                            <label class=\"label item-status\">{{getOrderStatus(item.status)}}</label>\n                            <div class=\"order-item-img\">\n                                {{item.quantity}} X\n                            </div>\n                            <div class=\"order-item-detail\">\n                                {{item.id.name}}\n                                <ul>\n                                    <li *ngFor=\"let varient of item.variant\">\n                                        <i *ngIf=\"varient.status == 1\">+</i><i *ngIf=\"varient.status == 0\">-</i> {{varient.name}}\n                                    </li>\n                                </ul>\n                            </div>\n                            <div class=\"order-quantity d-flex w-105\">\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 2)\">\n                                    <img src=\"assets/images/order-deliver.png\" alt=\"\" />\n                                </button>\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 4)\">\n                                    <i class=\"fas fa-sync-alt\"></i>\n                                </button>\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 3)\">\n                                    <i class=\"fas fa-times\"></i>\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"btn-container\">\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 3)\">Cancel</button>\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 4)\">In Progress</button>\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 2)\">Done</button>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "<!-- <div> -->\n    <div class=\"text-center\" *ngIf=\"!(orders && orders.length)\">No Order Found.</div>\n    <div *ngIf=\"orders && orders.length\" class=\"order-list-container\">\n        <div class=\"card order-list\" *ngFor=\"let order of orders | orderby: '-created_at'\">\n            <div class=\"card-body\" [class.opacity]=\"order.status == 3\">\n                <h4 class=\"card-title\">\n                    <div>\n                        <i class=\"far fa-clock\"></i> {{order.created_at | date:'hh:mm a'}}</div>\n                    <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div>\n                </h4>\n                <div class=\"card-text\">\n                    <p>\n                        <i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\n                    <p>\n                        <img src=\"assets/images/table.png\" alt=\"\">\n                        <span>{{order.tableName}}</span>\n                    </p>\n                    <p>\n                        <i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\n                </div>\n                <div class=\"order-items-container\">\n                    <div *ngFor=\"let item of order.item\">\n                        <div class=\"order-item\" *ngIf=\"this.authGuard.getCurrentUser().category.indexOf(item.category)>-1\">\n                            <label class=\"label item-status\">{{getOrderStatus(item.status)}}</label>\n                            <div class=\"order-item-img\">\n                                {{item.quantity}} X\n                            </div>\n                            <div class=\"order-item-detail\">\n                                {{item.id.name}}\n                                <ul>\n                                    <li *ngFor=\"let varient of item.variant\">\n                                        <i *ngIf=\"varient.status == 1\">+</i><i *ngIf=\"varient.status == 0\">-</i> {{varient.name}}\n                                    </li>\n                                </ul>\n                            </div>\n                            <div class=\"order-quantity d-flex w-105\">\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 2)\">\n                                    <img src=\"assets/images/order-deliver.png\" alt=\"\" />\n                                </button>\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 4)\">\n                                    <i class=\"fas fa-sync-alt\"></i>\n                                </button>\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 3)\">\n                                    <i class=\"fas fa-times\"></i>\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"btn-container\">\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 3)\">Cancel</button>\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 4)\">In Progress</button>\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 2)\">Done</button>\n                </div>\n            </div>\n        </div>\n    </div>\n<!-- </div> -->\n"
 
 /***/ }),
 
@@ -51,31 +51,16 @@ var OrderListComponent = /** @class */ (function () {
         this.authGuard = authGuard;
         this.orders = [];
         this.loadingOrders = true;
-        //websocketService.connect();
     }
     OrderListComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.websocketService.getOrders().then(function (data) {
             _this.orders = data;
-            // for(let i = 0; i<this.orders.length; i++){
-            //     this.itemsStore = [];
-            //     for(let j = 0; j<this.orders[i].item.length; j++){
-            //         if(this.orders[i].item[j].category == this.authGuard.getCurrentUser().category){
-            //             this.itemsStore.push(this.orders[i].item[j]);
-            //         }
-            //         this.orders[i].itemsStore = this.itemsStore;
-            //     }
-            // }  
             _this.loadingOrders = false;
         })
             .catch(function (error) {
             console.log('error', error);
         });
-        // setTimeout(()=>{
-        //     this.orders = this.websocketService.getOrders();
-        //     this.loadingOrders = false;
-        //     //console.log('this.orders ', this.orders);
-        // }, 5000);
         this.tick = setInterval(function () {
             _this.clock = Date.now();
         }, 1000);
@@ -113,9 +98,6 @@ var OrderListComponent = /** @class */ (function () {
                     items.push(order.item[i].id._id);
                 }
             }
-            // if(order.item[i].category == this.authGuard.getCurrentUser().category){
-            //     items.push(order.item[i].id._id)
-            // }
         }
         var opts = {
             status: status,

@@ -1,6 +1,6 @@
-<div>
-    <div class="text-center" *ngIf="loadingOrders">No Order Found</div>
-    <div *ngIf="!loadingOrders" class="order-list-container">
+<!-- <div> -->
+    <div class="text-center" *ngIf="!(orders && orders.length)">No Order Found.</div>
+    <div *ngIf="orders && orders.length" class="order-list-container">
         <div class="card order-list" *ngFor="let order of orders | orderby: '-created_at'">
             <div class="card-body" [class.opacity]="order.status == 3">
                 <h4 class="card-title">
@@ -55,4 +55,4 @@
             </div>
         </div>
     </div>
-</div>
+<!-- </div> -->

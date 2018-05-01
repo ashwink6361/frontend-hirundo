@@ -16,34 +16,16 @@ export class OrderListComponent implements OnInit {
     public tick: any;
     public loadingOrders: boolean = true;
     constructor(public websocketService: WebsocketService, public authGuard: AuthGuard) {
-        //websocketService.connect();
     }
 
     ngOnInit() {
-       
         this.websocketService.getOrders().then(data => {
             this.orders = data;
-            // for(let i = 0; i<this.orders.length; i++){
-            //     this.itemsStore = [];
-            //     for(let j = 0; j<this.orders[i].item.length; j++){
-            //         if(this.orders[i].item[j].category == this.authGuard.getCurrentUser().category){
-            //             this.itemsStore.push(this.orders[i].item[j]);
-            //         }
-            //         this.orders[i].itemsStore = this.itemsStore;
-            //     }
-            // }  
-            this.loadingOrders = false;            
-          })
+            this.loadingOrders = false;
+        })
             .catch(error => {
-              console.log('error', error);
+                console.log('error', error);
             });
-
-        // setTimeout(()=>{
-        //     this.orders = this.websocketService.getOrders();
-        //     this.loadingOrders = false;
-        //     //console.log('this.orders ', this.orders);
-        // }, 5000);
-
         this.tick = setInterval(() => {
             this.clock = Date.now();
         }, 1000);
@@ -78,9 +60,6 @@ export class OrderListComponent implements OnInit {
                     items.push(order.item[i].id._id)
                 }
             }
-            // if(order.item[i].category == this.authGuard.getCurrentUser().category){
-            //     items.push(order.item[i].id._id)
-            // }
         }
         let opts = {
             status: status,
