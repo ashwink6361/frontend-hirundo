@@ -50,7 +50,6 @@ export class OrderListComponent implements OnInit {
     }
 
     public getOrderStatus(status) {
-        console.log('dept getOrderStatus+++++++++++++++++++++',status);
         var str = 'In progress';
         switch (status) {
             case 0:
