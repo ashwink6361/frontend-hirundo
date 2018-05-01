@@ -54,14 +54,6 @@ export class ItemComponent implements OnInit {
       this.articles = this.orderService.getOrderData().categoryItems;
       this.selectedSubcategory[-1] = true;
     }
-    this.orderService.getVariantAndNotes()
-      .then(data => {
-        this.variantList = data.data.variants;
-        this.noteList = data.data.notes;
-      })
-      .catch(error => {
-        console.log('error', error);
-      });
   }
 
   // increaseValue(article) {
@@ -232,8 +224,19 @@ export class ItemComponent implements OnInit {
   }
 
   viewVarient(article) {
+    this.orderService.getVariantAndNotes()
+    .then(data => {
+      this.variantList = data.data.variants;
+      this.noteList = data.data.notes;
+    })
+    .catch(error => {
+      console.log('error', error);
+    });
     this.showVarient = true;
     this.articleData = article;
+    this.notes = [];
+    this.activeTab[0] = true;
+    this.activeTab[1] = false;
   }
 
   hideVarient() {
