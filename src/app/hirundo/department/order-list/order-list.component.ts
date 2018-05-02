@@ -21,6 +21,8 @@ export class OrderListComponent implements OnInit {
     ngOnInit() {
         this.websocketService.getOrders().then(data => {
             this.orders = data;
+            console.log('this.orders',this.orders);
+
             this.loadingOrders = false;
         })
             .catch(error => {

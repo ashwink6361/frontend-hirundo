@@ -30,8 +30,13 @@ export class WebsocketService {
             }
             else if (userType == 4) {
                 for (let j = 0; j < data.item.length; j++) {
-                    if (this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)>-1) {
+                    console.log('this.authGuard.getCurrentUser()._id',this.authGuard.getCurrentUser()._id);
+                    console.log('data.item[j].department',data.item[j].department);
+                    if ((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) {
+                        console.log('in');
+                        
                         this._orders.unshift(data);
+                        console.log('this._orders',this._orders);
                         break;
                     }
                 }

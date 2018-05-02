@@ -58,7 +58,8 @@ export class CartComponent implements OnInit {
         price: data.selectedItems[i].price,
         notes: data.selectedItems[i].ordernote ? data.selectedItems[i].ordernote : '',
         variant: vararray,
-        step: data.selectedItems[i].step
+        step: data.selectedItems[i].step,
+        department: data.selectedItems[i].category.department
       }
       itemarray.push(item);
     }

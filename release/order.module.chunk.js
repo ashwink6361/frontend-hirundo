@@ -99,7 +99,8 @@ var CartComponent = /** @class */ (function () {
                 price: data.selectedItems[i].price,
                 notes: data.selectedItems[i].ordernote ? data.selectedItems[i].ordernote : '',
                 variant: vararray,
-                step: data.selectedItems[i].step
+                step: data.selectedItems[i].step,
+                department: data.selectedItems[i].category.department
             };
             itemarray.push(item);
         }
@@ -276,22 +277,24 @@ var ChooseCategoryComponent = /** @class */ (function () {
         orderdata.selectedCategory = category;
         orderdata.categoryItems = [];
         this.orderService.getCategoryItem().then(function (data) {
-            for (var i = 0; i < data.data.length; i++) {
-                if (data.data[i].category._id == category._id) {
-                    // for (let j = 0; j < data.data[i].subcategory.length; j++) {
-                    //   for (let k = 0; k < data.data[i].subcategory[j].items.length; k++) {
-                    //     orderdata.categoryItems.push(data.data[i].subcategory[j].items[k]);
-                    //     this.orderService.setOrderData(orderdata);
-                    //   }
-                    // }
-                    orderdata.categoryItems = data.data[i].items;
-                    for (var j = 0; j < orderdata.categoryItems.length; j++) {
-                        orderdata.categoryItems[j].quantity = 0;
-                        orderdata.categoryItems[j].itemTotal = 0;
+            if (data.data.length) {
+                for (var i = 0; i < data.data.length; i++) {
+                    if (data.data[i].category._id == category._id) {
+                        // for (let j = 0; j < data.data[i].subcategory.length; j++) {
+                        //   for (let k = 0; k < data.data[i].subcategory[j].items.length; k++) {
+                        //     orderdata.categoryItems.push(data.data[i].subcategory[j].items[k]);
+                        //     this.orderService.setOrderData(orderdata);
+                        //   }
+                        // }
+                        orderdata.categoryItems = data.data[i].items;
+                        for (var j = 0; j < orderdata.categoryItems.length; j++) {
+                            orderdata.categoryItems[j].quantity = 0;
+                            orderdata.categoryItems[j].itemTotal = 0;
+                        }
                     }
                 }
-                _this.orderService.setOrderData(orderdata);
             }
+            _this.orderService.setOrderData(orderdata);
             _this.router.navigate(['/waiter/order/:id/choose-item']);
         })
             .catch(function (error) {
