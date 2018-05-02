@@ -46,6 +46,79 @@ var DashboardService = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "../../../../../src/app/hirundo/waiter/order/order.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return OrderService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__global_service__ = __webpack_require__("../../../../../src/app/hirundo/global.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var OrderService = /** @class */ (function () {
+    function OrderService(http, globalService) {
+        this.http = http;
+        this.globalService = globalService;
+        this.orderData = {};
+        this.categoryItems = [];
+    }
+    OrderService.prototype.getCategory = function () {
+        var url = '/api/categories';
+        return this.http.get(url).toPromise()
+            .then(this.globalService.extractData)
+            .catch(this.globalService.handleErrorPromise);
+    };
+    OrderService.prototype.getCategoryItem = function () {
+        var url = '/api/categories/items';
+        return this.http.get(url).toPromise()
+            .then(this.globalService.extractData)
+            .catch(this.globalService.handleErrorPromise);
+    };
+    OrderService.prototype.setOrderData = function (data) {
+        localStorage.setItem('orderData', JSON.stringify(data));
+    };
+    OrderService.prototype.getOrderData = function () {
+        var data = localStorage.getItem('orderData');
+        return JSON.parse(data);
+    };
+    OrderService.prototype.getVariantAndNotes = function () {
+        var url = '/api/variantAndNotes';
+        return this.http.get(url).toPromise()
+            .then(this.globalService.extractData)
+            .catch(this.globalService.handleErrorPromise);
+    };
+    OrderService.prototype.createOrder = function (data) {
+        var url = '/api/waiter/order';
+        return this.http.post(url, data).toPromise()
+            .then(this.globalService.extractData)
+            .catch(this.globalService.handleErrorPromise);
+    };
+    OrderService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Injectable */])(),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__global_service__["a" /* GlobalService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__global_service__["a" /* GlobalService */]) === "function" && _b || Object])
+    ], OrderService);
+    return OrderService;
+    var _a, _b;
+}());
+
+//# sourceMappingURL=order.service.js.map
+
+/***/ }),
+
 /***/ "../../../../../src/app/hirundo/waiter/profile/profile.service.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 

@@ -63,12 +63,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__shared_shared_module__ = __webpack_require__("../../../../../src/app/shared/shared.module.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__waiter_profile_profile_service__ = __webpack_require__("../../../../../src/app/hirundo/waiter/profile/profile.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__dashboard_dashboard_service__ = __webpack_require__("../../../../../src/app/hirundo/waiter/dashboard/dashboard.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__order_order_service__ = __webpack_require__("../../../../../src/app/hirundo/waiter/order/order.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -94,7 +96,8 @@ var WaiterModule = /** @class */ (function () {
             declarations: [__WEBPACK_IMPORTED_MODULE_5__waiter_component__["a" /* WaiterComponent */]],
             providers: [
                 __WEBPACK_IMPORTED_MODULE_7__waiter_profile_profile_service__["a" /* ProfileService */],
-                __WEBPACK_IMPORTED_MODULE_8__dashboard_dashboard_service__["a" /* DashboardService */]
+                __WEBPACK_IMPORTED_MODULE_8__dashboard_dashboard_service__["a" /* DashboardService */],
+                __WEBPACK_IMPORTED_MODULE_9__order_order_service__["a" /* OrderService */]
             ]
         })
     ], WaiterModule);
