@@ -778,6 +778,7 @@ var WebsocketService = /** @class */ (function () {
     WebsocketService.prototype.getOrders = function () {
         var _this = this;
         var url = '/api/department/orders';
+        console.log('category', this.authGuard.getCurrentUser().category);
         var opts = {
             category: this.authGuard.getCurrentUser().category
         };
