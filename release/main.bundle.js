@@ -736,7 +736,7 @@ var WebsocketService = /** @class */ (function () {
                 for (var j = 0; j < data.item.length; j++) {
                     console.log('this.authGuard.getCurrentUser()._id', _this.authGuard.getCurrentUser()._id);
                     console.log('data.item[j].department', data.item[j].department);
-                    if ((data.item[j].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) {
+                    if (((data.item[j].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
                         console.log('in');
                         _this._orders.unshift(data);
                         console.log('this._orders', _this._orders);
