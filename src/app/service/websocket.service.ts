@@ -32,7 +32,7 @@ export class WebsocketService {
                 for (let j = 0; j < data.item.length; j++) {
                     console.log('this.authGuard.getCurrentUser()._id',this.authGuard.getCurrentUser()._id);
                     console.log('data.item[j].department',data.item[j].department);
-                    if ((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) {
+                    if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
                         console.log('in');
                         
                         this._orders.unshift(data);
