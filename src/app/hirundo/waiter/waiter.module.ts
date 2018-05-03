@@ -7,6 +7,7 @@ import { WaiterComponent } from './waiter.component';
 import { SharedModule } from '../../shared/shared.module';
 import { ProfileService } from '../waiter/profile/profile.service';
 import { DashboardService } from './dashboard/dashboard.service';
+import { OrderService } from './order/order.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -19,7 +20,8 @@ import { DashboardService } from './dashboard/dashboard.service';
   declarations: [WaiterComponent],
   providers: [
     ProfileService,
-    DashboardService
+    DashboardService,
+    OrderService
   ]
 })
 export class WaiterModule { }

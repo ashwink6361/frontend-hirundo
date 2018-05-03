@@ -11,10 +11,22 @@ import 'rxjs/Rx';
 })
 export class CartComponent implements OnInit {
   private items = [];
+  private orderItems = [];
+  private orderId;
+  
   constructor(private orderService: OrderService, private router: Router, private globalService: GlobalService) { }
 
   ngOnInit() {
-    if (this.orderService.getOrderData().selectedItems) {
+    console.log('this.orderService.getOrderData()',this.orderService.getOrderData());
+    console.log('globalService.getTabData().step',this.globalService.getTabData());
+    if(localStorage.getItem('orderId')){
+      this.orderId = JSON.parse(localStorage.getItem('orderId'));
+      this.orderItems = JSON.parse(localStorage.getItem('orderItems'));
+      console.log('this.orderItems.orderItems()',this.orderItems);
+      console.log('this.orderId.orderId()',this.orderId);
+      
+    }
+    if (this.orderService.getOrderData() && this.orderService.getOrderData().selectedItems) {
       this.items = this.orderService.getOrderData().selectedItems;
     }
   }
@@ -46,14 +58,15 @@ export class CartComponent implements OnInit {
         price: data.selectedItems[i].price,
         notes: data.selectedItems[i].ordernote ? data.selectedItems[i].ordernote : '',
         variant: vararray,
-        step: data.selectedItems[i].step
+        step: data.selectedItems[i].step,
+        department: data.selectedItems[i].category.department
       }
       itemarray.push(item);
     }
     let createorder = {
       room: data.roomId,
       table: data.tableId,
-      noOfPeople: data.numberOfPerson,
+      noOfPeople: data.noOfPeople,
       item: itemarray
     }
     this.orderService.createOrder(createorder)
@@ -115,5 +128,9 @@ export class CartComponent implements OnInit {
       this.orderService.setOrderData(data);
       this.items = this.orderService.getOrderData().selectedItems;
     }
+  }
+
+  gotToCategoryList(){
+    this.router.navigate(['/waiter/order/:id/choose-category']);
   }
 }

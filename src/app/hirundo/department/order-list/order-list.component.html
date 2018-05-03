@@ -20,7 +20,7 @@
                 </div>
                 <div class="order-items-container">
                     <div *ngFor="let item of order.item">
-                        <div class="order-item" *ngIf="this.authGuard.getCurrentUser().category.indexOf(item.category)>-1">
+                        <div class="order-item" *ngIf="((item.department.indexOf(authGuard.getCurrentUser()._id)) > -1) || ((authGuard.getCurrentUser().category.indexOf(item.category)) > -1)">
                             <label class="label item-status">{{getOrderStatus(item.status)}}</label>
                             <div class="order-item-img">
                                 {{item.quantity}} X

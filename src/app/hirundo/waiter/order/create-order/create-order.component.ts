@@ -19,7 +19,7 @@ export class CreateOrderComponent implements OnInit {
   public showItem: boolean = false;
   public room = {};
   public tableData = {};
-  public numberOfPerson: number;
+  public noOfPeople: number;
   public tableId: number;
   public roomId: number;
   public quantity: number = 0;
@@ -37,7 +37,7 @@ export class CreateOrderComponent implements OnInit {
     localStorage.removeItem('tabData');
     localStorage.removeItem('stepData');    
     if (this.orderService.getOrderData()) {
-      this.numberOfPerson = this.orderService.getOrderData().numberOfPerson;
+      this.noOfPeople = this.orderService.getOrderData().noOfPeople;
     }
     this.roomData = JSON.parse(localStorage.getItem('roomdata'));
     this.tableData = JSON.parse(localStorage.getItem('tabledata'));
@@ -60,11 +60,11 @@ export class CreateOrderComponent implements OnInit {
   }
 
   makeOrder() {
-    if (this.numberOfPerson) {
+    if (this.noOfPeople) {
       let data = {
         roomId: this.roomData["_id"],
         tableId: this.tableData["_id"],
-        numberOfPerson: this.numberOfPerson,
+        noOfPeople: this.noOfPeople,
         selectedItems: [],
         cartTotalPrice : 0,
         cartTotalItem: 0
