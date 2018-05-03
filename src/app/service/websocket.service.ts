@@ -75,6 +75,7 @@ export class WebsocketService {
 
     public getOrders(): Promise<any> {
         let url = '/api/department/orders';
+        console.log('category',this.authGuard.getCurrentUser().category);        
         let opts = {
             category : this.authGuard.getCurrentUser().category
         }
