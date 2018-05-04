@@ -67,11 +67,11 @@
         <div class="total-amount">
             Sub Total: &euro;{{orderService.getOrderData().cartTotalPrice}}
         </div>
-        <!-- <div *ngIf="orderId">
-            <button type="button" (click)="gotToCategoryList()">
+        <div *ngIf="orderId">
+            <button type="button" class="btn btn-secondary" (click)="gotToCategoryList()">
                 Menu
             </button>
-        </div> -->
+        </div>
         <button type="submit" class="order-btn waves-light" [disabled]="!orderService.getOrderData().selectedItems.length" (click)="createOrder()">
             Create Order
         </button>

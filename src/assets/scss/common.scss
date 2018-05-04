@@ -1163,6 +1163,7 @@ header {
             display: inline-block;
             padding: 0 5px;
             color: #fff;
+            cursor: pointer;
             &.active{
                 color: $primary;
             }
