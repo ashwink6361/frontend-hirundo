@@ -1,6 +1,9 @@
 <header class="page-content-header">
     <div class="back-btn">
-        <a routerLink="/waiter/order/:id">
+        <a *ngIf="!orderId" routerLink="/waiter/order/:id">
+            <i class="fas fa-angle-left"></i>
+        </a>
+        <a *ngIf="orderId" routerLink="/waiter/order/:id/cart">
             <i class="fas fa-angle-left"></i>
         </a>
     </div>

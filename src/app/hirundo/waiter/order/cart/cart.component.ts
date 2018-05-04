@@ -17,14 +17,9 @@ export class CartComponent implements OnInit {
   constructor(private orderService: OrderService, private router: Router, private globalService: GlobalService) { }
 
   ngOnInit() {
-    console.log('this.orderService.getOrderData()',this.orderService.getOrderData());
-    console.log('globalService.getTabData().step',this.globalService.getTabData());
     if(localStorage.getItem('orderId')){
       this.orderId = JSON.parse(localStorage.getItem('orderId'));
       this.orderItems = JSON.parse(localStorage.getItem('orderItems'));
-      console.log('this.orderItems.orderItems()',this.orderItems);
-      console.log('this.orderId.orderId()',this.orderId);
-      
     }
     if (this.orderService.getOrderData() && this.orderService.getOrderData().selectedItems) {
       this.items = this.orderService.getOrderData().selectedItems;
@@ -69,13 +64,24 @@ export class CartComponent implements OnInit {
       noOfPeople: data.noOfPeople,
       item: itemarray
     }
-    this.orderService.createOrder(createorder)
+    if(this.orderId){
+      this.orderService.updateOrder(itemarray,this.orderId)
       .then(data => {
         this.router.navigate(['/waiter/list'])
       })
       .catch(error => {
         console.log('error', error);
       });
+    }
+    else{
+      this.orderService.createOrder(createorder)
+      .then(data => {
+        this.router.navigate(['/waiter/list'])
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+    }
   }
 
   deleteItemFromCart(article) {

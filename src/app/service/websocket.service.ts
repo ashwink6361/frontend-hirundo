@@ -31,12 +31,8 @@ export class WebsocketService {
             }
             else if (userType == 4) {
                 for (let j = 0; j < data.item.length; j++) {
-                    console.log('this.authGuard.getCurrentUser()._id',this.authGuard.getCurrentUser()._id);
-                    console.log('data.item[j].department',data.item[j].department);
                     if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
-                        console.log('in');
                         this._orders.unshift(data);
-                        console.log('this._orders',this._orders);
                         break;
                     }
                 }
@@ -52,10 +48,8 @@ export class WebsocketService {
                             if(data.order.itemId === this._orders[i].item[j].id._id) {
                                 this._orders[i].item[j].status = data.order.status;
                             }
-                            console.log('this._orders[i]',this._orders[i]);
                         }
                     }
-                    console.log(this._orders[i], 'this._orders[i]')
                 }
             // }
         });
@@ -75,7 +69,6 @@ export class WebsocketService {
 
     public getOrders(): Promise<any> {
         let url = '/api/department/orders';
-        console.log('category',this.authGuard.getCurrentUser().category);        
         let opts = {
             category : this.authGuard.getCurrentUser().category
         }

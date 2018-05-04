@@ -722,7 +722,6 @@ var WebsocketService = /** @class */ (function () {
         var _this = this;
         // If you aren't familiar with environment variables then
         // you can hard code `environment.ws_url` as `http://localhost:5000`
-        // this.socket = io('http://52.209.187.183:5051');
         this.socket = __WEBPACK_IMPORTED_MODULE_1_socket_io_client__('http://localhost:5051');
         if (this.socket.connected)
             console.log("Socket connection done ");
@@ -735,12 +734,8 @@ var WebsocketService = /** @class */ (function () {
             }
             else if (userType == 4) {
                 for (var j = 0; j < data.item.length; j++) {
-                    console.log('this.authGuard.getCurrentUser()._id', _this.authGuard.getCurrentUser()._id);
-                    console.log('data.item[j].department', data.item[j].department);
                     if (((data.item[j].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
-                        console.log('in');
                         _this._orders.unshift(data);
-                        console.log('this._orders', _this._orders);
                         break;
                     }
                 }
@@ -756,10 +751,8 @@ var WebsocketService = /** @class */ (function () {
                         if (data.order.itemId === _this._orders[i].item[j].id._id) {
                             _this._orders[i].item[j].status = data.order.status;
                         }
-                        console.log('this._orders[i]', _this._orders[i]);
                     }
                 }
-                console.log(_this._orders[i], 'this._orders[i]');
             }
             // }
         });
@@ -779,7 +772,6 @@ var WebsocketService = /** @class */ (function () {
     WebsocketService.prototype.getOrders = function () {
         var _this = this;
         var url = '/api/department/orders';
-        console.log('category', this.authGuard.getCurrentUser().category);
         var opts = {
             category: this.authGuard.getCurrentUser().category
         };

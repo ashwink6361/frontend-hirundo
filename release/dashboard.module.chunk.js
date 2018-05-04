@@ -75,43 +75,30 @@ var DashboardComponent = /** @class */ (function () {
     DashboardComponent.prototype.createOrder = function (table) {
         localStorage.setItem('tabledata', JSON.stringify(table));
         var room = JSON.parse(localStorage.getItem('roomdata'));
-        // console.log('table',table);
-        // if(table.orderId && table.orderId._id){
-        //   localStorage.setItem('orderId', JSON.stringify(table.orderId._id));
-        //   localStorage.setItem('orderItems',JSON.stringify(table.orderId.item));
-        //   let cp = 0;
-        //   let itemno = 0;
-        //   let varicost = 0;
-        //   for (let i = 0; i < table.orderId.item.length; i++) {
-        //     itemno += table.orderId.item[i].quantity;
-        //     if (table.orderId.item[i].variant && table.orderId.item[i].variant.length) {
-        //       for (let j = 0; j < table.orderId.item[i].variant.length; j++) {
-        //         if (table.orderId.item[i].variant[j].status == 1) {
-        //           varicost += table.orderId.item[i].variant[j].price;
-        //         }
-        //       }
-        //     }
-        //     cp += (table.orderId.item[i].price + varicost) * table.orderId.item[i].quantity;
-        //   }
-        //   let data = {
-        //     roomId: table.orderId.room,
-        //     tableId: table.orderId.table,
-        //     noOfPeople: table.orderId.noOfPeople,
-        //     selectedItems: [],
-        //     cartTotalPrice : cp,
-        //     cartTotalItem: itemno
-        //   }
-        //   this.orderService.setOrderData(data);
-        // }
-        // else{
-        //   localStorage.removeItem('orderId');
-        //   localStorage.removeItem('orderItems');
-        // }
-        // if(table.status == 1){
-        //   this.router.navigate(['/waiter/order/:id/cart']);
-        // }else{
-        this.router.navigate(['/waiter/order', room._id]);
-        // }
+        console.log('table', table);
+        if (table.orderId != null && table.orderId._id) {
+            localStorage.setItem('orderId', JSON.stringify(table.orderId._id));
+            localStorage.setItem('orderItems', JSON.stringify(table.orderId.item));
+            var data = {
+                roomId: table.orderId.room,
+                tableId: table.orderId.table,
+                noOfPeople: table.orderId.noOfPeople,
+                selectedItems: [],
+                cartTotalPrice: 0,
+                cartTotalItem: 0
+            };
+            this.orderService.setOrderData(data);
+        }
+        else {
+            localStorage.removeItem('orderId');
+            localStorage.removeItem('orderItems');
+        }
+        if (table.status == 1) {
+            this.router.navigate(['/waiter/order/:id/cart']);
+        }
+        else {
+            this.router.navigate(['/waiter/order', room._id]);
+        }
     };
     DashboardComponent.prototype.getTables = function (room, index) {
         localStorage.setItem('roomdata', JSON.stringify(room));

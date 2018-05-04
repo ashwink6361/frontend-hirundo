@@ -40,4 +40,14 @@ export class OrderService {
       .then(this.globalService.extractData)
       .catch(this.globalService.handleErrorPromise);
   }
+  updateOrder(item,orderId): Promise<any> {
+    let url = '/api/waiter/order';
+    let opts = {
+      item: item,
+      orderId: orderId
+    }
+    return this.http.put(url, opts).toPromise()
+      .then(this.globalService.extractData)
+      .catch(this.globalService.handleErrorPromise);
+  }
 }

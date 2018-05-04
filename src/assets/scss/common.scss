@@ -862,11 +862,7 @@ header {
     transition: 0.3s;
     padding: 0 10px;
     margin-top: 10px;
-    .total-amount{
-        position: fixed;
-        bottom: 60px;
-        right: 10px;
-    }
+    
     .item-list {
         display: flex;
         justify-content: space-between;
@@ -1032,17 +1028,7 @@ header {
     }
 }
 
-.order-btn {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    left: 0;
-    background-color: #3fb34f;
-    border: none;
-    color: #fff;
-    padding: 15px 0;
-    cursor: pointer;
-}
+
 
 .tabs-btn {
     display: flex;
@@ -1170,6 +1156,31 @@ header {
             &.completed{
                 text-decoration: line-through;
             }
+        }
+    }
+}
+
+.cart-bottom-fixed{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    .total-amount{
+        text-align: right;
+        padding: 0 10px;
+    }
+    .order-btn {
+        width: 100%;
+        background-color: #3fb34f;
+        border: none;
+        color: #fff;
+        padding: 15px 0;
+        cursor: pointer;
+    }
+    .cart-menu-btn{
+        text-align: right;
+        button{
+            margin: 0;
         }
     }
 }
