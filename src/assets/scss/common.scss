@@ -1158,5 +1158,8 @@ header {
     ul{
         padding: 0;
         list-style: none;
+        li{
+            display: inline-block;
+        }
     }
 }
