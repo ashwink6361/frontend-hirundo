@@ -5,7 +5,6 @@ import { OrderListRouting } from './order-list.routes';
 import { OrderListService } from './order-list.service';
 import { WebsocketService } from '../../../service/websocket.service';
 import { OrderByPipe } from '../../orderby';
-
 @NgModule({
   imports: [
     CommonModule,

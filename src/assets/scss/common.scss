@@ -59,6 +59,7 @@ body {
     width: 30px;
     height: 30px;
     padding: 0;
+    min-width: 30px;
 }
 
 .page-header {
@@ -784,8 +785,11 @@ header {
         padding: 0 0 13px;
         display: flex;
         justify-content: space-between;
-        i {
-            color: #fcab00;
+        img{
+            width: 30px;
+        }
+        span{
+            font-weight: bold;
         }
         .status {
             display: inline-block;
@@ -804,12 +808,12 @@ header {
             img {
                 max-width: 24px;
             }
-            span {
-                background-color: #fcab00;
-                color: #fff;
-                display: inline-block;
-                padding: 2px 5px;
-            }
+            // span {
+            //     background-color: #fcab00;
+            //     color: #fff;
+            //     display: inline-block;
+            //     padding: 2px 5px;
+            // }
         }
     }
     .btn-container {
@@ -900,8 +904,8 @@ header {
             }
         }
         .item-name {
-            max-width: 100px;
             width: 100%;
+            margin-left: 20px;
             .name {
                 font-weight: bold;
             }
@@ -1037,6 +1041,7 @@ header {
     border: none;
     color: #fff;
     padding: 15px 0;
+    cursor: pointer;
 }
 
 .tabs-btn {
@@ -1138,4 +1143,20 @@ header {
     color: #fff;
     padding: 1px 5px;
     border-radius: 3px;
+}
+
+.order-call-btn{
+    background-color: #008000;
+    border: none;
+    color: #fff;
+    padding: 15px;
+    cursor: pointer;
+}
+
+.step-listing{
+    background-color: $primary;
+    ul{
+        padding: 0;
+        list-style: none;
+    }
 }
