@@ -276,21 +276,35 @@ var ChooseCategoryComponent = /** @class */ (function () {
         var orderdata = this.orderService.getOrderData();
         orderdata.selectedCategory = category;
         orderdata.categoryItems = [];
+        // orderdata.step1 = [];
+        // orderdata.step2 = [];
         this.orderService.getCategoryItem().then(function (data) {
             if (data.data.length) {
                 for (var i = 0; i < data.data.length; i++) {
                     if (data.data[i].category._id == category._id) {
-                        // for (let j = 0; j < data.data[i].subcategory.length; j++) {
-                        //   for (let k = 0; k < data.data[i].subcategory[j].items.length; k++) {
-                        //     orderdata.categoryItems.push(data.data[i].subcategory[j].items[k]);
-                        //     this.orderService.setOrderData(orderdata);
-                        //   }
-                        // }
                         orderdata.categoryItems = data.data[i].items;
+                        // orderdata.step1 = data.data[i].items;
+                        // orderdata.step2 = data.data[i].items;
                         for (var j = 0; j < orderdata.categoryItems.length; j++) {
                             orderdata.categoryItems[j].quantity = 0;
                             orderdata.categoryItems[j].itemTotal = 0;
                         }
+                        // console.log('orderdata.step1',orderdata.step1);
+                        // console.log('orderdata.step2',orderdata.step2);
+                        // for (let j = 0; j < orderdata.step1.length; j++) {
+                        //   console.log('orderdata.step1',orderdata.step1[j]);
+                        //   orderdata.step1[j].quantity = 0;
+                        //   orderdata.step1[j].itemTotal = 0;
+                        //   orderdata.step1[j].step = 'Uscita 1';
+                        //   console.log('orderdata.step1++++++',orderdata.step1[j]);              
+                        // }
+                        // for (let k = 0; k < orderdata.step2.length; k++) {
+                        //   console.log('orderdata.step2',orderdata.step2[k]);
+                        //   orderdata.step2[k].quantity = 0;
+                        //   orderdata.step2[k].itemTotal = 0;
+                        //   orderdata.step2[k].step = 'Uscita 2';     
+                        //   console.log('orderdata.step2++++++++',orderdata.step2[k]);
+                        // }
                     }
                 }
             }
@@ -514,6 +528,8 @@ var ItemComponent = /** @class */ (function () {
         this.router = router;
         this.quantity = 0;
         this.articles = [];
+        // private step1 = [];
+        // private step2 = [];
         this.categoryList = [];
         this.categorySearchData = [];
         this.variantList = [];
@@ -534,6 +550,28 @@ var ItemComponent = /** @class */ (function () {
         this.data = this.orderService.getOrderData();
         console.log('this.data', this.data);
         if (this.data.categoryItems) {
+            // for (let i = 0; i < this.data.step1.length; i++) {
+            //   this.data.step1[i].itemTotal = 0;
+            //   if (this.data.selectedItems.length) {
+            //     for (let j = 0; j < this.data.selectedItems.length; j++) {
+            //       if (this.data.selectedItems[j]._id == this.data.step1[i]._id) {
+            //         this.data.step1[i].quantity = this.data.selectedItems[j].quantity;
+            //         this.data.step1[i].itemTotal = this.data.step1[i].itemTotal + this.data.selectedItems[j].quantity;
+            //       }
+            //     }
+            //   }
+            // }
+            // for (let i = 0; i < this.data.step2.length; i++) {
+            //   this.data.step2[i].itemTotal = 0;
+            //   if (this.data.selectedItems.length) {
+            //     for (let j = 0; j < this.data.selectedItems.length; j++) {
+            //       if (this.data.selectedItems[j]._id == this.data.step2[i]._id) {
+            //         this.data.step2[i].quantity = this.data.selectedItems[j].quantity;
+            //         this.data.step2[i].itemTotal = this.data.step2[i].itemTotal + this.data.selectedItems[j].quantity;
+            //       }
+            //     }
+            //   }
+            // }
             for (var i = 0; i < this.data.categoryItems.length; i++) {
                 this.data.categoryItems[i].itemTotal = 0;
                 if (this.data.selectedItems.length) {
@@ -547,6 +585,8 @@ var ItemComponent = /** @class */ (function () {
             }
             this.orderService.setOrderData(this.data);
             this.articles = this.orderService.getOrderData().categoryItems;
+            // this.step1 = this.orderService.getOrderData().step1;
+            // this.step2 = this.orderService.getOrderData().step2;
             this.selectedSubcategory[-1] = true;
         }
     };
@@ -597,6 +637,20 @@ var ItemComponent = /** @class */ (function () {
                     if (!data.selectedItems[i].variant) {
                         data.selectedItems[i].quantity += 1;
                         isarr.push(data.selectedItems[i]._id);
+                        // if(article.step == 'Uscita 1'){
+                        //   for (let j = 0; j < data.step1.length; j++) {
+                        //     if (data.step1[j]._id == data.selectedItems[i]._id) {
+                        //       data.step1[j].itemTotal = data.selectedItems[i].quantity;
+                        //     }
+                        //   }
+                        // }
+                        // else if(article.step == 'Uscita 2'){
+                        //   for (let j = 0; j < data.step2.length; j++) {
+                        //     if (data.step2[j]._id == data.selectedItems[i]._id) {
+                        //       data.step2[j].itemTotal = data.selectedItems[i].quantity;
+                        //     }
+                        //   }
+                        // }
                         for (var j = 0; j < data.categoryItems.length; j++) {
                             if (data.categoryItems[j]._id == data.selectedItems[i]._id) {
                                 data.categoryItems[j].itemTotal = data.selectedItems[i].quantity;
@@ -609,6 +663,20 @@ var ItemComponent = /** @class */ (function () {
                                 data.categoryItems[j].itemTotal = data.categoryItems[j].itemTotal + data.selectedItems[i].quantity;
                             }
                         }
+                        // if(article.step == 'Uscita 1'){
+                        //   for (let j = 0; j < data.step1.length; j++) {
+                        //     if (data.step1[j]._id == data.selectedItems[i]._id) {
+                        //       data.step1[j].itemTotal = data.step1[j].itemTotal + data.selectedItems[i].quantity;
+                        //     }
+                        //   }
+                        // }
+                        // else if(article.step == 'Uscita 2'){
+                        //   for (let j = 0; j < data.step2.length; j++) {
+                        //     if (data.step2[j]._id == data.selectedItems[i]._id) {
+                        //       data.step2[j].itemTotal = data.step2[j].itemTotal + data.selectedItems[i].quantity;
+                        //     }
+                        //   }
+                        // }
                     }
                 }
                 if (data.selectedItems[i]._id != article._id) {
@@ -622,6 +690,20 @@ var ItemComponent = /** @class */ (function () {
                         data.categoryItems[j].itemTotal = article.quantity;
                     }
                 }
+                // if(article.step == 'Uscita 1'){
+                //   for (let j = 0; j < data.step1.length; j++) {
+                //     if (data.step1[j]._id == article._id) {
+                //       data.step1[j].itemTotal = article.quantity;
+                //     }
+                //   }
+                // }
+                // else if(article.step == 'Uscita 2'){
+                //   for (let j = 0; j < data.step2.length; j++) {
+                //     if (data.step2[j]._id == article._id) {
+                //       data.step2[j].itemTotal = article.quantity;
+                //     }
+                //   }
+                // }
                 data.selectedItems.push(article);
             }
         }
@@ -632,6 +714,20 @@ var ItemComponent = /** @class */ (function () {
                     data.categoryItems[j].itemTotal = article.quantity;
                 }
             }
+            // if(article.step == 'Uscita 1'){
+            //   for (let j = 0; j < data.step1.length; j++) {
+            //     if (data.step1[j]._id == article._id) {
+            //       data.step1[j].itemTotal = article.quantity;
+            //     }
+            //   }
+            // }
+            // else if(article.step == 'Uscita 2'){
+            //   for (let j = 0; j < data.step2.length; j++) {
+            //     if (data.step2[j]._id == article._id) {
+            //       data.step2[j].itemTotal = article.quantity;
+            //     }
+            //   }
+            // }
             data.selectedItems.push(article);
         }
         var cp = 0;
@@ -653,6 +749,8 @@ var ItemComponent = /** @class */ (function () {
         this.orderService.setOrderData(data);
         console.log('inc this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
         this.articles = this.orderService.getOrderData().categoryItems;
+        // this.step1 = this.orderService.getOrderData().step1;
+        // this.step2 = this.orderService.getOrderData().step2;
     };
     ItemComponent.prototype.decreaseValue = function (article) {
         console.log('article dec', article);
@@ -667,6 +765,20 @@ var ItemComponent = /** @class */ (function () {
                             data.categoryItems[j].itemTotal = data.categoryItems[j].itemTotal - 1;
                         }
                     }
+                    // if(article.step == 'Uscita 1'){
+                    //   for (let j = 0; j < data.step1.length; j++) {
+                    //     if (data.step1[j]._id == data.selectedItems[i]._id) {
+                    //       data.step1[j].itemTotal = data.step1[j].itemTotal - 1;
+                    //     }
+                    //   }
+                    // }
+                    // else if(article.step == 'Uscita 2'){
+                    //   for (let j = 0; j < data.step2.length; j++) {
+                    //     if (data.step2[j]._id == data.selectedItems[i]._id) {
+                    //       data.step2[j].itemTotal = data.step2[j].itemTotal - 1;
+                    //     }
+                    //   }
+                    // }
                 }
                 else {
                     article.quantity = 0;
@@ -675,6 +787,20 @@ var ItemComponent = /** @class */ (function () {
                             data.categoryItems[j].itemTotal = data.categoryItems[j].itemTotal - 1;
                         }
                     }
+                    // if(article.step == 'Uscita 1'){
+                    //   for (let j = 0; j < data.step1.length; j++) {
+                    //     if (data.step1[j]._id == data.selectedItems[i]._id) {
+                    //       data.step1[j].itemTotal = data.step1[j].itemTotal - 1;
+                    //     }
+                    //   }
+                    // }
+                    // else if(article.step == 'Uscita 2'){
+                    //   for (let j = 0; j < data.step2.length; j++) {
+                    //     if (data.step2[j]._id == data.selectedItems[i]._id) {
+                    //       data.step2[j].itemTotal = data.step2[j].itemTotal - 1;
+                    //     }
+                    //   }
+                    // }
                     data.selectedItems.splice(i, 1);
                 }
             }
@@ -704,6 +830,8 @@ var ItemComponent = /** @class */ (function () {
         this.orderService.setOrderData(data);
         console.log('dec this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
         this.articles = this.orderService.getOrderData().categoryItems;
+        // this.step1 = this.orderService.getOrderData().step1;
+        // this.step2 = this.orderService.getOrderData().step2;
     };
     ItemComponent.prototype.viewCart = function () {
         this.router.navigate(['/waiter/order/:id/cart']);
@@ -835,6 +963,20 @@ var ItemComponent = /** @class */ (function () {
                     data.categoryItems[i].itemTotal = data.categoryItems[i].itemTotal + this.articleData.quantity;
                 }
             }
+            // if(this.articleData.step == 'Uscita 1'){
+            //   for (let i = 0; i < data.step1.length; i++) {
+            //     if (data.step1[i]._id == this.articleData._id) {
+            //       data.step1[i].itemTotal = data.step1[i].itemTotal + this.articleData.quantity;
+            //     }
+            //   }
+            // }
+            // else if(this.articleData.step == 'Uscita 2'){
+            //   for (let i = 0; i < data.step2.length; i++) {
+            //     if (data.step2[i]._id == this.articleData._id) {
+            //       data.step2[i].itemTotal = data.step2[i].itemTotal + this.articleData.quantity;
+            //     }
+            //   }
+            // }
             var cp = 0;
             var itemno = 0;
             var varicost = 0;
@@ -855,6 +997,8 @@ var ItemComponent = /** @class */ (function () {
             this.hideVarient();
             console.log('variant this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
             this.articles = this.orderService.getOrderData().categoryItems;
+            // this.step1 = this.orderService.getOrderData().step1;
+            // this.step2 = this.orderService.getOrderData().step2;
         }
     };
     ItemComponent = __decorate([
