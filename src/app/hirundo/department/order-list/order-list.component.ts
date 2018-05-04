@@ -18,7 +18,8 @@ export class OrderListComponent implements OnInit {
     public steps: Array<any> = []; 
     public activetab: boolean[] = [];
     public stepdata: Array<any> = [];
-    public orderId: Array<any> = [];     
+    public orderId: Array<any> = [];    
+    public times: Array<any> = [];      
     constructor(public websocketService: WebsocketService, public authGuard: AuthGuard) {
     }
 
@@ -28,13 +29,16 @@ export class OrderListComponent implements OnInit {
             if (this.orders.length) {
                 for (let i = 0; i < this.orders.length; i++) {
                     this.orderId.push(this.orders[i]._id);
-                    let step = [];                    
+                    let step = [];          
+                    let time = [];                    
                     for (let j = 0; j < this.orders[i].item.length; j++) {
                         if(step.indexOf(this.orders[i].item[j].step)<0){
                             step.push(this.orders[i].item[j].step);
                         }
+                        time.push(this.orders[i].item[j].id.preparationTime);
                     }
                     this.steps[this.orders[i]._id] = step;
+                    this.times[this.orders[i]._id] = Math.max(...time);
                 }
                 // this.activetab[0] = true;
                 for (let k = 0; k < this.orderId.length; k++) {
