@@ -20,13 +20,13 @@
             </div>
             <div class="step-listing">
                 <ul>
-                    <li *ngFor="let step of steps; let i = index;" (click)="selectedTab(steps[i],i)" [class.active]="activetab[i]">{{step}}</li>
+                    <li *ngFor="let step of steps[order._id]; let i = index;" (click)="selectedTab(steps[order._id][i],i,order._id)" [class.active]="steps[order._id][i] == stepdata[order._id].step">{{step}}</li>
                 </ul>
             </div>
             <div class="order-items-container">
                 <div *ngFor="let item of order.item">
                     <div *ngIf="((item.department.indexOf(authGuard.getCurrentUser()._id)) > -1) || ((authGuard.getCurrentUser().category.indexOf(item.category)) > -1)">
-                        <div class="order-item" *ngIf="item.step == stepdata.step">
+                        <div class="order-item" *ngIf="item.step == stepdata[order._id].step">
                             <label class="label item-status">{{getOrderStatus(item.status)}}</label>
                             <div class="order-item-img">
                                 {{item.quantity}} X

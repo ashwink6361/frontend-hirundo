@@ -17,7 +17,8 @@ export class OrderListComponent implements OnInit {
     public loadingOrders: boolean = true;
     public steps: Array<any> = []; 
     public activetab: boolean[] = [];
-    public stepdata;
+    public stepdata: Array<any> = [];
+    public orderId: Array<any> = [];     
     constructor(public websocketService: WebsocketService, public authGuard: AuthGuard) {
     }
 
@@ -26,21 +27,30 @@ export class OrderListComponent implements OnInit {
             this.orders = data;
             if (this.orders.length) {
                 for (let i = 0; i < this.orders.length; i++) {
+                    this.orderId.push(this.orders[i]._id);
+                    let step = [];                    
                     for (let j = 0; j < this.orders[i].item.length; j++) {
-                        if(this.steps.indexOf(this.orders[i].item[j].step)<0){
-                            this.steps.push(this.orders[i].item[j].step);
+                        if(step.indexOf(this.orders[i].item[j].step)<0){
+                            step.push(this.orders[i].item[j].step);
                         }
                     }
+                    this.steps[this.orders[i]._id] = step;
                 }
-                console.log('this.steps', this.steps);
-                this.activetab[0] = true;
-                this.stepdata = {
-                    tab: 0,
-                    step: this.steps[0]
+                // this.activetab[0] = true;
+                for (let k = 0; k < this.orderId.length; k++) {
+                    let temp = {
+                        tab: 0,
+                        step: ''
+                    }
+                    temp.tab = 0;
+                    temp.step = this.steps[this.orderId[k]][0];
+                    this.stepdata[this.orderId[k]] = temp;
                 }
+                // this.stepdata = {
+                //     tab: 0,
+                //     step: this.steps[this.orderId[0]][0]
+                // }
             }
-            console.log('this.orders',this.orders);
-
             this.loadingOrders = false;
         })
             .catch(error => {
@@ -107,17 +117,22 @@ export class OrderListComponent implements OnInit {
         });
     };
 
-    selectedTab(step, tab) {
-        this.activetab[tab] = true;
-        for (let i = 0; i < this.activetab.length; i++) {
-          if (i != tab) {
-            this.activetab[i] = false;
-          }
+    selectedTab(step, tab, orderId) {
+        // this.activetab[tab] = true;
+        // for (let i = 0; i < this.activetab.length; i++) {
+        //   if (i != tab) {
+        //     this.activetab[i] = false;
+        //   }
+        // }
+        // this.stepdata = {
+        //   tab: tab,
+        //   step: this.steps[orderId][tab]
+        // }
+        let temp = {
+            tab: tab,
+            step: step
         }
-        this.stepdata = {
-          tab: tab,
-          step: step
-        }
+        this.stepdata[orderId] = temp;
       }
-      
+
 }
