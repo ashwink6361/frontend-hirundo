@@ -107,6 +107,16 @@ var OrderService = /** @class */ (function () {
             .then(this.globalService.extractData)
             .catch(this.globalService.handleErrorPromise);
     };
+    OrderService.prototype.updateOrder = function (item, orderId) {
+        var url = '/api/waiter/order';
+        var opts = {
+            item: item,
+            orderId: orderId
+        };
+        return this.http.put(url, opts).toPromise()
+            .then(this.globalService.extractData)
+            .catch(this.globalService.handleErrorPromise);
+    };
     OrderService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Injectable */])(),
         __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__global_service__["a" /* GlobalService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__global_service__["a" /* GlobalService */]) === "function" && _b || Object])

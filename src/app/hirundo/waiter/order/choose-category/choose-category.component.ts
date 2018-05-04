@@ -19,9 +19,13 @@ export class ChooseCategoryComponent implements OnInit {
   protected selectedCategory = {};
   private categoryItems = [];
   public showItem: boolean = false;
+  private orderId;
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
+    if(localStorage.getItem('orderId')){
+      this.orderId = JSON.parse(localStorage.getItem('orderId'));
+    }
     this.orderService.getCategory()
       .then(data => {
         this.categoryList = data.data;

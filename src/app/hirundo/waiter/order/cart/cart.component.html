@@ -1,6 +1,9 @@
 <header class="page-content-header">
     <div class="back-btn">
-        <a routerLink="/waiter/order/:id/choose-item">
+        <a *ngIf="!orderId" routerLink="/waiter/order/:id/choose-item">
+            <i class="fas fa-angle-left"></i>
+        </a>
+        <a *ngIf="orderId" routerLink="/waiter/">
             <i class="fas fa-angle-left"></i>
         </a>
     </div>
@@ -11,9 +14,9 @@
 <div class="page-content">
 <app-steps></app-steps>    
     <div class="item-container">
-        <div class="text-center" *ngIf="!(items && items.length)">No Item Added</div>
-        <!-- <div class="text-center" *ngIf="!orderId && !(items && items.length)">No Item Added</div> -->
-        <!-- <div *ngIf="(orderId && orderItems && orderItems.length)">
+        <!-- <div class="text-center" *ngIf="!(items && items.length)">No Item Added</div> -->
+        <div class="text-center" *ngIf="!orderId && !(items && items.length)">No Item Added</div>
+        <div *ngIf="(orderId && orderItems && orderItems.length)">
             <div  *ngFor="let article of orderItems">
                 <div class="item-list align-items-center" *ngIf="article.step == globalService.getTabData().step">
                     <div class="item" [ngStyle]="{'background-color': article.id.category.color}">
@@ -36,7 +39,7 @@
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
         <div *ngIf="(items && items.length)">
             <div  *ngFor="let article of items">
                 <div class="item-list align-items-center" *ngIf="article.step == globalService.getTabData().step">
@@ -67,11 +70,11 @@
         <div class="total-amount">
             Sub Total: &euro;{{orderService.getOrderData().cartTotalPrice}}
         </div>
-        <!-- <div *ngIf="orderId">
+        <div *ngIf="orderId">
             <button type="button" (click)="gotToCategoryList()">
                 Menu
             </button>
-        </div> -->
+        </div>
         <button type="submit" class="order-btn waves-light" [disabled]="!orderService.getOrderData().selectedItems.length" (click)="createOrder()">
             Create Order
         </button>
