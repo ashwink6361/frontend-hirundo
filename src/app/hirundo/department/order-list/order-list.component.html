@@ -18,32 +18,39 @@
                 <p>
                     <i class="far fa-user"></i> {{order.noOfPeople}}</p>
             </div>
+            <div class="step-listing">
+                <ul>
+                    <li *ngFor="let step of steps; let i = index;" (click)="selectedTab(steps[i],i)" [class.active]="activetab[i]">{{step}}</li>
+                </ul>
+            </div>
             <div class="order-items-container">
                 <div *ngFor="let item of order.item">
-                    <div class="order-item" *ngIf="((item.department.indexOf(authGuard.getCurrentUser()._id)) > -1) || ((authGuard.getCurrentUser().category.indexOf(item.category)) > -1)">
-                        <label class="label item-status">{{getOrderStatus(item.status)}}</label>
-                        <div class="order-item-img">
-                            {{item.quantity}} X
-                        </div>
-                        <div class="order-item-detail">
-                            {{item.id.name}}
-                            <ul>
-                                <li *ngFor="let varient of item.variant">
-                                    <i *ngIf="varient.status == 1">+</i>
-                                    <i *ngIf="varient.status == 0">-</i> {{varient.name}}
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="order-quantity d-flex w-105">
-                            <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 2)">
-                                <img src="assets/images/order-deliver.png" alt="" />
-                            </button>
-                            <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 4)">
-                                <i class="fas fa-sync-alt"></i>
-                            </button>
-                            <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 3)">
-                                <i class="fas fa-times"></i>
-                            </button>
+                    <div *ngIf="((item.department.indexOf(authGuard.getCurrentUser()._id)) > -1) || ((authGuard.getCurrentUser().category.indexOf(item.category)) > -1)">
+                        <div class="order-item" *ngIf="item.step == stepdata.step">
+                            <label class="label item-status">{{getOrderStatus(item.status)}}</label>
+                            <div class="order-item-img">
+                                {{item.quantity}} X
+                            </div>
+                            <div class="order-item-detail">
+                                {{item.id.name}}
+                                <ul>
+                                    <li *ngFor="let varient of item.variant">
+                                        <i *ngIf="varient.status == 1">+</i>
+                                        <i *ngIf="varient.status == 0">-</i> {{varient.name}}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="order-quantity d-flex w-105">
+                                <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 2)">
+                                    <img src="assets/images/order-deliver.png" alt="" />
+                                </button>
+                                <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 4)">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                                <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 3)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
