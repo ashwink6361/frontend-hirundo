@@ -5,6 +5,7 @@ import { Http, Response } from '@angular/http';
 import * as Rx from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 import { AuthGuard } from '../shared/guard/auth.guard';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable()
 export class WebsocketService {

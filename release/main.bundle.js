@@ -1664,7 +1664,8 @@ var UserChangePasswordService = /** @class */ (function () {
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 var environment = {
-    production: false
+    production: false,
+    apiUrl: 'http://localhost:5051/'
 };
 //# sourceMappingURL=environment.js.map
 
