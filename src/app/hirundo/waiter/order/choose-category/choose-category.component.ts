@@ -44,21 +44,38 @@ export class ChooseCategoryComponent implements OnInit {
     let orderdata = this.orderService.getOrderData();
     orderdata.selectedCategory = category;
     orderdata.categoryItems = [];
+    // orderdata.step1 = [];
+    // orderdata.step2 = [];
+    
     this.orderService.getCategoryItem().then(data => {
       if(data.data.length){
         for (let i = 0; i < data.data.length; i++) {
           if (data.data[i].category._id == category._id) {
-            // for (let j = 0; j < data.data[i].subcategory.length; j++) {
-            //   for (let k = 0; k < data.data[i].subcategory[j].items.length; k++) {
-            //     orderdata.categoryItems.push(data.data[i].subcategory[j].items[k]);
-            //     this.orderService.setOrderData(orderdata);
-            //   }
-            // }
             orderdata.categoryItems = data.data[i].items;
+            // orderdata.step1 = data.data[i].items;
+            // orderdata.step2 = data.data[i].items;
             for (let j = 0; j < orderdata.categoryItems.length; j++) {
               orderdata.categoryItems[j].quantity = 0;
               orderdata.categoryItems[j].itemTotal = 0;
             }
+            // console.log('orderdata.step1',orderdata.step1);
+            // console.log('orderdata.step2',orderdata.step2);
+            // for (let j = 0; j < orderdata.step1.length; j++) {
+            //   console.log('orderdata.step1',orderdata.step1[j]);
+            //   orderdata.step1[j].quantity = 0;
+            //   orderdata.step1[j].itemTotal = 0;
+            //   orderdata.step1[j].step = 'Uscita 1';
+            //   console.log('orderdata.step1++++++',orderdata.step1[j]);              
+            // }
+            // for (let k = 0; k < orderdata.step2.length; k++) {
+            //   console.log('orderdata.step2',orderdata.step2[k]);
+              
+            //   orderdata.step2[k].quantity = 0;
+            //   orderdata.step2[k].itemTotal = 0;
+            //   orderdata.step2[k].step = 'Uscita 2';     
+            //   console.log('orderdata.step2++++++++',orderdata.step2[k]);
+                       
+            // }
           }
         }
       }

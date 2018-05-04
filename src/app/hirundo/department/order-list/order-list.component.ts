@@ -15,12 +15,30 @@ export class OrderListComponent implements OnInit {
     public clock: any;
     public tick: any;
     public loadingOrders: boolean = true;
+    public steps: Array<any> = []; 
+    public activetab: boolean[] = [];
+    public stepdata;
     constructor(public websocketService: WebsocketService, public authGuard: AuthGuard) {
     }
 
     ngOnInit() {
         this.websocketService.getOrders().then(data => {
             this.orders = data;
+            if (this.orders.length) {
+                for (let i = 0; i < this.orders.length; i++) {
+                    for (let j = 0; j < this.orders[i].item.length; j++) {
+                        if(this.steps.indexOf(this.orders[i].item[j].step)<0){
+                            this.steps.push(this.orders[i].item[j].step);
+                        }
+                    }
+                }
+                console.log('this.steps', this.steps);
+                this.activetab[0] = true;
+                this.stepdata = {
+                    tab: 0,
+                    step: this.steps[0]
+                }
+            }
             console.log('this.orders',this.orders);
 
             this.loadingOrders = false;
@@ -89,4 +107,17 @@ export class OrderListComponent implements OnInit {
         });
     };
 
+    selectedTab(step, tab) {
+        this.activetab[tab] = true;
+        for (let i = 0; i < this.activetab.length; i++) {
+          if (i != tab) {
+            this.activetab[i] = false;
+          }
+        }
+        this.stepdata = {
+          tab: tab,
+          step: step
+        }
+      }
+      
 }
