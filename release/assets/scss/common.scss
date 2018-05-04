@@ -1154,9 +1154,21 @@ header {
 }
 
 .step-listing{
-    background-color: $primary;
+    background-color: $secondary;
     ul{
         padding: 0;
         list-style: none;
+        margin: 0;
+        li{
+            display: inline-block;
+            padding: 0 5px;
+            color: #fff;
+            &.active{
+                color: $primary;
+            }
+            &.completed{
+                text-decoration: line-through;
+            }
+        }
     }
 }
