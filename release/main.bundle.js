@@ -1407,7 +1407,45 @@ var StepsComponent = /** @class */ (function () {
         this.activetab = [];
     }
     StepsComponent.prototype.ngOnInit = function () {
+        var orderId = JSON.parse(localStorage.getItem('orderId'));
+        if (orderId) {
+            if (this.globalService.getTabData()) {
+                this.activetab[this.globalService.getTabData().tab] = true;
+            }
+            else {
+                this.activetab[0] = true;
+            }
+            // this.activetab[0] = true;
+            var orderItems = JSON.parse(localStorage.getItem('orderItems'));
+            if (this.globalService.getStepData()) {
+                this.stepArray = this.globalService.getStepData();
+            }
+            else {
+                this.stepArray = ['Uscita 1', 'Uscita 2'];
+            }
+            for (var i = 0; i < orderItems.length; i++) {
+                if (this.stepArray.indexOf(orderItems[i].step) < 0) {
+                    this.stepArray.push(orderItems[i].step);
+                }
+            }
+            if (this.globalService.getTabData()) {
+                var tabdata = {
+                    tab: this.globalService.getTabData().tab,
+                    step: this.globalService.getTabData().step
+                };
+                this.globalService.setTabData(tabdata);
+            }
+            else {
+                var tabdata = {
+                    tab: 0,
+                    step: this.stepArray[0]
+                };
+                this.globalService.setTabData(tabdata);
+            }
+            this.globalService.setStepData(this.stepArray);
+        }
         var step = this.globalService.getStepData();
+        console.log('step', step);
         var data = this.globalService.getTabData();
         if (step && step.length) {
             this.stepArray = step;
@@ -1432,6 +1470,7 @@ var StepsComponent = /** @class */ (function () {
     StepsComponent.prototype.addStep = function () {
         var count = this.stepArray.length + 1;
         this.stepArray.push('Uscita ' + count);
+        console.log('this.stepArray', this.stepArray);
         this.globalService.setStepData(this.stepArray);
     };
     StepsComponent.prototype.selectedTab = function (step, tab) {
