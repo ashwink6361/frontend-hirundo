@@ -27,7 +27,7 @@
                         <img *ngIf="article.id.logo.small" [src]="article.id.logo.small" alt="Item Logo" />
                         <span class="item-quantity" *ngIf="article.quantity>0">{{article.quantity}}</span>
                     </div>
-                    <div class="item-name mw-160">
+                    <div class="item-name">
                         <p class="name m-0">{{article.id.name}}</p>
                         <p class="name m-0">&euro;{{article.price}}</p>
                         <span *ngIf="article.variant && article.variant.length">
