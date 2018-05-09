@@ -107,7 +107,6 @@ export class OrderListComponent implements OnInit {
 
     public updateOrder(order, time, status) {
         this.showToCall[order._id] = false; 
-        time = 2;
         let m = time - 1;
         let seconds = time * 60;
         let w = parseFloat((100/seconds).toFixed(2));

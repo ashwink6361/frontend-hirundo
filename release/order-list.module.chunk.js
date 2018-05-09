@@ -146,7 +146,6 @@ var OrderListComponent = /** @class */ (function () {
     OrderListComponent.prototype.updateOrder = function (order, time, status) {
         var _this = this;
         this.showToCall[order._id] = false;
-        time = 2;
         var m = time - 1;
         var seconds = time * 60;
         var w = parseFloat((100 / seconds).toFixed(2));
