@@ -185,8 +185,6 @@ export class OrderListComponent implements OnInit {
             step: step
         }
         this.stepdata[orderId] = temp;
-    }
-
-    public 
+    } 
 
 }
