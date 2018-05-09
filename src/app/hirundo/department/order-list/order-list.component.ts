@@ -105,35 +105,37 @@ export class OrderListComponent implements OnInit {
     };
 
     public updateOrder(order, time, status) {
-        console.log(time, 'order item time++++++');
-        // var hours = Math.floor(time / 60);
-        // var minutes = time % 60;
-        // var Pretime = hours + ":" + minutes;
-        // console.log(Pretime, 'Pretime');
+        time = 2;
+        let m = time - 1;
         let seconds = time * 60;
-        let mlSeconds = seconds * 1000;
         let timeInterval = 1000;
-        console.log(seconds, 'seconds');
-        console.log(mlSeconds, 'mlSeconds');
-
+        let t = 0;
+        let s = 60;
         var elem = document.getElementById(order._id);
         var width = 0;
         var id = setInterval(() => {
-            mlSeconds = mlSeconds-timeInterval;
-            console.log("mlSeconds ", mlSeconds);
-            if (mlSeconds < 0) {
+            t = t + 1;
+            seconds = seconds-1;
+            s = s-1;
+            if(seconds == 0) {   
                 clearInterval(id);
                 this.showDeliveredButton = true;
-                this.remainingTime = time;
                 console.log(this.showDeliveredButton, 'this.showDeliveredButton t');                
             } else {
-                width++;
-                if(mlSeconds>0)
-                this.remainingTime = (mlSeconds)/60*1000; 
+                width = width - Math.floor((1000/60*60));
+                console.log(width)
                 elem.style.width = width + '%';
                 this.showDeliveredButton = false;
                 console.log(this.showDeliveredButton, 'this.showDeliveredButton');                
             }
+            if (t == 60) {
+                t = 0;
+                s = 60;
+                m = m-1;
+            }
+            var minutes = m;
+            var seconds = s;
+            this.remainingTime = (minutes<10?('0'+minutes):minutes) + ":" + (seconds<10?('0'+seconds):seconds);
         }, timeInterval);
 
         order.status = status;
