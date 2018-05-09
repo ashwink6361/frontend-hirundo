@@ -16,7 +16,7 @@
     <div class="item-container">
         <!-- <div class="text-center" *ngIf="!(items && items.length)">No Item Added</div> -->
         <div class="text-center" *ngIf="!orderId && !(items && items.length)">No Item Added</div>
-        <div *ngIf="(orderId && orderItems && orderItems.length)">
+        <div *ngIf="(orderId && orderItems && orderItems.length)" class="border-bottom">
             <div *ngFor="let article of orderItems">
                 <div class="item-list align-items-center" *ngIf="article.step == globalService.getTabData().step">
                     <div class="item" [ngStyle]="{'background-color': article.id.category.color}">
@@ -27,7 +27,7 @@
                         <img *ngIf="article.id.logo.small" [src]="article.id.logo.small" alt="Item Logo" />
                         <span class="item-quantity" *ngIf="article.quantity>0">{{article.quantity}}</span>
                     </div>
-                    <div class="item-name mw-160">
+                    <div class="item-name">
                         <p class="name m-0">{{article.id.name}}</p>
                         <p class="name m-0">&euro;{{article.price}}</p>
                         <span *ngIf="article.variant && article.variant.length">

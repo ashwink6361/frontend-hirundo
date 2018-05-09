@@ -26,6 +26,11 @@ body {
     background-color: red;
 }
 
+.border-bottom{
+    border-bottom: 2px solid $primary;
+    padding-bottom: 5px;
+}
+
 .btn-default {
     background-color: $primary;
 }
@@ -865,7 +870,6 @@ header {
     
     .item-list {
         display: flex;
-        justify-content: space-between;
         margin-bottom: 10px;
         .item {
             max-width: 50px;
@@ -1131,13 +1135,6 @@ header {
     border-radius: 3px;
 }
 
-.order-call-btn{
-    background-color: #008000;
-    border: none;
-    color: #fff;
-    padding: 15px;
-    cursor: pointer;
-}
 
 .step-listing{
     background-color: $secondary;
@@ -1182,5 +1179,20 @@ header {
         button{
             margin: 0;
         }
+    }
+}
+
+.order-call-btn{
+    position: relative;
+    width: 100%;
+    button{
+        width: 100%;
+    }
+    .progress-btn{
+        position: absolute;
+        height: 100%;
+        top: 0;
+        z-index: 9;
+        background: #008000;
     }
 }
