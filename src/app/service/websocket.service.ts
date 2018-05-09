@@ -119,6 +119,16 @@ export class WebsocketService {
             return error;
           });
     }
+    public updateDeliveredOrder(id, opts): Promise<any> {
+        let url = '/api/orderStep/'+id;
+        return this.http.put(url,opts).toPromise()
+          .then(data => {
+            return data.json();
+          })
+          .catch(error => {
+            return error;
+          });
+    }
     public updateWaiterOrder(id, opts): Promise<any> {
         let url = '/api/waiter/orders/'+id;
         return this.http.put(url,opts).toPromise()

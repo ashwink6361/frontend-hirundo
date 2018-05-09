@@ -20,8 +20,9 @@ export class OrderListComponent implements OnInit {
     public stepdata: Array<any> = [];
     public orderId: Array<any> = [];    
     public times: Array<any> = []; 
-    public remainingTime: any = '0:00';
-    public showDeliveredButton: boolean = false; 
+    public remainingTime: Array<any> = ['0:00'];
+    public showDeliveredButton: boolean[] = [false]; 
+    public showToCall: boolean[] = [false];     
     // public times = {};          
     constructor(public websocketService: WebsocketService, public authGuard: AuthGuard) {
     }
@@ -105,9 +106,11 @@ export class OrderListComponent implements OnInit {
     };
 
     public updateOrder(order, time, status) {
+        this.showToCall[order._id] = false; 
         time = 2;
         let m = time - 1;
         let seconds = time * 60;
+        let w = parseFloat((100/seconds).toFixed(2));
         let timeInterval = 1000;
         let t = 0;
         let s = 60;
@@ -117,16 +120,19 @@ export class OrderListComponent implements OnInit {
             t = t + 1;
             seconds = seconds-1;
             s = s-1;
-            if(seconds == 0) {   
+            if(seconds == 0 || seconds<0) {   
                 clearInterval(id);
-                this.showDeliveredButton = true;
-                console.log(this.showDeliveredButton, 'this.showDeliveredButton t');                
+                this.showDeliveredButton[order._id] = true;            
             } else {
-                width = width - Math.floor((1000/60*60));
-                console.log(width)
-                elem.style.width = width + '%';
-                this.showDeliveredButton = false;
-                console.log(this.showDeliveredButton, 'this.showDeliveredButton');                
+                width = width + w;
+                console.log(width);
+                if(width < 100){
+                    elem.style.width = width + '%';
+                } else {
+                    elem.style.width = '100%';
+                }
+                
+                this.showDeliveredButton[order._id] = false;
             }
             if (t == 60) {
                 t = 0;
@@ -135,7 +141,7 @@ export class OrderListComponent implements OnInit {
             }
             var minutes = m;
             var seconds = s;
-            this.remainingTime = (minutes<10?('0'+minutes):minutes) + ":" + (seconds<10?('0'+seconds):seconds);
+            this.remainingTime[order._id] = (minutes<10?('0'+minutes):minutes) + ":" + (seconds<10?('0'+seconds):seconds);
         }, timeInterval);
 
         order.status = status;
@@ -189,6 +195,20 @@ export class OrderListComponent implements OnInit {
             step: step
         }
         this.stepdata[orderId] = temp;
-    }
+    } 
 
+    public updateDeliveredOrder(order) {
+        console.log(order, 'order ++++++');
+        let opts = {
+            step: this.stepdata[order._id].step,
+        };
+        this.websocketService.updateDeliveredOrder(order._id, opts).then(data => {
+            console.log("updateDeliveredOrder dept Order updated++++++++++++++++", data);
+            this.showToCall[order._id] = true;
+            this.showDeliveredButton[order._id] = false;
+            
+        }).catch(error => {
+            console.log("error", error);
+        });
+    };
 }
