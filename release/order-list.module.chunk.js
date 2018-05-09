@@ -3,7 +3,7 @@ webpackJsonp(["order-list.module"],{
 /***/ "../../../../../src/app/hirundo/department/order-list/order-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!-- <div> -->\n<div class=\"text-center\" *ngIf=\"!(orders && orders.length)\">No Order Found.</div>\n<div *ngIf=\"orders && orders.length\" class=\"order-list-container\">\n    <div class=\"card order-list\" *ngFor=\"let order of orders | orderby: '-created_at'\">\n        <div class=\"card-body\" [class.opacity]=\"order.status == 3\">\n            <h4 class=\"card-title\">\n                <div>\n                    <i class=\"far fa-clock\"></i> {{order.created_at | date:'hh:mm a'}}</div>\n                <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div>\n            </h4>\n            <div class=\"card-text\">\n                <p>\n                    <i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\n                <p>\n                    <img src=\"assets/images/table.png\" alt=\"\">\n                    <span>{{order.tableName}}</span>\n                </p>\n                <p>\n                    <i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\n            </div>\n            <div class=\"step-listing\">\n                <ul *ngIf=\"stepdata[order._id]\">\n                    <li *ngFor=\"let step of steps[order._id]; let i = index;\" (click)=\"selectedTab(steps[order._id][i],i,order._id)\" [class.active]=\"steps[order._id][i] == stepdata[order._id].step\">{{step}}</li>\n                </ul>\n            </div>\n            <div class=\"order-items-container\">\n                <div *ngFor=\"let item of order.item\">\n                    <div *ngIf=\"((item.department.indexOf(authGuard.getCurrentUser()._id)) > -1) || ((authGuard.getCurrentUser().category.indexOf(item.category)) > -1)\">\n                        <div class=\"order-item\" *ngIf=\"stepdata[order._id] && item.step == stepdata[order._id].step\">\n                            <label class=\"label item-status\">{{getOrderStatus(item.status)}}</label>\n                            <div class=\"order-item-img\">\n                                {{item.quantity}} X\n                            </div>\n                            <div class=\"order-item-detail\">\n                                {{item.id.name}}\n                                <ul>\n                                    <li *ngFor=\"let varient of item.variant\">\n                                        <i *ngIf=\"varient.status == 1\">+</i>\n                                        <i *ngIf=\"varient.status == 0\">-</i> {{varient.name}}\n                                    </li>\n                                </ul>\n                            </div>\n                            <div class=\"order-quantity d-flex w-105\">\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 2)\">\n                                    <img src=\"assets/images/order-deliver.png\" alt=\"\" />\n                                </button>\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 4)\">\n                                    <i class=\"fas fa-sync-alt\"></i>\n                                </button>\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 3)\">\n                                    <i class=\"fas fa-times\"></i>\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <!-- <div class=\"btn-container\">\n                <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 3)\">Cancel</button>\n                <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 4)\">In Progress</button>\n                <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 2)\">Done</button>\n            </div> -->\n        </div>\n        <div class=\"order-call-btn\">\n            <button *ngIf=\"!showDeliveredButton\" type=\"submit\" (click)=\"updateOrder(order, times[order._id], 4)\" [disabled]=\"order.status == 4\"><span *ngIf=\"order.status == 0\">Start ({{times[order._id]}}:00)</span><span *ngIf=\"order.status == 4\">Running </span></button>\n            <button *ngIf=\"showDeliveredButton\" type=\"submit\" (click)=\"updateOrder(order, 1)\">Delivered</button>\n            <div id=\"{{order._id}}\" class=\"progress-btn\"></div>\n        </div>\n    </div>\n</div>\n<!-- </div> -->\n"
+module.exports = "<!-- <div> -->\n<div class=\"text-center\" *ngIf=\"!(orders && orders.length)\">No Order Found.</div>\n<div *ngIf=\"orders && orders.length\" class=\"order-list-container\">\n    <div class=\"card order-list\" *ngFor=\"let order of orders | orderby: '-created_at'\">\n        <div class=\"card-body\" [class.opacity]=\"order.status == 3\">\n            <h4 class=\"card-title\">\n                <div>\n                    <i class=\"far fa-clock\"></i> {{order.created_at | date:'hh:mm a'}}</div>\n                <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div>\n            </h4>\n            <div class=\"card-text\">\n                <p>\n                    <i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\n                <p>\n                    <img src=\"assets/images/table.png\" alt=\"\">\n                    <span>{{order.tableName}}</span>\n                </p>\n                <p>\n                    <i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\n            </div>\n            <div class=\"step-listing\">\n                <ul *ngIf=\"stepdata[order._id]\">\n                    <li *ngFor=\"let step of steps[order._id]; let i = index;\" (click)=\"selectedTab(steps[order._id][i],i,order._id)\" [class.active]=\"steps[order._id][i] == stepdata[order._id].step\">{{step}}</li>\n                </ul>\n            </div>\n            <div class=\"order-items-container\">\n                <div *ngFor=\"let item of order.item\">\n                    <div *ngIf=\"((item.department.indexOf(authGuard.getCurrentUser()._id)) > -1) || ((authGuard.getCurrentUser().category.indexOf(item.category)) > -1)\">\n                        <div class=\"order-item\" *ngIf=\"stepdata[order._id] && item.step == stepdata[order._id].step\">\n                            <label class=\"label item-status\">{{getOrderStatus(item.status)}}</label>\n                            <div class=\"order-item-img\">\n                                {{item.quantity}} X\n                            </div>\n                            <div class=\"order-item-detail\">\n                                {{item.id.name}}\n                                <ul>\n                                    <li *ngFor=\"let varient of item.variant\">\n                                        <i *ngIf=\"varient.status == 1\">+</i>\n                                        <i *ngIf=\"varient.status == 0\">-</i> {{varient.name}}\n                                    </li>\n                                </ul>\n                            </div>\n                            <div class=\"order-quantity d-flex w-105\">\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 2)\">\n                                    <img src=\"assets/images/order-deliver.png\" alt=\"\" />\n                                </button>\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 4)\">\n                                    <i class=\"fas fa-sync-alt\"></i>\n                                </button>\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 3)\">\n                                    <i class=\"fas fa-times\"></i>\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <!-- <div class=\"btn-container\">\n                <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 3)\">Cancel</button>\n                <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 4)\">In Progress</button>\n                <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 2)\">Done</button>\n            </div> -->\n        </div>\n        <div class=\"order-call-btn\">\n            <button *ngIf=\"!showDeliveredButton\" type=\"submit\" (click)=\"updateOrder(order, times[order._id], 4)\" [disabled]=\"order.status == 4\"><span *ngIf=\"order.status == 0\">Start ({{times[order._id]}}:00)</span><span *ngIf=\"order.status == 4\">Running </span></button>\n            <button *ngIf=\"showDeliveredButton\" type=\"submit\" (click)=\"updateOrder(order, 1)\">Delivered</button>\n            <div *ngIf=\"!showDeliveredButton\" id=\"{{order._id}}\" class=\"progress-btn\">{{remainingTime}}</div>\n        </div>\n    </div>\n</div>\n<!-- </div> -->\n"
 
 /***/ }),
 
@@ -57,6 +57,7 @@ var OrderListComponent = /** @class */ (function () {
         this.stepdata = [];
         this.orderId = [];
         this.times = [];
+        this.remainingTime = '0:00';
         this.showDeliveredButton = false;
     }
     OrderListComponent.prototype.ngOnInit = function () {
@@ -142,30 +143,37 @@ var OrderListComponent = /** @class */ (function () {
     };
     ;
     OrderListComponent.prototype.updateOrder = function (order, time, status) {
+        var _this = this;
         console.log(time, 'order item time++++++');
         // var hours = Math.floor(time / 60);
         // var minutes = time % 60;
         // var Pretime = hours + ":" + minutes;
         // console.log(Pretime, 'Pretime');
         var seconds = time * 60;
-        // let mlSeconds = seconds * 1000;
+        var mlSeconds = seconds * 1000;
+        var timeInterval = 1000;
         console.log(seconds, 'seconds');
-        // console.log(mlSeconds, 'mlSeconds');
+        console.log(mlSeconds, 'mlSeconds');
         var elem = document.getElementById(order._id);
         var width = 0;
-        var id = setInterval(frame, seconds);
-        console.log(id, 'id time');
-        function frame() {
-            if (width >= 100) {
+        var id = setInterval(function () {
+            mlSeconds = mlSeconds - timeInterval;
+            console.log("mlSeconds ", mlSeconds);
+            if (mlSeconds < 0) {
                 clearInterval(id);
-                this.showDeliveredButton = false;
+                _this.showDeliveredButton = true;
+                _this.remainingTime = time;
+                console.log(_this.showDeliveredButton, 'this.showDeliveredButton t');
             }
             else {
                 width++;
+                if (mlSeconds > 0)
+                    _this.remainingTime = (mlSeconds) / 60 * 1000;
                 elem.style.width = width + '%';
-                this.showDeliveredButton = true;
+                _this.showDeliveredButton = false;
+                console.log(_this.showDeliveredButton, 'this.showDeliveredButton');
             }
-        }
+        }, timeInterval);
         order.status = status;
         var items = [];
         for (var i = 0; i < order.item.length; i++) {

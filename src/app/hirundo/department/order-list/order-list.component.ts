@@ -20,7 +20,8 @@ export class OrderListComponent implements OnInit {
     public stepdata: Array<any> = [];
     public orderId: Array<any> = [];    
     public times: Array<any> = []; 
-    public showDeliveredButton: boolean = false;  
+    public remainingTime: any = '0:00';
+    public showDeliveredButton: boolean = false; 
     // public times = {};          
     constructor(public websocketService: WebsocketService, public authGuard: AuthGuard) {
     }
@@ -110,24 +111,30 @@ export class OrderListComponent implements OnInit {
         // var Pretime = hours + ":" + minutes;
         // console.log(Pretime, 'Pretime');
         let seconds = time * 60;
-        // let mlSeconds = seconds * 1000;
+        let mlSeconds = seconds * 1000;
+        let timeInterval = 1000;
         console.log(seconds, 'seconds');
-        // console.log(mlSeconds, 'mlSeconds');
+        console.log(mlSeconds, 'mlSeconds');
 
         var elem = document.getElementById(order._id);
         var width = 0;
-        var id = setInterval(frame, seconds);
-        console.log(id, 'id time');
-        function frame() {
-            if (width >= 100) {
+        var id = setInterval(() => {
+            mlSeconds = mlSeconds-timeInterval;
+            console.log("mlSeconds ", mlSeconds);
+            if (mlSeconds < 0) {
                 clearInterval(id);
-                this.showDeliveredButton = false;
+                this.showDeliveredButton = true;
+                this.remainingTime = time;
+                console.log(this.showDeliveredButton, 'this.showDeliveredButton t');                
             } else {
                 width++;
+                if(mlSeconds>0)
+                this.remainingTime = (mlSeconds)/60*1000; 
                 elem.style.width = width + '%';
-                this.showDeliveredButton = true;
+                this.showDeliveredButton = false;
+                console.log(this.showDeliveredButton, 'this.showDeliveredButton');                
             }
-        }
+        }, timeInterval);
 
         order.status = status;
         let items = [];
