@@ -106,34 +106,43 @@ export class OrderListComponent implements OnInit {
     };
 
     public updateOrder(order, time, status) {
-        this.showToCall[order._id] = false;        
-        console.log(time, 'order item time++++++');
-        // var hours = Math.floor(time / 60);
-        // var minutes = time % 60;
-        // var Pretime = hours + ":" + minutes;
-        // console.log(Pretime, 'Pretime');
+        this.showToCall[order._id] = false; 
+        let m = time - 1;
         let seconds = time * 60;
-        let mlSeconds = seconds * 1000;
+        let w = parseFloat((100/seconds).toFixed(2));
         let timeInterval = 1000;
-        console.log(seconds, 'seconds');
-        console.log(mlSeconds, 'mlSeconds');
-
+        let t = 0;
+        let s = 60;
         var elem = document.getElementById(order._id);
         var width = 0;
         var id = setInterval(() => {
-            mlSeconds = mlSeconds-timeInterval;
-            console.log("mlSeconds ", mlSeconds);
-            if (mlSeconds < 0) {
+            t = t + 1;
+            seconds = seconds-1;
+            console.log(seconds, 'seconds =====')
+            s = s-1;
+            if(seconds == 0 || seconds<0) {   
                 clearInterval(id);
-                this.showDeliveredButton[order._id] = true;
-                this.remainingTime[order._id] = time;
+                this.showDeliveredButton[order._id] = true;            
             } else {
-                width++;
-                if(mlSeconds>0)
-                this.remainingTime[order._id] = (mlSeconds)/60*1000; 
-                elem.style.width = width + '%';
+                width = width + w;
+                console.log(width);
+                if(width < 100){
+                    elem.style.width = width + '%';
+                } else {
+                    elem.style.width = '100%';
+                }
                 this.showDeliveredButton[order._id] = false;
             }
+            if (t == 60) {
+                t = 0;
+                s = 60;
+                m = m-1;
+            }
+            var minutes = m;
+            var seconds = s;
+            console.log(seconds, 'seconds =====++++++')
+            
+            this.remainingTime[order._id] = (minutes<10?('0'+minutes):minutes) + ":" + (seconds<10?('0'+seconds):seconds);
         }, timeInterval);
 
         order.status = status;
