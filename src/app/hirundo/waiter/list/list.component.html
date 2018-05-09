@@ -57,7 +57,9 @@
                     <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 1)">Delivered</button>
                 </div> -->
         </div>
-        <button type="submit" class="order-call-btn" (click)="updateOrder(order, 1)">Call ({{times[order._id]}}:00)</button>
+        <div class="order-call-btn">
+            <button type="submit" (click)="updateOrder(order, 1)">Call ({{times[order._id]}}:00)</button>
+        </div>
     </div>
     <!-- </div> -->
 </div>

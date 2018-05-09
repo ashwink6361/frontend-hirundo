@@ -1187,11 +1187,21 @@ header {
     width: 100%;
     button{
         width: 100%;
+        background: #00b900;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 10px 0;
+        span{
+            z-index: 10;
+            position: relative;
+        }
     }
     .progress-btn{
         position: absolute;
         height: 100%;
         top: 0;
+        color: #fff;
         z-index: 9;
         background: #008000;
     }
