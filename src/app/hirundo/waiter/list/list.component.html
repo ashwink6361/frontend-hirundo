@@ -42,12 +42,12 @@
                             </ul>
                         </div>
                         <div class="order-quantity d-flex">
-                            <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 1)">
+                            <!-- <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 1)">
                                 <img src="assets/images/order-deliver.png" alt="" />
                             </button>
                             <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 3)">
                                 <i class="fas fa-times"></i>
-                            </button>
+                            </button> -->
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                     <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 1)">Delivered</button>
                 </div> -->
         </div>
-        <button type="submit" class="order-call-btn">Call ({{times[order._id]}}:00)</button>
+        <button type="submit" class="order-call-btn" (click)="updateOrder(order, 1)">Call ({{times[order._id]}}:00)</button>
     </div>
     <!-- </div> -->
 </div>

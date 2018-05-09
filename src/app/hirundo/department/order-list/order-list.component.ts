@@ -15,11 +15,11 @@ export class OrderListComponent implements OnInit {
     public clock: any;
     public tick: any;
     public loadingOrders: boolean = true;
-    public steps: Array<any> = []; 
+    public steps: Array<any> = [];
     public activetab: boolean[] = [];
     public stepdata: Array<any> = [];
-    public orderId: Array<any> = [];    
-    public times: Array<any> = [];      
+    public orderId: Array<any> = [];
+    public times: Array<any> = [];
     constructor(public websocketService: WebsocketService, public authGuard: AuthGuard) {
     }
 
@@ -29,10 +29,10 @@ export class OrderListComponent implements OnInit {
             if (this.orders.length) {
                 for (let i = 0; i < this.orders.length; i++) {
                     this.orderId.push(this.orders[i]._id);
-                    let step = [];          
-                    let time = [];                    
+                    let step = [];
+                    let time = [];
                     for (let j = 0; j < this.orders[i].item.length; j++) {
-                        if(step.indexOf(this.orders[i].item[j].step)<0){
+                        if (step.indexOf(this.orders[i].item[j].step) < 0) {
                             step.push(this.orders[i].item[j].step);
                         }
                         time.push(this.orders[i].item[j].id.preparationTime);
@@ -85,7 +85,30 @@ export class OrderListComponent implements OnInit {
         return str;
     };
 
-    public updateOrder(order, status) {
+    public updateOrder(order, time, status) {
+        console.log(time, 'order item time++++++');
+        var hours = Math.floor(time / 60);
+        var minutes = time % 60;
+        var Pretime = hours + ":" + minutes;
+        console.log(Pretime, 'Pretime');
+        let seconds = minutes * 60;
+        let mlSeconds = seconds * 1000;
+        console.log(seconds, 'seconds');
+        console.log(mlSeconds, 'mlSeconds');
+
+        var elem = document.getElementById(order._id);
+        var width = 0;
+        var id = setInterval(frame, seconds);
+        console.log(id, 'id time');
+        function frame() {
+            if (width >= 100) {
+                clearInterval(id);
+            } else {
+                width++;
+                elem.style.width = width + '%';
+            }
+        }
+
         order.status = status;
         let items = [];
         for (let i = 0; i < order.item.length; i++) {
@@ -137,6 +160,6 @@ export class OrderListComponent implements OnInit {
             step: step
         }
         this.stepdata[orderId] = temp;
-      }
+    }
 
 }
