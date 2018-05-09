@@ -130,7 +130,6 @@ export class OrderListComponent implements OnInit {
                 } else {
                     elem.style.width = '100%';
                 }
-                
                 this.showDeliveredButton[order._id] = false;
             }
             if (t == 60) {
