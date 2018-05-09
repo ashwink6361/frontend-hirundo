@@ -12,9 +12,8 @@ import 'rxjs/Rx';
 })
 export class ItemComponent implements OnInit {
   public quantity: number = 0;
-  private articles = [];
-  // private step1 = [];
-  // private step2 = [];
+  // private articles = {};
+  private articles = [];  
   private categoryList = [];
   public categorySearchData: any[] = [];
   protected dataService: CompleterData;
@@ -41,24 +40,19 @@ export class ItemComponent implements OnInit {
     this.data = this.orderService.getOrderData();
     console.log('this.data', this.data);
     if (this.data.categoryItems) {
-      // for (let i = 0; i < this.data.step1.length; i++) {
-      //   this.data.step1[i].itemTotal = 0;
-      //   if (this.data.selectedItems.length) {
-      //     for (let j = 0; j < this.data.selectedItems.length; j++) {
-      //       if (this.data.selectedItems[j]._id == this.data.step1[i]._id) {
-      //         this.data.step1[i].quantity = this.data.selectedItems[j].quantity;
-      //         this.data.step1[i].itemTotal = this.data.step1[i].itemTotal + this.data.selectedItems[j].quantity;
-      //       }
-      //     }
-      //   }
+      // var steps = [];
+      // if (this.globalService.getStepData()) {
+      //   steps = this.globalService.getStepData();
       // }
-      // for (let i = 0; i < this.data.step2.length; i++) {
-      //   this.data.step2[i].itemTotal = 0;
-      //   if (this.data.selectedItems.length) {
-      //     for (let j = 0; j < this.data.selectedItems.length; j++) {
-      //       if (this.data.selectedItems[j]._id == this.data.step2[i]._id) {
-      //         this.data.step2[i].quantity = this.data.selectedItems[j].quantity;
-      //         this.data.step2[i].itemTotal = this.data.step2[i].itemTotal + this.data.selectedItems[j].quantity;
+      // for (let k = 0; k < steps.length; k++) {
+      //   for (let i = 0; i < this.data.categoryItems[steps[k]].length; i++) {
+      //     this.data.categoryItems[steps[k]][i].itemTotal = 0;
+      //     if (this.data.selectedItems.length) {
+      //       for (let j = 0; j < this.data.selectedItems.length; j++) {
+      //         if (this.data.selectedItems[j]._id == this.data.categoryItems[steps[k]][i]._id && this.data.selectedItems[j].step == this.data.categoryItems[steps[k]][i].step) {
+      //           this.data.categoryItems[steps[k]][i].quantity = this.data.selectedItems[j].quantity;
+      //           this.data.categoryItems[steps[k]][i].itemTotal = this.data.categoryItems[steps[k]][i].itemTotal + this.data.selectedItems[j].quantity;
+      //         }
       //       }
       //     }
       //   }
@@ -76,53 +70,9 @@ export class ItemComponent implements OnInit {
       }
       this.orderService.setOrderData(this.data);
       this.articles = this.orderService.getOrderData().categoryItems;
-      // this.step1 = this.orderService.getOrderData().step1;
-      // this.step2 = this.orderService.getOrderData().step2;
       this.selectedSubcategory[-1] = true;
     }
   }
-
-  // increaseValue(article) {
-  //   let value = article.quantity;
-  //   value = isNaN(value) ? 0 : value;
-  //   value++;
-  //   article.quantity = value;
-  //   let data = this.orderService.getOrderData();
-  //   for (let i = 0; i < data.selectedItems.length; i++) {
-  //     if (data.selectedItems[i]._id == article._id) {
-  //       data.selectedItems.splice(i, 1);
-  //     }
-  //   }
-  //   data.selectedItems.push(article);
-  //   let cp = 0;
-  //   let itemno = 0;                                    
-  //   for (let i = 0; i < data.selectedItems.length; i++) {
-  //     itemno += data.selectedItems[i].quantity;                                        
-  //     cp += data.selectedItems[i].price * data.selectedItems[i].quantity;
-  //     data.cartTotalPrice = cp;
-  //     data.cartTotalItem = itemno;                                                        
-  //   }
-  //   this.orderService.setOrderData(data);
-  // }
-
-  // decreaseValue(article) {
-  //   let value = article.quantity;
-  //   value = isNaN(value) ? 0 : value;
-  //   value < 1 ? value = 1 : '';
-  //   value--;
-  //   article.quantity = value;
-  //   let data = this.orderService.getOrderData();
-  //   for (let i = 0; i < data.selectedItems.length; i++) {
-  //     if (data.selectedItems[i]._id == article._id) {
-  //       data.selectedItems.splice(i, 1);
-  //     }
-  //   }
-  //   this.orderService.setOrderData(data);
-  // }
-
-
-
-
 
   increaseValue(article) {
     article.step = this.globalService.getTabData().step;
@@ -333,6 +283,151 @@ export class ItemComponent implements OnInit {
     // this.step2 = this.orderService.getOrderData().step2;
   }
 
+//new code
+  // increaseValue(article) {
+  //   article.step = this.globalService.getTabData().step;
+  //   let data = this.orderService.getOrderData();
+  //   if (data.selectedItems.length) {
+  //     let isExist = true;
+  //     let isarr = [];
+  //     for (let i = 0; i < data.selectedItems.length; i++) {
+  //       if (data.selectedItems[i]._id == article._id) {
+  //         if(data.selectedItems[i].step == article.step){
+  //           if (!data.selectedItems[i].variant) {
+  //             data.selectedItems[i].quantity += 1;
+  //             isarr.push(data.selectedItems[i]._id);
+  //             for (let j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
+  //               if (data.categoryItems[this.globalService.getTabData().step][j]._id == data.selectedItems[i]._id) {
+  //                 data.categoryItems[this.globalService.getTabData().step][j].itemTotal = data.selectedItems[i].quantity;
+  //               }
+  //             }
+  //           }
+  //           if (data.selectedItems[i].variant) {
+  //             console.log('data.selectedItems[i].quantity',data.selectedItems[i].quantity);
+  //             for (let j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
+  //               if (data.categoryItems[this.globalService.getTabData().step][j]._id == data.selectedItems[i]._id) {
+  //             console.log('data.categoryItems[this.globalService.getTabData().step][j].itemTotal',data.categoryItems[this.globalService.getTabData().step][j].itemTotal);
+  //                 data.categoryItems[this.globalService.getTabData().step][j].itemTotal = data.categoryItems[this.globalService.getTabData().step][j].itemTotal + data.selectedItems[i].quantity;
+  //               }
+  //             }
+  //           }
+  //         }
+  //         if(data.selectedItems[i].step != article.step){
+  //           isExist = false;
+  //         }
+  //         // if (!data.selectedItems[i].variant) {
+  //         //   data.selectedItems[i].quantity += 1;
+  //         //   isarr.push(data.selectedItems[i]._id);
+  //         //   for (let j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
+  //         //     if (data.categoryItems[this.globalService.getTabData().step][j]._id == data.selectedItems[i]._id) {
+  //         //       data.categoryItems[this.globalService.getTabData().step][j].itemTotal = data.selectedItems[i].quantity;
+  //         //     }
+  //         //   }
+  //         // }
+  //         // else {
+  //         //   for (let j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
+  //         //     if (data.categoryItems[this.globalService.getTabData().step][j]._id == data.selectedItems[i]._id) {
+  //         //       data.categoryItems[this.globalService.getTabData().step][j].itemTotal = data.categoryItems[this.globalService.getTabData().step][j].itemTotal + data.selectedItems[i].quantity;
+  //         //     }
+  //         //   }
+  //         // }
+  //       }
+  //       if (data.selectedItems[i]._id != article._id) {
+  //         isExist = false;
+  //       }
+  //     }
+  //     if (!isExist && isarr.indexOf(article._id) < 0) {
+  //       article.quantity = article.quantity + 1;
+  //       for (let j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
+  //         if (data.categoryItems[this.globalService.getTabData().step][j]._id == article._id) {
+  //           data.categoryItems[this.globalService.getTabData().step][j].itemTotal = article.quantity;
+  //         }
+  //       }
+  //       data.selectedItems.push(article);
+  //     }
+  //   }
+  //   else {
+  //     article.quantity = article.quantity + 1;
+  //     for (let j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
+  //       if (data.categoryItems[this.globalService.getTabData().step][j]._id == article._id) {
+  //         data.categoryItems[this.globalService.getTabData().step][j].itemTotal = article.quantity;
+  //       }
+  //     }
+  //     data.selectedItems.push(article);
+  //   }
+  //   let cp = 0;
+  //   let itemno = 0;
+  //   let varicost = 0;
+  //   for (let i = 0; i < data.selectedItems.length; i++) {
+  //     itemno += data.selectedItems[i].quantity;
+  //     if (data.selectedItems[i].variant) {
+  //       for (let j = 0; j < data.selectedItems[i].variant.length; j++) {
+  //         if (data.selectedItems[i].variant[j].status == 1) {
+  //           varicost += data.selectedItems[i].variant[j].price;
+  //         }
+  //       }
+  //     }
+  //     cp += (data.selectedItems[i].price + varicost) * data.selectedItems[i].quantity;
+  //     data.cartTotalPrice = cp;
+  //     data.cartTotalItem = itemno;
+  //   }
+  //   this.orderService.setOrderData(data);
+  //   console.log('inc this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
+  //   this.articles = this.orderService.getOrderData().categoryItems;
+  // }
+
+  // decreaseValue(article) {
+  //   console.log('article dec', article);
+  //   article.step = this.globalService.getTabData().step;
+  //   let data = this.orderService.getOrderData();
+  //   for (let i = 0; i < data.selectedItems.length; i++) {
+  //     if (data.selectedItems[i]._id == article._id && !data.selectedItems[i].variant && data.selectedItems[i].step == article.step) {
+  //       if (data.selectedItems[i].quantity > 1) {
+  //         data.selectedItems[i].quantity = data.selectedItems[i].quantity - 1;
+  //         for (let j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
+  //           if (data.categoryItems[this.globalService.getTabData().step][j]._id == data.selectedItems[i]._id) {
+  //             data.categoryItems[this.globalService.getTabData().step][j].itemTotal = data.categoryItems[this.globalService.getTabData().step][j].itemTotal - 1;
+  //           }
+  //         }
+  //       }
+  //       else {
+  //         article.quantity = 0;
+  //         for (let j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
+  //           if (data.categoryItems[this.globalService.getTabData().step][j]._id == data.selectedItems[i]._id) {
+  //             data.categoryItems[this.globalService.getTabData().step][j].itemTotal = data.categoryItems[this.globalService.getTabData().step][j].itemTotal - 1;
+  //           }
+  //         }
+  //         data.selectedItems.splice(i, 1);
+  //       }
+  //     }
+  //   }
+  //   let cp = 0;
+  //   let itemno = 0;
+  //   let varicost = 0;
+  //   if (data.selectedItems.length) {
+  //     for (let i = 0; i < data.selectedItems.length; i++) {
+  //       itemno += data.selectedItems[i].quantity;
+  //       if (data.selectedItems[i].variant) {
+  //         for (let j = 0; j < data.selectedItems[i].variant.length; j++) {
+  //           if (data.selectedItems[i].variant[j].status == 1) {
+  //             varicost += data.selectedItems[i].variant[j].price;
+  //           }
+  //         }
+  //       }
+  //       cp += (data.selectedItems[i].price + varicost) * data.selectedItems[i].quantity;
+  //       data.cartTotalPrice = cp;
+  //       data.cartTotalItem = itemno;
+  //     }
+  //   }
+  //   else {
+  //     data.cartTotalPrice = 0;
+  //     data.cartTotalItem = 0;
+  //   }
+  //   this.orderService.setOrderData(data);
+  //   console.log('dec this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
+  //   this.articles = this.orderService.getOrderData().categoryItems;
+  // }
+
   viewCart() {
     this.router.navigate(['/waiter/order/:id/cart']);
   }
@@ -510,4 +605,52 @@ export class ItemComponent implements OnInit {
       // this.step2 = this.orderService.getOrderData().step2;
     }
   }
+
+  // saveVariantData() {
+  //   if (this.variantData.quantity == 0) {
+  //     this.variantError = 'Please enter quantity';
+  //     setTimeout(() => {
+  //       this.variantError = '';
+  //     }, 4000);
+  //   }
+  //   else if (this.variantData.quantity > 0 && !this.variantData.variant.length && !this.variantData.notes) {
+  //     this.variantError = 'Please select variants/notes';
+  //     setTimeout(() => {
+  //       this.variantError = '';
+  //     }, 4000);
+  //   }
+  //   else {
+  //     this.articleData.quantity = this.variantData.quantity;
+  //     this.articleData.variant = this.variantData.variant;
+  //     this.articleData.ordernote = this.variantData.notes;
+  //     this.articleData.step = this.globalService.getTabData().step;
+  //     let data = this.orderService.getOrderData();
+  //     data.selectedItems.push(this.articleData);
+  //     for (let i = 0; i < data.categoryItems[this.globalService.getTabData().step].length; i++) {
+  //       if (data.categoryItems[this.globalService.getTabData().step][i]._id == this.articleData._id) {
+  //         data.categoryItems[this.globalService.getTabData().step][i].itemTotal = data.categoryItems[this.globalService.getTabData().step][i].itemTotal + this.articleData.quantity;
+  //       }
+  //     }
+  //     let cp = 0;
+  //     let itemno = 0;
+  //     let varicost = 0;
+  //     for (let i = 0; i < data.selectedItems.length; i++) {
+  //       itemno += data.selectedItems[i].quantity;
+  //       if (data.selectedItems[i].variant) {
+  //         for (let j = 0; j < data.selectedItems[i].variant.length; j++) {
+  //           if (data.selectedItems[i].variant[j].status == 1) {
+  //             varicost += data.selectedItems[i].variant[j].price;
+  //           }
+  //         }
+  //       }
+  //       cp += (data.selectedItems[i].price + varicost) * data.selectedItems[i].quantity;
+  //       data.cartTotalPrice = cp;
+  //       data.cartTotalItem = itemno;
+  //     }
+  //     this.orderService.setOrderData(data);
+  //     this.hideVarient();
+  //     console.log('variant this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
+  //     this.articles = this.orderService.getOrderData().categoryItems;
+  //   }
+  // }
 }

@@ -20,6 +20,7 @@ export class OrderListComponent implements OnInit {
     public stepdata: Array<any> = [];
     public orderId: Array<any> = [];    
     public times: Array<any> = [];      
+    // public times = {};          
     constructor(public websocketService: WebsocketService, public authGuard: AuthGuard) {
     }
 
@@ -38,17 +39,32 @@ export class OrderListComponent implements OnInit {
                         time.push(this.orders[i].item[j].id.preparationTime);
                     }
                     this.steps[this.orders[i]._id] = step;
-                    this.times[this.orders[i]._id] = Math.max(...time);
+                    // for (let k = 0; k < this.steps[this.orders[i]._id].length; k++) {
+                    // let time = {};
+                    // let temp = [];                                                                
+                    //     for (let l = 0; l < this.orders[i].item.length; l++) {
+                    //         if(this.orders[i].item[l].step == this.steps[this.orders[i]._id][k]){
+                    //             temp.push(this.orders[i].item[l].id.preparationTime);
+                    //         }
+                    //     }
+                    //     console.log('temp',temp);
+                    //     time[this.steps[this.orders[i]._id][k]] = Math.max(...temp);                        
+                    //     console.log('time',time);                        
+                    //     this.times[this.orders[i]._id] = time;                        
+                    // }
+                    // console.log('this.times',this.times);
                 }
                 // this.activetab[0] = true;
-                for (let k = 0; k < this.orderId.length; k++) {
-                    let temp = {
-                        tab: 0,
-                        step: ''
+                if (this.orderId && this.orderId.length) {
+                    for (let k = 0; k < this.orderId.length; k++) {
+                        let temp = {
+                            tab: 0,
+                            step: ''
+                        }
+                        temp.tab = 0;
+                        temp.step = this.steps[this.orderId[k]][0];
+                        this.stepdata[this.orderId[k]] = temp;
                     }
-                    temp.tab = 0;
-                    temp.step = this.steps[this.orderId[k]][0];
-                    this.stepdata[this.orderId[k]] = temp;
                 }
                 // this.stepdata = {
                 //     tab: 0,

@@ -48,38 +48,32 @@ export class ChooseCategoryComponent implements OnInit {
     let orderdata = this.orderService.getOrderData();
     orderdata.selectedCategory = category;
     orderdata.categoryItems = [];
-    // orderdata.step1 = [];
-    // orderdata.step2 = [];
-    
+    // orderdata.categoryItems = {};    
     this.orderService.getCategoryItem().then(data => {
       if(data.data.length){
         for (let i = 0; i < data.data.length; i++) {
           if (data.data[i].category._id == category._id) {
+            // console.log('globalService.getStepData()',this.globalService.getStepData());
+            // var steps = [];
+            // if (this.globalService.getStepData()) {
+            //   steps = this.globalService.getStepData();
+            // }
+            // else {
+            //   steps = ['Uscita 1', 'Uscita 2'];
+            // }
+            // for (let j = 0; j < steps.length; j++) {
+            //   orderdata.categoryItems[steps[j]] = data.data[i].items;
+            //   for (let k = 0; k < orderdata.categoryItems[steps[j]].length; k++) {
+            //     orderdata.categoryItems[steps[j]][k].quantity = 0;
+            //     orderdata.categoryItems[steps[j]][k].itemTotal = 0;
+            //   }
+            // }
+            // console.log('orderdata.categoryItems',orderdata.categoryItems);
             orderdata.categoryItems = data.data[i].items;
-            // orderdata.step1 = data.data[i].items;
-            // orderdata.step2 = data.data[i].items;
             for (let j = 0; j < orderdata.categoryItems.length; j++) {
               orderdata.categoryItems[j].quantity = 0;
               orderdata.categoryItems[j].itemTotal = 0;
             }
-            // console.log('orderdata.step1',orderdata.step1);
-            // console.log('orderdata.step2',orderdata.step2);
-            // for (let j = 0; j < orderdata.step1.length; j++) {
-            //   console.log('orderdata.step1',orderdata.step1[j]);
-            //   orderdata.step1[j].quantity = 0;
-            //   orderdata.step1[j].itemTotal = 0;
-            //   orderdata.step1[j].step = 'Uscita 1';
-            //   console.log('orderdata.step1++++++',orderdata.step1[j]);              
-            // }
-            // for (let k = 0; k < orderdata.step2.length; k++) {
-            //   console.log('orderdata.step2',orderdata.step2[k]);
-              
-            //   orderdata.step2[k].quantity = 0;
-            //   orderdata.step2[k].itemTotal = 0;
-            //   orderdata.step2[k].step = 'Uscita 2';     
-            //   console.log('orderdata.step2++++++++',orderdata.step2[k]);
-                       
-            // }
           }
         }
       }

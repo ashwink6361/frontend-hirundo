@@ -21,13 +21,13 @@
                     <i class="far fa-user"></i> {{order.noOfPeople}}</p>
             </div>
             <div class="step-listing">
-                <ul>
+                <ul *ngIf="stepdata[order._id]">
                     <li *ngFor="let step of steps[order._id]; let i = index;" (click)="selectedTab(steps[order._id][i],i,order._id)" [class.active]="steps[order._id][i] == stepdata[order._id].step">{{step}}</li>
                 </ul>
             </div>
             <div class="order-items-container">
                 <div *ngFor="let item of order.item">
-                    <div class="order-item" *ngIf="item.step == stepdata[order._id].step">
+                    <div class="order-item" *ngIf="stepdata[order._id] && item.step == stepdata[order._id].step">
                         <label class="label item-status">{{getOrderStatus(item.status)}}</label>
                         <div class="order-item-img">
                             {{item.quantity}} X

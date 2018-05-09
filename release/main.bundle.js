@@ -646,6 +646,89 @@ var LoginService = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "../../../../../src/app/hirundo/waiter/order/order.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return OrderService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__global_service__ = __webpack_require__("../../../../../src/app/hirundo/global.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var OrderService = /** @class */ (function () {
+    function OrderService(http, globalService) {
+        this.http = http;
+        this.globalService = globalService;
+        this.orderData = {};
+        this.categoryItems = [];
+    }
+    OrderService.prototype.getCategory = function () {
+        var url = '/api/categories';
+        return this.http.get(url).toPromise()
+            .then(this.globalService.extractData)
+            .catch(this.globalService.handleErrorPromise);
+    };
+    OrderService.prototype.getCategoryItem = function () {
+        var url = '/api/categories/items';
+        return this.http.get(url).toPromise()
+            .then(this.globalService.extractData)
+            .catch(this.globalService.handleErrorPromise);
+    };
+    OrderService.prototype.setOrderData = function (data) {
+        localStorage.setItem('orderData', JSON.stringify(data));
+    };
+    OrderService.prototype.getOrderData = function () {
+        var data = localStorage.getItem('orderData');
+        return JSON.parse(data);
+    };
+    OrderService.prototype.getVariantAndNotes = function () {
+        var url = '/api/variantAndNotes';
+        return this.http.get(url).toPromise()
+            .then(this.globalService.extractData)
+            .catch(this.globalService.handleErrorPromise);
+    };
+    OrderService.prototype.createOrder = function (data) {
+        var url = '/api/waiter/order';
+        return this.http.post(url, data).toPromise()
+            .then(this.globalService.extractData)
+            .catch(this.globalService.handleErrorPromise);
+    };
+    OrderService.prototype.updateOrder = function (item, orderId) {
+        var url = '/api/waiter/order';
+        var opts = {
+            item: item,
+            orderId: orderId
+        };
+        return this.http.put(url, opts).toPromise()
+            .then(this.globalService.extractData)
+            .catch(this.globalService.handleErrorPromise);
+    };
+    OrderService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Injectable */])(),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__global_service__["a" /* GlobalService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__global_service__["a" /* GlobalService */]) === "function" && _b || Object])
+    ], OrderService);
+    return OrderService;
+    var _a, _b;
+}());
+
+//# sourceMappingURL=order.service.js.map
+
+/***/ }),
+
 /***/ "../../../../../src/app/service/app.service.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1389,6 +1472,7 @@ module.exports = module.exports.toString();
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return StepsComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__hirundo_global_service__ = __webpack_require__("../../../../../src/app/hirundo/global.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__hirundo_waiter_order_order_service__ = __webpack_require__("../../../../../src/app/hirundo/waiter/order/order.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1400,9 +1484,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 var StepsComponent = /** @class */ (function () {
-    function StepsComponent(globalService) {
+    function StepsComponent(globalService, orderService) {
         this.globalService = globalService;
+        this.orderService = orderService;
         this.stepArray = ['Uscita 1', 'Uscita 2'];
         this.activetab = [];
     }
@@ -1415,7 +1501,6 @@ var StepsComponent = /** @class */ (function () {
             else {
                 this.activetab[0] = true;
             }
-            // this.activetab[0] = true;
             var orderItems = JSON.parse(localStorage.getItem('orderItems'));
             if (this.globalService.getStepData()) {
                 this.stepArray = this.globalService.getStepData();
@@ -1445,7 +1530,6 @@ var StepsComponent = /** @class */ (function () {
             this.globalService.setStepData(this.stepArray);
         }
         var step = this.globalService.getStepData();
-        console.log('step', step);
         var data = this.globalService.getTabData();
         if (step && step.length) {
             this.stepArray = step;
@@ -1470,8 +1554,28 @@ var StepsComponent = /** @class */ (function () {
     StepsComponent.prototype.addStep = function () {
         var count = this.stepArray.length + 1;
         this.stepArray.push('Uscita ' + count);
-        console.log('this.stepArray', this.stepArray);
         this.globalService.setStepData(this.stepArray);
+        // let orderdata = this.orderService.getOrderData();
+        // this.orderService.getCategoryItem().then(data => {
+        //   if (data.data.length) {
+        //     for (let i = 0; i < data.data.length; i++) {
+        //       if (orderdata.selectedCategory && data.data[i].category._id == orderdata.selectedCategory._id) {
+        //             let step = 'Uscita ' + count;
+        //             orderdata.categoryItems[step] = data.data[i].items;
+        //         console.log('orderdata.categoryItems+++++++++++++++', orderdata.categoryItems);
+        //         for (let j = 0; j < orderdata.categoryItems[step].length; j++) {
+        //           orderdata.categoryItems[step][j].quantity = 0;
+        //           orderdata.categoryItems[step][j].itemTotal = 0;
+        //         }
+        //       }
+        //     }
+        //   }
+        //   console.log('orderdata+++++++++++++++', orderdata);      
+        //   this.orderService.setOrderData(orderdata);
+        // })
+        //   .catch(error => {
+        //     console.log('error', error);
+        //   });
     };
     StepsComponent.prototype.selectedTab = function (step, tab) {
         this.activetab[tab] = true;
@@ -1492,10 +1596,10 @@ var StepsComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/shared/steps/steps.component.html"),
             styles: [__webpack_require__("../../../../../src/app/shared/steps/steps.component.scss")]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__hirundo_global_service__["a" /* GlobalService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__hirundo_global_service__["a" /* GlobalService */]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__hirundo_global_service__["a" /* GlobalService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__hirundo_global_service__["a" /* GlobalService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__hirundo_waiter_order_order_service__["a" /* OrderService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__hirundo_waiter_order_order_service__["a" /* OrderService */]) === "function" && _b || Object])
     ], StepsComponent);
     return StepsComponent;
-    var _a;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=steps.component.js.map

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../hirundo/global.service';
+import { OrderService } from '../../hirundo/waiter/order/order.service';
 @Component({
   selector: 'app-steps',
   templateUrl: './steps.component.html',
@@ -8,7 +9,7 @@ import { GlobalService } from '../../hirundo/global.service';
 export class StepsComponent implements OnInit {
   public stepArray = ['Uscita 1', 'Uscita 2'];
   public activetab: boolean[] = [];
-  constructor(private globalService: GlobalService) { }
+  constructor(private globalService: GlobalService, private orderService: OrderService) { }
 
   ngOnInit() {
     let orderId = JSON.parse(localStorage.getItem('orderId'));
@@ -74,6 +75,27 @@ export class StepsComponent implements OnInit {
     let count = this.stepArray.length + 1;
     this.stepArray.push('Uscita ' + count);
     this.globalService.setStepData(this.stepArray);
+    // let orderdata = this.orderService.getOrderData();
+    // this.orderService.getCategoryItem().then(data => {
+    //   if (data.data.length) {
+    //     for (let i = 0; i < data.data.length; i++) {
+    //       if (orderdata.selectedCategory && data.data[i].category._id == orderdata.selectedCategory._id) {
+    //             let step = 'Uscita ' + count;
+    //             orderdata.categoryItems[step] = data.data[i].items;
+    //         console.log('orderdata.categoryItems+++++++++++++++', orderdata.categoryItems);
+    //         for (let j = 0; j < orderdata.categoryItems[step].length; j++) {
+    //           orderdata.categoryItems[step][j].quantity = 0;
+    //           orderdata.categoryItems[step][j].itemTotal = 0;
+    //         }
+    //       }
+    //     }
+    //   }
+    //   console.log('orderdata+++++++++++++++', orderdata);      
+    //   this.orderService.setOrderData(orderdata);
+    // })
+    //   .catch(error => {
+    //     console.log('error', error);
+    //   });
   }
 
   selectedTab(step, tab) {
