@@ -22,6 +22,7 @@ export class OrderListComponent implements OnInit {
     public times: Array<any> = []; 
     public remainingTime: Array<any> = ['0:00'];
     public showDeliveredButton: boolean[] = [false]; 
+    public showToCall: boolean[] = [false];     
     // public times = {};          
     constructor(public websocketService: WebsocketService, public authGuard: AuthGuard) {
     }
@@ -105,6 +106,7 @@ export class OrderListComponent implements OnInit {
     };
 
     public updateOrder(order, time, status) {
+        this.showToCall[order._id] = false;        
         console.log(time, 'order item time++++++');
         // var hours = Math.floor(time / 60);
         // var minutes = time % 60;
@@ -187,4 +189,18 @@ export class OrderListComponent implements OnInit {
         this.stepdata[orderId] = temp;
     } 
 
+    public updateDeliveredOrder(order) {
+        console.log(order, 'order ++++++');
+        let opts = {
+            step: this.stepdata[order._id].step,
+        };
+        this.websocketService.updateDeliveredOrder(order._id, opts).then(data => {
+            console.log("updateDeliveredOrder dept Order updated++++++++++++++++", data);
+            this.showToCall[order._id] = true;
+            this.showDeliveredButton[order._id] = false;
+            
+        }).catch(error => {
+            console.log("error", error);
+        });
+    };
 }

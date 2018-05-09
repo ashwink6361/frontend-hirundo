@@ -62,9 +62,11 @@
             </div> -->
         </div>
         <div class="order-call-btn">
-            <button *ngIf="!showDeliveredButton[order._id]" type="submit" (click)="updateOrder(order, times[order._id], 4)" [disabled]="order.status == 4"><span *ngIf="order.status == 0">Start ({{times[order._id]}}:00)</span><span *ngIf="order.status == 4">Running </span></button>
-            <button *ngIf="showDeliveredButton[order._id]" type="submit" (click)="updateDeliveredOrder(order, 1)">Delivered</button>
-            <div *ngIf="!showDeliveredButton[order._id]" id="{{order._id}}" class="progress-btn">{{remainingTime[order._id]}}</div>
+            <button *ngIf="!showToCall[order._id] && !showDeliveredButton[order._id]" type="submit" (click)="updateOrder(order, times[order._id], 4)" [disabled]="order.status == 4"><span *ngIf="order.status == 0">Start ({{times[order._id]}}:00)</span><span *ngIf="order.status == 4">Running </span></button>
+            <button *ngIf="!showToCall[order._id] && showDeliveredButton[order._id]" type="submit" (click)="updateDeliveredOrder(order)">Delivered</button>
+            <div *ngIf="!showToCall[order._id] && !showDeliveredButton[order._id]" id="{{order._id}}" class="progress-btn">{{remainingTime[order._id]}}</div>
+            <button *ngIf="showToCall[order._id] && !showDeliveredButton[order._id]" type="submit" [disabled]="true">To Call ({{times[order._id]}}:00)</button>
+       
         </div>
     </div>
 </div>

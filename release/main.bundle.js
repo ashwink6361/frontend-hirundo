@@ -907,6 +907,16 @@ var WebsocketService = /** @class */ (function () {
             return error;
         });
     };
+    WebsocketService.prototype.updateDeliveredOrder = function (id, opts) {
+        var url = '/api/orderStep/' + id;
+        return this.http.put(url, opts).toPromise()
+            .then(function (data) {
+            return data.json();
+        })
+            .catch(function (error) {
+            return error;
+        });
+    };
     WebsocketService.prototype.updateWaiterOrder = function (id, opts) {
         var url = '/api/waiter/orders/' + id;
         return this.http.put(url, opts).toPromise()
