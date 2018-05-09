@@ -20,8 +20,8 @@ export class OrderListComponent implements OnInit {
     public stepdata: Array<any> = [];
     public orderId: Array<any> = [];    
     public times: Array<any> = []; 
-    public remainingTime: any = '0:00';
-    public showDeliveredButton: boolean = false; 
+    public remainingTime: Array<any> = ['0:00'];
+    public showDeliveredButton: boolean[] = [false]; 
     // public times = {};          
     constructor(public websocketService: WebsocketService, public authGuard: AuthGuard) {
     }
@@ -123,16 +123,14 @@ export class OrderListComponent implements OnInit {
             console.log("mlSeconds ", mlSeconds);
             if (mlSeconds < 0) {
                 clearInterval(id);
-                this.showDeliveredButton = true;
-                this.remainingTime = time;
-                console.log(this.showDeliveredButton, 'this.showDeliveredButton t');                
+                this.showDeliveredButton[order._id] = true;
+                this.remainingTime[order._id] = time;
             } else {
                 width++;
                 if(mlSeconds>0)
-                this.remainingTime = (mlSeconds)/60*1000; 
+                this.remainingTime[order._id] = (mlSeconds)/60*1000; 
                 elem.style.width = width + '%';
-                this.showDeliveredButton = false;
-                console.log(this.showDeliveredButton, 'this.showDeliveredButton');                
+                this.showDeliveredButton[order._id] = false;
             }
         }, timeInterval);
 
@@ -188,5 +186,7 @@ export class OrderListComponent implements OnInit {
         }
         this.stepdata[orderId] = temp;
     }
+
+    public 
 
 }
