@@ -23,6 +23,7 @@ export class OrderListComponent implements OnInit {
     public showDeliveredButton: Array<any> = [];
     public showToCall: Array<any> = [];
     public remainingTime: Array<any> = [];
+    public orderStepData: Array<any> = [];
     // public remainingTime: Array<any> = ['0:00'];
     // public showDeliveredButton: boolean[] = [false]; 
     // public showToCall: boolean[] = [false];     
@@ -33,6 +34,7 @@ export class OrderListComponent implements OnInit {
     ngOnInit() {
         this.websocketService.getOrders().then(data => {
             this.orders = data;
+            console.log(this.orders, 'orderlist pagfe')
             if (this.orders.length) {
                 for (let i = 0; i < this.orders.length; i++) {
                     this.orderId.push(this.orders[i]._id);
@@ -209,7 +211,7 @@ export class OrderListComponent implements OnInit {
         let timeInterval = 1000;
         let t = 0;
         let s = 60;
-        var elem = document.getElementById(this.stepdata[order._id].step);
+        var elem = document.getElementById(order._id+'_'+this.stepdata[order._id].step);
         var width = 0;
         var id = setInterval(() => {
             t = t + 1;
@@ -234,8 +236,8 @@ export class OrderListComponent implements OnInit {
                 m = m - 1;
             }
             var minutes = m;
-            var seconds = s;
-            this.remainingTime[order._id][this.stepdata[order._id].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (seconds < 10 ? ('0' + seconds) : seconds);
+            // var seconds = s;
+            this.remainingTime[order._id][this.stepdata[order._id].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
         }, timeInterval);
 
         let items = [];
@@ -258,6 +260,7 @@ export class OrderListComponent implements OnInit {
         };
         this.websocketService.updateOrder(order._id, opts).then(data => {
             console.log("update step Item dept item updated+++++++++++++", data);
+            this.orderStepData = data.data;
         }).catch(error => {
             console.log("error", error);
         });
