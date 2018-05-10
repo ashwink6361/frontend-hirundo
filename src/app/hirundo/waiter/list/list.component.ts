@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { GlobalService } from '../../global.service'
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
+import *  as _ from 'lodash';
+
 @Component({
     selector: 'app-list',
     templateUrl: './list.component.html',
@@ -26,31 +28,46 @@ export class ListComponent implements OnInit {
                 for (let i = 0; i < this.orders.length; i++) {
                     this.orderId.push(this.orders[i]._id);
                     let step = [];
-                    // let time = [];                    
                     for (let j = 0; j < this.orders[i].item.length; j++) {
-                        if (step.indexOf(this.orders[i].item[j].step) < 0) {
-                            step.push(this.orders[i].item[j].step);
+                        if (step.length) {
+                            for (let b = 0; b < step.length; b++) {
+                                if (step[b].value !== this.orders[i].item[j].step) {
+                                    let key = this.orders[i].item[j].step.split(' ');
+                                    let newKey = Number(key[1]);
+                                    let value = this.orders[i].item[j].step;
+                                    step.push({ id: newKey, value: value });
+                                }
+                            }
                         }
-                        // time.push(this.orders[i].item[j].id.preparationTime);
+                        if (!step.length) {
+                            let key = this.orders[i].item[j].step.split(' ');
+                            let newKey = Number(key[1]);
+                            let value = this.orders[i].item[j].step;
+                            step.push({ id: newKey, value: value });
+                        }
                     }
+                    step.sort(function(a, b){
+                        return a.id-b.id
+                    });
+                    step = _.uniqBy(step,'value');
+                    // for (let j = 0; j < this.orders[i].item.length; j++) {
+                    //     if (step.indexOf(this.orders[i].item[j].step) < 0) {
+                    //         step.push(this.orders[i].item[j].step);
+                    //     }
+                    // }
                     this.steps[this.orders[i]._id] = step;
-                    // this.times[this.orders[i]._id] = Math.max(...time);
                     let time = {};                                                                        
                     for (let k = 0; k < this.steps[this.orders[i]._id].length; k++) {
                     let temp = [];                          
                         for (let l = 0; l < this.orders[i].item.length; l++) {
-                            if(this.orders[i].item[l].step == this.steps[this.orders[i]._id][k] && temp.indexOf(this.orders[i].item[l].id.preparationTime) < 0){
+                            if(this.orders[i].item[l].step == this.steps[this.orders[i]._id][k].value && temp.indexOf(this.orders[i].item[l].id.preparationTime) < 0){
                                 temp.push(this.orders[i].item[l].id.preparationTime);
                             }
                         }
-                        console.log('temp',temp);
-                        time[this.steps[this.orders[i]._id][k]] = Math.max(...temp);                        
-                        console.log('time',time);                        
+                        time[this.steps[this.orders[i]._id][k].value] = Math.max(...temp);                        
                     }
                     this.times[this.orders[i]._id] = time;                                            
-                    console.log('this.times',this.times);
                 }
-                // this.activetab[0] = true;
                 if (this.orderId && this.orderId.length) {
                     for (let k = 0; k < this.orderId.length; k++) {
                         let temp = {
@@ -58,14 +75,10 @@ export class ListComponent implements OnInit {
                             step: ''
                         }
                         temp.tab = 0;
-                        temp.step = this.steps[this.orderId[k]][0];
+                        temp.step = this.steps[this.orderId[k]][0].value;
                         this.stepdata[this.orderId[k]] = temp;
                     }
                 }
-                // this.stepdata = {
-                //     tab: 0,
-                //     step: this.steps[this.orderId[0]][0]
-                // }
             }
             this.loadingOrders = false;
         })

@@ -3,7 +3,7 @@ webpackJsonp(["list.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/list/list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"text-center\" *ngIf=\"!(orders && orders.length)\">No Order Found.</div>\n<div *ngIf=\"orders && orders.length\" class=\"order-list-container\">\n    <!-- <div *ngIf=\"orders && orders.length\"> -->\n    <div class=\"card order-list\" *ngFor=\"let order of orders\">\n        <div class=\"card-body\" [class.opacity]=\"order.status == 3\" [class.disabled]=\"order.status == 1 || order.status == 3\">\n            <h4 class=\"card-title\">\n                <div>\n                    <img src=\"assets/images/table.png\" alt=\"\">\n                    <span>{{order.tableName}}</span>\n                </div>\n                <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div>\n            </h4>\n            <div class=\"card-text\">\n                <p>\n                    <i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\n                <p>\n                    <i class=\"far fa-clock\"></i>\n                    <span>{{order.created_at | date:'hh:mm a'}}</span>\n                </p>\n                <p>\n                    <i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\n            </div>\n            <div class=\"step-listing\">\n                <ul *ngIf=\"stepdata[order._id]\">\n                    <li *ngFor=\"let step of steps[order._id]; let i = index;\" (click)=\"selectedTab(steps[order._id][i],i,order._id)\" [class.active]=\"steps[order._id][i] == stepdata[order._id].step\">{{step}}</li>\n                </ul>\n            </div>\n            <div class=\"order-items-container\">\n                <div *ngFor=\"let item of order.item\">\n                    <div class=\"order-item\" *ngIf=\"stepdata[order._id] && item.step == stepdata[order._id].step\">\n                        <label class=\"label item-status\">{{getOrderStatus(item.status)}}</label>\n                        <div class=\"order-item-img\">\n                            {{item.quantity}} X\n                        </div>\n                        <div class=\"order-item-detail\">\n                            {{item.id.name}}\n                            <ul>\n                                <li *ngFor=\"let varient of item.variant\">\n                                    <i *ngIf=\"varient.status == 1\">+</i>\n                                    <i *ngIf=\"varient.status == 0\">-</i> {{varient.name}}\n                                </li>\n                            </ul>\n                        </div>\n                        <div class=\"order-quantity d-flex\">\n                            <!-- <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 1)\">\n                                <img src=\"assets/images/order-deliver.png\" alt=\"\" />\n                            </button>\n                            <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 3)\">\n                                <i class=\"fas fa-times\"></i>\n                            </button> -->\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <!-- <div class=\"btn-container d-flex justify-content-between\">\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 3)\">Cancel</button>\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 1)\">Delivered</button>\n                </div> -->\n        </div>\n        <div class=\"order-call-btn\">\n            <button *ngIf=\"stepdata[order._id]\" type=\"submit\" (click)=\"updateOrder(order, 1)\">Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>\n        </div>\n    </div>\n    <!-- </div> -->\n</div>\n"
+module.exports = "<div class=\"text-center\" *ngIf=\"!(orders && orders.length)\">No Order Found.</div>\n<div *ngIf=\"orders && orders.length\" class=\"order-list-container\">\n    <!-- <div *ngIf=\"orders && orders.length\"> -->\n    <div class=\"card order-list\" *ngFor=\"let order of orders\">\n        <div class=\"card-body\" [class.opacity]=\"order.status == 3\" [class.disabled]=\"order.status == 1 || order.status == 3\">\n            <h4 class=\"card-title\">\n                <div>\n                    <img src=\"assets/images/table.png\" alt=\"\">\n                    <span>{{order.tableName}}</span>\n                </div>\n                <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div>\n            </h4>\n            <div class=\"card-text\">\n                <p>\n                    <i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\n                <p>\n                    <i class=\"far fa-clock\"></i>\n                    <span>{{order.created_at | date:'hh:mm a'}}</span>\n                </p>\n                <p>\n                    <i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\n            </div>\n            <div class=\"step-listing\">\n                <ul *ngIf=\"stepdata[order._id]\">\n                    <li *ngFor=\"let step of steps[order._id]; let i = index;\" (click)=\"selectedTab(steps[order._id][i].value,i,order._id)\" [class.active]=\"steps[order._id][i].value == stepdata[order._id].step\">{{step.value}}</li>\n                </ul>\n            </div>\n            <div class=\"order-items-container\">\n                <div *ngFor=\"let item of order.item\">\n                    <div class=\"order-item\" *ngIf=\"stepdata[order._id] && item.step == stepdata[order._id].step\">\n                        <label class=\"label item-status\">{{getOrderStatus(item.status)}}</label>\n                        <div class=\"order-item-img\">\n                            {{item.quantity}} X\n                        </div>\n                        <div class=\"order-item-detail\">\n                            {{item.id.name}}\n                            <ul>\n                                <li *ngFor=\"let varient of item.variant\">\n                                    <i *ngIf=\"varient.status == 1\">+</i>\n                                    <i *ngIf=\"varient.status == 0\">-</i> {{varient.name}}\n                                </li>\n                            </ul>\n                        </div>\n                        <div class=\"order-quantity d-flex\">\n                            <!-- <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 1)\">\n                                <img src=\"assets/images/order-deliver.png\" alt=\"\" />\n                            </button>\n                            <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 3)\">\n                                <i class=\"fas fa-times\"></i>\n                            </button> -->\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <!-- <div class=\"btn-container d-flex justify-content-between\">\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 3)\">Cancel</button>\n                    <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 1)\">Delivered</button>\n                </div> -->\n        </div>\n        <div class=\"order-call-btn\">\n            <button *ngIf=\"stepdata[order._id]\" type=\"submit\" (click)=\"updateOrder(order, 1)\">Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>\n        </div>\n    </div>\n    <!-- </div> -->\n</div>\n"
 
 /***/ }),
 
@@ -36,6 +36,8 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__global_service__ = __webpack_require__("../../../../../src/app/hirundo/global.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__ = __webpack_require__("../../../../rxjs/Rx.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_lodash__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -45,6 +47,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -71,31 +74,46 @@ var ListComponent = /** @class */ (function () {
                 for (var i = 0; i < _this.orders.length; i++) {
                     _this.orderId.push(_this.orders[i]._id);
                     var step = [];
-                    // let time = [];                    
                     for (var j = 0; j < _this.orders[i].item.length; j++) {
-                        if (step.indexOf(_this.orders[i].item[j].step) < 0) {
-                            step.push(_this.orders[i].item[j].step);
+                        if (step.length) {
+                            for (var b = 0; b < step.length; b++) {
+                                if (step[b].value !== _this.orders[i].item[j].step) {
+                                    var key = _this.orders[i].item[j].step.split(' ');
+                                    var newKey = Number(key[1]);
+                                    var value = _this.orders[i].item[j].step;
+                                    step.push({ id: newKey, value: value });
+                                }
+                            }
                         }
-                        // time.push(this.orders[i].item[j].id.preparationTime);
+                        if (!step.length) {
+                            var key = _this.orders[i].item[j].step.split(' ');
+                            var newKey = Number(key[1]);
+                            var value = _this.orders[i].item[j].step;
+                            step.push({ id: newKey, value: value });
+                        }
                     }
+                    step.sort(function (a, b) {
+                        return a.id - b.id;
+                    });
+                    step = __WEBPACK_IMPORTED_MODULE_5_lodash__["uniqBy"](step, 'value');
+                    // for (let j = 0; j < this.orders[i].item.length; j++) {
+                    //     if (step.indexOf(this.orders[i].item[j].step) < 0) {
+                    //         step.push(this.orders[i].item[j].step);
+                    //     }
+                    // }
                     _this.steps[_this.orders[i]._id] = step;
-                    // this.times[this.orders[i]._id] = Math.max(...time);
                     var time = {};
                     for (var k = 0; k < _this.steps[_this.orders[i]._id].length; k++) {
                         var temp = [];
                         for (var l = 0; l < _this.orders[i].item.length; l++) {
-                            if (_this.orders[i].item[l].step == _this.steps[_this.orders[i]._id][k] && temp.indexOf(_this.orders[i].item[l].id.preparationTime) < 0) {
+                            if (_this.orders[i].item[l].step == _this.steps[_this.orders[i]._id][k].value && temp.indexOf(_this.orders[i].item[l].id.preparationTime) < 0) {
                                 temp.push(_this.orders[i].item[l].id.preparationTime);
                             }
                         }
-                        console.log('temp', temp);
-                        time[_this.steps[_this.orders[i]._id][k]] = Math.max.apply(Math, temp);
-                        console.log('time', time);
+                        time[_this.steps[_this.orders[i]._id][k].value] = Math.max.apply(Math, temp);
                     }
                     _this.times[_this.orders[i]._id] = time;
-                    console.log('this.times', _this.times);
                 }
-                // this.activetab[0] = true;
                 if (_this.orderId && _this.orderId.length) {
                     for (var k = 0; k < _this.orderId.length; k++) {
                         var temp = {
@@ -103,14 +121,10 @@ var ListComponent = /** @class */ (function () {
                             step: ''
                         };
                         temp.tab = 0;
-                        temp.step = _this.steps[_this.orderId[k]][0];
+                        temp.step = _this.steps[_this.orderId[k]][0].value;
                         _this.stepdata[_this.orderId[k]] = temp;
                     }
                 }
-                // this.stepdata = {
-                //     tab: 0,
-                //     step: this.steps[this.orderId[0]][0]
-                // }
             }
             _this.loadingOrders = false;
         })

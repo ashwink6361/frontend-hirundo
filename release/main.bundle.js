@@ -40,6 +40,7 @@ var map = {
 	],
 	"./order-list/order-list.module": [
 		"../../../../../src/app/hirundo/department/order-list/order-list.module.ts",
+		"common",
 		"order-list.module"
 	],
 	"./order/order.module": [

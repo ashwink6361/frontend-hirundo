@@ -3,7 +3,7 @@ webpackJsonp(["order-list.module"],{
 /***/ "../../../../../src/app/hirundo/department/order-list/order-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!-- <div> -->\n<div class=\"text-center\" *ngIf=\"!(orders && orders.length)\">No Order Found.</div>\n<div *ngIf=\"orders && orders.length\" class=\"order-list-container\">\n    <div class=\"card order-list\" *ngFor=\"let order of orders | orderby: '-created_at'\">\n        <div class=\"card-body\" [class.opacity]=\"order.status == 3\">\n            <h4 class=\"card-title\">\n                <div>\n                    <i class=\"far fa-clock\"></i> {{order.created_at | date:'hh:mm a'}}</div>\n                <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div>\n            </h4>\n            <div class=\"card-text\">\n                <p>\n                    <i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\n                <p>\n                    <img src=\"assets/images/table.png\" alt=\"\">\n                    <span>{{order.tableName}}</span>\n                </p>\n                <p>\n                    <i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\n            </div>\n            <div class=\"step-listing\">\n                <ul *ngIf=\"stepdata[order._id]\">\n                    <li *ngFor=\"let step of steps[order._id]; let i = index;\" (click)=\"selectedTab(steps[order._id][i],i,order._id)\" [class.active]=\"steps[order._id][i] == stepdata[order._id].step\">{{step}}</li>\n                </ul>\n            </div>\n            <div class=\"order-items-container\">\n                <div *ngFor=\"let item of order.item\">\n                    <div *ngIf=\"((item.department.indexOf(authGuard.getCurrentUser()._id)) > -1) || ((authGuard.getCurrentUser().category.indexOf(item.category)) > -1)\">\n                        <div class=\"order-item\" *ngIf=\"stepdata[order._id] && item.step == stepdata[order._id].step\">\n                            <label class=\"label item-status\">{{getOrderStatus(item.status)}}</label>\n                            <div class=\"order-item-img\">\n                                {{item.quantity}} X\n                            </div>\n                            <div class=\"order-item-detail\">\n                                {{item.id.name}}\n                                <ul>\n                                    <li *ngFor=\"let varient of item.variant\">\n                                        <i *ngIf=\"varient.status == 1\">+</i>\n                                        <i *ngIf=\"varient.status == 0\">-</i> {{varient.name}}\n                                    </li>\n                                </ul>\n                            </div>\n                            <div class=\"order-quantity d-flex w-105\">\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 2)\">\n                                    <img src=\"assets/images/order-deliver.png\" alt=\"\" />\n                                </button>\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 4)\">\n                                    <i class=\"fas fa-sync-alt\"></i>\n                                </button>\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 3)\">\n                                    <i class=\"fas fa-times\"></i>\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <!-- <div class=\"btn-container\">\n                <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 3)\">Cancel</button>\n                <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 4)\">In Progress</button>\n                <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 2)\">Done</button>\n            </div> -->\n        </div>\n        <div class=\"order-call-btn\">\n            <button *ngIf=\"stepdata[order._id] && !showToCall[order._id][stepdata[order._id].step] && !showDeliveredButton[order._id][stepdata[order._id].step]\" type=\"submit\" (click)=\"updateStepItem(order, times[order._id][stepdata[order._id].step], 4)\" [disabled]=\"order.status == 4\"><span *ngIf=\"order.status == 0\">Start ({{times[order._id][stepdata[order._id].step]}}:00)</span><span *ngIf=\"order.status == 4\">Running {{remainingTime[order._id][stepdata[order._id].step]}}</span></button>\n            <button *ngIf=\"stepdata[order._id] && !showToCall[order._id][stepdata[order._id].step] && showDeliveredButton[order._id][stepdata[order._id].step]\" type=\"submit\" (click)=\"updateStepItem(order, times[order._id][stepdata[order._id].step], 1)\">Delivered</button>\n            <div *ngIf=\"stepdata[order._id] && !showToCall[order._id][stepdata[order._id].step] && !showDeliveredButton[order._id][stepdata[order._id].step]\" id=\"{{stepdata[order._id].step}}\" class=\"progress-btn\"></div>\n            <button *ngIf=\"stepdata[order._id] && showToCall[order._id][stepdata[order._id].step] && !showDeliveredButton[order._id][stepdata[order._id].step]\" type=\"submit\" [disabled]=\"true\">To Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>\n        </div>\n    </div>\n</div>\n<!-- </div> -->\n"
+module.exports = "<!-- <div> -->\n<div class=\"text-center\" *ngIf=\"!(orders && orders.length)\">No Order Found.</div>\n<div *ngIf=\"orders && orders.length\" class=\"order-list-container\">\n    <div class=\"card order-list\" *ngFor=\"let order of orders | orderby: '-created_at'\">\n        <div class=\"card-body\" [class.opacity]=\"order.status == 3\">\n            <h4 class=\"card-title\">\n                <div>\n                    <i class=\"far fa-clock\"></i> {{order.created_at | date:'hh:mm a'}}</div>\n                <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div>\n            </h4>\n            <div class=\"card-text\">\n                <p>\n                    <i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\n                <p>\n                    <img src=\"assets/images/table.png\" alt=\"\">\n                    <span>{{order.tableName}}</span>\n                </p>\n                <p>\n                    <i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\n            </div>\n            <div class=\"step-listing\">\n                <ul *ngIf=\"stepdata[order._id]\">\n                    <li *ngFor=\"let step of steps[order._id]; let i = index;\" (click)=\"selectedTab(steps[order._id][i].value,i,order._id)\" [class.active]=\"steps[order._id][i].value == stepdata[order._id].step\">{{step.value}}</li>\n                </ul>\n            </div>\n            <div class=\"order-items-container\">\n                <div *ngFor=\"let item of order.item\">\n                    <div *ngIf=\"((item.department.indexOf(authGuard.getCurrentUser()._id)) > -1) || ((authGuard.getCurrentUser().category.indexOf(item.category)) > -1)\">\n                        <div class=\"order-item\" *ngIf=\"stepdata[order._id] && item.step == stepdata[order._id].step\">\n                            <label class=\"label item-status\">{{getOrderStatus(item.status)}}</label>\n                            <div class=\"order-item-img\">\n                                {{item.quantity}} X\n                            </div>\n                            <div class=\"order-item-detail\">\n                                {{item.id.name}}\n                                <ul>\n                                    <li *ngFor=\"let varient of item.variant\">\n                                        <i *ngIf=\"varient.status == 1\">+</i>\n                                        <i *ngIf=\"varient.status == 0\">-</i> {{varient.name}}\n                                    </li>\n                                </ul>\n                            </div>\n                            <div class=\"order-quantity d-flex w-105\">\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 2)\">\n                                    <img src=\"assets/images/order-deliver.png\" alt=\"\" />\n                                </button>\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 4)\">\n                                    <i class=\"fas fa-sync-alt\"></i>\n                                </button>\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 3)\">\n                                    <i class=\"fas fa-times\"></i>\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <!-- <div class=\"btn-container\">\n                <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 3)\">Cancel</button>\n                <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 4)\">In Progress</button>\n                <button class=\"btn btn-primary waves-light\" mdbRippleRadius (click)=\"updateOrder(order, 2)\">Done</button>\n            </div> -->\n        </div>\n        <div class=\"order-call-btn\">\n            <button *ngIf=\"stepdata[order._id] && !showToCall[order._id][stepdata[order._id].step] && !showDeliveredButton[order._id][stepdata[order._id].step]\" type=\"submit\" (click)=\"updateStepItem(order, times[order._id][stepdata[order._id].step], 4)\" [disabled]=\"order.status == 4\"><span *ngIf=\"order.status == 0\">Start ({{times[order._id][stepdata[order._id].step]}}:00)</span><span *ngIf=\"order.status == 4\">Running {{remainingTime[order._id][stepdata[order._id].step]}}</span></button>\n            <button *ngIf=\"stepdata[order._id] && !showToCall[order._id][stepdata[order._id].step] && showDeliveredButton[order._id][stepdata[order._id].step]\" type=\"submit\" (click)=\"updateStepItem(order, times[order._id][stepdata[order._id].step], 1)\">Delivered</button>\n            <div *ngIf=\"stepdata[order._id] && !showToCall[order._id][stepdata[order._id].step] && !showDeliveredButton[order._id][stepdata[order._id].step]\" id=\"{{stepdata[order._id].step}}\" class=\"progress-btn\"></div>\n            <button *ngIf=\"stepdata[order._id] && showToCall[order._id][stepdata[order._id].step] && !showDeliveredButton[order._id][stepdata[order._id].step]\" type=\"submit\" [disabled]=\"true\">To Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>\n        </div>\n    </div>\n</div>\n<!-- </div> -->\n"
 
 /***/ }),
 
@@ -33,6 +33,8 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__service_websocket_service__ = __webpack_require__("../../../../../src/app/service/websocket.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_guard_auth_guard__ = __webpack_require__("../../../../../src/app/shared/guard/auth.guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -42,6 +44,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -72,15 +75,31 @@ var OrderListComponent = /** @class */ (function () {
                 for (var i = 0; i < _this.orders.length; i++) {
                     _this.orderId.push(_this.orders[i]._id);
                     var step = [];
-                    // let time = [];
                     for (var j = 0; j < _this.orders[i].item.length; j++) {
-                        if (step.indexOf(_this.orders[i].item[j].step) < 0) {
-                            step.push(_this.orders[i].item[j].step);
+                        if (((_this.orders[i].item[j].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(_this.orders[i].item[j].category)) > -1)) {
+                            if (step.length) {
+                                for (var b = 0; b < step.length; b++) {
+                                    if (step[b].value !== _this.orders[i].item[j].step) {
+                                        var key = _this.orders[i].item[j].step.split(' ');
+                                        var newKey = Number(key[1]);
+                                        var value = _this.orders[i].item[j].step;
+                                        step.push({ id: newKey, value: value });
+                                    }
+                                }
+                            }
+                            if (!step.length) {
+                                var key = _this.orders[i].item[j].step.split(' ');
+                                var newKey = Number(key[1]);
+                                var value = _this.orders[i].item[j].step;
+                                step.push({ id: newKey, value: value });
+                            }
                         }
-                        // time.push(this.orders[i].item[j].id.preparationTime);
                     }
+                    step.sort(function (a, b) {
+                        return a.id - b.id;
+                    });
+                    step = __WEBPACK_IMPORTED_MODULE_3_lodash__["uniqBy"](step, 'value');
                     _this.steps[_this.orders[i]._id] = step;
-                    // this.times[this.orders[i]._id] = Math.max(...time);
                     var time = {};
                     var delivered = {};
                     var call = {};
@@ -88,28 +107,19 @@ var OrderListComponent = /** @class */ (function () {
                     for (var k = 0; k < _this.steps[_this.orders[i]._id].length; k++) {
                         var temp = [];
                         for (var l = 0; l < _this.orders[i].item.length; l++) {
-                            if (_this.orders[i].item[l].step == _this.steps[_this.orders[i]._id][k] && temp.indexOf(_this.orders[i].item[l].id.preparationTime) < 0) {
+                            if (_this.orders[i].item[l].step == _this.steps[_this.orders[i]._id][k].value && temp.indexOf(_this.orders[i].item[l].id.preparationTime) < 0) {
                                 temp.push(_this.orders[i].item[l].id.preparationTime);
                             }
                         }
-                        console.log('temp', temp);
-                        time[_this.steps[_this.orders[i]._id][k]] = Math.max.apply(Math, temp);
-                        delivered[_this.steps[_this.orders[i]._id][k]] = false;
-                        call[_this.steps[_this.orders[i]._id][k]] = false;
-                        remtime[_this.steps[_this.orders[i]._id][k]] = '0:00';
-                        console.log('time', time);
-                        console.log('delivered', delivered);
-                        console.log('call', call);
-                        console.log('remtime', remtime);
+                        time[_this.steps[_this.orders[i]._id][k].value] = Math.max.apply(Math, temp);
+                        delivered[_this.steps[_this.orders[i]._id][k].value] = false;
+                        call[_this.steps[_this.orders[i]._id][k].value] = false;
+                        remtime[_this.steps[_this.orders[i]._id][k].value] = '0:00';
                     }
                     _this.times[_this.orders[i]._id] = time;
-                    console.log('this.times', _this.times);
                     _this.showDeliveredButton[_this.orders[i]._id] = delivered;
-                    console.log('this.showDeliveredButton', _this.showDeliveredButton);
                     _this.showToCall[_this.orders[i]._id] = call;
-                    console.log('this.showToCall', _this.showToCall);
                     _this.remainingTime[_this.orders[i]._id] = remtime;
-                    console.log('this.remainingTime', _this.remainingTime);
                 }
                 if (_this.orderId && _this.orderId.length) {
                     for (var k = 0; k < _this.orderId.length; k++) {
@@ -118,14 +128,10 @@ var OrderListComponent = /** @class */ (function () {
                             step: ''
                         };
                         temp.tab = 0;
-                        temp.step = _this.steps[_this.orderId[k]][0];
+                        temp.step = _this.steps[_this.orderId[k]][0].value;
                         _this.stepdata[_this.orderId[k]] = temp;
                     }
                 }
-                // this.stepdata = {
-                //     tab: 0,
-                //     step: this.steps[this.orderId[0]][0]
-                // }
             }
             _this.loadingOrders = false;
         })
@@ -248,7 +254,6 @@ var OrderListComponent = /** @class */ (function () {
         var id = setInterval(function () {
             t = t + 1;
             seconds = seconds - 1;
-            console.log(seconds, 'seconds =====');
             s = s - 1;
             if (seconds == 0 || seconds < 0) {
                 clearInterval(id);
@@ -272,7 +277,6 @@ var OrderListComponent = /** @class */ (function () {
             }
             var minutes = m;
             var seconds = s;
-            console.log(seconds, 'seconds =====++++++');
             _this.remainingTime[order._id][_this.stepdata[order._id].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (seconds < 10 ? ('0' + seconds) : seconds);
         }, timeInterval);
         var items = [];
