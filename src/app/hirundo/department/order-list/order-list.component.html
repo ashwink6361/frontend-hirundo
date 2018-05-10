@@ -64,7 +64,7 @@
         <div class="order-call-btn">
             <button *ngIf="stepdata[order._id] && !showToCall[order._id][stepdata[order._id].step] && !showDeliveredButton[order._id][stepdata[order._id].step]" type="submit" (click)="updateStepItem(order, times[order._id][stepdata[order._id].step], 4)" [disabled]="order.status == 4"><span *ngIf="order.status == 0">Start ({{times[order._id][stepdata[order._id].step]}}:00)</span><span *ngIf="order.status == 4">Running {{remainingTime[order._id][stepdata[order._id].step]}}</span></button>
             <button *ngIf="stepdata[order._id] && !showToCall[order._id][stepdata[order._id].step] && showDeliveredButton[order._id][stepdata[order._id].step]" type="submit" (click)="updateStepItem(order, times[order._id][stepdata[order._id].step], 1)">Delivered</button>
-            <div *ngIf="stepdata[order._id] && !showToCall[order._id][stepdata[order._id].step] && !showDeliveredButton[order._id][stepdata[order._id].step]" id="{{stepdata[order._id].step}}" class="progress-btn"></div>
+            <div *ngIf="stepdata[order._id] && !showToCall[order._id][stepdata[order._id].step] && !showDeliveredButton[order._id][stepdata[order._id].step]" id="{{order._id}}_{{stepdata[order._id].step}}" class="progress-btn"></div>
             <button *ngIf="stepdata[order._id] && showToCall[order._id][stepdata[order._id].step] && !showDeliveredButton[order._id][stepdata[order._id].step]" type="submit" [disabled]="true">To Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>
         </div>
     </div>
