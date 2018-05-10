@@ -302,6 +302,7 @@ var OrderListComponent = /** @class */ (function () {
         this.websocketService.updateOrder(order._id, opts).then(function (data) {
             console.log("update step Item dept item updated+++++++++++++", data);
             _this.orderStepData = data.data;
+            console.log("orderStepData+++++++++++++", _this.orderStepData);
         }).catch(function (error) {
             console.log("error", error);
         });

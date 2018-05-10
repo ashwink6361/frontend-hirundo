@@ -261,6 +261,7 @@ export class OrderListComponent implements OnInit {
         this.websocketService.updateOrder(order._id, opts).then(data => {
             console.log("update step Item dept item updated+++++++++++++", data);
             this.orderStepData = data.data;
+            console.log("orderStepData+++++++++++++", this.orderStepData);            
         }).catch(error => {
             console.log("error", error);
         });
