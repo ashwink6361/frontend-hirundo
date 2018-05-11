@@ -84,66 +84,14 @@ export class CartComponent implements OnInit {
     }
   }
 
-  deleteItemFromCart(article) {
-    let data = this.orderService.getOrderData();
-    for (let i = 0; i < data.selectedItems.length; i++) {
-      if (data.selectedItems[i]._id == article._id && !article.variant) {
-        //non variant type data
-        for (let m = 0; m < data.categoryItems.length; m++) {
-          if (data.categoryItems[m]._id == data.selectedItems[i]._id) {
-            data.categoryItems[m].itemTotal = data.categoryItems[m].itemTotal - data.selectedItems[i].quantity;
-          }
-        }
-        if (!data.selectedItems[i].variant) {
-          data.selectedItems.splice(i, 1);
-        }
-      }
-      else if (data.selectedItems[i]._id == article._id && article.variant) {
-        //variant type data
-        for (let m = 0; m < data.categoryItems.length; m++) {
-          if (data.categoryItems[m]._id == data.selectedItems[i]._id) {
-            data.categoryItems[m].itemTotal = data.categoryItems[m].itemTotal - data.selectedItems[i].quantity;
-          }
-        }
-        if (data.selectedItems[i].variant) {
-          data.selectedItems.splice(i, 1);
-        }
-      }
-      let cp = 0;
-      let itemno = 0;
-      let varicost = 0;
-      if (data.selectedItems.length) {
-        for (let i = 0; i < data.selectedItems.length; i++) {
-          itemno += data.selectedItems[i].quantity;
-          if (data.selectedItems[i].variant) {
-            for (let j = 0; j < data.selectedItems[i].variant.length; j++) {
-              if (data.selectedItems[i].variant[j].status == 1) {
-                varicost += data.selectedItems[i].variant[j].price;
-              }
-            }
-          }
-          cp += (data.selectedItems[i].price + varicost) * data.selectedItems[i].quantity;
-          data.cartTotalPrice = cp;
-          data.cartTotalItem = itemno;
-        }
-      }
-      else {
-        data.cartTotalPrice = 0;
-        data.cartTotalItem = 0;
-      }
-      this.orderService.setOrderData(data);
-      this.items = this.orderService.getOrderData().selectedItems;
-    }
-  }
-
   // deleteItemFromCart(article) {
   //   let data = this.orderService.getOrderData();
   //   for (let i = 0; i < data.selectedItems.length; i++) {
   //     if (data.selectedItems[i]._id == article._id && !article.variant) {
   //       //non variant type data
-  //       for (let m = 0; m < data.categoryItems[this.globalService.getTabData().step].length; m++) {
-  //         if (data.categoryItems[this.globalService.getTabData().step][m]._id == data.selectedItems[i]._id) {
-  //           data.categoryItems[this.globalService.getTabData().step][m].itemTotal = data.categoryItems[this.globalService.getTabData().step][m].itemTotal - data.selectedItems[i].quantity;
+  //       for (let m = 0; m < data.categoryItems.length; m++) {
+  //         if (data.categoryItems[m]._id == data.selectedItems[i]._id) {
+  //           data.categoryItems[m].itemTotal = data.categoryItems[m].itemTotal - data.selectedItems[i].quantity;
   //         }
   //       }
   //       if (!data.selectedItems[i].variant) {
@@ -152,9 +100,9 @@ export class CartComponent implements OnInit {
   //     }
   //     else if (data.selectedItems[i]._id == article._id && article.variant) {
   //       //variant type data
-  //       for (let m = 0; m < data.categoryItems[this.globalService.getTabData().step].length; m++) {
-  //         if (data.categoryItems[this.globalService.getTabData().step][m]._id == data.selectedItems[i]._id) {
-  //           data.categoryItems[this.globalService.getTabData().step][m].itemTotal = data.categoryItems[this.globalService.getTabData().step][m].itemTotal - data.selectedItems[i].quantity;
+  //       for (let m = 0; m < data.categoryItems.length; m++) {
+  //         if (data.categoryItems[m]._id == data.selectedItems[i]._id) {
+  //           data.categoryItems[m].itemTotal = data.categoryItems[m].itemTotal - data.selectedItems[i].quantity;
   //         }
   //       }
   //       if (data.selectedItems[i].variant) {
@@ -187,6 +135,58 @@ export class CartComponent implements OnInit {
   //     this.items = this.orderService.getOrderData().selectedItems;
   //   }
   // }
+
+  deleteItemFromCart(article) {
+    let data = this.orderService.getOrderData();
+    for (let i = 0; i < data.selectedItems.length; i++) {
+      if (data.selectedItems[i]._id == article._id && !article.variant) {
+        //non variant type data
+        for (let m = 0; m < data.categoryItems[this.globalService.getTabData().step].length; m++) {
+          if (data.categoryItems[this.globalService.getTabData().step][m]._id == data.selectedItems[i]._id && data.categoryItems[this.globalService.getTabData().step][m].step == data.selectedItems[i].step) {
+            data.categoryItems[this.globalService.getTabData().step][m].itemTotal = data.categoryItems[this.globalService.getTabData().step][m].itemTotal - data.selectedItems[i].quantity;
+          }
+        }
+        if (!data.selectedItems[i].variant && this.globalService.getTabData().step == data.selectedItems[i].step) {
+          data.selectedItems.splice(i, 1);
+        }
+      }
+      else if (data.selectedItems[i]._id == article._id && article.variant) {
+        //variant type data
+        for (let m = 0; m < data.categoryItems[this.globalService.getTabData().step].length; m++) {
+          if (data.categoryItems[this.globalService.getTabData().step][m]._id == data.selectedItems[i]._id && data.categoryItems[this.globalService.getTabData().step][m].step == data.selectedItems[i].step) {
+            data.categoryItems[this.globalService.getTabData().step][m].itemTotal = data.categoryItems[this.globalService.getTabData().step][m].itemTotal - data.selectedItems[i].quantity;
+          }
+        }
+        if (data.selectedItems[i].variant && this.globalService.getTabData().step == data.selectedItems[i].step) {
+          data.selectedItems.splice(i, 1);
+        }
+      }
+      let cp = 0;
+      let itemno = 0;
+      let varicost = 0;
+      if (data.selectedItems.length) {
+        for (let i = 0; i < data.selectedItems.length; i++) {
+          itemno += data.selectedItems[i].quantity;
+          if (data.selectedItems[i].variant) {
+            for (let j = 0; j < data.selectedItems[i].variant.length; j++) {
+              if (data.selectedItems[i].variant[j].status == 1) {
+                varicost += data.selectedItems[i].variant[j].price;
+              }
+            }
+          }
+          cp += (data.selectedItems[i].price + varicost) * data.selectedItems[i].quantity;
+          data.cartTotalPrice = cp;
+          data.cartTotalItem = itemno;
+        }
+      }
+      else {
+        data.cartTotalPrice = 0;
+        data.cartTotalItem = 0;
+      }
+      this.orderService.setOrderData(data);
+      this.items = this.orderService.getOrderData().selectedItems;
+    }
+  }
 
   gotToCategoryList(){
     this.router.navigate(['/waiter/order/:id/choose-category']);

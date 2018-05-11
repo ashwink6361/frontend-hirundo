@@ -23,7 +23,7 @@ export class OrderListComponent implements OnInit {
     public showDeliveredButton: Array<any> = [];
     public showToCall: Array<any> = [];
     public remainingTime: Array<any> = [];
-    public orderStepData: Array<any> = [];
+    public orderStepData: {};
     // public remainingTime: Array<any> = ['0:00'];
     // public showDeliveredButton: boolean[] = [false]; 
     // public showToCall: boolean[] = [false];     
@@ -211,7 +211,9 @@ export class OrderListComponent implements OnInit {
         let timeInterval = 1000;
         let t = 0;
         let s = 60;
+        console.log('+++++++++++++++++++++++++++++++++',order._id+'_'+this.stepdata[order._id].step);
         var elem = document.getElementById(order._id+'_'+this.stepdata[order._id].step);
+        console.log(elem, 'elem++++++++++++++++++++++++++++++++');        
         var width = 0;
         var id = setInterval(() => {
             t = t + 1;
@@ -219,16 +221,50 @@ export class OrderListComponent implements OnInit {
             s = s - 1;
             if (seconds == 0 || seconds < 0) {
                 clearInterval(id);
-                this.showDeliveredButton[order._id][this.stepdata[order._id].step] = true;
+                // this.showDeliveredButton[order._id][this.stepdata[order._id].step] = true;
             } else {
                 width = width + w;
                 console.log(width);
                 if (width < 100) {
+                    console.log(elem, 'elem');
                     elem.style.width = width + '%';
                 } else {
                     elem.style.width = '100%';
+                    console.log('elem.style.width',elem.style.width);
+                    if(elem.style.width == '100%'){
+                        let items = [];
+                        for (let i = 0; i < order.item.length; i++) {
+                            for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
+                                if (((order.item[i].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(order.item[i].category)) > -1)) {
+                                    if (order.item[i].step == this.stepdata[order._id].step) {
+                                        order.item[i].status = status;
+                                        if (items.indexOf(order.item[i].id._id) < 0) {
+                                            items.push(order.item[i].id._id)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        let opts = {
+                            status: 5,
+                            itemId: items,
+                            step: this.stepdata[order._id].step
+                        };
+                        this.websocketService.updateOrder(order._id, opts).then(data => {
+                            console.log("update step Item dept item updated+++++++++++++", data);
+                            for (let i = 0; i < this.orders.length; i++) {
+                                if (this.orders[i]._id == data.data._id) {
+                                    this.orders[i].step = data.data.step;
+                                }
+                            }
+                            console.log('this.orders',this.orders);
+                        }).catch(error => {
+                            console.log("error", error);
+                        });
+                    }
+                    
                 }
-                this.showDeliveredButton[order._id][this.stepdata[order._id].step] = false;
+                // this.showDeliveredButton[order._id][this.stepdata[order._id].step] = false;
             }
             if (t == 60) {
                 t = 0;
@@ -260,8 +296,12 @@ export class OrderListComponent implements OnInit {
         };
         this.websocketService.updateOrder(order._id, opts).then(data => {
             console.log("update step Item dept item updated+++++++++++++", data);
-            this.orderStepData = data.data;
-            console.log("orderStepData+++++++++++++", this.orderStepData);            
+            for (let i = 0; i < this.orders.length; i++) {
+                if (this.orders[i]._id == data.data._id) {
+                    this.orders[i].step = data.data.step;
+                }
+            }
+            console.log('this.orders',this.orders);
         }).catch(error => {
             console.log("error", error);
         });

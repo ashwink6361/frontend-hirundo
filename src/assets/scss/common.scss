@@ -1197,6 +1197,16 @@ header {
             position: relative;
         }
     }
+    span{
+        width: 100%;
+        background: #00b900;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 10px 0;
+        display: block;
+        text-align: center;
+    }
     .progress-btn{
         position: absolute;
         height: 100%;

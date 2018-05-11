@@ -35,15 +35,15 @@
             </div>
         </div>
         <div class="alert-danger" *ngIf="error">{{errorMsg}}</div>
-        <div *ngIf="!articles.length" class="text-center">
-            No Item Found
-        </div>
-        <!-- <div *ngIf="!articles" class="text-center">
+        <!-- <div *ngIf="!articles.length" class="text-center">
             No Item Found
         </div> -->
-        <div *ngIf="articles.length">
-            <div *ngFor="let article of articles | filter : searchText ; let i = index">
-            <!-- <div *ngFor="let article of orderService.getOrderData().categoryItems[globalService.getTabData().step] | filter : searchText ; let i = index"> -->
+        <div *ngIf="!orderService.getOrderData().categoryItems[globalService.getTabData().step]" class="text-center">
+            No Item Found
+        </div>
+        <div *ngIf="orderService.getOrderData().categoryItems[globalService.getTabData().step]">
+            <!-- <div *ngFor="let article of articles | filter : searchText ; let i = index"> -->
+            <div *ngFor="let article of orderService.getOrderData().categoryItems[globalService.getTabData().step] | filter : searchText ; let i = index">
                 <div class="item-list align-items-center" *ngIf="subcategory && (article.subCategory == subcategory)">
                     <div class="item" [ngStyle]="{'background-color': article.category.color}">
                         <img *ngIf="!article.logo.small && article.category.isIcon" class="icon-img" [src]="article.category.icon" alt="" />

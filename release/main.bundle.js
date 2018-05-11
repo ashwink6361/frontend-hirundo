@@ -1564,30 +1564,34 @@ var StepsComponent = /** @class */ (function () {
         }
     };
     StepsComponent.prototype.addStep = function () {
+        var _this = this;
         var count = this.stepArray.length + 1;
         this.stepArray.push('Uscita ' + count);
         this.globalService.setStepData(this.stepArray);
-        // let orderdata = this.orderService.getOrderData();
-        // this.orderService.getCategoryItem().then(data => {
-        //   if (data.data.length) {
-        //     for (let i = 0; i < data.data.length; i++) {
-        //       if (orderdata.selectedCategory && data.data[i].category._id == orderdata.selectedCategory._id) {
-        //             let step = 'Uscita ' + count;
-        //             orderdata.categoryItems[step] = data.data[i].items;
-        //         console.log('orderdata.categoryItems+++++++++++++++', orderdata.categoryItems);
-        //         for (let j = 0; j < orderdata.categoryItems[step].length; j++) {
-        //           orderdata.categoryItems[step][j].quantity = 0;
-        //           orderdata.categoryItems[step][j].itemTotal = 0;
-        //         }
-        //       }
-        //     }
-        //   }
-        //   console.log('orderdata+++++++++++++++', orderdata);      
-        //   this.orderService.setOrderData(orderdata);
-        // })
-        //   .catch(error => {
-        //     console.log('error', error);
-        //   });
+        var orderdata = this.orderService.getOrderData();
+        this.orderService.getCategoryItem().then(function (data) {
+            if (data.data.length) {
+                for (var i = 0; i < data.data.length; i++) {
+                    if (orderdata.selectedCategory && data.data[i].category._id == orderdata.selectedCategory._id) {
+                        var step = 'Uscita ' + count;
+                        console.log('step+++++++++++++++', step);
+                        orderdata.categoryItems[step] = data.data[i].items;
+                        console.log('orderdata.categoryItems[step]+++++++++++++++', orderdata.categoryItems[step]);
+                        console.log('orderdata.categoryItems+++++++++++++++', orderdata.categoryItems);
+                        for (var j = 0; j < orderdata.categoryItems[step].length; j++) {
+                            orderdata.categoryItems[step][j].quantity = 0;
+                            orderdata.categoryItems[step][j].itemTotal = 0;
+                        }
+                        console.log('orderdatasdgdjghjfxzddfgjfxgfzsddjfjhxgsdfjhxgfdjghfgjdhg+++++++++++++++', orderdata);
+                    }
+                }
+            }
+            console.log('orderdata+++++++++++++++', orderdata);
+            _this.orderService.setOrderData(orderdata);
+        })
+            .catch(function (error) {
+            console.log('error', error);
+        });
     };
     StepsComponent.prototype.selectedTab = function (step, tab) {
         this.activetab[tab] = true;
