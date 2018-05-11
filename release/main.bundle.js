@@ -806,8 +806,8 @@ var WebsocketService = /** @class */ (function () {
         var _this = this;
         // If you aren't familiar with environment variables then
         // you can hard code `environment.ws_url` as `http://localhost:5000`
-        this.socket = __WEBPACK_IMPORTED_MODULE_1_socket_io_client__('http://localhost:5051');
-        // this.socket = io('http://52.209.187.183:5051');
+        // this.socket = io('http://localhost:5051');
+        this.socket = __WEBPACK_IMPORTED_MODULE_1_socket_io_client__('http://52.209.187.183:5051');
         if (this.socket.connected)
             console.log("Socket connection done ");
         var user = JSON.parse(localStorage.getItem('currentUser'));
