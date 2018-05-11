@@ -44,13 +44,15 @@ export class ItemComponent implements OnInit {
       if (this.globalService.getStepData()) {
         steps = this.globalService.getStepData();
       }
+      else {
+        steps = ['Uscita 1', 'Uscita 2'];
+      }
       for (let k = 0; k < steps.length; k++) {
         for (let i = 0; i < this.data.categoryItems[steps[k]].length; i++) {
-          if (this.data.selectedItems.length) {
-            for (let j = 0; j < this.data.selectedItems.length; j++) {
-              if (this.data.selectedItems[j]._id == this.data.categoryItems[steps[k]][i]._id && this.data.selectedItems[j].step == this.data.categoryItems[steps[k]][i].step) {
-                this.data.selectedItems[j].quantity += this.data.selectedItems[j].quantity;
-                this.data.categoryItems[steps[k]][i].itemTotal = this.data.selectedItems[j].quantity;
+          if (this.data.selectedItems[steps[k]].length) {
+            for (let j = 0; j < this.data.selectedItems[steps[k]].length; j++) {
+              if (this.data.selectedItems[steps[k]][j]._id == this.data.categoryItems[steps[k]][i]._id ) {
+                this.data.categoryItems[steps[k]][i].itemTotal = this.data.selectedItems[steps[k]][j].quantity;
               }
             }
           }
@@ -198,33 +200,34 @@ export class ItemComponent implements OnInit {
 //new code
   increaseValue(article) {
     article.step = this.globalService.getTabData().step;
+    let currentStep =  this.globalService.getTabData().step;
     let data = this.orderService.getOrderData();
-    if (data.selectedItems.length) {
+    if (data.selectedItems[currentStep].length) {
       let isExist = true;
       let isarr = [];
-      for (let i = 0; i < data.selectedItems.length; i++) {
-        if (data.selectedItems[i]._id == article._id) {
-          if(data.selectedItems[i].step == article.step){
-            if (!data.selectedItems[i].variant) {
-              data.selectedItems[i].quantity += 1;
-              isarr.push(data.selectedItems[i]._id);
-              for (let j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
-                if (data.categoryItems[this.globalService.getTabData().step][j]._id == data.selectedItems[i]._id) {
-                  data.categoryItems[this.globalService.getTabData().step][j].itemTotal = data.selectedItems[i].quantity;
+      for (let i = 0; i < data.selectedItems[currentStep].length; i++) {
+        if (data.selectedItems[currentStep][i]._id == article._id) {
+          if(data.selectedItems[currentStep][i].step == article.step){
+            if (!data.selectedItems[currentStep][i].variant) {
+              data.selectedItems[currentStep][i].quantity += 1;
+              isarr.push(data.selectedItems[currentStep][i]._id);
+              for (let j = 0; j < data.categoryItems[currentStep].length; j++) {
+                if (data.categoryItems[currentStep][j]._id == data.selectedItems[currentStep][i]._id) {
+                  data.categoryItems[currentStep][j].itemTotal = data.selectedItems[currentStep][i].quantity;
                 }
               }
             }
-            if (data.selectedItems[i].variant) {
-              console.log('data.selectedItems[i].quantity',data.selectedItems[i].quantity);
-              for (let j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
-                if (data.categoryItems[this.globalService.getTabData().step][j]._id == data.selectedItems[i]._id) {
-              console.log('data.categoryItems[this.globalService.getTabData().step][j].itemTotal',data.categoryItems[this.globalService.getTabData().step][j].itemTotal);
-                  data.categoryItems[this.globalService.getTabData().step][j].itemTotal = data.categoryItems[this.globalService.getTabData().step][j].itemTotal + data.selectedItems[i].quantity;
+            if (data.selectedItems[currentStep][i].variant) {
+              console.log('data.selectedItems[currentStep][i].quantity',data.selectedItems[currentStep][i].quantity);
+              for (let j = 0; j < data.categoryItems[currentStep].length; j++) {
+                if (data.categoryItems[currentStep][j]._id == data.selectedItems[currentStep][i]._id) {
+              console.log('data.categoryItems[currentStep][j].itemTotal',data.categoryItems[currentStep][j].itemTotal);
+                  data.categoryItems[currentStep][j].itemTotal = data.categoryItems[currentStep][j].itemTotal + data.selectedItems[currentStep][i].quantity;
                 }
               }
             }
           }
-          if(data.selectedItems[i].step != article.step){
+          if(data.selectedItems[currentStep][i].step != article.step){
             isExist = false;
           }
           // if (!data.selectedItems[i].variant) {
@@ -244,45 +247,67 @@ export class ItemComponent implements OnInit {
           //   }
           // }
         }
-        if (data.selectedItems[i]._id != article._id) {
+        if (data.selectedItems[currentStep][i]._id != article._id) {
           isExist = false;
         }
       }
       if (!isExist && isarr.indexOf(article._id) < 0) {
         article.quantity = article.quantity + 1;
-        for (let j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
-          if (data.categoryItems[this.globalService.getTabData().step][j]._id == article._id) {
-            data.categoryItems[this.globalService.getTabData().step][j].itemTotal = article.quantity;
+        for (let j = 0; j < data.categoryItems[currentStep].length; j++) {
+          if (data.categoryItems[currentStep][j]._id == article._id) {
+            data.categoryItems[currentStep][j].itemTotal = article.quantity;
           }
         }
-        data.selectedItems.push(article);
+        data.selectedItems[currentStep].push(article);
       }
     }
     else {
       article.quantity = article.quantity + 1;
-      for (let j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
-        if (data.categoryItems[this.globalService.getTabData().step][j]._id == article._id) {
-          data.categoryItems[this.globalService.getTabData().step][j].itemTotal = article.quantity;
+      for (let j = 0; j < data.categoryItems[currentStep].length; j++) {
+        if (data.categoryItems[currentStep][j]._id == article._id) {
+          data.categoryItems[currentStep][j].itemTotal = article.quantity;
         }
       }
-      data.selectedItems.push(article);
+      data.selectedItems[currentStep].push(article);
     }
     let cp = 0;
     let itemno = 0;
     let varicost = 0;
-    for (let i = 0; i < data.selectedItems.length; i++) {
-      itemno += data.selectedItems[i].quantity;
-      if (data.selectedItems[i].variant) {
-        for (let j = 0; j < data.selectedItems[i].variant.length; j++) {
-          if (data.selectedItems[i].variant[j].status == 1) {
-            varicost += data.selectedItems[i].variant[j].price;
+    var steps = [];
+      if (this.globalService.getStepData()) {
+        steps = this.globalService.getStepData();
+      }
+      else {
+        steps = ['Uscita 1', 'Uscita 2'];
+      }
+    for(let a=0;a<steps.length;a++){
+      for (let i = 0; i < data.selectedItems[steps[a]].length; i++) {
+        itemno += data.selectedItems[steps[a]][i].quantity;
+        if (data.selectedItems[steps[a]][i].variant) {
+          for (let j = 0; j < data.selectedItems[steps[a]][i].variant.length; j++) {
+            if (data.selectedItems[steps[a]][i].variant[j].status == 1) {
+              varicost += data.selectedItems[steps[a]][i].variant[j].price;
+            }
           }
         }
+        cp += (data.selectedItems[steps[a]][i].price + varicost) * data.selectedItems[steps[a]][i].quantity;
+        data.cartTotalPrice = cp;
+        data.cartTotalItem = itemno;
       }
-      cp += (data.selectedItems[i].price + varicost) * data.selectedItems[i].quantity;
-      data.cartTotalPrice = cp;
-      data.cartTotalItem = itemno;
     }
+    // for (let i = 0; i < data.selectedItems[currentStep].length; i++) {
+    //   itemno += data.selectedItems[currentStep][i].quantity;
+    //   if (data.selectedItems[currentStep][i].variant) {
+    //     for (let j = 0; j < data.selectedItems[currentStep][i].variant.length; j++) {
+    //       if (data.selectedItems[currentStep][i].variant[j].status == 1) {
+    //         varicost += data.selectedItems[currentStep][i].variant[j].price;
+    //       }
+    //     }
+    //   }
+    //   cp += (data.selectedItems[currentStep][i].price + varicost) * data.selectedItems[currentStep][i].quantity;
+    //   data.cartTotalPrice = cp;
+    //   data.cartTotalItem = itemno;
+    // }
     this.orderService.setOrderData(data);
     console.log('inc this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
     this.articles = this.orderService.getOrderData().categoryItems;
@@ -291,50 +316,85 @@ export class ItemComponent implements OnInit {
   decreaseValue(article) {
     console.log('article dec', article);
     article.step = this.globalService.getTabData().step;
+    let currentStep = this.globalService.getTabData().step;
     let data = this.orderService.getOrderData();
-    for (let i = 0; i < data.selectedItems.length; i++) {
-      if (data.selectedItems[i]._id == article._id && !data.selectedItems[i].variant && data.selectedItems[i].step == article.step) {
-        if (data.selectedItems[i].quantity > 1) {
-          data.selectedItems[i].quantity = data.selectedItems[i].quantity - 1;
-          for (let j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
-            if (data.categoryItems[this.globalService.getTabData().step][j]._id == data.selectedItems[i]._id) {
-              data.categoryItems[this.globalService.getTabData().step][j].itemTotal = data.categoryItems[this.globalService.getTabData().step][j].itemTotal - 1;
+    for (let i = 0; i < data.selectedItems[currentStep].length; i++) {
+      if (data.selectedItems[currentStep][i]._id == article._id && !data.selectedItems[currentStep][i].variant && data.selectedItems[currentStep][i].step == article.step) {
+        if (data.selectedItems[currentStep][i].quantity > 1) {
+          data.selectedItems[currentStep][i].quantity = data.selectedItems[currentStep][i].quantity - 1;
+          for (let j = 0; j < data.categoryItems[currentStep].length; j++) {
+            if (data.categoryItems[currentStep][j]._id == data.selectedItems[currentStep][i]._id) {
+              data.categoryItems[currentStep][j].itemTotal = data.categoryItems[currentStep][j].itemTotal - 1;
             }
           }
         }
         else {
           article.quantity = 0;
-          for (let j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
-            if (data.categoryItems[this.globalService.getTabData().step][j]._id == data.selectedItems[i]._id) {
-              data.categoryItems[this.globalService.getTabData().step][j].itemTotal = data.categoryItems[this.globalService.getTabData().step][j].itemTotal - 1;
+          for (let j = 0; j < data.categoryItems[currentStep].length; j++) {
+            if (data.categoryItems[currentStep][j]._id == data.selectedItems[currentStep][i]._id) {
+              data.categoryItems[currentStep][j].itemTotal = data.categoryItems[currentStep][j].itemTotal - 1;
             }
           }
-          data.selectedItems.splice(i, 1);
+          data.selectedItems[currentStep].splice(i, 1);
         }
       }
     }
     let cp = 0;
     let itemno = 0;
     let varicost = 0;
-    if (data.selectedItems.length) {
-      for (let i = 0; i < data.selectedItems.length; i++) {
-        itemno += data.selectedItems[i].quantity;
-        if (data.selectedItems[i].variant) {
-          for (let j = 0; j < data.selectedItems[i].variant.length; j++) {
-            if (data.selectedItems[i].variant[j].status == 1) {
-              varicost += data.selectedItems[i].variant[j].price;
-            }
-          }
-        }
-        cp += (data.selectedItems[i].price + varicost) * data.selectedItems[i].quantity;
-        data.cartTotalPrice = cp;
-        data.cartTotalItem = itemno;
-      }
+    var steps = [];
+    if (this.globalService.getStepData()) {
+      steps = this.globalService.getStepData();
     }
     else {
-      data.cartTotalPrice = 0;
-      data.cartTotalItem = 0;
+      steps = ['Uscita 1', 'Uscita 2'];
     }
+    let emptyArray = [];
+    for(let a=0;a<steps.length;a++){     
+      if (data.selectedItems[steps[a]].length) {
+        for (let i = 0; i < data.selectedItems[steps[a]].length; i++) {
+          itemno += data.selectedItems[steps[a]][i].quantity;
+          if (data.selectedItems[steps[a]][i].variant) {
+            for (let j = 0; j < data.selectedItems[steps[a]][i].variant.length; j++) {
+              if (data.selectedItems[steps[a]][i].variant[j].status == 1) {
+                varicost += data.selectedItems[steps[a]][i].variant[j].price;
+              }
+            }
+          }
+          cp += (data.selectedItems[steps[a]][i].price + varicost) * data.selectedItems[steps[a]][i].quantity;
+          data.cartTotalPrice = cp;
+          data.cartTotalItem = itemno;
+        }
+      }
+      if (data.selectedItems[steps[a]].length == 0) {
+        if(emptyArray.indexOf(steps[a])<0){
+          emptyArray.push(steps[a]);
+        }
+      }
+      if(emptyArray.length == steps.length){
+        data.cartTotalPrice = 0;
+        data.cartTotalItem = 0;
+      }
+    }
+    // if (data.selectedItems[currentStep].length) {
+    //   for (let i = 0; i < data.selectedItems[currentStep].length; i++) {
+    //     itemno += data.selectedItems[currentStep][i].quantity;
+    //     if (data.selectedItems[currentStep][i].variant) {
+    //       for (let j = 0; j < data.selectedItems[currentStep][i].variant.length; j++) {
+    //         if (data.selectedItems[currentStep][i].variant[j].status == 1) {
+    //           varicost += data.selectedItems[currentStep][i].variant[j].price;
+    //         }
+    //       }
+    //     }
+    //     cp += (data.selectedItems[currentStep][i].price + varicost) * data.selectedItems[currentStep][i].quantity;
+    //     data.cartTotalPrice = cp;
+    //     data.cartTotalItem = itemno;
+    //   }
+    // }
+    // else {
+    //   data.cartTotalPrice = 0;
+    //   data.cartTotalItem = 0;
+    // }
     this.orderService.setOrderData(data);
     console.log('dec this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
     this.articles = this.orderService.getOrderData().categoryItems;
@@ -503,6 +563,7 @@ export class ItemComponent implements OnInit {
   // }
 
   saveVariantData() {
+    let currentStep = this.globalService.getTabData().step;
     if (this.variantData.quantity == 0) {
       this.variantError = 'Please enter quantity';
       setTimeout(() => {
@@ -519,30 +580,52 @@ export class ItemComponent implements OnInit {
       this.articleData.quantity = this.variantData.quantity;
       this.articleData.variant = this.variantData.variant;
       this.articleData.ordernote = this.variantData.notes;
-      this.articleData.step = this.globalService.getTabData().step;
+      this.articleData.step = currentStep;
       let data = this.orderService.getOrderData();
-      data.selectedItems.push(this.articleData);
-      for (let i = 0; i < data.categoryItems[this.globalService.getTabData().step].length; i++) {
-        if (data.categoryItems[this.globalService.getTabData().step][i]._id == this.articleData._id) {
-          data.categoryItems[this.globalService.getTabData().step][i].itemTotal = data.categoryItems[this.globalService.getTabData().step][i].itemTotal + this.articleData.quantity;
+      data.selectedItems[currentStep].push(this.articleData);
+      for (let i = 0; i < data.categoryItems[currentStep].length; i++) {
+        if (data.categoryItems[currentStep][i]._id == this.articleData._id) {
+          data.categoryItems[currentStep][i].itemTotal = data.categoryItems[currentStep][i].itemTotal + this.articleData.quantity;
         }
       }
       let cp = 0;
       let itemno = 0;
       let varicost = 0;
-      for (let i = 0; i < data.selectedItems.length; i++) {
-        itemno += data.selectedItems[i].quantity;
-        if (data.selectedItems[i].variant) {
-          for (let j = 0; j < data.selectedItems[i].variant.length; j++) {
-            if (data.selectedItems[i].variant[j].status == 1) {
-              varicost += data.selectedItems[i].variant[j].price;
+      var steps = [];
+      if (this.globalService.getStepData()) {
+        steps = this.globalService.getStepData();
+      }
+      else {
+        steps = ['Uscita 1', 'Uscita 2'];
+      }
+      for(let a=0;a<steps.length;a++){
+        for (let i = 0; i < data.selectedItems[steps[a]].length; i++) {
+          itemno += data.selectedItems[steps[a]][i].quantity;
+          if (data.selectedItems[steps[a]][i].variant) {
+            for (let j = 0; j < data.selectedItems[steps[a]][i].variant.length; j++) {
+              if (data.selectedItems[steps[a]][i].variant[j].status == 1) {
+                varicost += data.selectedItems[steps[a]][i].variant[j].price;
+              }
             }
           }
+          cp += (data.selectedItems[steps[a]][i].price + varicost) * data.selectedItems[steps[a]][i].quantity;
+          data.cartTotalPrice = cp;
+          data.cartTotalItem = itemno;
         }
-        cp += (data.selectedItems[i].price + varicost) * data.selectedItems[i].quantity;
-        data.cartTotalPrice = cp;
-        data.cartTotalItem = itemno;
       }
+      // for (let i = 0; i < data.selectedItems[currentStep].length; i++) {
+      //   itemno += data.selectedItems[currentStep][i].quantity;
+      //   if (data.selectedItems[currentStep][i].variant) {
+      //     for (let j = 0; j < data.selectedItems[currentStep][i].variant.length; j++) {
+      //       if (data.selectedItems[currentStep][i].variant[j].status == 1) {
+      //         varicost += data.selectedItems[currentStep][i].variant[j].price;
+      //       }
+      //     }
+      //   }
+      //   cp += (data.selectedItems[currentStep][i].price + varicost) * data.selectedItems[currentStep][i].quantity;
+      //   data.cartTotalPrice = cp;
+      //   data.cartTotalItem = itemno;
+      // }
       this.orderService.setOrderData(data);
       this.hideVarient();
       console.log('variant this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());

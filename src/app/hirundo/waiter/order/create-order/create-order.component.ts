@@ -62,11 +62,22 @@ export class CreateOrderComponent implements OnInit {
 
   makeOrder() {
     if (this.noOfPeople) {
+      var steps = [];
+      let selectedItems = {};      
+      if (this.globalService.getStepData()) {
+        steps = this.globalService.getStepData();
+      }
+      else {
+        steps = ['Uscita 1', 'Uscita 2'];
+      }
+      for (let j = 0; j < steps.length; j++) {
+        selectedItems[steps[j]] = [];
+      }
       let data = {
         roomId: this.roomData["_id"],
         tableId: this.tableData["_id"],
         noOfPeople: this.noOfPeople,
-        selectedItems: [],
+        selectedItems: selectedItems,
         cartTotalPrice : 0,
         cartTotalItem: 0
       }

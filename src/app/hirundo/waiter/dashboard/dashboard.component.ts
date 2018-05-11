@@ -5,6 +5,8 @@ import { DashboardService } from './dashboard.service'
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { WebsocketService } from '../../../service/websocket.service';
 import { OrderService} from '../order/order.service';
+import { GlobalService } from '../../global.service';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -14,7 +16,7 @@ export class DashboardComponent implements OnInit {
   private roomData = [];
   private tables = [];
   private activeRoom: boolean[] = [false];
-  constructor(public router: Router,private orderService: OrderService, private dashboardService: DashboardService, public websocketService: WebsocketService) { }
+  constructor(public router: Router,private orderService: OrderService,private globalService: GlobalService, private dashboardService: DashboardService, public websocketService: WebsocketService) { }
 
   ngOnInit() {
     localStorage.removeItem('orderData');
@@ -36,11 +38,23 @@ export class DashboardComponent implements OnInit {
     if(table.orderId != null && table.orderId._id){
       localStorage.setItem('orderId', JSON.stringify(table.orderId._id));
       localStorage.setItem('orderItems',JSON.stringify(table.orderId.item));
+      var steps = [];
+      let selectedItems = {};      
+      if (this.globalService.getStepData()) {
+        steps = this.globalService.getStepData();
+      }
+      else {
+        steps = ['Uscita 1', 'Uscita 2'];
+      }
+      for (let j = 0; j < steps.length; j++) {
+        selectedItems[steps[j]] = [];
+      }
       let data = {
         roomId: table.orderId.room,
         tableId: table.orderId.table,
         noOfPeople: table.orderId.noOfPeople,
-        selectedItems: [],
+        // selectedItems: [],
+        selectedItems: selectedItems,        
         cartTotalPrice : 0,
         cartTotalItem: 0
       }

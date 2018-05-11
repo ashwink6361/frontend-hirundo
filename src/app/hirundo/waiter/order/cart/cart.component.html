@@ -15,7 +15,7 @@
     <app-steps></app-steps>
     <div class="item-container">
         <!-- <div class="text-center" *ngIf="!(items && items.length)">No Item Added</div> -->
-        <div class="text-center" *ngIf="!orderId && !(items && items.length)">No Item Added</div>
+        <div class="text-center" *ngIf="!orderId && !(orderService.getOrderData().selectedItems)">No Item Added</div>
         <div *ngIf="(orderId && orderItems && orderItems.length)" class="border-bottom">
             <div *ngFor="let article of orderItems">
                 <div class="item-list align-items-center" *ngIf="article.step == globalService.getTabData().step">
@@ -41,8 +41,8 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="(items && items.length)">
-            <div *ngFor="let article of items">
+        <div *ngIf="(orderService.getOrderData().selectedItems)">
+            <div *ngFor="let article of orderService.getOrderData().selectedItems[globalService.getTabData().step]">
                 <div class="item-list align-items-center" *ngIf="article.step == globalService.getTabData().step">
                     <div class="item" [ngStyle]="{'background-color': article.category.color}">
                         <img *ngIf="!article.logo.small && article.category.isIcon" class="icon-img" [src]="article.category.icon" alt="" />
@@ -77,7 +77,7 @@
                     Menu
                 </button>
             </div>
-            <button type="submit" class="order-btn waves-light" [disabled]="!orderService.getOrderData().selectedItems.length" (click)="createOrder()">
+            <button type="submit" class="order-btn waves-light" [disabled]="!orderService.getOrderData().selectedItems" (click)="createOrder()">
                 Create Order
             </button>
         </div>

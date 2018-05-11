@@ -35,6 +35,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dashboard_service__ = __webpack_require__("../../../../../src/app/hirundo/waiter/dashboard/dashboard.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__service_websocket_service__ = __webpack_require__("../../../../../src/app/service/websocket.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__order_order_service__ = __webpack_require__("../../../../../src/app/hirundo/waiter/order/order.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__global_service__ = __webpack_require__("../../../../../src/app/hirundo/global.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -49,10 +50,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var DashboardComponent = /** @class */ (function () {
-    function DashboardComponent(router, orderService, dashboardService, websocketService) {
+    function DashboardComponent(router, orderService, globalService, dashboardService, websocketService) {
         this.router = router;
         this.orderService = orderService;
+        this.globalService = globalService;
         this.dashboardService = dashboardService;
         this.websocketService = websocketService;
         this.roomData = [];
@@ -79,11 +82,23 @@ var DashboardComponent = /** @class */ (function () {
         if (table.orderId != null && table.orderId._id) {
             localStorage.setItem('orderId', JSON.stringify(table.orderId._id));
             localStorage.setItem('orderItems', JSON.stringify(table.orderId.item));
+            var steps = [];
+            var selectedItems = {};
+            if (this.globalService.getStepData()) {
+                steps = this.globalService.getStepData();
+            }
+            else {
+                steps = ['Uscita 1', 'Uscita 2'];
+            }
+            for (var j = 0; j < steps.length; j++) {
+                selectedItems[steps[j]] = [];
+            }
             var data = {
                 roomId: table.orderId.room,
                 tableId: table.orderId.table,
                 noOfPeople: table.orderId.noOfPeople,
-                selectedItems: [],
+                // selectedItems: [],
+                selectedItems: selectedItems,
                 cartTotalPrice: 0,
                 cartTotalItem: 0
             };
@@ -116,10 +131,10 @@ var DashboardComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/hirundo/waiter/dashboard/dashboard.component.html"),
             styles: [__webpack_require__("../../../../../src/app/hirundo/waiter/dashboard/dashboard.component.scss")]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__order_order_service__["a" /* OrderService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__order_order_service__["a" /* OrderService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__dashboard_service__["a" /* DashboardService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__dashboard_service__["a" /* DashboardService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__service_websocket_service__["a" /* WebsocketService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__service_websocket_service__["a" /* WebsocketService */]) === "function" && _d || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__order_order_service__["a" /* OrderService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__order_order_service__["a" /* OrderService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_5__global_service__["a" /* GlobalService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__global_service__["a" /* GlobalService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__dashboard_service__["a" /* DashboardService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__dashboard_service__["a" /* DashboardService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__service_websocket_service__["a" /* WebsocketService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__service_websocket_service__["a" /* WebsocketService */]) === "function" && _e || Object])
     ], DashboardComponent);
     return DashboardComponent;
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
 }());
 
 //# sourceMappingURL=dashboard.component.js.map

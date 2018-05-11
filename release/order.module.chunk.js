@@ -3,7 +3,7 @@ webpackJsonp(["order.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/order/cart/cart.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header class=\"page-content-header\">\n    <div class=\"back-btn\">\n        <a *ngIf=\"!orderId\" routerLink=\"/waiter/order/:id/choose-item\">\n            <i class=\"fas fa-angle-left\"></i>\n        </a>\n        <a *ngIf=\"orderId\" routerLink=\"/waiter/\">\n            <i class=\"fas fa-angle-left\"></i>\n        </a>\n    </div>\n    <div class=\"header-title\">\n        Create Order\n    </div>\n</header>\n<div class=\"page-content\">\n    <app-steps></app-steps>\n    <div class=\"item-container\">\n        <!-- <div class=\"text-center\" *ngIf=\"!(items && items.length)\">No Item Added</div> -->\n        <div class=\"text-center\" *ngIf=\"!orderId && !(items && items.length)\">No Item Added</div>\n        <div *ngIf=\"(orderId && orderItems && orderItems.length)\" class=\"border-bottom\">\n            <div *ngFor=\"let article of orderItems\">\n                <div class=\"item-list align-items-center\" *ngIf=\"article.step == globalService.getTabData().step\">\n                    <div class=\"item\" [ngStyle]=\"{'background-color': article.id.category.color}\">\n                        <img *ngIf=\"!article.id.logo.small && article.id.category.isIcon\" class=\"icon-img\" [src]=\"article.id.category.icon\" alt=\"\"\n                        />\n                        <img *ngIf=\"!article.id.logo.small && !article.id.category.isIcon && article.id.category.logo.small\" [src]=\"article.id.category.logo.small\"\n                            alt=\"Category Logo\" />\n                        <img *ngIf=\"article.id.logo.small\" [src]=\"article.id.logo.small\" alt=\"Item Logo\" />\n                        <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\n                    </div>\n                    <div class=\"item-name\">\n                        <p class=\"name m-0\">{{article.id.name}}</p>\n                        <p class=\"name m-0\">&euro;{{article.price}}</p>\n                        <span *ngIf=\"article.variant && article.variant.length\">\n                            <span *ngFor=\"let variant of article.variant\" class=\"d-flex added-variand-name\">\n                                <span *ngIf=\"variant.status == 0\">- {{variant.name}} </span>\n                                <span *ngIf=\"variant.status == 1\">+ {{variant.name}} &euro;{{variant.price}}</span>\n                            </span>\n                        </span>\n                        <span *ngIf=\"article.notes\" class=\"d-flex added-variand-name\">{{article.notes}}</span>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div *ngIf=\"(items && items.length)\">\n            <div *ngFor=\"let article of items\">\n                <div class=\"item-list align-items-center\" *ngIf=\"article.step == globalService.getTabData().step\">\n                    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\n                        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\n                        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\n                            alt=\"Category Logo\" />\n                        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\n                        <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\n                    </div>\n                    <div class=\"item-name mw-160\">\n                        <p class=\"name m-0\">{{article.name}}</p>\n                        <p class=\"name m-0\">&euro;{{article.price}}</p>\n                        <span *ngIf=\"article.variant && article.variant.length\">\n                            <span *ngFor=\"let variant of article.variant\" class=\"d-flex added-variand-name\">\n                                <span *ngIf=\"variant.status == 0\">- {{variant.name}} </span>\n                                <span *ngIf=\"variant.status == 1\">+ {{variant.name}} &euro;{{variant.price}}</span>\n                            </span>\n                        </span>\n                        <span *ngIf=\"article.ordernote\" class=\"d-flex added-variand-name\">{{article.ordernote}}</span>\n                    </div>\n                    <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"deleteItemFromCart(article)\">\n                        <i class=\"fas fa-times\"></i>\n                    </button>\n                </div>\n            </div>\n        </div>\n        <div class=\"cart-bottom-fixed\">\n            <div class=\"total-amount\">\n                Sub Total: &euro;{{orderService.getOrderData().cartTotalPrice}}\n            </div>\n            <div *ngIf=\"orderId\" class=\"cart-menu-btn\">\n                <button type=\"button\" class=\"btn btn-default\" (click)=\"gotToCategoryList()\">\n                    Menu\n                </button>\n            </div>\n            <button type=\"submit\" class=\"order-btn waves-light\" [disabled]=\"!orderService.getOrderData().selectedItems.length\" (click)=\"createOrder()\">\n                Create Order\n            </button>\n        </div>\n    </div>\n</div>\n"
+module.exports = "<header class=\"page-content-header\">\n    <div class=\"back-btn\">\n        <a *ngIf=\"!orderId\" routerLink=\"/waiter/order/:id/choose-item\">\n            <i class=\"fas fa-angle-left\"></i>\n        </a>\n        <a *ngIf=\"orderId\" routerLink=\"/waiter/\">\n            <i class=\"fas fa-angle-left\"></i>\n        </a>\n    </div>\n    <div class=\"header-title\">\n        Create Order\n    </div>\n</header>\n<div class=\"page-content\">\n    <app-steps></app-steps>\n    <div class=\"item-container\">\n        <!-- <div class=\"text-center\" *ngIf=\"!(items && items.length)\">No Item Added</div> -->\n        <div class=\"text-center\" *ngIf=\"!orderId && !(orderService.getOrderData().selectedItems)\">No Item Added</div>\n        <div *ngIf=\"(orderId && orderItems && orderItems.length)\" class=\"border-bottom\">\n            <div *ngFor=\"let article of orderItems\">\n                <div class=\"item-list align-items-center\" *ngIf=\"article.step == globalService.getTabData().step\">\n                    <div class=\"item\" [ngStyle]=\"{'background-color': article.id.category.color}\">\n                        <img *ngIf=\"!article.id.logo.small && article.id.category.isIcon\" class=\"icon-img\" [src]=\"article.id.category.icon\" alt=\"\"\n                        />\n                        <img *ngIf=\"!article.id.logo.small && !article.id.category.isIcon && article.id.category.logo.small\" [src]=\"article.id.category.logo.small\"\n                            alt=\"Category Logo\" />\n                        <img *ngIf=\"article.id.logo.small\" [src]=\"article.id.logo.small\" alt=\"Item Logo\" />\n                        <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\n                    </div>\n                    <div class=\"item-name\">\n                        <p class=\"name m-0\">{{article.id.name}}</p>\n                        <p class=\"name m-0\">&euro;{{article.price}}</p>\n                        <span *ngIf=\"article.variant && article.variant.length\">\n                            <span *ngFor=\"let variant of article.variant\" class=\"d-flex added-variand-name\">\n                                <span *ngIf=\"variant.status == 0\">- {{variant.name}} </span>\n                                <span *ngIf=\"variant.status == 1\">+ {{variant.name}} &euro;{{variant.price}}</span>\n                            </span>\n                        </span>\n                        <span *ngIf=\"article.notes\" class=\"d-flex added-variand-name\">{{article.notes}}</span>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div *ngIf=\"(orderService.getOrderData().selectedItems)\">\n            <div *ngFor=\"let article of orderService.getOrderData().selectedItems[globalService.getTabData().step]\">\n                <div class=\"item-list align-items-center\" *ngIf=\"article.step == globalService.getTabData().step\">\n                    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\n                        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\n                        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\n                            alt=\"Category Logo\" />\n                        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\n                        <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\n                    </div>\n                    <div class=\"item-name mw-160\">\n                        <p class=\"name m-0\">{{article.name}}</p>\n                        <p class=\"name m-0\">&euro;{{article.price}}</p>\n                        <span *ngIf=\"article.variant && article.variant.length\">\n                            <span *ngFor=\"let variant of article.variant\" class=\"d-flex added-variand-name\">\n                                <span *ngIf=\"variant.status == 0\">- {{variant.name}} </span>\n                                <span *ngIf=\"variant.status == 1\">+ {{variant.name}} &euro;{{variant.price}}</span>\n                            </span>\n                        </span>\n                        <span *ngIf=\"article.ordernote\" class=\"d-flex added-variand-name\">{{article.ordernote}}</span>\n                    </div>\n                    <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"deleteItemFromCart(article)\">\n                        <i class=\"fas fa-times\"></i>\n                    </button>\n                </div>\n            </div>\n        </div>\n        <div class=\"cart-bottom-fixed\">\n            <div class=\"total-amount\">\n                Sub Total: &euro;{{orderService.getOrderData().cartTotalPrice}}\n            </div>\n            <div *ngIf=\"orderId\" class=\"cart-menu-btn\">\n                <button type=\"button\" class=\"btn btn-default\" (click)=\"gotToCategoryList()\">\n                    Menu\n                </button>\n            </div>\n            <button type=\"submit\" class=\"order-btn waves-light\" [disabled]=\"!orderService.getOrderData().selectedItems\" (click)=\"createOrder()\">\n                Create Order\n            </button>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -63,42 +63,51 @@ var CartComponent = /** @class */ (function () {
             this.orderId = JSON.parse(localStorage.getItem('orderId'));
             this.orderItems = JSON.parse(localStorage.getItem('orderItems'));
         }
-        if (this.orderService.getOrderData() && this.orderService.getOrderData().selectedItems) {
-            this.items = this.orderService.getOrderData().selectedItems;
-        }
+        // if (this.orderService.getOrderData() && this.orderService.getOrderData().selectedItems) {
+        //   this.items = this.orderService.getOrderData().selectedItems;
+        // }
     };
     CartComponent.prototype.createOrder = function () {
         var _this = this;
         var data = this.orderService.getOrderData();
         var itemarray = [];
-        for (var i = 0; i < data.selectedItems.length; i++) {
-            var vararray = [];
-            if (data.selectedItems[i].variant) {
-                for (var j = 0; j < data.selectedItems[i].variant.length; j++) {
-                    var catarray = [];
-                    for (var k = 0; k < data.selectedItems[i].variant[j].category.length; k++) {
-                        catarray.push(data.selectedItems[i].variant[j].category[k]._id);
+        var steps = [];
+        if (this.globalService.getStepData()) {
+            steps = this.globalService.getStepData();
+        }
+        else {
+            steps = ['Uscita 1', 'Uscita 2'];
+        }
+        for (var a = 0; a < steps.length; a++) {
+            for (var i = 0; i < data.selectedItems[steps[a]].length; i++) {
+                var vararray = [];
+                if (data.selectedItems[steps[a]][i].variant) {
+                    for (var j = 0; j < data.selectedItems[steps[a]][i].variant.length; j++) {
+                        var catarray = [];
+                        for (var k = 0; k < data.selectedItems[steps[a]][i].variant[j].category.length; k++) {
+                            catarray.push(data.selectedItems[steps[a]][i].variant[j].category[k]._id);
+                        }
+                        var vari = {
+                            name: data.selectedItems[steps[a]][i].variant[j].name,
+                            category: catarray,
+                            price: data.selectedItems[steps[a]][i].variant[j].price,
+                            status: data.selectedItems[steps[a]][i].variant[j].status
+                        };
+                        vararray.push(vari);
                     }
-                    var vari = {
-                        name: data.selectedItems[i].variant[j].name,
-                        category: catarray,
-                        price: data.selectedItems[i].variant[j].price,
-                        status: data.selectedItems[i].variant[j].status
-                    };
-                    vararray.push(vari);
                 }
+                var item = {
+                    id: data.selectedItems[steps[a]][i]._id,
+                    category: data.selectedItems[steps[a]][i].category._id,
+                    quantity: data.selectedItems[steps[a]][i].quantity,
+                    price: data.selectedItems[steps[a]][i].price,
+                    notes: data.selectedItems[steps[a]][i].ordernote ? data.selectedItems[steps[a]][i].ordernote : '',
+                    variant: vararray,
+                    step: data.selectedItems[steps[a]][i].step,
+                    department: data.selectedItems[steps[a]][i].category.department
+                };
+                itemarray.push(item);
             }
-            var item = {
-                id: data.selectedItems[i]._id,
-                category: data.selectedItems[i].category._id,
-                quantity: data.selectedItems[i].quantity,
-                price: data.selectedItems[i].price,
-                notes: data.selectedItems[i].ordernote ? data.selectedItems[i].ordernote : '',
-                variant: vararray,
-                step: data.selectedItems[i].step,
-                department: data.selectedItems[i].category.department
-            };
-            itemarray.push(item);
         }
         var createorder = {
             room: data.roomId,
@@ -178,53 +187,88 @@ var CartComponent = /** @class */ (function () {
     // }
     CartComponent.prototype.deleteItemFromCart = function (article) {
         var data = this.orderService.getOrderData();
-        for (var i = 0; i < data.selectedItems.length; i++) {
-            if (data.selectedItems[i]._id == article._id && !article.variant) {
+        var currentStep = this.globalService.getTabData().step;
+        for (var i = 0; i < data.selectedItems[currentStep].length; i++) {
+            if (data.selectedItems[currentStep][i]._id == article._id && !article.variant) {
                 //non variant type data
-                for (var m = 0; m < data.categoryItems[this.globalService.getTabData().step].length; m++) {
-                    if (data.categoryItems[this.globalService.getTabData().step][m]._id == data.selectedItems[i]._id && data.categoryItems[this.globalService.getTabData().step][m].step == data.selectedItems[i].step) {
-                        data.categoryItems[this.globalService.getTabData().step][m].itemTotal = data.categoryItems[this.globalService.getTabData().step][m].itemTotal - data.selectedItems[i].quantity;
+                for (var m = 0; m < data.categoryItems[currentStep].length; m++) {
+                    if (data.categoryItems[currentStep][m]._id == data.selectedItems[currentStep][i]._id) {
+                        data.categoryItems[currentStep][m].itemTotal = data.categoryItems[currentStep][m].itemTotal - data.selectedItems[currentStep][i].quantity;
                     }
                 }
-                if (!data.selectedItems[i].variant && this.globalService.getTabData().step == data.selectedItems[i].step) {
-                    data.selectedItems.splice(i, 1);
+                if (!data.selectedItems[currentStep][i].variant && currentStep == data.selectedItems[currentStep][i].step) {
+                    data.selectedItems[currentStep].splice(i, 1);
                 }
             }
-            else if (data.selectedItems[i]._id == article._id && article.variant) {
+            else if (data.selectedItems[currentStep][i]._id == article._id && article.variant) {
                 //variant type data
-                for (var m = 0; m < data.categoryItems[this.globalService.getTabData().step].length; m++) {
-                    if (data.categoryItems[this.globalService.getTabData().step][m]._id == data.selectedItems[i]._id && data.categoryItems[this.globalService.getTabData().step][m].step == data.selectedItems[i].step) {
-                        data.categoryItems[this.globalService.getTabData().step][m].itemTotal = data.categoryItems[this.globalService.getTabData().step][m].itemTotal - data.selectedItems[i].quantity;
+                for (var m = 0; m < data.categoryItems[currentStep].length; m++) {
+                    if (data.categoryItems[currentStep][m]._id == data.selectedItems[currentStep][i]._id) {
+                        data.categoryItems[currentStep][m].itemTotal = data.categoryItems[currentStep][m].itemTotal - data.selectedItems[currentStep][i].quantity;
                     }
                 }
-                if (data.selectedItems[i].variant && this.globalService.getTabData().step == data.selectedItems[i].step) {
-                    data.selectedItems.splice(i, 1);
+                if (data.selectedItems[currentStep][i].variant && currentStep == data.selectedItems[currentStep][i].step) {
+                    data.selectedItems[currentStep].splice(i, 1);
                 }
             }
             var cp = 0;
             var itemno = 0;
             var varicost = 0;
-            if (data.selectedItems.length) {
-                for (var i_1 = 0; i_1 < data.selectedItems.length; i_1++) {
-                    itemno += data.selectedItems[i_1].quantity;
-                    if (data.selectedItems[i_1].variant) {
-                        for (var j = 0; j < data.selectedItems[i_1].variant.length; j++) {
-                            if (data.selectedItems[i_1].variant[j].status == 1) {
-                                varicost += data.selectedItems[i_1].variant[j].price;
-                            }
-                        }
-                    }
-                    cp += (data.selectedItems[i_1].price + varicost) * data.selectedItems[i_1].quantity;
-                    data.cartTotalPrice = cp;
-                    data.cartTotalItem = itemno;
-                }
+            var steps = [];
+            if (this.globalService.getStepData()) {
+                steps = this.globalService.getStepData();
             }
             else {
-                data.cartTotalPrice = 0;
-                data.cartTotalItem = 0;
+                steps = ['Uscita 1', 'Uscita 2'];
             }
+            var emptyArray = [];
+            for (var a = 0; a < steps.length; a++) {
+                if (data.selectedItems[steps[a]].length) {
+                    for (var i_1 = 0; i_1 < data.selectedItems[steps[a]].length; i_1++) {
+                        itemno += data.selectedItems[steps[a]][i_1].quantity;
+                        if (data.selectedItems[steps[a]][i_1].variant) {
+                            for (var j = 0; j < data.selectedItems[steps[a]][i_1].variant.length; j++) {
+                                if (data.selectedItems[steps[a]][i_1].variant[j].status == 1) {
+                                    varicost += data.selectedItems[steps[a]][i_1].variant[j].price;
+                                }
+                            }
+                        }
+                        cp += (data.selectedItems[steps[a]][i_1].price + varicost) * data.selectedItems[steps[a]][i_1].quantity;
+                        data.cartTotalPrice = cp;
+                        data.cartTotalItem = itemno;
+                    }
+                }
+                if (data.selectedItems[steps[a]].length == 0) {
+                    if (emptyArray.indexOf(steps[a]) < 0) {
+                        emptyArray.push(steps[a]);
+                    }
+                }
+                if (emptyArray.length == steps.length) {
+                    data.cartTotalPrice = 0;
+                    data.cartTotalItem = 0;
+                }
+            }
+            // if (data.selectedItems[currentStep].length) {
+            //   for (let i = 0; i < data.selectedItems[currentStep].length; i++) {
+            //     itemno += data.selectedItems[currentStep][i].quantity;
+            //     if (data.selectedItems[currentStep][i].variant) {
+            //       for (let j = 0; j < data.selectedItems[currentStep][i].variant.length; j++) {
+            //         if (data.selectedItems[currentStep][i].variant[j].status == 1) {
+            //           varicost += data.selectedItems[currentStep][i].variant[j].price;
+            //         }
+            //       }
+            //     }
+            //     cp += (data.selectedItems[currentStep][i].price + varicost) * data.selectedItems[currentStep][i].quantity;
+            //     data.cartTotalPrice = cp;
+            //     data.cartTotalItem = itemno;
+            //   }
+            // }
+            // else {
+            //   data.cartTotalPrice = 0;
+            //   data.cartTotalItem = 0;
+            // }
             this.orderService.setOrderData(data);
-            this.items = this.orderService.getOrderData().selectedItems;
+            // this.items = this.orderService.getOrderData().selectedItems;
         }
     };
     CartComponent.prototype.gotToCategoryList = function () {
@@ -491,11 +535,22 @@ var CreateOrderComponent = /** @class */ (function () {
     CreateOrderComponent.prototype.makeOrder = function () {
         var _this = this;
         if (this.noOfPeople) {
+            var steps = [];
+            var selectedItems = {};
+            if (this.globalService.getStepData()) {
+                steps = this.globalService.getStepData();
+            }
+            else {
+                steps = ['Uscita 1', 'Uscita 2'];
+            }
+            for (var j = 0; j < steps.length; j++) {
+                selectedItems[steps[j]] = [];
+            }
             var data = {
                 roomId: this.roomData["_id"],
                 tableId: this.tableData["_id"],
                 noOfPeople: this.noOfPeople,
-                selectedItems: [],
+                selectedItems: selectedItems,
                 cartTotalPrice: 0,
                 cartTotalItem: 0
             };
@@ -612,13 +667,15 @@ var ItemComponent = /** @class */ (function () {
             if (this.globalService.getStepData()) {
                 steps = this.globalService.getStepData();
             }
+            else {
+                steps = ['Uscita 1', 'Uscita 2'];
+            }
             for (var k = 0; k < steps.length; k++) {
                 for (var i = 0; i < this.data.categoryItems[steps[k]].length; i++) {
-                    if (this.data.selectedItems.length) {
-                        for (var j = 0; j < this.data.selectedItems.length; j++) {
-                            if (this.data.selectedItems[j]._id == this.data.categoryItems[steps[k]][i]._id && this.data.selectedItems[j].step == this.data.categoryItems[steps[k]][i].step) {
-                                this.data.selectedItems[j].quantity += this.data.selectedItems[j].quantity;
-                                this.data.categoryItems[steps[k]][i].itemTotal = this.data.selectedItems[j].quantity;
+                    if (this.data.selectedItems[steps[k]].length) {
+                        for (var j = 0; j < this.data.selectedItems[steps[k]].length; j++) {
+                            if (this.data.selectedItems[steps[k]][j]._id == this.data.categoryItems[steps[k]][i]._id) {
+                                this.data.categoryItems[steps[k]][i].itemTotal = this.data.selectedItems[steps[k]][j].quantity;
                             }
                         }
                     }
@@ -763,33 +820,34 @@ var ItemComponent = /** @class */ (function () {
     //new code
     ItemComponent.prototype.increaseValue = function (article) {
         article.step = this.globalService.getTabData().step;
+        var currentStep = this.globalService.getTabData().step;
         var data = this.orderService.getOrderData();
-        if (data.selectedItems.length) {
+        if (data.selectedItems[currentStep].length) {
             var isExist = true;
             var isarr = [];
-            for (var i = 0; i < data.selectedItems.length; i++) {
-                if (data.selectedItems[i]._id == article._id) {
-                    if (data.selectedItems[i].step == article.step) {
-                        if (!data.selectedItems[i].variant) {
-                            data.selectedItems[i].quantity += 1;
-                            isarr.push(data.selectedItems[i]._id);
-                            for (var j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
-                                if (data.categoryItems[this.globalService.getTabData().step][j]._id == data.selectedItems[i]._id) {
-                                    data.categoryItems[this.globalService.getTabData().step][j].itemTotal = data.selectedItems[i].quantity;
+            for (var i = 0; i < data.selectedItems[currentStep].length; i++) {
+                if (data.selectedItems[currentStep][i]._id == article._id) {
+                    if (data.selectedItems[currentStep][i].step == article.step) {
+                        if (!data.selectedItems[currentStep][i].variant) {
+                            data.selectedItems[currentStep][i].quantity += 1;
+                            isarr.push(data.selectedItems[currentStep][i]._id);
+                            for (var j = 0; j < data.categoryItems[currentStep].length; j++) {
+                                if (data.categoryItems[currentStep][j]._id == data.selectedItems[currentStep][i]._id) {
+                                    data.categoryItems[currentStep][j].itemTotal = data.selectedItems[currentStep][i].quantity;
                                 }
                             }
                         }
-                        if (data.selectedItems[i].variant) {
-                            console.log('data.selectedItems[i].quantity', data.selectedItems[i].quantity);
-                            for (var j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
-                                if (data.categoryItems[this.globalService.getTabData().step][j]._id == data.selectedItems[i]._id) {
-                                    console.log('data.categoryItems[this.globalService.getTabData().step][j].itemTotal', data.categoryItems[this.globalService.getTabData().step][j].itemTotal);
-                                    data.categoryItems[this.globalService.getTabData().step][j].itemTotal = data.categoryItems[this.globalService.getTabData().step][j].itemTotal + data.selectedItems[i].quantity;
+                        if (data.selectedItems[currentStep][i].variant) {
+                            console.log('data.selectedItems[currentStep][i].quantity', data.selectedItems[currentStep][i].quantity);
+                            for (var j = 0; j < data.categoryItems[currentStep].length; j++) {
+                                if (data.categoryItems[currentStep][j]._id == data.selectedItems[currentStep][i]._id) {
+                                    console.log('data.categoryItems[currentStep][j].itemTotal', data.categoryItems[currentStep][j].itemTotal);
+                                    data.categoryItems[currentStep][j].itemTotal = data.categoryItems[currentStep][j].itemTotal + data.selectedItems[currentStep][i].quantity;
                                 }
                             }
                         }
                     }
-                    if (data.selectedItems[i].step != article.step) {
+                    if (data.selectedItems[currentStep][i].step != article.step) {
                         isExist = false;
                     }
                     // if (!data.selectedItems[i].variant) {
@@ -809,45 +867,67 @@ var ItemComponent = /** @class */ (function () {
                     //   }
                     // }
                 }
-                if (data.selectedItems[i]._id != article._id) {
+                if (data.selectedItems[currentStep][i]._id != article._id) {
                     isExist = false;
                 }
             }
             if (!isExist && isarr.indexOf(article._id) < 0) {
                 article.quantity = article.quantity + 1;
-                for (var j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
-                    if (data.categoryItems[this.globalService.getTabData().step][j]._id == article._id) {
-                        data.categoryItems[this.globalService.getTabData().step][j].itemTotal = article.quantity;
+                for (var j = 0; j < data.categoryItems[currentStep].length; j++) {
+                    if (data.categoryItems[currentStep][j]._id == article._id) {
+                        data.categoryItems[currentStep][j].itemTotal = article.quantity;
                     }
                 }
-                data.selectedItems.push(article);
+                data.selectedItems[currentStep].push(article);
             }
         }
         else {
             article.quantity = article.quantity + 1;
-            for (var j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
-                if (data.categoryItems[this.globalService.getTabData().step][j]._id == article._id) {
-                    data.categoryItems[this.globalService.getTabData().step][j].itemTotal = article.quantity;
+            for (var j = 0; j < data.categoryItems[currentStep].length; j++) {
+                if (data.categoryItems[currentStep][j]._id == article._id) {
+                    data.categoryItems[currentStep][j].itemTotal = article.quantity;
                 }
             }
-            data.selectedItems.push(article);
+            data.selectedItems[currentStep].push(article);
         }
         var cp = 0;
         var itemno = 0;
         var varicost = 0;
-        for (var i = 0; i < data.selectedItems.length; i++) {
-            itemno += data.selectedItems[i].quantity;
-            if (data.selectedItems[i].variant) {
-                for (var j = 0; j < data.selectedItems[i].variant.length; j++) {
-                    if (data.selectedItems[i].variant[j].status == 1) {
-                        varicost += data.selectedItems[i].variant[j].price;
+        var steps = [];
+        if (this.globalService.getStepData()) {
+            steps = this.globalService.getStepData();
+        }
+        else {
+            steps = ['Uscita 1', 'Uscita 2'];
+        }
+        for (var a = 0; a < steps.length; a++) {
+            for (var i = 0; i < data.selectedItems[steps[a]].length; i++) {
+                itemno += data.selectedItems[steps[a]][i].quantity;
+                if (data.selectedItems[steps[a]][i].variant) {
+                    for (var j = 0; j < data.selectedItems[steps[a]][i].variant.length; j++) {
+                        if (data.selectedItems[steps[a]][i].variant[j].status == 1) {
+                            varicost += data.selectedItems[steps[a]][i].variant[j].price;
+                        }
                     }
                 }
+                cp += (data.selectedItems[steps[a]][i].price + varicost) * data.selectedItems[steps[a]][i].quantity;
+                data.cartTotalPrice = cp;
+                data.cartTotalItem = itemno;
             }
-            cp += (data.selectedItems[i].price + varicost) * data.selectedItems[i].quantity;
-            data.cartTotalPrice = cp;
-            data.cartTotalItem = itemno;
         }
+        // for (let i = 0; i < data.selectedItems[currentStep].length; i++) {
+        //   itemno += data.selectedItems[currentStep][i].quantity;
+        //   if (data.selectedItems[currentStep][i].variant) {
+        //     for (let j = 0; j < data.selectedItems[currentStep][i].variant.length; j++) {
+        //       if (data.selectedItems[currentStep][i].variant[j].status == 1) {
+        //         varicost += data.selectedItems[currentStep][i].variant[j].price;
+        //       }
+        //     }
+        //   }
+        //   cp += (data.selectedItems[currentStep][i].price + varicost) * data.selectedItems[currentStep][i].quantity;
+        //   data.cartTotalPrice = cp;
+        //   data.cartTotalItem = itemno;
+        // }
         this.orderService.setOrderData(data);
         console.log('inc this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
         this.articles = this.orderService.getOrderData().categoryItems;
@@ -855,50 +935,85 @@ var ItemComponent = /** @class */ (function () {
     ItemComponent.prototype.decreaseValue = function (article) {
         console.log('article dec', article);
         article.step = this.globalService.getTabData().step;
+        var currentStep = this.globalService.getTabData().step;
         var data = this.orderService.getOrderData();
-        for (var i = 0; i < data.selectedItems.length; i++) {
-            if (data.selectedItems[i]._id == article._id && !data.selectedItems[i].variant && data.selectedItems[i].step == article.step) {
-                if (data.selectedItems[i].quantity > 1) {
-                    data.selectedItems[i].quantity = data.selectedItems[i].quantity - 1;
-                    for (var j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
-                        if (data.categoryItems[this.globalService.getTabData().step][j]._id == data.selectedItems[i]._id) {
-                            data.categoryItems[this.globalService.getTabData().step][j].itemTotal = data.categoryItems[this.globalService.getTabData().step][j].itemTotal - 1;
+        for (var i = 0; i < data.selectedItems[currentStep].length; i++) {
+            if (data.selectedItems[currentStep][i]._id == article._id && !data.selectedItems[currentStep][i].variant && data.selectedItems[currentStep][i].step == article.step) {
+                if (data.selectedItems[currentStep][i].quantity > 1) {
+                    data.selectedItems[currentStep][i].quantity = data.selectedItems[currentStep][i].quantity - 1;
+                    for (var j = 0; j < data.categoryItems[currentStep].length; j++) {
+                        if (data.categoryItems[currentStep][j]._id == data.selectedItems[currentStep][i]._id) {
+                            data.categoryItems[currentStep][j].itemTotal = data.categoryItems[currentStep][j].itemTotal - 1;
                         }
                     }
                 }
                 else {
                     article.quantity = 0;
-                    for (var j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
-                        if (data.categoryItems[this.globalService.getTabData().step][j]._id == data.selectedItems[i]._id) {
-                            data.categoryItems[this.globalService.getTabData().step][j].itemTotal = data.categoryItems[this.globalService.getTabData().step][j].itemTotal - 1;
+                    for (var j = 0; j < data.categoryItems[currentStep].length; j++) {
+                        if (data.categoryItems[currentStep][j]._id == data.selectedItems[currentStep][i]._id) {
+                            data.categoryItems[currentStep][j].itemTotal = data.categoryItems[currentStep][j].itemTotal - 1;
                         }
                     }
-                    data.selectedItems.splice(i, 1);
+                    data.selectedItems[currentStep].splice(i, 1);
                 }
             }
         }
         var cp = 0;
         var itemno = 0;
         var varicost = 0;
-        if (data.selectedItems.length) {
-            for (var i = 0; i < data.selectedItems.length; i++) {
-                itemno += data.selectedItems[i].quantity;
-                if (data.selectedItems[i].variant) {
-                    for (var j = 0; j < data.selectedItems[i].variant.length; j++) {
-                        if (data.selectedItems[i].variant[j].status == 1) {
-                            varicost += data.selectedItems[i].variant[j].price;
-                        }
-                    }
-                }
-                cp += (data.selectedItems[i].price + varicost) * data.selectedItems[i].quantity;
-                data.cartTotalPrice = cp;
-                data.cartTotalItem = itemno;
-            }
+        var steps = [];
+        if (this.globalService.getStepData()) {
+            steps = this.globalService.getStepData();
         }
         else {
-            data.cartTotalPrice = 0;
-            data.cartTotalItem = 0;
+            steps = ['Uscita 1', 'Uscita 2'];
         }
+        var emptyArray = [];
+        for (var a = 0; a < steps.length; a++) {
+            if (data.selectedItems[steps[a]].length) {
+                for (var i = 0; i < data.selectedItems[steps[a]].length; i++) {
+                    itemno += data.selectedItems[steps[a]][i].quantity;
+                    if (data.selectedItems[steps[a]][i].variant) {
+                        for (var j = 0; j < data.selectedItems[steps[a]][i].variant.length; j++) {
+                            if (data.selectedItems[steps[a]][i].variant[j].status == 1) {
+                                varicost += data.selectedItems[steps[a]][i].variant[j].price;
+                            }
+                        }
+                    }
+                    cp += (data.selectedItems[steps[a]][i].price + varicost) * data.selectedItems[steps[a]][i].quantity;
+                    data.cartTotalPrice = cp;
+                    data.cartTotalItem = itemno;
+                }
+            }
+            if (data.selectedItems[steps[a]].length == 0) {
+                if (emptyArray.indexOf(steps[a]) < 0) {
+                    emptyArray.push(steps[a]);
+                }
+            }
+            if (emptyArray.length == steps.length) {
+                data.cartTotalPrice = 0;
+                data.cartTotalItem = 0;
+            }
+        }
+        // if (data.selectedItems[currentStep].length) {
+        //   for (let i = 0; i < data.selectedItems[currentStep].length; i++) {
+        //     itemno += data.selectedItems[currentStep][i].quantity;
+        //     if (data.selectedItems[currentStep][i].variant) {
+        //       for (let j = 0; j < data.selectedItems[currentStep][i].variant.length; j++) {
+        //         if (data.selectedItems[currentStep][i].variant[j].status == 1) {
+        //           varicost += data.selectedItems[currentStep][i].variant[j].price;
+        //         }
+        //       }
+        //     }
+        //     cp += (data.selectedItems[currentStep][i].price + varicost) * data.selectedItems[currentStep][i].quantity;
+        //     data.cartTotalPrice = cp;
+        //     data.cartTotalItem = itemno;
+        //   }
+        // }
+        // else {
+        //   data.cartTotalPrice = 0;
+        //   data.cartTotalItem = 0;
+        // }
         this.orderService.setOrderData(data);
         console.log('dec this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
         this.articles = this.orderService.getOrderData().categoryItems;
@@ -1056,6 +1171,7 @@ var ItemComponent = /** @class */ (function () {
     // }
     ItemComponent.prototype.saveVariantData = function () {
         var _this = this;
+        var currentStep = this.globalService.getTabData().step;
         if (this.variantData.quantity == 0) {
             this.variantError = 'Please enter quantity';
             setTimeout(function () {
@@ -1072,30 +1188,52 @@ var ItemComponent = /** @class */ (function () {
             this.articleData.quantity = this.variantData.quantity;
             this.articleData.variant = this.variantData.variant;
             this.articleData.ordernote = this.variantData.notes;
-            this.articleData.step = this.globalService.getTabData().step;
+            this.articleData.step = currentStep;
             var data = this.orderService.getOrderData();
-            data.selectedItems.push(this.articleData);
-            for (var i = 0; i < data.categoryItems[this.globalService.getTabData().step].length; i++) {
-                if (data.categoryItems[this.globalService.getTabData().step][i]._id == this.articleData._id) {
-                    data.categoryItems[this.globalService.getTabData().step][i].itemTotal = data.categoryItems[this.globalService.getTabData().step][i].itemTotal + this.articleData.quantity;
+            data.selectedItems[currentStep].push(this.articleData);
+            for (var i = 0; i < data.categoryItems[currentStep].length; i++) {
+                if (data.categoryItems[currentStep][i]._id == this.articleData._id) {
+                    data.categoryItems[currentStep][i].itemTotal = data.categoryItems[currentStep][i].itemTotal + this.articleData.quantity;
                 }
             }
             var cp = 0;
             var itemno = 0;
             var varicost = 0;
-            for (var i = 0; i < data.selectedItems.length; i++) {
-                itemno += data.selectedItems[i].quantity;
-                if (data.selectedItems[i].variant) {
-                    for (var j = 0; j < data.selectedItems[i].variant.length; j++) {
-                        if (data.selectedItems[i].variant[j].status == 1) {
-                            varicost += data.selectedItems[i].variant[j].price;
+            var steps = [];
+            if (this.globalService.getStepData()) {
+                steps = this.globalService.getStepData();
+            }
+            else {
+                steps = ['Uscita 1', 'Uscita 2'];
+            }
+            for (var a = 0; a < steps.length; a++) {
+                for (var i = 0; i < data.selectedItems[steps[a]].length; i++) {
+                    itemno += data.selectedItems[steps[a]][i].quantity;
+                    if (data.selectedItems[steps[a]][i].variant) {
+                        for (var j = 0; j < data.selectedItems[steps[a]][i].variant.length; j++) {
+                            if (data.selectedItems[steps[a]][i].variant[j].status == 1) {
+                                varicost += data.selectedItems[steps[a]][i].variant[j].price;
+                            }
                         }
                     }
+                    cp += (data.selectedItems[steps[a]][i].price + varicost) * data.selectedItems[steps[a]][i].quantity;
+                    data.cartTotalPrice = cp;
+                    data.cartTotalItem = itemno;
                 }
-                cp += (data.selectedItems[i].price + varicost) * data.selectedItems[i].quantity;
-                data.cartTotalPrice = cp;
-                data.cartTotalItem = itemno;
             }
+            // for (let i = 0; i < data.selectedItems[currentStep].length; i++) {
+            //   itemno += data.selectedItems[currentStep][i].quantity;
+            //   if (data.selectedItems[currentStep][i].variant) {
+            //     for (let j = 0; j < data.selectedItems[currentStep][i].variant.length; j++) {
+            //       if (data.selectedItems[currentStep][i].variant[j].status == 1) {
+            //         varicost += data.selectedItems[currentStep][i].variant[j].price;
+            //       }
+            //     }
+            //   }
+            //   cp += (data.selectedItems[currentStep][i].price + varicost) * data.selectedItems[currentStep][i].quantity;
+            //   data.cartTotalPrice = cp;
+            //   data.cartTotalItem = itemno;
+            // }
             this.orderService.setOrderData(data);
             this.hideVarient();
             console.log('variant this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());

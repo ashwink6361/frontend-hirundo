@@ -74,25 +74,19 @@ export class StepsComponent implements OnInit {
   addStep() {
     let count = this.stepArray.length + 1;
     this.stepArray.push('Uscita ' + count);
+    let step = 'Uscita ' + count;    
     this.globalService.setStepData(this.stepArray);
     let orderdata = this.orderService.getOrderData();
     this.orderService.getCategoryItem().then(data => {
       if (data.data.length) {
         for (let i = 0; i < data.data.length; i++) {
+          orderdata.selectedItems[step] = [];                      
           if (orderdata.selectedCategory && data.data[i].category._id == orderdata.selectedCategory._id) {
-                let step = 'Uscita ' + count;
-            console.log('step+++++++++++++++', step);
-                
-                orderdata.categoryItems[step] = data.data[i].items;
-            console.log('orderdata.categoryItems[step]+++++++++++++++', orderdata.categoryItems[step]);
-                
-            console.log('orderdata.categoryItems+++++++++++++++', orderdata.categoryItems);
+            orderdata.categoryItems[step] = data.data[i].items;
             for (let j = 0; j < orderdata.categoryItems[step].length; j++) {
               orderdata.categoryItems[step][j].quantity = 0;
               orderdata.categoryItems[step][j].itemTotal = 0;
             }
-      console.log('orderdatasdgdjghjfxzddfgjfxgfzsddjfjhxgsdfjhxgfdjghfgjdhg+++++++++++++++', orderdata);      
-            
           }
         }
       }
