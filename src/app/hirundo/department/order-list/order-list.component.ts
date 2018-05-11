@@ -41,28 +41,28 @@ export class OrderListComponent implements OnInit {
                     let step = [];
                     for (let j = 0; j < this.orders[i].item.length; j++) {
                         if (((this.orders[i].item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(this.orders[i].item[j].category)) > -1)) {
-                            if(step.length){
-                                for(let b = 0;b<step.length;b++){
-                                    if(step[b].value !== this.orders[i].item[j].step){
+                            if (step.length) {
+                                for (let b = 0; b < step.length; b++) {
+                                    if (step[b].value !== this.orders[i].item[j].step) {
                                         let key = this.orders[i].item[j].step.split(' ');
                                         let newKey = Number(key[1]);
                                         let value = this.orders[i].item[j].step;
-                                        step.push({ id : newKey, value: value });  
+                                        step.push({ id: newKey, value: value });
                                     }
                                 }
                             }
-                            if(!step.length){
+                            if (!step.length) {
                                 let key = this.orders[i].item[j].step.split(' ');
                                 let newKey = Number(key[1]);
                                 let value = this.orders[i].item[j].step;
-                                step.push({ id : newKey, value: value });   
+                                step.push({ id: newKey, value: value });
                             }
                         }
                     }
-                    step.sort(function(a, b){
-                        return a.id-b.id
+                    step.sort(function (a, b) {
+                        return a.id - b.id
                     });
-                    step = _.uniqBy(step,'value');                    
+                    step = _.uniqBy(step, 'value');
                     this.steps[this.orders[i]._id] = step;
                     let time = {};
                     let delivered = {};
@@ -211,68 +211,63 @@ export class OrderListComponent implements OnInit {
         let timeInterval = 1000;
         let t = 0;
         let s = 60;
-        console.log('+++++++++++++++++++++++++++++++++',order._id+'_'+this.stepdata[order._id].step);
-        var elem = document.getElementById(order._id+'_'+this.stepdata[order._id].step);
-        console.log(elem, 'elem++++++++++++++++++++++++++++++++');        
+        // order._id+this.stepdata[order._id].step.replace(' ', '')
+        var elem = document.getElementById(order._id+this.stepdata[order._id].step.replace(' ', ''));
         var width = 0;
         var id = setInterval(() => {
             t = t + 1;
             seconds = seconds - 1;
             s = s - 1;
-            if (seconds == 0 || seconds < 0) {
+            if (seconds == 0) {
+                console.log(seconds, 'seconds');
                 clearInterval(id);
-                // this.showDeliveredButton[order._id][this.stepdata[order._id].step] = true;
-            } else {
-                width = width + w;
-                console.log(width);
-                if (width < 100) {
-                    console.log(elem, 'elem');
-                    elem.style.width = width + '%';
-                } else {
-                    elem.style.width = '100%';
-                    console.log('elem.style.width',elem.style.width);
-                    if(elem.style.width == '100%'){
-                        let items = [];
-                        for (let i = 0; i < order.item.length; i++) {
-                            for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
-                                if (((order.item[i].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(order.item[i].category)) > -1)) {
-                                    if (order.item[i].step == this.stepdata[order._id].step) {
-                                        order.item[i].status = status;
-                                        if (items.indexOf(order.item[i].id._id) < 0) {
-                                            items.push(order.item[i].id._id)
-                                        }
-                                    }
+                let items = [];
+                for (let i = 0; i < order.item.length; i++) {
+                    for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
+                        if (((order.item[i].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(order.item[i].category)) > -1)) {
+                            if (order.item[i].step == this.stepdata[order._id].step) {
+                                order.item[i].status = status;
+                                if (items.indexOf(order.item[i].id._id) < 0) {
+                                    items.push(order.item[i].id._id)
                                 }
                             }
                         }
-                        let opts = {
-                            status: 5,
-                            itemId: items,
-                            step: this.stepdata[order._id].step
-                        };
-                        this.websocketService.updateOrder(order._id, opts).then(data => {
-                            console.log("update step Item dept item updated+++++++++++++", data);
-                            for (let i = 0; i < this.orders.length; i++) {
-                                if (this.orders[i]._id == data.data._id) {
-                                    this.orders[i].step = data.data.step;
-                                }
-                            }
-                            console.log('this.orders',this.orders);
-                        }).catch(error => {
-                            console.log("error", error);
-                        });
                     }
-                    
                 }
-                // this.showDeliveredButton[order._id][this.stepdata[order._id].step] = false;
+                let opts = {
+                    status: 5,
+                    itemId: items,
+                    step: this.stepdata[order._id].step
+                };
+                this.websocketService.updateOrder(order._id, opts).then(data => {
+                    for (let i = 0; i < this.orders.length; i++) {
+                        if (this.orders[i]._id == data.data._id) {
+                            this.orders[i].step = data.data.step;
+                        }
+                    }
+                    console.log('this.orders', this.orders);
+                }).catch(error => {
+                    console.log("error", error);
+                });
+            } else {
+                width = width + w;
+                if (width < 100) {
+                    elem.style.width = width + '%';
+                } else {
+                    elem.style.width = '100%';
+                }
             }
             if (t == 60) {
                 t = 0;
-                s = 60;
-                m = m - 1;
+                if(m==0) {
+                    m = 0;
+                    s = 0;
+                } else {
+                    m = m-1;
+                    s = 60;
+                }
             }
             var minutes = m;
-            // var seconds = s;
             this.remainingTime[order._id][this.stepdata[order._id].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
         }, timeInterval);
 
@@ -301,7 +296,7 @@ export class OrderListComponent implements OnInit {
                     this.orders[i].step = data.data.step;
                 }
             }
-            console.log('this.orders',this.orders);
+            console.log('this.orders', this.orders);
         }).catch(error => {
             console.log("error", error);
         });
