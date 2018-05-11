@@ -143,7 +143,7 @@ export class ListComponent implements OnInit {
         let items = [];
         // items.push(item.id._id)
         let opts = {
-            stepStatus: step
+            step: step
             // itemId: items
         };
         this.websocketService.changeOrderStep(order._id, opts).then(data => {

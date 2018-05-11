@@ -19,8 +19,8 @@ export class WebsocketService {
     connect() {
         // If you aren't familiar with environment variables then
         // you can hard code `environment.ws_url` as `http://localhost:5000`
-        // this.socket = io('http://localhost:5051');
-        this.socket = io('http://52.209.187.183:5051');
+        this.socket = io('http://localhost:5051');
+        // this.socket = io('http://52.209.187.183:5051');
         if(this.socket.connected)
             console.log("Socket connection done ");
         let user = JSON.parse(localStorage.getItem('currentUser'));
@@ -54,7 +54,7 @@ export class WebsocketService {
                 }
             // }
         });
-        this.socket.on('tablestatus', (data) => {
+        this.socket.on('tablestatus', (data) => {            
             for (var i = 0; i < this._rooms.length; i++) {
                 if (data.room == this._rooms[i]._id) {
                     for (var j = 0; j < this._rooms[i].tables.length; j++) {
@@ -67,16 +67,17 @@ export class WebsocketService {
             }
         });
         this.socket.on('changeStep', (data) => {
-            for (var i = 0; i < this._rooms.length; i++) {
-                if (data.room == this._rooms[i]._id) {
-                    for (var j = 0; j < this._rooms[i].tables.length; j++) {
-                        if (data.table == this._rooms[i].tables[j]._id) {
-                            this._rooms[i].tables[j].status = data.status;
-                            break;
-                        }
-                    }
-                }
-            }
+            console.log(data, 'data');
+            // for (var i = 0; i < this._rooms.length; i++) {
+            //     if (data.room == this._rooms[i]._id) {
+            //         for (var j = 0; j < this._rooms[i].tables.length; j++) {
+            //             if (data.table == this._rooms[i].tables[j]._id) {
+            //                 this._rooms[i].tables[j].status = data.status;
+            //                 break;
+            //             }
+            //         }
+            //     }
+            // }
         });
     }
 

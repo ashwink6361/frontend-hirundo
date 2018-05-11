@@ -806,8 +806,8 @@ var WebsocketService = /** @class */ (function () {
         var _this = this;
         // If you aren't familiar with environment variables then
         // you can hard code `environment.ws_url` as `http://localhost:5000`
-        // this.socket = io('http://localhost:5051');
-        this.socket = __WEBPACK_IMPORTED_MODULE_1_socket_io_client__('http://52.209.187.183:5051');
+        this.socket = __WEBPACK_IMPORTED_MODULE_1_socket_io_client__('http://localhost:5051');
+        // this.socket = io('http://52.209.187.183:5051');
         if (this.socket.connected)
             console.log("Socket connection done ");
         var user = JSON.parse(localStorage.getItem('currentUser'));
@@ -854,16 +854,17 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('changeStep', function (data) {
-            for (var i = 0; i < _this._rooms.length; i++) {
-                if (data.room == _this._rooms[i]._id) {
-                    for (var j = 0; j < _this._rooms[i].tables.length; j++) {
-                        if (data.table == _this._rooms[i].tables[j]._id) {
-                            _this._rooms[i].tables[j].status = data.status;
-                            break;
-                        }
-                    }
-                }
-            }
+            console.log(data, 'data');
+            // for (var i = 0; i < this._rooms.length; i++) {
+            //     if (data.room == this._rooms[i]._id) {
+            //         for (var j = 0; j < this._rooms[i].tables.length; j++) {
+            //             if (data.table == this._rooms[i].tables[j]._id) {
+            //                 this._rooms[i].tables[j].status = data.status;
+            //                 break;
+            //             }
+            //         }
+            //     }
+            // }
         });
     };
     WebsocketService.prototype.getOrders = function () {

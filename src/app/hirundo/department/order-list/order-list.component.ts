@@ -24,6 +24,7 @@ export class OrderListComponent implements OnInit {
     public showToCall: Array<any> = [];
     public remainingTime: Array<any> = [];
     public orderStepData: {};
+    public barWidth: Array<any> = [];
     // public remainingTime: Array<any> = ['0:00'];
     // public showDeliveredButton: boolean[] = [false]; 
     // public showToCall: boolean[] = [false];     
@@ -252,9 +253,11 @@ export class OrderListComponent implements OnInit {
             } else {
                 width = width + w;
                 if (width < 100) {
+                    this.barWidth[this.stepdata[order._id].step.replace(' ', '')+order._id+index] = width + '%';
                     elem.style.width = width + '%';
                 } else {
                     elem.style.width = '100%';
+                    this.barWidth[this.stepdata[order._id].step.replace(' ', '')+order._id+index] = '100%';
                 }
             }
             if (t == 60) {

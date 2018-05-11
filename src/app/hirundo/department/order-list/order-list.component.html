@@ -20,7 +20,7 @@
             </div>
             <div class="step-listing">
                 <ul *ngIf="stepdata[order._id]">
-                    <li *ngFor="let step of steps[order._id]; let i = index;" (click)="selectedTab(steps[order._id][i].value,i,order._id)" [class.active]="steps[order._id][i].value == stepdata[order._id].step">{{step.value}}</li>
+                    <li *ngFor="let step of steps[order._id]; let i = index;" (click)="selectedTab(steps[order._id][i].value,i,order._id)" [class.active]="steps[order._id][i].value == stepdata[order._id].step" [class.completed]="steps[order._id][i].value == stepStatus">{{step.value}}</li>
                 </ul>
             </div>
             <div class="order-items-container">
@@ -70,10 +70,11 @@
         <div class="order-call-btn" *ngIf="order.step.length">
             <div *ngFor="let step of order.step; let indx = index;">
                 <div *ngIf="stepdata[order._id].step == step.step">
+                    {{width}}
                     <button type="submit" *ngIf="step.status == 0" (click)="updateStepItem(indx, order, times[order._id][stepdata[order._id].step], 4)">Start ({{times[order._id][stepdata[order._id].step]}}:00)</button>
                     <span *ngIf="stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 4)">Running {{remainingTime[order._id][stepdata[order._id].step]}}</span>
                     <button *ngIf="stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 5)" type="submit" (click)="updateStepItem(indx, order, times[order._id][stepdata[order._id].step], 1)">Completed</button>
-                    <div *ngIf="stepdata[order._id]" id="{{stepdata[order._id].step.replace(' ','')+order._id+indx}}" class="progress-btn"></div>
+                    <div *ngIf="stepdata[order._id]" id="{{stepdata[order._id].step.replace(' ','')+order._id+indx}}" [ngStyle]="{'width': barWidth[stepdata[order._id].step.replace(' ','')+order._id+indx]}" class="progress-btn"></div>
                     <button class="bg-yellow" *ngIf="stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 1)" type="submit" [disabled]="true">To Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>
                 </div>
             </div>
