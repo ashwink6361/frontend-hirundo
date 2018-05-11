@@ -1197,7 +1197,7 @@ header {
             position: relative;
         }
     }
-    span{
+    .running-label{
         width: 100%;
         background: #00b900;
         color: #fff;
@@ -1206,6 +1206,10 @@ header {
         padding: 10px 0;
         display: block;
         text-align: center;
+        .running{
+            z-index: 10;
+            position: relative;
+        }
     }
     .progress-btn{
         position: absolute;

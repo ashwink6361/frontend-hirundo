@@ -128,46 +128,7 @@ export class OrderListComponent implements OnInit {
         return str;
     };
 
-    public updateOrder(order, time, status) {
-        // this.showToCall[order._id][this.stepdata[order._id].step] = false; 
-        // let m = time - 1;
-        // let seconds = time * 60;
-        // let w = parseFloat((100/seconds).toFixed(2));
-        // let timeInterval = 1000;
-        // let t = 0;
-        // let s = 60;
-        // var elem = document.getElementById(this.stepdata[order._id].step);
-        // var width = 0;
-        // var id = setInterval(() => {
-        //     t = t + 1;
-        //     seconds = seconds-1;
-        //     console.log(seconds, 'seconds =====')
-        //     s = s-1;
-        //     if(seconds == 0 || seconds<0) {   
-        //         clearInterval(id);
-        //         this.showDeliveredButton[order._id][this.stepdata[order._id].step] = true;            
-        //     } else {
-        //         width = width + w;
-        //         console.log(width);
-        //         if(width < 100){
-        //             elem.style.width = width + '%';
-        //         } else {
-        //             elem.style.width = '100%';
-        //         }
-        //         this.showDeliveredButton[order._id][this.stepdata[order._id].step] = false;
-        //     }
-        //     if (t == 60) {
-        //         t = 0;
-        //         s = 60;
-        //         m = m-1;
-        //     }
-        //     var minutes = m;
-        //     var seconds = s;
-        //     console.log(seconds, 'seconds =====++++++')
-
-        //     this.remainingTime[order._id][this.stepdata[order._id].step] = (minutes<10?('0'+minutes):minutes) + ":" + (seconds<10?('0'+seconds):seconds);
-        // }, timeInterval);
-
+    public updateOrder(order, time, status) {        
         order.status = status;
         let items = [];
         for (let i = 0; i < order.item.length; i++) {
@@ -213,7 +174,6 @@ export class OrderListComponent implements OnInit {
         let t = 0;
         let s = 60;
         console.log(this.stepdata[order._id].step.replace(' ', '')+order._id+index);
-        var elem = document.getElementById(this.stepdata[order._id].step.replace(' ', '')+order._id+index);
         var width = 0;
         var id = setInterval(() => {
             t = t + 1;
@@ -254,9 +214,7 @@ export class OrderListComponent implements OnInit {
                 width = width + w;
                 if (width < 100) {
                     this.barWidth[this.stepdata[order._id].step.replace(' ', '')+order._id+index] = width + '%';
-                    elem.style.width = width + '%';
                 } else {
-                    elem.style.width = '100%';
                     this.barWidth[this.stepdata[order._id].step.replace(' ', '')+order._id+index] = '100%';
                 }
             }
