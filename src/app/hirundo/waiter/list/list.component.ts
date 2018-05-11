@@ -137,6 +137,21 @@ export class ListComponent implements OnInit {
         });
     };
 
+
+    public changeStep(order, step) {
+        // item.status = status;
+        let items = [];
+        // items.push(item.id._id)
+        let opts = {
+            stepStatus: step
+            // itemId: items
+        };
+        this.websocketService.changeOrderStep(order._id, opts).then(data => {
+        }).catch(error => {
+            console.log("error", error);
+        });
+    };
+
     selectedTab(step, tab, orderId) {
         // this.activetab[tab] = true;
         // for (let i = 0; i < this.activetab.length; i++) {

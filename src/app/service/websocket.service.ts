@@ -66,6 +66,18 @@ export class WebsocketService {
                 }
             }
         });
+        this.socket.on('changeStep', (data) => {
+            for (var i = 0; i < this._rooms.length; i++) {
+                if (data.room == this._rooms[i]._id) {
+                    for (var j = 0; j < this._rooms[i].tables.length; j++) {
+                        if (data.table == this._rooms[i].tables[j]._id) {
+                            this._rooms[i].tables[j].status = data.status;
+                            break;
+                        }
+                    }
+                }
+            }
+        });
     }
 
     public getOrders(): Promise<any> {
@@ -132,6 +144,16 @@ export class WebsocketService {
     }
     public updateWaiterOrder(id, opts): Promise<any> {
         let url = '/api/waiter/orders/'+id;
+        return this.http.put(url,opts).toPromise()
+          .then(data => {
+            return data.json();
+          })
+          .catch(error => {
+            return error;
+          });
+    }
+    public changeOrderStep(id, opts): Promise<any> {
+        let url = '/api/orderStep/'+id;
         return this.http.put(url,opts).toPromise()
           .then(data => {
             return data.json();

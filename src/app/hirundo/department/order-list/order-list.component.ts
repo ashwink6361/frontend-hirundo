@@ -203,7 +203,7 @@ export class OrderListComponent implements OnInit {
         });
     };
 
-    public updateStepItem(order, time, status) {
+    public updateStepItem(index, order, time, status) {
         this.showToCall[order._id][this.stepdata[order._id].step] = false;
         let m = time - 1;
         let seconds = time * 60;
@@ -211,8 +211,8 @@ export class OrderListComponent implements OnInit {
         let timeInterval = 1000;
         let t = 0;
         let s = 60;
-        // order._id+this.stepdata[order._id].step.replace(' ', '')
-        var elem = document.getElementById(order._id+this.stepdata[order._id].step.replace(' ', ''));
+        console.log(this.stepdata[order._id].step.replace(' ', '')+order._id+index);
+        var elem = document.getElementById(this.stepdata[order._id].step.replace(' ', '')+order._id+index);
         var width = 0;
         var id = setInterval(() => {
             t = t + 1;

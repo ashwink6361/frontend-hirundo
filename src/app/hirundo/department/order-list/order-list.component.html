@@ -68,12 +68,12 @@
             <button *ngIf="stepdata[order._id] && showToCall[order._id][stepdata[order._id].step] && !showDeliveredButton[order._id][stepdata[order._id].step]" type="submit" [disabled]="true">To Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>
         </div> -->
         <div class="order-call-btn" *ngIf="order.step.length">
-            <div *ngFor="let step of order.step">
+            <div *ngFor="let step of order.step; let indx = index;">
                 <div *ngIf="stepdata[order._id].step == step.step">
-                    <button type="submit" *ngIf="step.status == 0" (click)="updateStepItem(order, times[order._id][stepdata[order._id].step], 4)">Start ({{times[order._id][stepdata[order._id].step]}}:00)</button>
+                    <button type="submit" *ngIf="step.status == 0" (click)="updateStepItem(indx, order, times[order._id][stepdata[order._id].step], 4)">Start ({{times[order._id][stepdata[order._id].step]}}:00)</button>
                     <span *ngIf="stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 4)">Running {{remainingTime[order._id][stepdata[order._id].step]}}</span>
-                    <button *ngIf="stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 5)" type="submit" (click)="updateStepItem(order, times[order._id][stepdata[order._id].step], 1)">Completed</button>
-                    <div *ngIf="stepdata[order._id]" id="{{order._id}}{{stepdata[order._id].step.replace(' ','')}}" class="progress-btn"></div>
+                    <button *ngIf="stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 5)" type="submit" (click)="updateStepItem(indx, order, times[order._id][stepdata[order._id].step], 1)">Completed</button>
+                    <div *ngIf="stepdata[order._id]" id="{{stepdata[order._id].step.replace(' ','')+order._id+indx}}" class="progress-btn"></div>
                     <button class="bg-yellow" *ngIf="stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 1)" type="submit" [disabled]="true">To Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>
                 </div>
             </div>

@@ -853,6 +853,18 @@ var WebsocketService = /** @class */ (function () {
                 }
             }
         });
+        this.socket.on('changeStep', function (data) {
+            for (var i = 0; i < _this._rooms.length; i++) {
+                if (data.room == _this._rooms[i]._id) {
+                    for (var j = 0; j < _this._rooms[i].tables.length; j++) {
+                        if (data.table == _this._rooms[i].tables[j]._id) {
+                            _this._rooms[i].tables[j].status = data.status;
+                            break;
+                        }
+                    }
+                }
+            }
+        });
     };
     WebsocketService.prototype.getOrders = function () {
         var _this = this;
@@ -921,6 +933,16 @@ var WebsocketService = /** @class */ (function () {
     };
     WebsocketService.prototype.updateWaiterOrder = function (id, opts) {
         var url = '/api/waiter/orders/' + id;
+        return this.http.put(url, opts).toPromise()
+            .then(function (data) {
+            return data.json();
+        })
+            .catch(function (error) {
+            return error;
+        });
+    };
+    WebsocketService.prototype.changeOrderStep = function (id, opts) {
+        var url = '/api/orderStep/' + id;
         return this.http.put(url, opts).toPromise()
             .then(function (data) {
             return data.json();
