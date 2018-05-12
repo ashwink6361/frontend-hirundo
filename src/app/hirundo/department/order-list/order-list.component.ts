@@ -97,6 +97,18 @@ export class OrderListComponent implements OnInit {
                         this.stepdata[this.orderId[k]] = temp;
                     }
                 }
+                // if (this.orders && this.orders.length) {
+                //     for (let k = 0; k < this.orders.length; k++) {
+                //         if(this.orders[k].stepStatus != null){
+                //             var tabTemp =this.orders[k].stepStatus.split(' ')[1];
+                //             let temp = {
+                //                 tab: tabTemp + 1,
+                //                 step: this.orders[k].stepStatus,
+                //             }
+                //             this.stepdata[this.orders[k]._id] = temp;
+                //         }
+                //     }
+                // }
             }
             this.loadingOrders = false;
         })
@@ -256,6 +268,21 @@ export class OrderListComponent implements OnInit {
                 if (this.orders[i]._id == data.data._id) {
                     this.orders[i].step = data.data.step;
                 }
+                // if(this.orders[i].step){
+                //     for(let j=0;j<this.orders[i].step.length;j++){
+                //         if(this.orders[i]._id == order._id && this.orders[i].step[j].status == 1){
+                //             let temparray = this.orders[i].step[j].step.split(' ');
+                //             let tabTemp = temparray[1];
+                //             let stepTemp = temparray[0]+' '+Number(temparray[1])+1;
+                //             let temp = {
+                //                 tab: tabTemp,
+                //                 step: stepTemp,
+                //             }
+                //             this.stepdata[this.orders[i]._id] = temp;
+                //             console.log('this.stepdata',this.stepdata);
+                //         }
+                //     }
+                // }
             }
             console.log('this.orders', this.orders);
         }).catch(error => {
@@ -268,7 +295,7 @@ export class OrderListComponent implements OnInit {
             tab: tab,
             step: step
         }
-        this.stepdata[orderId] = temp;
+        this.stepdata[orderId] = temp;        
     }
 
     public updateDeliveredOrder(order) {

@@ -58,7 +58,7 @@
                 </div> -->
         </div>
         <div class="order-call-btn">
-            <button *ngIf="stepdata[order._id]" type="submit" (click)="changeStep(order, stepdata[order._id].step)">Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>
+            <button *ngIf="stepdata[order._id] && stepdata[order._id].step != 'Uscita 1' " type="submit" (click)="changeStep(order, stepdata[order._id].step)">Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>
         </div>
     </div>
     <!-- </div> -->
