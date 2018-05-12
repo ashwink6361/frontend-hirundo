@@ -172,6 +172,7 @@ export class CartComponent implements OnInit {
           data.selectedItems[currentStep].splice(i, 1);
         }
       }
+    }
       let cp = 0;
       let itemno = 0;
       let varicost = 0;
@@ -230,7 +231,7 @@ export class CartComponent implements OnInit {
       // }
       this.orderService.setOrderData(data);
       // this.items = this.orderService.getOrderData().selectedItems;
-    }
+    // }
   }
 
   gotToCategoryList(){
