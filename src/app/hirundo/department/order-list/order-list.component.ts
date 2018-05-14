@@ -292,7 +292,7 @@ export class OrderListComponent implements DoCheck {
                     order.step = data.data.step;
                 // }
                 if(order.step){
-                    for(let j=0;j<order.step.length;j++){
+                    for(let j=0;j<order.step.length-1;j++){
                         if(order.step[j].status == 1){
                             let temparray = order.step[j].step.split(' ');
                             let num = Number(temparray[1]);
