@@ -40,7 +40,6 @@ var map = {
 	],
 	"./order-list/order-list.module": [
 		"../../../../../src/app/hirundo/department/order-list/order-list.module.ts",
-		"common",
 		"order-list.module"
 	],
 	"./order/order.module": [
@@ -855,16 +854,11 @@ var WebsocketService = /** @class */ (function () {
         });
         this.socket.on('changeStep', function (data) {
             console.log(data, 'data');
-            // for (var i = 0; i < this._rooms.length; i++) {
-            //     if (data.room == this._rooms[i]._id) {
-            //         for (var j = 0; j < this._rooms[i].tables.length; j++) {
-            //             if (data.table == this._rooms[i].tables[j]._id) {
-            //                 this._rooms[i].tables[j].status = data.status;
-            //                 break;
-            //             }
-            //         }
-            //     }
-            // }
+            for (var i = 0; i < _this._orders.length; i++) {
+                if (data._id === _this._orders[i]._id) {
+                    _this._orders[i].stepStatus = data.stepStatus;
+                }
+            }
         });
     };
     WebsocketService.prototype.getOrders = function () {
