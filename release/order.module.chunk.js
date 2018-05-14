@@ -211,65 +211,66 @@ var CartComponent = /** @class */ (function () {
                     data.selectedItems[currentStep].splice(i, 1);
                 }
             }
-            var cp = 0;
-            var itemno = 0;
-            var varicost = 0;
-            var steps = [];
-            if (this.globalService.getStepData()) {
-                steps = this.globalService.getStepData();
-            }
-            else {
-                steps = ['Uscita 1', 'Uscita 2'];
-            }
-            var emptyArray = [];
-            for (var a = 0; a < steps.length; a++) {
-                if (data.selectedItems[steps[a]].length) {
-                    for (var i_1 = 0; i_1 < data.selectedItems[steps[a]].length; i_1++) {
-                        itemno += data.selectedItems[steps[a]][i_1].quantity;
-                        if (data.selectedItems[steps[a]][i_1].variant) {
-                            for (var j = 0; j < data.selectedItems[steps[a]][i_1].variant.length; j++) {
-                                if (data.selectedItems[steps[a]][i_1].variant[j].status == 1) {
-                                    varicost += data.selectedItems[steps[a]][i_1].variant[j].price;
-                                }
+        }
+        var cp = 0;
+        var itemno = 0;
+        var varicost = 0;
+        var steps = [];
+        if (this.globalService.getStepData()) {
+            steps = this.globalService.getStepData();
+        }
+        else {
+            steps = ['Uscita 1', 'Uscita 2'];
+        }
+        var emptyArray = [];
+        for (var a = 0; a < steps.length; a++) {
+            if (data.selectedItems[steps[a]].length) {
+                for (var i = 0; i < data.selectedItems[steps[a]].length; i++) {
+                    itemno += data.selectedItems[steps[a]][i].quantity;
+                    if (data.selectedItems[steps[a]][i].variant) {
+                        for (var j = 0; j < data.selectedItems[steps[a]][i].variant.length; j++) {
+                            if (data.selectedItems[steps[a]][i].variant[j].status == 1) {
+                                varicost += data.selectedItems[steps[a]][i].variant[j].price;
                             }
                         }
-                        cp += (data.selectedItems[steps[a]][i_1].price + varicost) * data.selectedItems[steps[a]][i_1].quantity;
-                        data.cartTotalPrice = cp;
-                        data.cartTotalItem = itemno;
                     }
-                }
-                if (data.selectedItems[steps[a]].length == 0) {
-                    if (emptyArray.indexOf(steps[a]) < 0) {
-                        emptyArray.push(steps[a]);
-                    }
-                }
-                if (emptyArray.length == steps.length) {
-                    data.cartTotalPrice = 0;
-                    data.cartTotalItem = 0;
+                    cp += (data.selectedItems[steps[a]][i].price + varicost) * data.selectedItems[steps[a]][i].quantity;
+                    data.cartTotalPrice = cp;
+                    data.cartTotalItem = itemno;
                 }
             }
-            // if (data.selectedItems[currentStep].length) {
-            //   for (let i = 0; i < data.selectedItems[currentStep].length; i++) {
-            //     itemno += data.selectedItems[currentStep][i].quantity;
-            //     if (data.selectedItems[currentStep][i].variant) {
-            //       for (let j = 0; j < data.selectedItems[currentStep][i].variant.length; j++) {
-            //         if (data.selectedItems[currentStep][i].variant[j].status == 1) {
-            //           varicost += data.selectedItems[currentStep][i].variant[j].price;
-            //         }
-            //       }
-            //     }
-            //     cp += (data.selectedItems[currentStep][i].price + varicost) * data.selectedItems[currentStep][i].quantity;
-            //     data.cartTotalPrice = cp;
-            //     data.cartTotalItem = itemno;
-            //   }
-            // }
-            // else {
-            //   data.cartTotalPrice = 0;
-            //   data.cartTotalItem = 0;
-            // }
-            this.orderService.setOrderData(data);
-            // this.items = this.orderService.getOrderData().selectedItems;
+            if (data.selectedItems[steps[a]].length == 0) {
+                if (emptyArray.indexOf(steps[a]) < 0) {
+                    emptyArray.push(steps[a]);
+                }
+            }
+            if (emptyArray.length == steps.length) {
+                data.cartTotalPrice = 0;
+                data.cartTotalItem = 0;
+            }
         }
+        // if (data.selectedItems[currentStep].length) {
+        //   for (let i = 0; i < data.selectedItems[currentStep].length; i++) {
+        //     itemno += data.selectedItems[currentStep][i].quantity;
+        //     if (data.selectedItems[currentStep][i].variant) {
+        //       for (let j = 0; j < data.selectedItems[currentStep][i].variant.length; j++) {
+        //         if (data.selectedItems[currentStep][i].variant[j].status == 1) {
+        //           varicost += data.selectedItems[currentStep][i].variant[j].price;
+        //         }
+        //       }
+        //     }
+        //     cp += (data.selectedItems[currentStep][i].price + varicost) * data.selectedItems[currentStep][i].quantity;
+        //     data.cartTotalPrice = cp;
+        //     data.cartTotalItem = itemno;
+        //   }
+        // }
+        // else {
+        //   data.cartTotalPrice = 0;
+        //   data.cartTotalItem = 0;
+        // }
+        this.orderService.setOrderData(data);
+        // this.items = this.orderService.getOrderData().selectedItems;
+        // }
     };
     CartComponent.prototype.gotToCategoryList = function () {
         this.router.navigate(['/waiter/order/:id/choose-category']);
