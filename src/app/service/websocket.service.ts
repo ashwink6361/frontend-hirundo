@@ -68,16 +68,11 @@ export class WebsocketService {
         });
         this.socket.on('changeStep', (data) => {
             console.log(data, 'data');
-            // for (var i = 0; i < this._rooms.length; i++) {
-            //     if (data.room == this._rooms[i]._id) {
-            //         for (var j = 0; j < this._rooms[i].tables.length; j++) {
-            //             if (data.table == this._rooms[i].tables[j]._id) {
-            //                 this._rooms[i].tables[j].status = data.status;
-            //                 break;
-            //             }
-            //         }
-            //     }
-            // }
+            for(var i=0; i<this._orders.length; i++) {
+                if(data._id === this._orders[i]._id) {
+                    this._orders[i].stepStatus = data.stepStatus;
+                }
+            }
         });
     }
 
