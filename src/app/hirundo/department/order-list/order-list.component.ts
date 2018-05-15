@@ -188,7 +188,7 @@ export class OrderListComponent implements DoCheck {
         });
     };
 
-    public updateStepItem(index, order, time, status) {
+    public updateStepItem(step, index, order, time, status) {
         let m = time - 1;
         let seconds = time * 60;
         let w = parseFloat((100 / seconds).toFixed(2));
@@ -197,59 +197,61 @@ export class OrderListComponent implements DoCheck {
         let s = 60;
         var width = 0;
         var id = setInterval(() => {
-            t = t + 1;
-            seconds = seconds - 1;
-            s = s - 1;
-            if (seconds == 0 && order.status != 1) {
-                clearInterval(id);
-                let items = [];
-                for (let i = 0; i < order.item.length; i++) {
-                    for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
-                        if (((order.item[i].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(order.item[i].category)) > -1)) {
-                            if (order.item[i].step == this.stepdata[order._id].step) {
-                                order.item[i].status = status;
-                                if (items.indexOf(order.item[i].id._id) < 0) {
-                                    items.push(order.item[i].id._id)
+            if(order.status != 1 && step.step == this.stepdata[order._id].step){
+                t = t + 1;
+                seconds = seconds - 1;
+                s = s - 1;
+                if (seconds == 0 && order.status != 1 && step.step == this.stepdata[order._id].step) {
+                    clearInterval(id);
+                    let items = [];
+                    for (let i = 0; i < order.item.length; i++) {
+                        for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
+                            if (((order.item[i].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(order.item[i].category)) > -1)) {
+                                if (order.item[i].step == this.stepdata[order._id].step) {
+                                    order.item[i].status = status;
+                                    if (items.indexOf(order.item[i].id._id) < 0) {
+                                        items.push(order.item[i].id._id)
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                let temp = {
-                    status: 5,
-                    itemId: items,
-                    step: this.stepdata[order._id].step
-                };
-                    this.websocketService.updateOrder(order._id, temp).then(data => {
-                        order.status = data.data.status;
-                        for (let i = 0; i < this.orders.length; i++) {
-                            if (this.orders[i]._id == data.data._id) {
-                                this.orders[i].step = data.data.step;
+                    let temp = {
+                        status: 5,
+                        itemId: items,
+                        step: this.stepdata[order._id].step
+                    };
+                        this.websocketService.updateOrder(order._id, temp).then(data => {
+                            order.status = data.data.status;
+                            for (let i = 0; i < this.orders.length; i++) {
+                                if (this.orders[i]._id == data.data._id) {
+                                    this.orders[i].step = data.data.step;
+                                }
                             }
-                        }
-                    }).catch(error => {
-                        console.log("error", error);
-                    });
-            } else {
-                width = width + w;
-                if (width < 100) {
-                    this.barWidth[this.stepdata[order._id].step.replace(' ', '')+order._id+index] = width + '%';
+                        }).catch(error => {
+                            console.log("error", error);
+                        });
                 } else {
-                    this.barWidth[this.stepdata[order._id].step.replace(' ', '')+order._id+index] = '100%';
+                    width = width + w;
+                    if (width < 100) {
+                        this.barWidth[step.step.replace(' ', '')+order._id+index] = width + '%';
+                    } else {
+                        this.barWidth[step.step.replace(' ', '')+order._id+index] = '100%';
+                    }
                 }
-            }
-            if (t == 60) {
-                t = 0;
-                if(m==0) {
-                    m = 0;
-                    s = 0;
-                } else {
-                    m = m-1;
-                    s = 60;
+                if (t == 60) {
+                    t = 0;
+                    if(m==0) {
+                        m = 0;
+                        s = 0;
+                    } else {
+                        m = m-1;
+                        s = 60;
+                    }
                 }
+                var minutes = m;
+                this.remainingTime[order._id][this.stepdata[order._id].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
             }
-            var minutes = m;
-            this.remainingTime[order._id][this.stepdata[order._id].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
         }, timeInterval);
 
         let items = [];

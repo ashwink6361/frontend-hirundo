@@ -2,7 +2,7 @@
 <div *ngIf="orders && orders.length" class="order-list-container">
     <!-- <div *ngIf="orders && orders.length"> -->
     <div class="card order-list" *ngFor="let order of orders">
-        <div class="card-body" [class.opacity]="order.status == 3" [class.disabled]="order.status == 1 || order.status == 3">
+        <div class="card-body" [class.opacity]="order.status == 3">
             <h4 class="card-title">
                 <div>
                     <img src="assets/images/table.png" alt="">
@@ -57,8 +57,15 @@
                     <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 1)">Delivered</button>
                 </div> -->
         </div>
-        <div class="order-call-btn">
+        <!-- <div class="order-call-btn">
             <button *ngIf="stepdata[order._id] && stepdata[order._id].step != 'Uscita 1' " type="submit" (click)="changeStep(order, stepdata[order._id].step)">Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>
+        </div> -->
+        <div class="order-call-btn" *ngIf="order.step.length">
+            <div *ngFor="let step of order.step; let indx = index;">
+                <div *ngIf="stepdata[order._id].step == step.step">
+                    <button *ngIf="stepdata[order._id] && stepdata[order._id].step != 'Uscita 1' && step.status != 1" type="submit" (click)="changeStep(order, stepdata[order._id].step)">Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>
+                </div>
+            </div>
         </div>
     </div>
     <!-- </div> -->
