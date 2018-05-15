@@ -232,6 +232,9 @@ var ListComponent = /** @class */ (function () {
     };
     ;
     ListComponent.prototype.selectedTab = function (step, tab, orderId) {
+        console.log('step', step);
+        console.log('tab', tab);
+        console.log('orderId', orderId);
         var temp = {
             tab: tab,
             step: step

@@ -237,7 +237,7 @@ var OrderListComponent = /** @class */ (function () {
             t = t + 1;
             seconds = seconds - 1;
             s = s - 1;
-            if (seconds == 0) {
+            if (seconds == 0 && order.status != 1) {
                 clearInterval(id);
                 var items_1 = [];
                 for (var i = 0; i < order.item.length; i++) {
@@ -252,12 +252,13 @@ var OrderListComponent = /** @class */ (function () {
                         }
                     }
                 }
-                var opts_1 = {
+                var temp = {
                     status: 5,
                     itemId: items_1,
                     step: _this.stepdata[order._id].step
                 };
-                _this.websocketService.updateOrder(order._id, opts_1).then(function (data) {
+                _this.websocketService.updateOrder(order._id, temp).then(function (data) {
+                    order.status = data.data.status;
                     for (var i = 0; i < _this.orders.length; i++) {
                         if (_this.orders[i]._id == data.data._id) {
                             _this.orders[i].step = data.data.step;
@@ -309,7 +310,7 @@ var OrderListComponent = /** @class */ (function () {
             step: this.stepdata[order._id].step
         };
         this.websocketService.updateOrder(order._id, opts).then(function (data) {
-            console.log("update step Item dept item updated+++++++++++++", data);
+            order.status = data.data.status;
             order.step = data.data.step;
             if (order.step) {
                 for (var j = 0; j < order.step.length - 1; j++) {

@@ -805,8 +805,8 @@ var WebsocketService = /** @class */ (function () {
         var _this = this;
         // If you aren't familiar with environment variables then
         // you can hard code `environment.ws_url` as `http://localhost:5000`
-        //this.socket = io('http://localhost:5051');
-        this.socket = __WEBPACK_IMPORTED_MODULE_1_socket_io_client__('http://52.209.187.183:5051');
+        this.socket = __WEBPACK_IMPORTED_MODULE_1_socket_io_client__('http://localhost:5051');
+        //  this.socket = io('http://52.209.187.183:5051');
         if (this.socket.connected)
             console.log("Socket connection done ");
         var user = JSON.parse(localStorage.getItem('currentUser'));
@@ -830,6 +830,12 @@ var WebsocketService = /** @class */ (function () {
             // if(data.by.id !== user._id) {
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data.id === _this._orders[i]._id) {
+                    var userType = _this.authGuard.getCurrentUser().userType;
+                    if (userType == 3) {
+                        _this._orders[i].step = data.step;
+                    }
+                    console.log(_this._orders[i].step, 'this._orders[i].step');
+                    _this._orders[i].stepStatus = data.stepStatus;
                     _this._orders[i].status = data.status;
                     for (var j = 0; j < _this._orders[i].item.length; j++) {
                         if (data.order.itemId === _this._orders[i].item[j].id._id) {

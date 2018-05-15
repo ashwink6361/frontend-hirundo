@@ -200,7 +200,7 @@ export class OrderListComponent implements DoCheck {
             t = t + 1;
             seconds = seconds - 1;
             s = s - 1;
-            if (seconds == 0) {
+            if (seconds == 0 && order.status != 1) {
                 clearInterval(id);
                 let items = [];
                 for (let i = 0; i < order.item.length; i++) {
@@ -215,20 +215,21 @@ export class OrderListComponent implements DoCheck {
                         }
                     }
                 }
-                let opts = {
+                let temp = {
                     status: 5,
                     itemId: items,
                     step: this.stepdata[order._id].step
                 };
-                this.websocketService.updateOrder(order._id, opts).then(data => {
-                    for (let i = 0; i < this.orders.length; i++) {
-                        if (this.orders[i]._id == data.data._id) {
-                            this.orders[i].step = data.data.step;
+                    this.websocketService.updateOrder(order._id, temp).then(data => {
+                        order.status = data.data.status;
+                        for (let i = 0; i < this.orders.length; i++) {
+                            if (this.orders[i]._id == data.data._id) {
+                                this.orders[i].step = data.data.step;
+                            }
                         }
-                    }
-                }).catch(error => {
-                    console.log("error", error);
-                });
+                    }).catch(error => {
+                        console.log("error", error);
+                    });
             } else {
                 width = width + w;
                 if (width < 100) {
@@ -270,7 +271,7 @@ export class OrderListComponent implements DoCheck {
             step: this.stepdata[order._id].step
         };
         this.websocketService.updateOrder(order._id, opts).then(data => {
-            console.log("update step Item dept item updated+++++++++++++", data);
+            order.status = data.data.status;
             order.step = data.data.step;
             if (order.step) {
                 for (let j = 0; j < order.step.length - 1; j++) {

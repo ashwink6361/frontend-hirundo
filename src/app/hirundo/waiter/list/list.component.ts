@@ -188,6 +188,10 @@ export class ListComponent implements DoCheck {
     };
 
     selectedTab(step, tab, orderId) {
+        console.log('step',step);
+        console.log('tab',tab);
+        console.log('orderId',orderId);
+        
         let temp = {
             tab: tab,
             step: step

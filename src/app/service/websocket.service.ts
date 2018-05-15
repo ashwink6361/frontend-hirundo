@@ -19,8 +19,8 @@ export class WebsocketService {
     connect() {
         // If you aren't familiar with environment variables then
         // you can hard code `environment.ws_url` as `http://localhost:5000`
-        //this.socket = io('http://localhost:5051');
-         this.socket = io('http://52.209.187.183:5051');
+        this.socket = io('http://localhost:5051');
+        //  this.socket = io('http://52.209.187.183:5051');
         if(this.socket.connected)
             console.log("Socket connection done ");
         let user = JSON.parse(localStorage.getItem('currentUser'));
@@ -44,6 +44,12 @@ export class WebsocketService {
             // if(data.by.id !== user._id) {
                 for(var i=0; i<this._orders.length; i++) {
                     if(data.id === this._orders[i]._id) {
+                        let userType = this.authGuard.getCurrentUser().userType;
+                        if (userType == 3) {
+                            this._orders[i].step = data.step;
+                        }
+                        console.log(this._orders[i].step, 'this._orders[i].step');
+                        this._orders[i].stepStatus = data.stepStatus;
                         this._orders[i].status = data.status;
                         for(var j=0; j<this._orders[i].item.length; j++) {
                             if(data.order.itemId === this._orders[i].item[j].id._id) {
