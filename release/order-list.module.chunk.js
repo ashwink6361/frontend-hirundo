@@ -46,10 +46,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var OrderListComponent = /** @class */ (function () {
-    // public remainingTime: Array<any> = ['0:00'];
-    // public showDeliveredButton: boolean[] = [false]; 
-    // public showToCall: boolean[] = [false];     
-    // public times = {};          
     function OrderListComponent(websocketService, authGuard, differs) {
         this.websocketService = websocketService;
         this.authGuard = authGuard;
@@ -71,7 +67,6 @@ var OrderListComponent = /** @class */ (function () {
         var _this = this;
         this.websocketService.getOrders().then(function (data) {
             _this.orders = data;
-            console.log(_this.orders, 'orderlist pagfe');
             if (_this.orders.length) {
                 for (var i = 0; i < _this.orders.length; i++) {
                     var time = {};
@@ -94,7 +89,6 @@ var OrderListComponent = /** @class */ (function () {
                                 step: stepTemp,
                             };
                             _this.stepdata[_this.orders[i]._id] = temp_1;
-                            console.log('this.stepdata', _this.stepdata);
                         }
                         else {
                             var tempp = {
@@ -134,8 +128,6 @@ var OrderListComponent = /** @class */ (function () {
                     // step = _.uniqBy(step, 'value');
                     // this.steps[this.orders[i]._id] = step;
                     // let time = {};
-                    // let delivered = {};
-                    // let call = {};
                     // let remtime = {};
                     // for (let k = 0; k < this.steps[this.orders[i]._id].length; k++) {
                     //     let temp = [];
@@ -145,13 +137,9 @@ var OrderListComponent = /** @class */ (function () {
                     //         }
                     //     }
                     //     time[this.steps[this.orders[i]._id][k].value] = Math.max(...temp);
-                    //     delivered[this.steps[this.orders[i]._id][k].value] = false;
-                    //     call[this.steps[this.orders[i]._id][k].value] = false;
                     //     remtime[this.steps[this.orders[i]._id][k].value] = '0:00';
                     // }
                     _this.times[_this.orders[i]._id] = time;
-                    // this.showDeliveredButton[this.orders[i]._id] = delivered;
-                    // this.showToCall[this.orders[i]._id] = call;
                     _this.remainingTime[_this.orders[i]._id] = remtime;
                 }
                 // if (this.orderId && this.orderId.length) {
@@ -238,21 +226,18 @@ var OrderListComponent = /** @class */ (function () {
     ;
     OrderListComponent.prototype.updateStepItem = function (index, order, time, status) {
         var _this = this;
-        // this.showToCall[order._id][this.stepdata[order._id].step] = false;
         var m = time - 1;
         var seconds = time * 60;
         var w = parseFloat((100 / seconds).toFixed(2));
         var timeInterval = 1000;
         var t = 0;
         var s = 60;
-        console.log(this.stepdata[order._id].step.replace(' ', '') + order._id + index);
         var width = 0;
         var id = setInterval(function () {
             t = t + 1;
             seconds = seconds - 1;
             s = s - 1;
             if (seconds == 0) {
-                console.log(seconds, 'seconds');
                 clearInterval(id);
                 var items_1 = [];
                 for (var i = 0; i < order.item.length; i++) {
@@ -278,7 +263,6 @@ var OrderListComponent = /** @class */ (function () {
                             _this.orders[i].step = data.data.step;
                         }
                     }
-                    console.log('this.orders', _this.orders);
                 }).catch(function (error) {
                     console.log("error", error);
                 });
@@ -326,10 +310,7 @@ var OrderListComponent = /** @class */ (function () {
         };
         this.websocketService.updateOrder(order._id, opts).then(function (data) {
             console.log("update step Item dept item updated+++++++++++++", data);
-            // for (let i = 0; i < this.orders.length; i++) {
-            // if (this.orders[i]._id == data.data._id) {
             order.step = data.data.step;
-            // }
             if (order.step) {
                 for (var j = 0; j < order.step.length - 1; j++) {
                     if (order.step[j].status == 1) {
@@ -341,12 +322,9 @@ var OrderListComponent = /** @class */ (function () {
                             step: stepTemp,
                         };
                         _this.stepdata[order._id] = temp;
-                        console.log('this.stepdata', _this.stepdata);
                     }
                 }
             }
-            // }
-            console.log('this.orders', _this.orders);
         }).catch(function (error) {
             console.log("error", error);
         });
@@ -359,34 +337,8 @@ var OrderListComponent = /** @class */ (function () {
         };
         this.stepdata[orderId] = temp;
     };
-    OrderListComponent.prototype.updateDeliveredOrder = function (order) {
-        console.log(order, 'order ++++++');
-        var items = [];
-        for (var i = 0; i < order.item.length; i++) {
-            for (var k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
-                if (((order.item[i].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(order.item[i].category)) > -1)) {
-                    if (order.item[i].step == this.stepdata[order._id].step) {
-                        items.push(order.item[i].id._id);
-                    }
-                }
-            }
-        }
-        var opts = {
-            step: this.stepdata[order._id].step,
-            item: items
-        };
-        this.websocketService.updateDeliveredOrder(order._id, opts).then(function (data) {
-            console.log("updateDeliveredOrder dept Order updated++++++++++++++++", data);
-            // this.showToCall[order._id][this.stepdata[order._id].step] = true;
-            // this.showDeliveredButton[order._id][this.stepdata[order._id].step] = false;
-        }).catch(function (error) {
-            console.log("error", error);
-        });
-    };
-    ;
     OrderListComponent.prototype.ngDoCheck = function () {
         var change = this.differ.diff(this.orders);
-        console.log('changes detedcted', change);
         if (change != null) {
             if (this.orders.length) {
                 for (var i = 0; i < this.orders.length; i++) {
@@ -409,114 +361,9 @@ var OrderListComponent = /** @class */ (function () {
                         tempp.step = this.orders[i].step[0].step;
                         this.stepdata[this.orders[i]._id] = tempp;
                     }
-                    // this.orderId.push(this.orders[i]._id);
-                    // let step = [];
-                    // for (let j = 0; j < this.orders[i].item.length; j++) {
-                    //     if (((this.orders[i].item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(this.orders[i].item[j].category)) > -1)) {
-                    //         if (step.length) {
-                    //             for (let b = 0; b < step.length; b++) {
-                    //                 if (step[b].value !== this.orders[i].item[j].step) {
-                    //                     let key = this.orders[i].item[j].step.split(' ');
-                    //                     let newKey = Number(key[1]);
-                    //                     let value = this.orders[i].item[j].step;
-                    //                     step.push({ id: newKey, value: value });
-                    //                 }
-                    //             }
-                    //         }
-                    //         if (!step.length) {
-                    //             let key = this.orders[i].item[j].step.split(' ');
-                    //             let newKey = Number(key[1]);
-                    //             let value = this.orders[i].item[j].step;
-                    //             step.push({ id: newKey, value: value });
-                    //         }
-                    //     }
-                    // }
-                    // step.sort(function (a, b) {
-                    //     return a.id - b.id
-                    // });
-                    // step = _.uniqBy(step, 'value');
-                    // this.steps[this.orders[i]._id] = step;
-                    // let time = {};
-                    // let delivered = {};
-                    // let call = {};
-                    // let remtime = {};
-                    // for (let k = 0; k < this.steps[this.orders[i]._id].length; k++) {
-                    //     let temp = [];
-                    //     for (let l = 0; l < this.orders[i].item.length; l++) {
-                    //         if (this.orders[i].item[l].step == this.steps[this.orders[i]._id][k].value && temp.indexOf(this.orders[i].item[l].id.preparationTime) < 0) {
-                    //             temp.push(this.orders[i].item[l].id.preparationTime);
-                    //         }
-                    //     }
-                    //     time[this.steps[this.orders[i]._id][k].value] = Math.max(...temp);
-                    //     delivered[this.steps[this.orders[i]._id][k].value] = false;
-                    //     call[this.steps[this.orders[i]._id][k].value] = false;
-                    //     remtime[this.steps[this.orders[i]._id][k].value] = '0:00';
-                    // }
                     this.times[this.orders[i]._id] = time;
-                    // this.showDeliveredButton[this.orders[i]._id] = delivered;
-                    // this.showToCall[this.orders[i]._id] = call;
                     this.remainingTime[this.orders[i]._id] = remtime;
                 }
-                // for (let i = 0; i < this.orders.length; i++) {
-                //     this.orderId.push(this.orders[i]._id);
-                //     let step = [];
-                //     for (let j = 0; j < this.orders[i].item.length; j++) {
-                //         if (((this.orders[i].item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(this.orders[i].item[j].category)) > -1)) {
-                //             if (step.length) {
-                //                 for (let b = 0; b < step.length; b++) {
-                //                     if (step[b].value !== this.orders[i].item[j].step) {
-                //                         let key = this.orders[i].item[j].step.split(' ');
-                //                         let newKey = Number(key[1]);
-                //                         let value = this.orders[i].item[j].step;
-                //                         step.push({ id: newKey, value: value });
-                //                     }
-                //                 }
-                //             }
-                //             if (!step.length) {
-                //                 let key = this.orders[i].item[j].step.split(' ');
-                //                 let newKey = Number(key[1]);
-                //                 let value = this.orders[i].item[j].step;
-                //                 step.push({ id: newKey, value: value });
-                //             }
-                //         }
-                //     }
-                //     step.sort(function (a, b) {
-                //         return a.id - b.id
-                //     });
-                //     step = _.uniqBy(step, 'value');
-                //     this.steps[this.orders[i]._id] = step;
-                //     let time = {};
-                //     let delivered = {};
-                //     let call = {};
-                //     let remtime = {};
-                //     for (let k = 0; k < this.steps[this.orders[i]._id].length; k++) {
-                //         let temp = [];
-                //         for (let l = 0; l < this.orders[i].item.length; l++) {
-                //             if (this.orders[i].item[l].step == this.steps[this.orders[i]._id][k].value && temp.indexOf(this.orders[i].item[l].id.preparationTime) < 0) {
-                //                 temp.push(this.orders[i].item[l].id.preparationTime);
-                //             }
-                //         }
-                //         time[this.steps[this.orders[i]._id][k].value] = Math.max(...temp);
-                //         delivered[this.steps[this.orders[i]._id][k].value] = false;
-                //         call[this.steps[this.orders[i]._id][k].value] = false;
-                //         remtime[this.steps[this.orders[i]._id][k].value] = '0:00';
-                //     }
-                //     this.times[this.orders[i]._id] = time;
-                //     this.showDeliveredButton[this.orders[i]._id] = delivered;
-                //     this.showToCall[this.orders[i]._id] = call;
-                //     this.remainingTime[this.orders[i]._id] = remtime;
-                // }
-                // if (this.orderId && this.orderId.length) {
-                //     for (let k = 0; k < this.orderId.length; k++) {
-                //         let temp = {
-                //             tab: 0,
-                //             step: ''
-                //         }
-                //         temp.tab = 0;
-                //         temp.step = this.steps[this.orderId[k]][0].value;
-                //         this.stepdata[this.orderId[k]] = temp;
-                //     }
-                // }
             }
         }
     };

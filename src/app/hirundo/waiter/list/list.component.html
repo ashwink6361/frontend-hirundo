@@ -22,7 +22,7 @@
             </div>
             <div class="step-listing">
                 <ul *ngIf="stepdata[order._id]">
-                    <li *ngFor="let step of steps[order._id]; let i = index;" (click)="selectedTab(steps[order._id][i].value,i,order._id)" [class.active]="steps[order._id][i].value == stepdata[order._id].step">{{step.value}}</li>
+                    <li *ngFor="let step of order.step; let i = index;" (click)="selectedTab(step.step,i,order._id)" [class.active]="step.step == stepdata[order._id].step" [class.completed]="step.status == 1">{{step.step}}</li>
                 </ul>
             </div>
             <div class="order-items-container">
