@@ -113,12 +113,13 @@
             </div>
             <div *ngIf="variantError" class="color-red">{{variantError}}</div>
         </div>
-        <h1 *ngIf="!nonVariantData">Variant and Notes</h1>
-        <div *ngIf="!nonVariantData" class="tabs-btn">
+        <div  [class.pointer-none]="nonVariantData">
+        <h1 >Variant and Notes</h1>
+        <div  class="tabs-btn">
             <button type="button" (click)="tabActive(1)" [class.active]="activeTab[0]">Variants</button>
             <button type="button" (click)="tabActive(2)" [class.active]="activeTab[1]">Notes</button>
         </div>
-        <div *ngIf="!nonVariantData && activeTab[0]" class="varient-list">
+        <div *ngIf="activeTab[0]" class="varient-list">
             <table class="table">
                 <tbody>
                     <tr *ngFor="let varient of variantList">
@@ -136,7 +137,7 @@
                 </tbody>
             </table>
         </div>
-        <div *ngIf="!nonVariantData && activeTab[1]" class="varient-list">
+        <div *ngIf="activeTab[1]" class="varient-list">
             <table class="table">
                 <tbody>
                     <tr *ngFor="let note of noteList; let i = index">
@@ -148,5 +149,6 @@
                 </tbody>
             </table>
         </div>
+    </div>
     </div>
 </div>
