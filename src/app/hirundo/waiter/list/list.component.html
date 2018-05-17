@@ -22,7 +22,7 @@
             </div>
             <div class="step-listing">
                 <ul *ngIf="stepdata[order._id]">
-                    <li *ngFor="let step of order.step; let i = index;" (click)="selectedTab(step.step,i,order._id)" [class.active]="step.step == stepdata[order._id].step" [class.completed]="step.status == 1">{{step.step}}</li>
+                    <li *ngFor="let step of order.step; let i = index;" (click)="selectedTab(step.step,i,order._id)" [class.active]="step.step == stepdata[order._id].step" [class.completed]="step.status == 1 || step.step == 'Uscita 1'">{{step.step}}</li>
                 </ul>
             </div>
             <div class="order-items-container">
@@ -40,26 +40,18 @@
                                     <i *ngIf="varient.status == 0">-</i> {{varient.name}}
                                 </li>
                             </ul>
+                            <ul>
+                                <li>
+                                    {{item.notes}}
+                                </li>
+                            </ul>
                         </div>
                         <div class="order-quantity d-flex">
-                            <!-- <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 1)">
-                                <img src="assets/images/order-deliver.png" alt="" />
-                            </button>
-                            <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 3)">
-                                <i class="fas fa-times"></i>
-                            </button> -->
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- <div class="btn-container d-flex justify-content-between">
-                    <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 3)">Cancel</button>
-                    <button class="btn btn-primary waves-light" mdbRippleRadius (click)="updateOrder(order, 1)">Delivered</button>
-                </div> -->
         </div>
-        <!-- <div class="order-call-btn">
-            <button *ngIf="stepdata[order._id] && stepdata[order._id].step != 'Uscita 1' " type="submit" (click)="changeStep(order, stepdata[order._id].step)">Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>
-        </div> -->
         <div class="order-call-btn" *ngIf="order.step.length">
             <div *ngFor="let step of order.step; let indx = index;">
                 <div *ngIf="stepdata[order._id].step == step.step">

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { DashboardService } from './dashboard.service'
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { WebsocketService } from '../../../service/websocket.service';
-import { OrderService} from '../order/order.service';
+import { OrderService } from '../order/order.service';
 import { GlobalService } from '../../global.service';
 
 @Component({
@@ -15,8 +15,9 @@ import { GlobalService } from '../../global.service';
 export class DashboardComponent implements OnInit {
   private roomData = [];
   private tables = [];
+  public stepArray = [];
   private activeRoom: boolean[] = [false];
-  constructor(public router: Router,private orderService: OrderService,private globalService: GlobalService, private dashboardService: DashboardService, public websocketService: WebsocketService) { }
+  constructor(public router: Router, private orderService: OrderService, private globalService: GlobalService, private dashboardService: DashboardService, public websocketService: WebsocketService) { }
 
   ngOnInit() {
     localStorage.removeItem('orderData');
@@ -34,12 +35,18 @@ export class DashboardComponent implements OnInit {
   createOrder(table) {
     localStorage.setItem('tabledata', JSON.stringify(table));
     let room = JSON.parse(localStorage.getItem('roomdata'));
-    console.log('table',table);
-    if(table.orderId != null && table.orderId._id){
+    console.log('table', table);
+    if (table.orderId != null && table.orderId._id) {
       localStorage.setItem('orderId', JSON.stringify(table.orderId._id));
-      localStorage.setItem('orderItems',JSON.stringify(table.orderId.item));
+      localStorage.setItem('orderItems', JSON.stringify(table.orderId.item));
+      for (var i = 0; i < table.orderId.step.length; i++) {
+        this.stepArray.push(table.orderId.step[i].step);
+      }
+      if (this.stepArray.length) {
+        this.globalService.setStepData(this.stepArray);
+      }
       var steps = [];
-      let selectedItems = {};      
+      let selectedItems = {};
       if (this.globalService.getStepData()) {
         steps = this.globalService.getStepData();
       }
@@ -53,20 +60,19 @@ export class DashboardComponent implements OnInit {
         roomId: table.orderId.room,
         tableId: table.orderId.table,
         noOfPeople: table.orderId.noOfPeople,
-        // selectedItems: [],
-        selectedItems: selectedItems,        
-        cartTotalPrice : 0,
+        selectedItems: selectedItems,
+        cartTotalPrice: 0,
         cartTotalItem: 0
       }
       this.orderService.setOrderData(data);
     }
-    else{
+    else {
       localStorage.removeItem('orderId');
       localStorage.removeItem('orderItems');
     }
-    if(table.status == 1){
+    if (table.status == 1) {
       this.router.navigate(['/waiter/order/:id/cart']);
-    }else{
+    } else {
       this.router.navigate(['/waiter/order', room._id]);
     }
   }

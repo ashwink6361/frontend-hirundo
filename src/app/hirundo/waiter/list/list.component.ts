@@ -109,8 +109,14 @@ export class ListComponent implements DoCheck {
                                 tab: 0,
                                 step: ''
                             }
-                            tempp.tab = 0;
-                            tempp.step = this.orders[i].step[0].step;
+                            if(this.orders[i].step.length>1){
+                                tempp.tab = 1;
+                                tempp.step = this.orders[i].step[1].step;
+                            }
+                            else{
+                                tempp.tab = 0;
+                                tempp.step = this.orders[i].step[0].step;
+                            }
                             this.stepdata[this.orders[i]._id] = tempp;
                         }
                         
@@ -187,11 +193,7 @@ export class ListComponent implements DoCheck {
         });
     };
 
-    selectedTab(step, tab, orderId) {
-        console.log('step',step);
-        console.log('tab',tab);
-        console.log('orderId',orderId);
-        
+    selectedTab(step, tab, orderId) {        
         let temp = {
             tab: tab,
             step: step
@@ -217,8 +219,14 @@ export class ListComponent implements DoCheck {
                             tab: 0,
                             step: ''
                         }
-                        tempp.tab = 0;
-                        tempp.step = this.orders[i].step[0].step;
+                        if(this.orders[i].step.length>1){
+                            tempp.tab = 1;
+                            tempp.step = this.orders[i].step[1].step;
+                        }
+                        else{
+                            tempp.tab = 0;
+                            tempp.step = this.orders[i].step[0].step;
+                        }
                         this.stepdata[this.orders[i]._id] = tempp;
                     }
                     this.times[this.orders[i]._id] = time;
