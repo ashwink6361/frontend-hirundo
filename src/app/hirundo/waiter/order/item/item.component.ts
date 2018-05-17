@@ -50,9 +50,11 @@ export class ItemComponent implements OnInit {
       for (let k = 0; k < steps.length; k++) {
         for (let i = 0; i < this.data.categoryItems[steps[k]].length; i++) {
           if (this.data.selectedItems[steps[k]].length) {
+            let temp = 0;
             for (let j = 0; j < this.data.selectedItems[steps[k]].length; j++) {
               if (this.data.selectedItems[steps[k]][j]._id == this.data.categoryItems[steps[k]][i]._id ) {
-                this.data.categoryItems[steps[k]][i].itemTotal = this.data.selectedItems[steps[k]][j].quantity;
+                temp = temp + this.data.selectedItems[steps[k]][j].quantity;
+                this.data.categoryItems[steps[k]][i].itemTotal = temp;
               }
             }
           }
@@ -207,45 +209,18 @@ export class ItemComponent implements OnInit {
       let isarr = [];
       for (let i = 0; i < data.selectedItems[currentStep].length; i++) {
         if (data.selectedItems[currentStep][i]._id == article._id) {
-          if(data.selectedItems[currentStep][i].step == article.step){
             if (!data.selectedItems[currentStep][i].variant) {
               data.selectedItems[currentStep][i].quantity += 1;
               isarr.push(data.selectedItems[currentStep][i]._id);
               for (let j = 0; j < data.categoryItems[currentStep].length; j++) {
                 if (data.categoryItems[currentStep][j]._id == data.selectedItems[currentStep][i]._id) {
-                  data.categoryItems[currentStep][j].itemTotal = data.selectedItems[currentStep][i].quantity;
+                  data.categoryItems[currentStep][j].itemTotal = data.categoryItems[currentStep][j].itemTotal + 1;
                 }
               }
             }
             if (data.selectedItems[currentStep][i].variant) {
-              console.log('data.selectedItems[currentStep][i].quantity',data.selectedItems[currentStep][i].quantity);
-              for (let j = 0; j < data.categoryItems[currentStep].length; j++) {
-                if (data.categoryItems[currentStep][j]._id == data.selectedItems[currentStep][i]._id) {
-              console.log('data.categoryItems[currentStep][j].itemTotal',data.categoryItems[currentStep][j].itemTotal);
-                  data.categoryItems[currentStep][j].itemTotal = data.categoryItems[currentStep][j].itemTotal + data.selectedItems[currentStep][i].quantity;
-                }
-              }
+              isExist = false;
             }
-          }
-          if(data.selectedItems[currentStep][i].step != article.step){
-            isExist = false;
-          }
-          // if (!data.selectedItems[i].variant) {
-          //   data.selectedItems[i].quantity += 1;
-          //   isarr.push(data.selectedItems[i]._id);
-          //   for (let j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
-          //     if (data.categoryItems[this.globalService.getTabData().step][j]._id == data.selectedItems[i]._id) {
-          //       data.categoryItems[this.globalService.getTabData().step][j].itemTotal = data.selectedItems[i].quantity;
-          //     }
-          //   }
-          // }
-          // else {
-          //   for (let j = 0; j < data.categoryItems[this.globalService.getTabData().step].length; j++) {
-          //     if (data.categoryItems[this.globalService.getTabData().step][j]._id == data.selectedItems[i]._id) {
-          //       data.categoryItems[this.globalService.getTabData().step][j].itemTotal = data.categoryItems[this.globalService.getTabData().step][j].itemTotal + data.selectedItems[i].quantity;
-          //     }
-          //   }
-          // }
         }
         if (data.selectedItems[currentStep][i]._id != article._id) {
           isExist = false;
@@ -255,7 +230,7 @@ export class ItemComponent implements OnInit {
         article.quantity = article.quantity + 1;
         for (let j = 0; j < data.categoryItems[currentStep].length; j++) {
           if (data.categoryItems[currentStep][j]._id == article._id) {
-            data.categoryItems[currentStep][j].itemTotal = article.quantity;
+            data.categoryItems[currentStep][j].itemTotal = data.categoryItems[currentStep][j].itemTotal + article.quantity;
           }
         }
         data.selectedItems[currentStep].push(article);
@@ -581,6 +556,7 @@ export class ItemComponent implements OnInit {
       this.articleData.variant = this.variantData.variant;
       this.articleData.ordernote = this.variantData.notes;
       this.articleData.step = currentStep;
+      this.articleData.variantUniqueId = Math.floor(Math.random() * 10000);
       let data = this.orderService.getOrderData();
       data.selectedItems[currentStep].push(this.articleData);
       for (let i = 0; i < data.categoryItems[currentStep].length; i++) {
