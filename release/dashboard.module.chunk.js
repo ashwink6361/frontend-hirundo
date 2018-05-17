@@ -60,6 +60,7 @@ var DashboardComponent = /** @class */ (function () {
         this.websocketService = websocketService;
         this.roomData = [];
         this.tables = [];
+        this.stepArray = [];
         this.activeRoom = [false];
     }
     DashboardComponent.prototype.ngOnInit = function () {
@@ -82,6 +83,12 @@ var DashboardComponent = /** @class */ (function () {
         if (table.orderId != null && table.orderId._id) {
             localStorage.setItem('orderId', JSON.stringify(table.orderId._id));
             localStorage.setItem('orderItems', JSON.stringify(table.orderId.item));
+            for (var i = 0; i < table.orderId.step.length; i++) {
+                this.stepArray.push(table.orderId.step[i].step);
+            }
+            if (this.stepArray.length) {
+                this.globalService.setStepData(this.stepArray);
+            }
             var steps = [];
             var selectedItems = {};
             if (this.globalService.getStepData()) {
@@ -97,7 +104,6 @@ var DashboardComponent = /** @class */ (function () {
                 roomId: table.orderId.room,
                 tableId: table.orderId.table,
                 noOfPeople: table.orderId.noOfPeople,
-                // selectedItems: [],
                 selectedItems: selectedItems,
                 cartTotalPrice: 0,
                 cartTotalItem: 0

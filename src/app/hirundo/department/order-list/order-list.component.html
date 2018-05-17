@@ -1,19 +1,23 @@
 <!-- <div> -->
 <div class="text-center" *ngIf="!(orders && orders.length)">No Order Found.</div>
-<div *ngIf="orders && orders.length" class="order-list-container">
-    <div class="card order-list" *ngFor="let order of orders | orderby: '-created_at'">
+<div *ngIf="orders && orders.length" class="order-list-container container-fluid">
+    <div class="row">
+        <div class="col-sm-6 col-md-3"  *ngFor="let order of orders | orderby: '-created_at'">
+    <div class="card order-list">
         <div class="card-body" [class.opacity]="order.status == 3">
             <h4 class="card-title">
                 <div>
-                    <i class="far fa-clock"></i> {{order.created_at | date:'hh:mm a'}}</div>
+                        <img src="assets/images/table.png" alt="">
+                        <span>{{order.tableName}}</span>
+                    </div>
                 <div class="status" [class.bg-red]="order.status == 0" [class.bg-green]="order.status == 2" [class.bg-yellow]="order.status == 4">{{getOrderStatus(order.status)}}</div>
             </h4>
             <div class="card-text">
                 <p>
                     <i class="fas fa-cube"></i> {{order.room.name}}</p>
                 <p>
-                    <img src="assets/images/table.png" alt="">
-                    <span>{{order.tableName}}</span>
+                        <i class="far fa-clock"></i> {{order.created_at | date:'hh:mm a'}}
+                    
                 </p>
                 <p>
                     <i class="far fa-user"></i> {{order.noOfPeople}}</p>
@@ -49,12 +53,12 @@
                                 <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 2)">
                                     <img src="assets/images/order-deliver.png" alt="" />
                                 </button>
-                                <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 4)">
+                                <!-- <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 4)">
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
                                 <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 3)">
                                     <i class="fas fa-times"></i>
-                                </button>
+                                </button> -->
                             </div>
                         </div>
                     </div>
@@ -85,6 +89,8 @@
             </div>
         </div>
     </div>
+</div>
+</div>
 </div>
 <!-- </div> -->
 

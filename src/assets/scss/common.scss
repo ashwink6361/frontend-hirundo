@@ -788,6 +788,10 @@ header {
             padding-top: 0;
             padding-bottom: 5px;
         }
+        @include respond-to($phone-md-min){
+            height: 266px;
+            overflow-y: auto;
+        }
     }
     .card-title {
         font-size: 18px;
