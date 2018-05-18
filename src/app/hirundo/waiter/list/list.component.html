@@ -55,7 +55,7 @@
         <div class="order-call-btn" *ngIf="order.step.length">
             <div *ngFor="let step of order.step; let indx = index;">
                 <div *ngIf="stepdata[order._id].step == step.step">
-                    <button *ngIf="stepdata[order._id] && stepdata[order._id].step != 'Uscita 1' && step.status != 1" type="submit" (click)="changeStep(order, stepdata[order._id].step)">Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>
+                    <button *ngIf="stepdata[order._id] && stepdata[order._id].step != 'Uscita 1' && step.status != 1" type="submit" (click)="changeStep(order, stepdata[order._id].step, step.step)"><span *ngIf="(!showToCall[order._id][step.step] || step.status == 4 || step.status == 5 )">In Progress</span><span *ngIf="showToCall[order._id][step.step] && step.status == 0">Call ({{times[order._id][stepdata[order._id].step]}}:00)</span></button>
                 </div>
             </div>
         </div>

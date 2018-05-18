@@ -20,7 +20,8 @@ export class ListComponent implements DoCheck {
     public activetab: boolean[] = [];
     public stepdata: Array<any> = [];
     public orderId: Array<any> = [];
-    public times: Array<any> = [];      
+    public times: Array<any> = [];    
+    public showToCall: Array<any> = [];  
     constructor(public websocketService: WebsocketService, private globalService: GlobalService, public router: Router,private differs: IterableDiffers) {
         this.differ = differs.find([]).create(null);
      }
@@ -28,65 +29,10 @@ export class ListComponent implements DoCheck {
     ngOnInit() {
         this.websocketService.getWaiterOrders().then(data => {
             this.orders = data;
-            // if (this.orders.length) {
-            //     for (let i = 0; i < this.orders.length; i++) {
-            //         this.orderId.push(this.orders[i]._id);
-            //         let step = [];
-            //         for (let j = 0; j < this.orders[i].item.length; j++) {
-            //             if (step.length) {
-            //                 for (let b = 0; b < step.length; b++) {
-            //                     if (step[b].value !== this.orders[i].item[j].step) {
-            //                         let key = this.orders[i].item[j].step.split(' ');
-            //                         let newKey = Number(key[1]);
-            //                         let value = this.orders[i].item[j].step;
-            //                         step.push({ id: newKey, value: value });
-            //                     }
-            //                 }
-            //             }
-            //             if (!step.length) {
-            //                 let key = this.orders[i].item[j].step.split(' ');
-            //                 let newKey = Number(key[1]);
-            //                 let value = this.orders[i].item[j].step;
-            //                 step.push({ id: newKey, value: value });
-            //             }
-            //         }
-            //         step.sort(function(a, b){
-            //             return a.id-b.id
-            //         });
-            //         step = _.uniqBy(step,'value');
-            //         // for (let j = 0; j < this.orders[i].item.length; j++) {
-            //         //     if (step.indexOf(this.orders[i].item[j].step) < 0) {
-            //         //         step.push(this.orders[i].item[j].step);
-            //         //     }
-            //         // }
-            //         this.steps[this.orders[i]._id] = step;
-            //         let time = {};                                                                        
-            //         for (let k = 0; k < this.steps[this.orders[i]._id].length; k++) {
-            //         let temp = [];                          
-            //             for (let l = 0; l < this.orders[i].item.length; l++) {
-            //                 if(this.orders[i].item[l].step == this.steps[this.orders[i]._id][k].value && temp.indexOf(this.orders[i].item[l].id.preparationTime) < 0){
-            //                     temp.push(this.orders[i].item[l].id.preparationTime);
-            //                 }
-            //             }
-            //             time[this.steps[this.orders[i]._id][k].value] = Math.max(...temp);                        
-            //         }
-            //         this.times[this.orders[i]._id] = time;                                            
-            //     }
-            //     if (this.orderId && this.orderId.length) {
-            //         for (let k = 0; k < this.orderId.length; k++) {
-            //             let temp = {
-            //                 tab: 0,
-            //                 step: ''
-            //             }
-            //             temp.tab = 0;
-            //             temp.step = this.steps[this.orderId[k]][0].value;
-            //             this.stepdata[this.orderId[k]] = temp;
-            //         }
-            //     }
-            // }
             if (this.orders.length) {
                 for (let i = 0; i < this.orders.length; i++) {
                     let time = {};
+                    let call = {};
                     for (let k = 0; k < this.orders[i].step.length; k++) {
                         let temp = [];
                         for (let l = 0; l < this.orders[i].item.length; l++) {
@@ -95,6 +41,7 @@ export class ListComponent implements DoCheck {
                             }
                         }
                         time[this.orders[i].step[k].step] = Math.max(...temp);
+                        call[this.orders[i].step[k].step] = true;
                         if(this.orders[i].step[k].status == 1){
                             let temparray = this.orders[i].step[k].step.split(' ');
                             let num = Number(temparray[1]);
@@ -122,6 +69,7 @@ export class ListComponent implements DoCheck {
                         
                     }
                     this.times[this.orders[i]._id] = time;
+                    this.showToCall[this.orders[i]._id] = call;
                 }
             }
             this.loadingOrders = false;
@@ -182,12 +130,14 @@ export class ListComponent implements DoCheck {
     };
 
 
-    public changeStep(order, step) {
+    public changeStep(order, step, stepKey) {
         let items = [];
         let opts = {
             step: step
         };
         this.websocketService.changeOrderStep(order._id, opts).then(data => {
+            this.showToCall[order._id][stepKey] = false;   
+            console.log("this.showToCall", this.showToCall);                     
         }).catch(error => {
             console.log("error", error);
         });
@@ -207,6 +157,7 @@ export class ListComponent implements DoCheck {
             if (this.orders.length) {
                 for (let i = 0; i < this.orders.length; i++) {
                     let time = {};
+                    let call = {};                    
                     for (let k = 0; k < this.orders[i].step.length; k++) {
                         let temp = [];
                         for (let l = 0; l < this.orders[i].item.length; l++) {
@@ -215,6 +166,7 @@ export class ListComponent implements DoCheck {
                             }
                         }
                         time[this.orders[i].step[k].step] = Math.max(...temp);
+                        call[this.orders[i].step[k].step] = true;                        
                         let tempp = {
                             tab: 0,
                             step: ''
@@ -230,6 +182,7 @@ export class ListComponent implements DoCheck {
                         this.stepdata[this.orders[i]._id] = tempp;
                     }
                     this.times[this.orders[i]._id] = time;
+                    this.showToCall[this.orders[i]._id] = call;                    
                 }
             }
         }
