@@ -817,11 +817,27 @@ var WebsocketService = /** @class */ (function () {
                 _this._orders.unshift(data);
             }
             else if (userType == 4) {
+                var steps = [];
+                var sts = [];
+                var isItemExist = false;
                 for (var j = 0; j < data.item.length; j++) {
                     if (((data.item[j].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
-                        _this._orders.unshift(data);
-                        break;
+                        isItemExist = true;
+                        if (sts.indexOf(data.item[j].step) < 0) {
+                            sts.push(data.item[j].step);
+                            steps.push({
+                                itemId: [],
+                                step: data.item[j].step,
+                                status: 0
+                            });
+                        }
+                        // this._orders.unshift(data);
+                        // break;
                     }
+                }
+                if (isItemExist) {
+                    data.step = steps;
+                    _this._orders.unshift(data);
                 }
             }
         });

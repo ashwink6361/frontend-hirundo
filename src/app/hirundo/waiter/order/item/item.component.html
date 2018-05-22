@@ -38,10 +38,10 @@
         <!-- <div *ngIf="!articles.length" class="text-center">
             No Item Found
         </div> -->
-        <div *ngIf="!orderService.getOrderData().categoryItems[globalService.getTabData().step]" class="text-center">
+        <div *ngIf="orderService.getOrderData().categoryItems[globalService.getTabData().step].length == 0" class="text-center">
             No Item Found
         </div>
-        <div *ngIf="orderService.getOrderData().categoryItems[globalService.getTabData().step]">
+        <div *ngIf="orderService.getOrderData().categoryItems[globalService.getTabData().step].length > 0">
             <!-- <div *ngFor="let article of articles | filter : searchText ; let i = index"> -->
             <div *ngFor="let article of orderService.getOrderData().categoryItems[globalService.getTabData().step] | filter : searchText ; let i = index">
                 <div class="item-list align-items-center" *ngIf="subcategory && (article.subCategory == subcategory)">

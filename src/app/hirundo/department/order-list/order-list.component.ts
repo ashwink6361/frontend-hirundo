@@ -197,11 +197,11 @@ export class OrderListComponent implements DoCheck {
         let s = 60;
         var width = 0;
         var id = setInterval(() => {
-            if(order.status != 1 && step.step == this.stepdata[order._id].step){
+            if(step.status != 1 && step.step == this.stepdata[order._id].step){
                 t = t + 1;
                 seconds = seconds - 1;
                 s = s - 1;
-                if (seconds == 0 && order.status != 1 && step.step == this.stepdata[order._id].step) {
+                if (seconds == 0 && step.status != 1 && step.step == this.stepdata[order._id].step) {
                     clearInterval(id);
                     let items = [];
                     for (let i = 0; i < order.item.length; i++) {
@@ -226,6 +226,11 @@ export class OrderListComponent implements DoCheck {
                             for (let i = 0; i < this.orders.length; i++) {
                                 if (this.orders[i]._id == data.data._id) {
                                     this.orders[i].step = data.data.step;
+                                }
+                            }
+                            for (let i = 0; i < data.data.step.length; i++) {
+                                if (data.data.step[i].step == step.step) {
+                                    step.status = data.data.step[i].status;
                                 }
                             }
                         }).catch(error => {
@@ -275,6 +280,11 @@ export class OrderListComponent implements DoCheck {
         this.websocketService.updateOrder(order._id, opts).then(data => {
             order.status = data.data.status;
             order.step = data.data.step;
+            for (let i = 0; i < data.data.step.length; i++) {
+                if (data.data.step[i].step == step.step) {
+                    step.status = data.data.step[i].status;
+                }
+            }
             if (order.step) {
                 for (let j = 0; j < order.step.length - 1; j++) {
                     if (order.step[j].status == 1) {
