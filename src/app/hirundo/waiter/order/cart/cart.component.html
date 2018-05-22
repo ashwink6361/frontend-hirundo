@@ -7,18 +7,21 @@
             <i class="fas fa-angle-left"></i>
         </a>
     </div>
-    <div class="header-title">
+    <div *ngIf="!orderId" class="header-title">
         Create Order
+    </div>
+    <div *ngIf="orderId" class="header-title">
+        Order Created
     </div>
 </header>
 <div class="page-content">
-    <app-steps></app-steps>
+    <app-steps *ngIf="!orderId"></app-steps>
     <div class="item-container">
-        <!-- <div class="text-center" *ngIf="!(items && items.length)">No Item Added</div> -->
         <div class="text-center" *ngIf="!orderId && !(orderService.getOrderData().selectedItems)">No Item Added</div>
-        <div *ngIf="(orderId && orderItems && orderItems.length)" class="border-bottom">
+        <div *ngIf="(orderId && orderItems && orderItems.length)">
             <div *ngFor="let article of orderItems">
-                <div class="item-list align-items-center" *ngIf="article.step == globalService.getTabData().step">
+                <!-- <div class="item-list align-items-center" *ngIf="article.step == globalService.getTabData().step"> -->
+                <div class="item-list align-items-center">                    
                     <div class="item" [ngStyle]="{'background-color': article.id.category.color}">
                         <img *ngIf="!article.id.logo.small && article.id.category.isIcon" class="icon-img" [src]="article.id.category.icon" alt=""
                         />
@@ -41,7 +44,8 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="(orderService.getOrderData().selectedItems)">
+        <div *ngIf="!orderId && orderService.getOrderData().selectedItems">       
+        <!-- <div *ngIf="(orderService.getOrderData().selectedItems)"> -->
             <div *ngFor="let article of orderService.getOrderData().selectedItems[globalService.getTabData().step]">
                 <div class="item-list align-items-center" *ngIf="article.step == globalService.getTabData().step">
                     <div class="item" [ngStyle]="{'background-color': article.category.color}">
@@ -71,15 +75,15 @@
                 </div>
             </div>
         </div>
-        <div class="cart-bottom-fixed">
+        <div class="cart-bottom-fixed" *ngIf="!orderId">
             <div class="total-amount">
                 Sub Total: &euro;{{orderService.getOrderData().cartTotalPrice}}
             </div>
-            <div *ngIf="orderId" class="cart-menu-btn">
+            <!-- <div *ngIf="orderId" class="cart-menu-btn">
                 <button type="button" class="btn btn-default" (click)="gotToCategoryList()">
                     Menu
                 </button>
-            </div>
+            </div> -->
             <button type="submit" class="order-btn waves-light" [disabled]="!orderService.getOrderData().selectedItems" (click)="createOrder()">
                 Create Order
             </button>
