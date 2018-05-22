@@ -64,11 +64,24 @@ export class WebsocketService {
                         if (userType == 3) {
                             this._orders[i].step = data.step;
                         }
+                        // else if (userType == 4) {
+                        //     let steps = [];
+                        //     for (let j = 0; j < this._orders[i].item.length; j++) {
+                        //         for (let k = 0; k < data.step.length; k++) {
+                        //             if (((this._orders[i].item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(this._orders[i].item[j].category)) > -1)) {
+                        //                 if(this._orders[i].item[j].step == data.step[k].step) {
+                        //                     steps.push(data.step[k]);
+                        //                 }
+                        //             }
+                        //         }
+                        //     }
+                        //     this._orders[i].step = steps;
+                        // }
                         console.log(this._orders[i].step, 'this._orders[i].step');
                         this._orders[i].stepStatus = data.stepStatus;
                         this._orders[i].status = data.status;
                         for(var j=0; j<this._orders[i].item.length; j++) {
-                            if(data.order.itemId === this._orders[i].item[j].id._id) {
+                            if(data.order.itemId === this._orders[i].item[j].id._id && data.order.step === this._orders[i].item[j].step) {
                                 this._orders[i].item[j].status = data.order.status;
                             }
                         }
