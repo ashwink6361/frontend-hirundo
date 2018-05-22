@@ -19,8 +19,8 @@ export class WebsocketService {
     connect() {
         // If you aren't familiar with environment variables then
         // you can hard code `environment.ws_url` as `http://localhost:5000`
-        // this.socket = io('http://localhost:5051');
-         this.socket = io('http://52.209.187.183:5051');
+        this.socket = io('http://localhost:5051');
+        //  this.socket = io('http://52.209.187.183:5051');
         if(this.socket.connected)
             console.log("Socket connection done ");
         let user = JSON.parse(localStorage.getItem('currentUser'));
@@ -31,11 +31,27 @@ export class WebsocketService {
                 this._orders.unshift(data);
             }
             else if (userType == 4) {
+                let steps = [];
+                let sts = [];
+                let isItemExist = false;
                 for (let j = 0; j < data.item.length; j++) {
                     if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
-                        this._orders.unshift(data);
-                        break;
+                        isItemExist = true;
+                        if(sts.indexOf(data.item[j].step) < 0) {
+                            sts.push(data.item[j].step);
+                            steps.push({
+                                itemId: [],
+                                step: data.item[j].step,
+                                status: 0
+                            });
+                        }
+                        // this._orders.unshift(data);
+                        // break;
                     }
+                }
+                if(isItemExist) {
+                    data.step = steps;
+                    this._orders.unshift(data);
                 }
             }
         });
