@@ -852,15 +852,20 @@ var WebsocketService = /** @class */ (function () {
                     }
                     else if (userType == 4) {
                         var steps = [];
+                        var sts = [];
                         for (var j_1 = 0; j_1 < _this._orders[i].item.length; j_1++) {
                             for (var k = 0; k < data.step.length; k++) {
                                 if (((_this._orders[i].item[j_1].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(_this._orders[i].item[j_1].category)) > -1)) {
                                     if (_this._orders[i].item[j_1].step == data.step[k].step) {
-                                        steps.push(data.step[k]);
+                                        if (sts.indexOf(data.step[k].step) < 0) {
+                                            sts.push(data.step[k].step);
+                                            steps.push(data.step[k]);
+                                        }
                                     }
                                 }
                             }
                         }
+                        console.log(steps, 'steps');
                         _this._orders[i].step = steps;
                         console.log(_this._orders[i].step, 'this._orders[i].step+++++++++');
                     }

@@ -66,15 +66,20 @@ export class WebsocketService {
                         }
                         else if (userType == 4) {
                             let steps = [];
+                            let sts = [];                               
                             for (let j = 0; j < this._orders[i].item.length; j++) {
                                 for (let k = 0; k < data.step.length; k++) {
                                     if (((this._orders[i].item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(this._orders[i].item[j].category)) > -1)) {
                                         if(this._orders[i].item[j].step == data.step[k].step) {
-                                            steps.push(data.step[k]);
+                                            if (sts.indexOf(data.step[k].step) < 0) {
+                                                sts.push(data.step[k].step);
+                                                steps.push(data.step[k]);
+                                            }
                                         }
                                     }
                                 }
                             }
+                            console.log(steps, 'steps');                                                        
                             this._orders[i].step = steps;
                             console.log(this._orders[i].step, 'this._orders[i].step+++++++++');                            
                         }
