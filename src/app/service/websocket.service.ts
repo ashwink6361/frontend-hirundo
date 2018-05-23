@@ -19,8 +19,8 @@ export class WebsocketService {
     connect() {
         // If you aren't familiar with environment variables then
         // you can hard code `environment.ws_url` as `http://localhost:5000`
-        this.socket = io('http://localhost:5051');
-        //  this.socket = io('http://52.209.187.183:5051');
+        // this.socket = io('http://localhost:5051');
+         this.socket = io('http://52.209.187.183:5051');
         if(this.socket.connected)
             console.log("Socket connection done ");
         let user = JSON.parse(localStorage.getItem('currentUser'));
