@@ -850,20 +850,22 @@ var WebsocketService = /** @class */ (function () {
                     if (userType == 3) {
                         _this._orders[i].step = data.step;
                     }
-                    // else if (userType == 4) {
-                    //     let steps = [];
-                    //     for (let j = 0; j < this._orders[i].item.length; j++) {
-                    //         for (let k = 0; k < data.step.length; k++) {
-                    //             if (((this._orders[i].item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(this._orders[i].item[j].category)) > -1)) {
-                    //                 if(this._orders[i].item[j].step == data.step[k].step) {
-                    //                     steps.push(data.step[k]);
-                    //                 }
-                    //             }
-                    //         }
-                    //     }
-                    //     this._orders[i].step = steps;
-                    // }
-                    console.log(_this._orders[i].step, 'this._orders[i].step');
+                    else if (userType == 4) {
+                        var steps = [];
+                        for (var j_1 = 0; j_1 < _this._orders[i].item.length; j_1++) {
+                            for (var k = 0; k < data.step.length; k++) {
+                                if (((_this._orders[i].item[j_1].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(_this._orders[i].item[j_1].category)) > -1)) {
+                                    if (_this._orders[i].item[j_1].step == data.step[k].step) {
+                                        steps.push(data.step[k]);
+                                    }
+                                }
+                            }
+                        }
+                        _this._orders[i].step = steps;
+                        console.log(_this._orders[i].step, 'this._orders[i].step+++++++++');
+                    }
+                    console.log(_this._orders[i].step, 'this._orders[i].step----------------');
+                    console.log(_this._orders[i], 'this._orders[i]----------------');
                     _this._orders[i].stepStatus = data.stepStatus;
                     _this._orders[i].status = data.status;
                     for (var j = 0; j < _this._orders[i].item.length; j++) {
