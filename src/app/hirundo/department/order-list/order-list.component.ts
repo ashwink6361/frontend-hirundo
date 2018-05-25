@@ -299,6 +299,13 @@ export class OrderListComponent implements DoCheck {
                     }
                 }
             }
+            if(data.data.status == 1){
+                for(var i=0; i<this.orders.length; i++) {
+                    if(data.data._id === this.orders[i]._id) {
+                        this.orders.splice(i,1);
+                    }
+                }
+            }
         }).catch(error => {
             console.log("error", error);
         });

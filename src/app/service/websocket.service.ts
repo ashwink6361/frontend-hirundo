@@ -19,8 +19,8 @@ export class WebsocketService {
     connect() {
         // If you aren't familiar with environment variables then
         // you can hard code `environment.ws_url` as `http://localhost:5000`
-        // this.socket = io('http://localhost:5051');
-         this.socket = io('http://52.209.187.183:5051');
+        this.socket = io('http://localhost:5051');
+        //  this.socket = io('http://52.209.187.183:5051');
         if(this.socket.connected)
             console.log("Socket connection done ");
         let user = JSON.parse(localStorage.getItem('currentUser'));
@@ -28,7 +28,7 @@ export class WebsocketService {
             console.log("Received Order from Websocket Server", data);
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
-                this._orders.unshift(data);
+                this._orders.push(data);
             }
             else if (userType == 4) {
                 let steps = [];
@@ -51,7 +51,7 @@ export class WebsocketService {
                 }
                 if(isItemExist) {
                     data.step = steps;
-                    this._orders.unshift(data);
+                    this._orders.push(data);
                 }
             }
         });
@@ -92,6 +92,9 @@ export class WebsocketService {
                                 this._orders[i].item[j].status = data.order.status;
                             }
                         }
+                        if(data.status == 1){
+                            this._orders.splice(i,1);
+                        }
                     }
                 }
             // }
@@ -109,10 +112,16 @@ export class WebsocketService {
             }
         });
         this.socket.on('changeStep', (data) => {
-            console.log(data, 'data');
             for(var i=0; i<this._orders.length; i++) {
                 if(data._id === this._orders[i]._id) {
                     this._orders[i].stepStatus = data.stepStatus;
+                }
+            }
+        });
+        this.socket.on('itemDeleted', (data) => {
+            for(var i=0; i<this._orders.length; i++) {
+                if(data._id === this._orders[i]._id) {
+                    this._orders[i] = data;
                 }
             }
         });

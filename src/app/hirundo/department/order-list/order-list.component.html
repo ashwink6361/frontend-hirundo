@@ -2,7 +2,7 @@
 <div class="text-center" *ngIf="!(orders && orders.length)">No Order Found.</div>
 <div *ngIf="orders && orders.length" class="order-list-container container-fluid">
     <div class="row">
-        <div class="col-sm-6 col-md-3"  *ngFor="let order of orders | orderby: '-created_at'">
+        <div class="col-sm-6 col-md-3"  *ngFor="let order of orders">
     <div class="card order-list">
         <div class="card-body" [class.opacity]="order.status == 3">
             <h4 class="card-title">
