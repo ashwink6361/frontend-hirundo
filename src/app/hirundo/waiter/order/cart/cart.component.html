@@ -15,12 +15,13 @@
     </div>
 </header>
 <div class="page-content">
-    <app-steps></app-steps>
-    <div class="item-container">
+    <app-steps *ngIf="orderService.showElement"></app-steps>
+    <div class="item-container cart-page-height">
         <div class="text-center" *ngIf="!orderId && !(orderService.getOrderData().selectedItems)">No Item Added</div>
-        <div *ngIf="(orderId && orderItems && orderItems.length)">
+        <div *ngIf="orderId && orderItems && orderItems.length">
             <div *ngFor="let article of orderItems">
-                <div class="item-list align-items-center" *ngIf="article.step == globalService.getTabData().step">
+                    <!-- *ngIf="article.step == globalService.getTabData().step" -->
+                <div class="item-list align-items-center">
                     <div class="item-list align-items-center">
                         <div class="item" [ngStyle]="{'background-color': article.id.category.color}">
                             <img *ngIf="!article.id.logo.small && article.id.category.isIcon" class="icon-img" [src]="article.id.category.icon" alt=""
@@ -46,7 +47,7 @@
             </div>
         </div>
         <!-- <div *ngIf="!orderId && orderService.getOrderData().selectedItems">        -->
-        <div *ngIf="(orderService.getOrderData().selectedItems)">
+        <div *ngIf="orderService.getOrderData().selectedItems">
             <div *ngFor="let article of orderService.getOrderData().selectedItems[globalService.getTabData().step]">
                 <div class="item-list align-items-center" *ngIf="article.step == globalService.getTabData().step">
                     <div class="item" [ngStyle]="{'background-color': article.category.color}">
@@ -85,9 +86,12 @@
                     Menu
                 </button>
             </div>
-            <button type="submit" class="order-btn waves-light" [disabled]="!orderService.getOrderData().selectedItems" (click)="createOrder()">
-                <span *ngIf="!orderId">Create Order</span>
-                <span *ngIf="orderId">Update Order</span>
+            {{orderService.getElement()}}
+            <button type="submit" *ngIf="!orderId || orderService.showElement" class="order-btn waves-light" [disabled]="!orderService.getOrderData().selectedItems" (click)="createOrder()">
+                <span>Create Order</span>
+            </button>
+            <button type="submit" *ngIf="orderId && !orderService.showElement" class="order-btn waves-light" [disabled]="!orderService.getOrderData().selectedItems">
+                <span>Total</span>
             </button>
         </div>
     </div>

@@ -34,6 +34,7 @@ app.engine('html', cons.underscore);
 app.set('view engine', 'html');
 app.set('apiUrl', Config.apiUrl);
 app.set('secretKey', Config.key.privateKey);
+app.set('socketUrl', Config.socketUrl);
 //intercepting API requests
 app.use('/api/*', function (req, res, next) {
     var token = req.cookies.token;
@@ -141,6 +142,10 @@ app.use('/api/*', function (req, res, next) {
             }
         });
     }
+});
+
+app.get('/server/env', function(req, res) {
+    res.send({socketUrl: app.get('socketUrl')});
 });
 
 app.use('/login', function (req, res, next) {

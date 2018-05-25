@@ -24,6 +24,7 @@ export class CartComponent implements OnInit {
   }
   public notes = [];
   public variantError = '';
+  public showElement = 0;
   public articleData: any;
   public nonVariantData: boolean = false;          
   constructor(private orderService: OrderService, private router: Router, private globalService: GlobalService) { }
@@ -85,7 +86,8 @@ export class CartComponent implements OnInit {
     if (this.orderId) {
       this.orderService.updateOrder(itemarray, this.orderId)
         .then(data => {
-          this.router.navigate(['/waiter/list'])
+          this.router.navigate(['/waiter/list']);
+          this.orderService.showElement = false;
         })
         .catch(error => {
           console.log('error', error);
@@ -94,7 +96,8 @@ export class CartComponent implements OnInit {
     else {
       this.orderService.createOrder(createorder)
         .then(data => {
-          this.router.navigate(['/waiter/list'])
+          this.router.navigate(['/waiter/list']);
+          this.orderService.showElement = false;
         })
         .catch(error => {
           console.log('error', error);
@@ -171,6 +174,7 @@ export class CartComponent implements OnInit {
 
   gotToCategoryList() {
     this.router.navigate(['/waiter/order/:id/choose-category']);
+    this.orderService.showElement = true;
   }
 
   viewVarient(article) {
