@@ -5,6 +5,7 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class OrderService {
   public orderData = {};
+  public showElement = false;
   public categoryItems = [];
   constructor(private http: Http, private globalService: GlobalService) { }
   getCategory(): Promise<any> {
@@ -19,7 +20,15 @@ export class OrderService {
       .then(this.globalService.extractData)
       .catch(this.globalService.handleErrorPromise);
   }
+  
+  setElement(data: any) {
+    localStorage.setItem('showElement', JSON.stringify(data));
+  }
 
+  getElement() {
+    let data = localStorage.getItem('showElement');
+    return JSON.parse(data);
+  }
   setOrderData(data: any) {
     localStorage.setItem('orderData', JSON.stringify(data));
   }

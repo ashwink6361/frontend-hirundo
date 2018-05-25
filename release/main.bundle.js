@@ -674,6 +674,7 @@ var OrderService = /** @class */ (function () {
         this.http = http;
         this.globalService = globalService;
         this.orderData = {};
+        this.showElement = false;
         this.categoryItems = [];
     }
     OrderService.prototype.getCategory = function () {
@@ -687,6 +688,13 @@ var OrderService = /** @class */ (function () {
         return this.http.get(url).toPromise()
             .then(this.globalService.extractData)
             .catch(this.globalService.handleErrorPromise);
+    };
+    OrderService.prototype.setElement = function (data) {
+        localStorage.setItem('showElement', JSON.stringify(data));
+    };
+    OrderService.prototype.getElement = function () {
+        var data = localStorage.getItem('showElement');
+        return JSON.parse(data);
     };
     OrderService.prototype.setOrderData = function (data) {
         localStorage.setItem('orderData', JSON.stringify(data));
@@ -795,18 +803,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var WebsocketService = /** @class */ (function () {
     function WebsocketService(http, authGuard) {
+        var _this = this;
         this.http = http;
         this.authGuard = authGuard;
         this._orders = [];
         this._rooms = [];
-        this.connect();
+        var url = '/server/env';
+        this.http.get(url).toPromise()
+            .then(function (data) {
+            _this.socketUrl = data.json().socketUrl;
+            console.log(_this.socketUrl);
+            _this.connect();
+        })
+            .catch(function (error) {
+            console.log('connection scoket url not available');
+        });
     }
     WebsocketService.prototype.connect = function () {
         var _this = this;
         // If you aren't familiar with environment variables then
         // you can hard code `environment.ws_url` as `http://localhost:5000`
-        this.socket = __WEBPACK_IMPORTED_MODULE_1_socket_io_client__('http://localhost:5051');
-        //  this.socket = io('http://52.209.187.183:5051');
+        // this.socket = io('http://localhost:5051');
+        this.socket = __WEBPACK_IMPORTED_MODULE_1_socket_io_client__(this.socketUrl);
         if (this.socket.connected)
             console.log("Socket connection done ");
         var user = JSON.parse(localStorage.getItem('currentUser'));
@@ -877,9 +895,9 @@ var WebsocketService = /** @class */ (function () {
                         if (data.order.itemId === _this._orders[i].item[j].id._id && data.order.step === _this._orders[i].item[j].step) {
                             _this._orders[i].item[j].status = data.order.status;
                         }
-                    }
-                    if (data.status == 1) {
-                        _this._orders.splice(i, 1);
+                        if (data.status == 1) {
+                            _this._orders.splice(i, 1);
+                        }
                     }
                 }
             }

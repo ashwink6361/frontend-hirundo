@@ -3,7 +3,7 @@
         <a *ngIf="!orderId" routerLink="/waiter/order/:id">
             <i class="fas fa-angle-left"></i>
         </a>
-        <a *ngIf="orderId" routerLink="/waiter/order/:id/cart">
+        <a *ngIf="orderId" (click)="hideStep()">
             <i class="fas fa-angle-left"></i>
         </a>
     </div>

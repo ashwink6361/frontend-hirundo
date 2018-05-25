@@ -71,8 +71,10 @@ export class DashboardComponent implements OnInit {
       localStorage.removeItem('orderItems');
     }
     if (table.status == 1) {
+      this.orderService.showElement = false;
       this.router.navigate(['/waiter/order/:id/cart']);
     } else {
+      this.orderService.showElement = true;
       this.router.navigate(['/waiter/order', room._id]);
     }
   }

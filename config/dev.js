@@ -9,7 +9,7 @@ const path = require('path');
 const projectName = 'MVP Hirundo';
 const port = 5052;
 const apiUrl = 'http://localhost:5051/';
-
+const socketUrl = 'http://localhost:5051';
 module.exports = {
     env: 'development',
     server: {
@@ -22,6 +22,7 @@ module.exports = {
     key: {
         privateKey: 'BbZJjyoXAdr8BUZuiKKARWimKfrSmQ6fv8kZ7OFfc'
     },
-    apiUrl: apiUrl+'api/'
+    apiUrl: apiUrl+'api/',
+    socketUrl: socketUrl
 };
 
