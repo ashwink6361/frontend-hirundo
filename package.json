@@ -11,6 +11,9 @@
     "stagingrestart": "NODE_ENV=staging forever restart server.js",
     "prod": "NODE_ENV=prod forever start server.js",
     "prodrestart": "NODE_ENV=prod forever restart server.js",
+    "hirundo": "mkdir -p logs; NODE_ENV=hirundo forever start server.js",
+    "hirundorestart": "mkdir -p logs; NODE_ENV=hirundo forever restart server.js",
+    "hirundostop": "mkdir -p logs; NODE_ENV=hirundo forever stop server.js",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
