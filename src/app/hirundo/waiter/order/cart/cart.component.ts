@@ -403,5 +403,6 @@ export class CartComponent implements OnInit {
 
   hideStep(){
     this.orderService.showElement = false;
+    this.router.navigate(['/waiter']);
   }
 }
