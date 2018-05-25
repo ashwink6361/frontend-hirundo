@@ -3,7 +3,7 @@
         <a *ngIf="!orderId" routerLink="/waiter/order/:id/choose-item">
             <i class="fas fa-angle-left"></i>
         </a>
-        <a *ngIf="orderId" routerLink="/waiter/">
+        <a *ngIf="orderId" (click)="hideStep()" routerLink="/waiter/">
             <i class="fas fa-angle-left"></i>
         </a>
     </div>
@@ -11,16 +11,16 @@
         Create Order
     </div>
     <div *ngIf="orderId" class="header-title">
-        Update Order
+        Table {{tableData.name}}
     </div>
 </header>
 <div class="page-content">
     <app-steps *ngIf="orderService.showElement"></app-steps>
     <div class="item-container cart-page-height">
         <div class="text-center" *ngIf="!orderId && !(orderService.getOrderData().selectedItems)">No Item Added</div>
-        <div *ngIf="orderId && orderItems && orderItems.length">
+        <div *ngIf="orderId && orderItems && orderItems.length && !orderService.showElement">
             <div *ngFor="let article of orderItems">
-                    <!-- *ngIf="article.step == globalService.getTabData().step" -->
+                <!-- *ngIf="article.step == globalService.getTabData().step" -->
                 <div class="item-list align-items-center">
                     <div class="item-list align-items-center">
                         <div class="item" [ngStyle]="{'background-color': article.id.category.color}">
@@ -47,7 +47,7 @@
             </div>
         </div>
         <!-- <div *ngIf="!orderId && orderService.getOrderData().selectedItems">        -->
-        <div *ngIf="orderService.getOrderData().selectedItems">
+        <div *ngIf="orderService.getOrderData().selectedItems && orderService.showElement">
             <div *ngFor="let article of orderService.getOrderData().selectedItems[globalService.getTabData().step]">
                 <div class="item-list align-items-center" *ngIf="article.step == globalService.getTabData().step">
                     <div class="item" [ngStyle]="{'background-color': article.category.color}">
@@ -81,17 +81,17 @@
             <div class="total-amount">
                 Sub Total: &euro;{{orderService.getOrderData().cartTotalPrice}}
             </div>
-            <div *ngIf="orderId" class="cart-menu-btn">
-                <button type="button" class="btn btn-default" (click)="gotToCategoryList()">
+            <div class="cart-menu-btn">
+                <button type="button" *ngIf="orderId" class="btn btn-default" (click)="gotToCategoryList()">
                     Menu
                 </button>
             </div>
-            {{orderService.getElement()}}
-            <button type="submit" *ngIf="!orderId || orderService.showElement" class="order-btn waves-light" [disabled]="!orderService.getOrderData().selectedItems" (click)="createOrder()">
+            <button type="submit" *ngIf="!orderId" class="order-btn waves-light" [disabled]="!orderService.getOrderData().selectedItems"
+                (click)="createOrder()">
                 <span>Create Order</span>
             </button>
-            <button type="submit" *ngIf="orderId && !orderService.showElement" class="order-btn waves-light" [disabled]="!orderService.getOrderData().selectedItems">
-                <span>Total</span>
+            <button  type="submit" *ngIf="orderId" class="order-btn waves-light" (click)="createOrder()">
+                <span>Update Order</span>
             </button>
         </div>
     </div>

@@ -84,4 +84,9 @@ export class ChooseCategoryComponent implements OnInit {
         console.log('error', error);
       });
   }
+
+  hideStep(){
+    this.orderService.showElement = false;
+    this.router.navigate(['/waiter/order/:id/cart']);
+  }
 }

@@ -879,7 +879,7 @@ header {
     
     .item-list {
         display: flex;
-        margin-bottom: 10px;
+        margin-top: 10px;
         .item {
             max-width: 50px;
             position: relative;
@@ -1185,9 +1185,9 @@ header {
         cursor: pointer;
     }
     .cart-menu-btn{
-        text-align: right;
         button{
             margin: 0;
+            width: 100%;
         }
     }
 }

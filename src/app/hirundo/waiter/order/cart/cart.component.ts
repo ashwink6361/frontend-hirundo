@@ -15,6 +15,7 @@ export class CartComponent implements OnInit {
   private orderId;
   private variantList = [];
   private noteList = [];
+  public tableData = {};
   public showVarient: boolean = false;
   public activeTab: boolean[] = [true, false];
   public variantData = {
@@ -33,6 +34,7 @@ export class CartComponent implements OnInit {
     if (localStorage.getItem('orderId')) {
       this.orderId = JSON.parse(localStorage.getItem('orderId'));
       this.orderItems = JSON.parse(localStorage.getItem('orderItems'));
+      this.tableData = JSON.parse(localStorage.getItem('tabledata'))
     }
   }
 
@@ -397,5 +399,9 @@ export class CartComponent implements OnInit {
         console.log('variant this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
       }
     }
+  }
+
+  hideStep(){
+    this.orderService.showElement = false;
   }
 }
