@@ -3,7 +3,7 @@
         <a *ngIf="!orderId" routerLink="/waiter/order/:id/choose-item">
             <i class="fas fa-angle-left"></i>
         </a>
-        <a *ngIf="orderId" (click)="hideStep()" routerLink="/waiter/">
+        <a *ngIf="orderId" (click)="hideStep()">
             <i class="fas fa-angle-left"></i>
         </a>
     </div>
@@ -78,7 +78,7 @@
             </div>
         </div>
         <div class="cart-bottom-fixed">
-            <div class="total-amount">
+            <div class="total-amount" *ngIf="orderService.showElement && orderService.getOrderData().selectedItems">
                 Sub Total: &euro;{{orderService.getOrderData().cartTotalPrice}}
             </div>
             <div class="cart-menu-btn">
