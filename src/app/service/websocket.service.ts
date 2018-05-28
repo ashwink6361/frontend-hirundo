@@ -133,6 +133,13 @@ export class WebsocketService {
                 }
             }
         });
+        this.socket.on('itemUpdated', (data) => {
+            for(var i=0; i<this._orders.length; i++) {
+                if(data._id === this._orders[i]._id) {
+                    this._orders[i] = data;
+                }
+            }
+        });
     }
 
     public getOrders(): Promise<any> {

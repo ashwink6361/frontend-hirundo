@@ -929,6 +929,13 @@ var WebsocketService = /** @class */ (function () {
                 }
             }
         });
+        this.socket.on('itemUpdated', function (data) {
+            for (var i = 0; i < _this._orders.length; i++) {
+                if (data._id === _this._orders[i]._id) {
+                    _this._orders[i] = data;
+                }
+            }
+        });
     };
     WebsocketService.prototype.getOrders = function () {
         var _this = this;

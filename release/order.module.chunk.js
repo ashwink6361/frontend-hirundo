@@ -103,7 +103,8 @@ var CartComponent = /** @class */ (function () {
                             name: data.selectedItems[steps[a]][i].variant[j].name,
                             category: catarray,
                             price: data.selectedItems[steps[a]][i].variant[j].price,
-                            status: data.selectedItems[steps[a]][i].variant[j].status
+                            status: data.selectedItems[steps[a]][i].variant[j].status,
+                            id: data.selectedItems[steps[a]][i].variant[j]._id
                         };
                         vararray.push(vari);
                     }
