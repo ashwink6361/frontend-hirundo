@@ -787,6 +787,8 @@ var AppService = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_guard_auth_guard__ = __webpack_require__("../../../../../src/app/shared/guard/auth.guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_lodash__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -796,6 +798,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -864,40 +867,42 @@ var WebsocketService = /** @class */ (function () {
             // if(data.by.id !== user._id) {
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data.id === _this._orders[i]._id) {
+                    var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);
                     var userType = _this.authGuard.getCurrentUser().userType;
                     if (userType == 3) {
-                        _this._orders[i].step = data.step;
+                        temp.step = data.step;
                     }
                     else if (userType == 4) {
                         var steps = [];
                         var sts = [];
-                        for (var j_1 = 0; j_1 < _this._orders[i].item.length; j_1++) {
-                            for (var k = 0; k < data.step.length; k++) {
-                                if (((_this._orders[i].item[j_1].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(_this._orders[i].item[j_1].category)) > -1)) {
-                                    if (_this._orders[i].item[j_1].step == data.step[k].step) {
-                                        if (sts.indexOf(data.step[k].step) < 0) {
-                                            sts.push(data.step[k].step);
-                                            steps.push(data.step[k]);
+                        if (temp && temp.item) {
+                            for (var j_1 = 0; j_1 < temp.item.length; j_1++) {
+                                for (var k = 0; k < data.step.length; k++) {
+                                    if (((temp.item[j_1].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(temp.item[j_1].category)) > -1)) {
+                                        if (temp.item[j_1].step == data.step[k].step) {
+                                            if (sts.indexOf(data.step[k].step) < 0) {
+                                                sts.push(data.step[k].step);
+                                                steps.push(data.step[k]);
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
-                        console.log(steps, 'steps');
-                        _this._orders[i].step = steps;
-                        console.log(_this._orders[i].step, 'this._orders[i].step+++++++++');
+                        temp.step = steps;
                     }
-                    console.log(_this._orders[i].step, 'this._orders[i].step----------------');
-                    console.log(_this._orders[i], 'this._orders[i]----------------');
-                    _this._orders[i].stepStatus = data.stepStatus;
-                    _this._orders[i].status = data.status;
-                    for (var j = 0; j < _this._orders[i].item.length; j++) {
-                        if (data.order.itemId === _this._orders[i].item[j].id._id && data.order.step === _this._orders[i].item[j].step) {
-                            _this._orders[i].item[j].status = data.order.status;
+                    temp.stepStatus = data.stepStatus;
+                    temp.status = data.status;
+                    if (temp && temp.item) {
+                        for (var j = 0; j < temp.item.length; j++) {
+                            if (data.order.itemId === temp.item[j].id._id && data.order.step === temp.item[j].step) {
+                                temp.item[j].status = data.order.status;
+                            }
                         }
-                        if (data.status == 1) {
-                            _this._orders.splice(i, 1);
-                        }
+                    }
+                    _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
+                    if (data.status == 1) {
+                        _this._orders.splice(i, 1);
                     }
                 }
             }

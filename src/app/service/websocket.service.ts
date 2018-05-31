@@ -5,6 +5,7 @@ import { Http, Response } from '@angular/http';
 import * as Rx from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 import { AuthGuard } from '../shared/guard/auth.guard';
+import *  as _ from 'lodash';
 @Injectable()
 export class WebsocketService {
     // Our socket connection
@@ -68,17 +69,19 @@ export class WebsocketService {
             // if(data.by.id !== user._id) {
             for (var i = 0; i < this._orders.length; i++) {
                 if (data.id === this._orders[i]._id) {
+                    var temp = _.cloneDeep(this._orders[i]);
                     let userType = this.authGuard.getCurrentUser().userType;
                     if (userType == 3) {
-                        this._orders[i].step = data.step;
+                        temp.step = data.step;
                     }
                     else if (userType == 4) {
                         let steps = [];
                         let sts = [];
-                        for (let j = 0; j < this._orders[i].item.length; j++) {
+                        if(temp && temp.item){
+                        for (let j = 0; j < temp.item.length; j++) {
                             for (let k = 0; k < data.step.length; k++) {
-                                if (((this._orders[i].item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(this._orders[i].item[j].category)) > -1)) {
-                                    if (this._orders[i].item[j].step == data.step[k].step) {
+                                if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
+                                    if (temp.item[j].step == data.step[k].step) {
                                         if (sts.indexOf(data.step[k].step) < 0) {
                                             sts.push(data.step[k].step);
                                             steps.push(data.step[k]);
@@ -87,21 +90,22 @@ export class WebsocketService {
                                 }
                             }
                         }
-                        console.log(steps, 'steps');
-                        this._orders[i].step = steps;
-                        console.log(this._orders[i].step, 'this._orders[i].step+++++++++');
                     }
-                    console.log(this._orders[i].step, 'this._orders[i].step----------------');
-                    console.log(this._orders[i], 'this._orders[i]----------------');
-                    this._orders[i].stepStatus = data.stepStatus;
-                    this._orders[i].status = data.status;
-                    for (var j = 0; j < this._orders[i].item.length; j++) {
-                        if (data.order.itemId === this._orders[i].item[j].id._id && data.order.step === this._orders[i].item[j].step) {
-                            this._orders[i].item[j].status = data.order.status;
+                    temp.step = steps;
+                    }
+                    temp.stepStatus = data.stepStatus;
+                    temp.status = data.status;
+                    if(temp && temp.item){
+                        for (var j = 0; j < temp.item.length; j++) {
+                            if (data.order.itemId === temp.item[j].id._id && data.order.step === temp.item[j].step) {
+                                temp.item[j].status = data.order.status;
+                            }
+                            
                         }
-                        if(data.status == 1){
-                            this._orders.splice(i,1);
-                        }
+                    }
+                    this._orders[i]  = _.cloneDeep(temp);  
+                    if(data.status == 1){
+                        this._orders.splice(i,1);
                     }
                 }
             }
