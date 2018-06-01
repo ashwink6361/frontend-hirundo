@@ -22,6 +22,7 @@ export class OrderListComponent implements DoCheck {
     public stepdata: Array<any> = [];
     public orderId: Array<any> = [];
     public times: Array<any> = [];
+    public completeButton = false;
     // public showDeliveredButton: Array<any> = [];
     // public showToCall: Array<any> = [];
     public remainingTime: Array<any> = [];
@@ -204,6 +205,7 @@ export class OrderListComponent implements DoCheck {
                 if (seconds == 0 && step.status != 1 && step.step == this.stepdata[order._id].step) {
                     clearInterval(id);
                     let items = [];
+                    this.completeButton = true;
                     for (let i = 0; i < order.item.length; i++) {
                         for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
                             if (((order.item[i].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(order.item[i].category)) > -1)) {
@@ -310,6 +312,10 @@ export class OrderListComponent implements DoCheck {
             console.log("error", error);
         });
     };
+
+    showCompleteBtn(step, index, order, time){
+        this.completeButton = true;
+    }
 
     selectedTab(step, tab, orderId) {
         let temp = {

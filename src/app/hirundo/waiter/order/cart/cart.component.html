@@ -90,7 +90,7 @@
                 (click)="createOrder()">
                 <span>Create Order</span>
             </button>
-            <button  type="submit" *ngIf="orderId" class="order-btn waves-light" (click)="createOrder()">
+            <button  type="submit" *ngIf="orderId && orderService.showElement && orderService.getOrderData().selectedItems" class="order-btn waves-light" (click)="createOrder()">
                 <span>Update Order</span>
             </button>
         </div>
