@@ -164,6 +164,18 @@ export class WebsocketService {
             .then(data => {
                 let res = data.json();
                 this._orders = res.data;
+                for(var i = 0; i<this._orders.length; i++){
+                let stepStatus = [];                    
+                    for(let k in this._orders[i].step){
+                        if(this._orders[i].step[k].status == 1){
+                            stepStatus.push(this._orders[i].step[k].status);
+                        }
+                    }
+                    if(stepStatus.length == this._orders[i].step.length){
+                        this._orders.splice(i,1);
+                    }
+                }
+                    
                 return this._orders;
             })
             .catch(error => {

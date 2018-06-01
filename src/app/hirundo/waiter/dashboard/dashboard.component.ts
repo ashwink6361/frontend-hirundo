@@ -45,6 +45,7 @@ export class DashboardComponent implements OnInit {
       if (this.stepArray.length) {
         this.globalService.setStepData(this.stepArray);
       }
+      console.log(this.globalService.getStepData(), 'this.globalService.setStepData()0');
       var steps = [];
       let selectedItems = {};
       if (this.globalService.getStepData()) {
@@ -70,9 +71,13 @@ export class DashboardComponent implements OnInit {
       localStorage.removeItem('orderId');
       localStorage.removeItem('orderItems');
     }
+    console.log(this.orderService.getOrderData(), 'this.orderService.getOrderData()');
+    
     if (table.status == 1) {
       this.orderService.showElement = false;
-      this.router.navigate(['/waiter/order/:id/cart']);
+      if(this.orderService.getOrderData() && this.orderService.getOrderData().selectedItems){
+        this.router.navigate(['/waiter/order/:id/cart']);
+      }
     } else {
       this.orderService.showElement = true;
       this.router.navigate(['/waiter/order', room._id]);
