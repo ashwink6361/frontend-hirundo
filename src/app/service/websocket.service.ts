@@ -103,10 +103,19 @@ export class WebsocketService {
                             
                         }
                     }
-                    this._orders[i]  = _.cloneDeep(temp);  
-                    if(data.status == 1){
-                        this._orders.splice(i,1);
+                    let stepStatus = [];
+                    for(let k in temp.step){
+                        if(temp.step[k].status == 1){
+                            stepStatus.push(temp.step[k].status);
+                        }
                     }
+                    this._orders[i]  = _.cloneDeep(temp);
+                    if(stepStatus.length == temp.step.length){
+                        this._orders.splice(i,1);
+                    }  
+                    // if(data.status == 1){
+                    //     this._orders.splice(i,1);
+                    // }
                 }
             }
             // }
