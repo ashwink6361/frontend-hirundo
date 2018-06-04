@@ -155,7 +155,7 @@ export class WebsocketService {
         });
         this.socket.on('newItem', (data) => {
             console.log(data, 'newItem');
-            this._orders.push(data);
+            // this._orders.push(data);
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     var temp = _.cloneDeep(this._orders[i]);
