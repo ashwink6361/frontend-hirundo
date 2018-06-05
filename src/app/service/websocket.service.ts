@@ -77,42 +77,42 @@ export class WebsocketService {
                     else if (userType == 4) {
                         let steps = [];
                         let sts = [];
-                        if(temp && temp.item){
-                        for (let j = 0; j < temp.item.length; j++) {
-                            for (let k = 0; k < data.step.length; k++) {
-                                if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
-                                    if (temp.item[j].step == data.step[k].step) {
-                                        if (sts.indexOf(data.step[k].step) < 0) {
-                                            sts.push(data.step[k].step);
-                                            steps.push(data.step[k]);
+                        if (temp && temp.item) {
+                            for (let j = 0; j < temp.item.length; j++) {
+                                for (let k = 0; k < data.step.length; k++) {
+                                    if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
+                                        if (temp.item[j].step == data.step[k].step) {
+                                            if (sts.indexOf(data.step[k].step) < 0) {
+                                                sts.push(data.step[k].step);
+                                                steps.push(data.step[k]);
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
-                    temp.step = steps;
+                        temp.step = steps;
                     }
                     temp.stepStatus = data.stepStatus;
                     temp.status = data.status;
-                    if(temp && temp.item){
+                    if (temp && temp.item) {
                         for (var j = 0; j < temp.item.length; j++) {
                             if (data.order.itemId === temp.item[j].id._id && data.order.step === temp.item[j].step) {
                                 temp.item[j].status = data.order.status;
                             }
-                            
+
                         }
                     }
                     let stepStatus = [];
-                    for(let k in temp.step){
-                        if(temp.step[k].status == 1){
+                    for (let k in temp.step) {
+                        if (temp.step[k].status == 1) {
                             stepStatus.push(temp.step[k].status);
                         }
                     }
-                    this._orders[i]  = _.cloneDeep(temp);
-                    if(stepStatus.length == temp.step.length){
-                        this._orders.splice(i,1);
-                    }  
+                    this._orders[i] = _.cloneDeep(temp);
+                    if (stepStatus.length == temp.step.length) {
+                        this._orders.splice(i, 1);
+                    }
                     // if(data.status == 1){
                     //     this._orders.splice(i,1);
                     // }
@@ -133,22 +133,22 @@ export class WebsocketService {
             }
         });
         this.socket.on('changeStep', (data) => {
-            for(var i=0; i<this._orders.length; i++) {
-                if(data._id === this._orders[i]._id) {
+            for (var i = 0; i < this._orders.length; i++) {
+                if (data._id === this._orders[i]._id) {
                     this._orders[i].stepStatus = data.stepStatus;
                 }
             }
         });
         this.socket.on('itemDeleted', (data) => {
-            for(var i=0; i<this._orders.length; i++) {
-                if(data._id === this._orders[i]._id) {
+            for (var i = 0; i < this._orders.length; i++) {
+                if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;
                 }
             }
         });
         this.socket.on('itemUpdated', (data) => {
-            for(var i=0; i<this._orders.length; i++) {
-                if(data._id === this._orders[i]._id) {
+            for (var i = 0; i < this._orders.length; i++) {
+                if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;
                 }
             }
@@ -166,38 +166,41 @@ export class WebsocketService {
                     else if (userType == 4) {
                         let steps = [];
                         let sts = [];
-                        if(temp && temp.item){
-                        for (let j = 0; j < temp.item.length; j++) {
-                            for (let k = 0; k < data.step.length; k++) {
-                                if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
-                                    if (temp.item[j].step == data.step[k].step) {
-                                        if (sts.indexOf(data.step[k].step) < 0) {
-                                            sts.push(data.step[k].step);
-                                            steps.push(data.step[k]);
+                        if (temp && temp.item) {
+                            for (let j = 0; j < temp.item.length; j++) {
+                                for (let k = 0; k < data.step.length; k++) {
+                                    if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
+                                        if (temp.item[j].step == data.step[k].step) {
+                                            if (sts.indexOf(data.step[k].step) < 0) {
+                                                sts.push(data.step[k].step);
+                                                steps.push(data.step[k]);
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
-                    temp.step = steps;
+                        temp.step = steps;
                     }
                     temp.stepStatus = data.stepStatus;
                     temp.status = data.status;
-                    
+
                     let stepStatus = [];
-                    for(let k in temp.step){
-                        if(temp.step[k].status == 1){
+                    for (let k in temp.step) {
+                        if (temp.step[k].status == 1) {
                             stepStatus.push(temp.step[k].status);
                         }
                     }
-                    this._orders[i]  = _.cloneDeep(temp);
-                    if(stepStatus.length == temp.step.length){
-                        this._orders.splice(i,1);
-                    }  
+                    this._orders[i] = _.cloneDeep(temp);
+                    if (stepStatus.length == temp.step.length) {
+                        this._orders.splice(i, 1);
+                    }
                     // if(data.status == 1){
                     //     this._orders.splice(i,1);
                     // }
+                }
+                if(i == this._orders.length-1 && data._id !== this._orders[i]._id) {
+                    this._orders.push(data);
                 }
             }
         });
@@ -212,18 +215,18 @@ export class WebsocketService {
             .then(data => {
                 let res = data.json();
                 this._orders = res.data;
-                for(var i = 0; i<this._orders.length; i++){
-                let stepStatus = [];                    
-                    for(let k in this._orders[i].step){
-                        if(this._orders[i].step[k].status == 1){
+                for (var i = 0; i < this._orders.length; i++) {
+                    let stepStatus = [];
+                    for (let k in this._orders[i].step) {
+                        if (this._orders[i].step[k].status == 1) {
                             stepStatus.push(this._orders[i].step[k].status);
                         }
                     }
-                    if(stepStatus.length == this._orders[i].step.length){
-                        this._orders.splice(i,1);
+                    if (stepStatus.length == this._orders[i].step.length) {
+                        this._orders.splice(i, 1);
                     }
                 }
-                    
+
                 return this._orders;
             })
             .catch(error => {
@@ -263,18 +266,18 @@ export class WebsocketService {
             .then(data => {
                 let res = data.json();
                 for (var i = 0; i < this._orders.length; i++) {
-                    if (res._id === this._orders[i]._id) {                           
+                    if (res._id === this._orders[i]._id) {
                         let stepStatus = [];
-                        for(let k in res.step){
-                            if(res.step[k].status == 1){
+                        for (let k in res.step) {
+                            if (res.step[k].status == 1) {
                                 stepStatus.push(res.step[k].status);
                             }
                         }
-                        if(stepStatus.length == res.step.length){
-                            this._orders.splice(i,1);
-                        } 
+                        if (stepStatus.length == res.step.length) {
+                            this._orders.splice(i, 1);
+                        }
                     }
-                } 
+                }
                 return data.json();
             })
             .catch(error => {
