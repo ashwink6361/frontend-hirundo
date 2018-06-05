@@ -81,6 +81,9 @@
             <div class="total-amount" *ngIf="orderService.showElement && orderService.getOrderData().selectedItems">
                 Sub Total: &euro;{{orderService.getOrderData().cartTotalPrice}}
             </div>
+            <div class="total-amount" *ngIf="orderId && !orderService.showElement">
+                Total: &euro;{{orderItemsTotalPrice}}
+            </div>
             <div class="cart-menu-btn">
                 <button type="button" *ngIf="orderId" class="btn btn-default" (click)="gotToCategoryList()">
                     Menu

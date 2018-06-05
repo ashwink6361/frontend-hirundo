@@ -15,7 +15,7 @@ export class CartComponent implements OnInit {
   private orderId;
   private variantList = [];
   private noteList = [];
-  public tableData = {};
+  public tableData: any;
   public showVarient: boolean = false;
   public activeTab: boolean[] = [true, false];
   public variantData = {
@@ -27,14 +27,46 @@ export class CartComponent implements OnInit {
   public variantError = '';
   public showElement = 0;
   public articleData: any;
-  public nonVariantData: boolean = false;          
+  public nonVariantData: boolean = false;  
+  public orderItemsTotalPrice = 0;
+  public orderItemsTotalItem = 0;         
+           
   constructor(private orderService: OrderService, private router: Router, private globalService: GlobalService) { }
 
   ngOnInit() {
     if (localStorage.getItem('orderId')) {
       this.orderId = JSON.parse(localStorage.getItem('orderId'));
       this.orderItems = JSON.parse(localStorage.getItem('orderItems'));
-      this.tableData = JSON.parse(localStorage.getItem('tabledata'))
+      this.tableData = JSON.parse(localStorage.getItem('tabledata'));
+      console.log('this.tableData', this.tableData);      
+      var cp = 0;
+      var itemno = 0;
+      var varicost = 0;
+      this.orderItemsTotalPrice = 0;
+      this.orderItemsTotalItem = 0;
+      if (this.orderItems.length) {
+        for (var i = 0; i < this.orderItems.length; i++) {
+          console.log('this.orderItems[i]', this.orderItems[i]);
+          
+          varicost = 0;
+          itemno += this.orderItems[i].quantity;
+          if (this.orderItems[i].variant) {
+            for (var j = 0; j < this.orderItems[i].variant.length; j++) {
+              if (this.orderItems[i].variant[j].status == 1) {
+                varicost += this.orderItems[i].variant[j].price;
+              }
+            }
+          }
+          console.log('this.tableData.orderId.noOfPeople', this.tableData.orderId.noOfPeople);
+          cp += (this.orderItems[i].price + varicost) * this.orderItems[i].quantity;
+          console.log('cp', cp);
+          
+          this.orderItemsTotalPrice = cp + this.tableData.orderId.noOfPeople + (0.5 * this.tableData.orderId.noOfPeople);
+          this.orderItemsTotalItem = itemno;
+          console.log('this.orderItemsTotalPrice', this.orderItemsTotalPrice);
+          
+        }
+      }
     }
   }
 
