@@ -995,6 +995,9 @@ var WebsocketService = /** @class */ (function () {
                     //     this._orders.splice(i,1);
                     // }
                 }
+                if (i == _this._orders.length - 1 && data._id !== _this._orders[i]._id) {
+                    _this._orders.push(data);
+                }
             }
         });
     };
