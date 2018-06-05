@@ -156,8 +156,10 @@ export class WebsocketService {
         this.socket.on('newItem', (data) => {
             console.log(data, 'newItem');
             // this._orders.push(data);
+            var tempArray = [];
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
+                    tempArray.push(this._orders[i]._id);
                     var temp = _.cloneDeep(this._orders[i]);
                     let userType = this.authGuard.getCurrentUser().userType;
                     if (userType == 3) {
@@ -199,9 +201,53 @@ export class WebsocketService {
                     //     this._orders.splice(i,1);
                     // }
                 }
-                if(i == this._orders.length-1 && data._id !== this._orders[i]._id) {
-                    this._orders.push(data);
+
+            }
+            console.log('in 1', data._id, tempArray.indexOf(data._id));
+            if (tempArray.indexOf(data._id) < 0) {
+                console.log('in 2');
+                this._orders.push(data);
+                for (var i = 0; i < this._orders.length; i++) {
+                    if (data._id === this._orders[i]._id) {
+                        var temp = _.cloneDeep(this._orders[i]);
+                        let userType = this.authGuard.getCurrentUser().userType;
+                        if (userType == 3) {
+                            temp.step = data.step;
+                        }
+                        else if (userType == 4) {
+                            let steps = [];
+                            let sts = [];
+                            if (temp && temp.item) {
+                                for (let j = 0; j < temp.item.length; j++) {
+                                    for (let k = 0; k < data.step.length; k++) {
+                                        if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
+                                            if (temp.item[j].step == data.step[k].step) {
+                                                if (sts.indexOf(data.step[k].step) < 0) {
+                                                    sts.push(data.step[k].step);
+                                                    steps.push(data.step[k]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            temp.step = steps;
+                        }
+                        temp.stepStatus = data.stepStatus;
+                        temp.status = data.status;
+                        let stepStatus = [];
+                        for (let k in temp.step) {
+                            if (temp.step[k].status == 1) {
+                                stepStatus.push(temp.step[k].status);
+                            }
+                        }
+                        this._orders[i] = _.cloneDeep(temp);
+                        if (stepStatus.length == temp.step.length) {
+                            this._orders.splice(i, 1);
+                        }
+                    }
                 }
+
             }
         });
     }

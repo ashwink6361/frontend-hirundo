@@ -953,8 +953,10 @@ var WebsocketService = /** @class */ (function () {
         this.socket.on('newItem', function (data) {
             console.log(data, 'newItem');
             // this._orders.push(data);
+            var tempArray = [];
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id === _this._orders[i]._id) {
+                    tempArray.push(_this._orders[i]._id);
                     var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);
                     var userType = _this.authGuard.getCurrentUser().userType;
                     if (userType == 3) {
@@ -995,8 +997,50 @@ var WebsocketService = /** @class */ (function () {
                     //     this._orders.splice(i,1);
                     // }
                 }
-                if (i == _this._orders.length - 1 && data._id !== _this._orders[i]._id) {
-                    _this._orders.push(data);
+            }
+            console.log('in 1', data._id, tempArray.indexOf(data._id));
+            if (tempArray.indexOf(data._id) < 0) {
+                console.log('in 2');
+                _this._orders.push(data);
+                for (var i = 0; i < _this._orders.length; i++) {
+                    if (data._id === _this._orders[i]._id) {
+                        var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);
+                        var userType = _this.authGuard.getCurrentUser().userType;
+                        if (userType == 3) {
+                            temp.step = data.step;
+                        }
+                        else if (userType == 4) {
+                            var steps = [];
+                            var sts = [];
+                            if (temp && temp.item) {
+                                for (var j = 0; j < temp.item.length; j++) {
+                                    for (var k = 0; k < data.step.length; k++) {
+                                        if (((temp.item[j].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
+                                            if (temp.item[j].step == data.step[k].step) {
+                                                if (sts.indexOf(data.step[k].step) < 0) {
+                                                    sts.push(data.step[k].step);
+                                                    steps.push(data.step[k]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            temp.step = steps;
+                        }
+                        temp.stepStatus = data.stepStatus;
+                        temp.status = data.status;
+                        var stepStatus = [];
+                        for (var k in temp.step) {
+                            if (temp.step[k].status == 1) {
+                                stepStatus.push(temp.step[k].status);
+                            }
+                        }
+                        _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
+                        if (stepStatus.length == temp.step.length) {
+                            _this._orders.splice(i, 1);
+                        }
+                    }
                 }
             }
         });
