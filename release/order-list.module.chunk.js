@@ -227,20 +227,36 @@ var OrderListComponent = /** @class */ (function () {
     ;
     OrderListComponent.prototype.updateStepItem = function (step, index, order, time, status) {
         var _this = this;
+        var id;
+        var seconds = 0;
+        var timeInterval = 0;
+        // console.log("updateStepItem Hello", status);
+        if (status == 5) {
+            console.log("Hello");
+            seconds = 0;
+            timeInterval = 0;
+            clearInterval(id);
+        }
+        if (status != 5) {
+            console.log("time * 60;", seconds);
+            seconds = time * 60;
+            timeInterval = 1000;
+        }
         var m = time - 1;
-        var seconds = time * 60;
         var w = parseFloat((100 / seconds).toFixed(2));
-        var timeInterval = 1000;
         var t = 0;
         var s = 60;
         var width = 0;
-        var id = setInterval(function () {
+        id = setInterval(function () {
             if (step.status != 1 && step.step == _this.stepdata[order._id].step) {
                 t = t + 1;
                 seconds = seconds - 1;
                 s = s - 1;
+                // console.log(step.step , this.stepdata[order._id].step, seconds, "asdsad+++++++")
                 if (seconds == 0 && step.status != 1 && step.step == _this.stepdata[order._id].step) {
+                    console.log("one time ", seconds);
                     clearInterval(id);
+                    setTimeout(function () { step.status == 5 && step.step == this.stepdata[order._id].step; }, 0);
                     var items_1 = [];
                     _this.completeButton = true;
                     for (var i = 0; i < order.item.length; i++) {
