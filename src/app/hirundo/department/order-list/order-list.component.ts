@@ -285,6 +285,10 @@ export class OrderListComponent implements DoCheck {
             for (let i = 0; i < data.data.step.length; i++) {
                 if (data.data.step[i].step == step.step) {
                     step.status = data.data.step[i].status;
+                    if(step.status == 5){
+                        clearInterval(id);
+                        seconds =0;
+                    }
                 }
             }
             if (order.step) {
