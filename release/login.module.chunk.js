@@ -75,7 +75,6 @@ var LoginComponent = /** @class */ (function () {
         this.User.password = user.password;
         this.User.deviceType = 'web';
         this.loginService.login(this.User).then(function (data) {
-            console.log('datadatadatadatadatadata', data);
             document.cookie = "token=" + data.token;
             localStorage.setItem('isLoggedin', 'true');
             localStorage.setItem('currentUser', JSON.stringify(data.data));
@@ -87,7 +86,6 @@ var LoginComponent = /** @class */ (function () {
                 window.location.href = '/department';
             }
         }).catch(function (error) {
-            console.log("Error ", error);
             _this.requestRunning = false;
             _this.loginError = true;
             _this.loginErrorMsg = error;

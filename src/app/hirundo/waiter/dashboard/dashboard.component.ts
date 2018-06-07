@@ -28,14 +28,12 @@ export class DashboardComponent implements OnInit {
       localStorage.setItem('roomdata', JSON.stringify(this.roomData[0]));
     })
       .catch(error => {
-        console.log('error', error);
       });
   }
 
   createOrder(table) {
     localStorage.setItem('tabledata', JSON.stringify(table));
     let room = JSON.parse(localStorage.getItem('roomdata'));
-    console.log('table', table);
     if (table.orderId != null && table.orderId._id) {
       localStorage.setItem('orderId', JSON.stringify(table.orderId._id));
       localStorage.setItem('orderItems', JSON.stringify(table.orderId.item));
@@ -45,7 +43,7 @@ export class DashboardComponent implements OnInit {
       if (this.stepArray.length) {
         this.globalService.setStepData(this.stepArray);
       }
-      console.log(this.globalService.getStepData(), 'this.globalService.setStepData()0');
+      console.log(this.globalService.getStepData());
       var steps = [];
       let selectedItems = {};
       if (this.globalService.getStepData()) {
@@ -71,7 +69,7 @@ export class DashboardComponent implements OnInit {
       localStorage.removeItem('orderId');
       localStorage.removeItem('orderItems');
     }
-    console.log(this.orderService.getOrderData(), 'this.orderService.getOrderData()');
+    console.log(this.orderService.getOrderData());
     
     if (table.status == 1) {
       this.orderService.showElement = false;

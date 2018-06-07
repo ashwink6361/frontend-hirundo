@@ -29,7 +29,6 @@ export class CreateOrderComponent implements OnInit {
   protected dataService1: CompleterData;
   protected selectedCategory = {};
   private categoryItems = [];
-  // private categoryItems = {};
   public numberError: boolean = false;
   public numberErrorMsg: string = '';
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
@@ -56,7 +55,6 @@ export class CreateOrderComponent implements OnInit {
         }
       })
       .catch(error => {
-        console.log('error', error);
       });
   }
 

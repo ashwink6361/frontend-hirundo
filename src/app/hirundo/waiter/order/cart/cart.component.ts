@@ -38,7 +38,6 @@ export class CartComponent implements OnInit {
       this.orderId = JSON.parse(localStorage.getItem('orderId'));
       this.orderItems = JSON.parse(localStorage.getItem('orderItems'));
       this.tableData = JSON.parse(localStorage.getItem('tabledata'));
-      console.log('this.tableData', this.tableData);      
       var cp = 0;
       var itemno = 0;
       var varicost = 0;
@@ -46,8 +45,6 @@ export class CartComponent implements OnInit {
       this.orderItemsTotalItem = 0;
       if (this.orderItems.length) {
         for (var i = 0; i < this.orderItems.length; i++) {
-          console.log('this.orderItems[i]', this.orderItems[i]);
-          
           varicost = 0;
           itemno += this.orderItems[i].quantity;
           if (this.orderItems[i].variant) {
@@ -57,14 +54,9 @@ export class CartComponent implements OnInit {
               }
             }
           }
-          console.log('this.tableData.orderId.noOfPeople', this.tableData.orderId.noOfPeople);
           cp += (this.orderItems[i].price + varicost) * this.orderItems[i].quantity;
-          console.log('cp', cp);
-          
           this.orderItemsTotalPrice = cp + this.tableData.orderId.noOfPeople + (0.5 * this.tableData.orderId.noOfPeople);
           this.orderItemsTotalItem = itemno;
-          console.log('this.orderItemsTotalPrice', this.orderItemsTotalPrice);
-          
         }
       }
     }
@@ -125,7 +117,6 @@ export class CartComponent implements OnInit {
           this.orderService.showElement = false;
         })
         .catch(error => {
-          console.log('error', error);
         });
     }
     else {
@@ -135,7 +126,6 @@ export class CartComponent implements OnInit {
           this.orderService.showElement = false;
         })
         .catch(error => {
-          console.log('error', error);
         });
     }
   }
@@ -249,7 +239,6 @@ export class CartComponent implements OnInit {
         }
       })
       .catch(error => {
-        console.log('error', error);
       });
   }
 
@@ -368,7 +357,6 @@ export class CartComponent implements OnInit {
         }
         this.orderService.setOrderData(data);
         this.hideVarient();
-        console.log('variant this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
       }
     }
     else {
@@ -388,7 +376,6 @@ export class CartComponent implements OnInit {
         this.articleData.quantity = this.variantData.quantity;
         this.articleData.variant = this.variantData.variant;
         this.articleData.ordernote = this.variantData.notes;
-        console.log('this.articleData', this.articleData);
         let data = this.orderService.getOrderData();
         for (let i = 0; i < data.selectedItems[this.articleData.step].length; i++) {
           if (data.selectedItems[this.articleData.step][i]._id == this.articleData._id && data.selectedItems[this.articleData.step][i].variant && data.selectedItems[this.articleData.step][i].variantUniqueId == this.articleData.variantUniqueId) {
@@ -429,7 +416,6 @@ export class CartComponent implements OnInit {
         }
         this.orderService.setOrderData(data);
         this.hideVarient();
-        console.log('variant this.orderService.setOrderData(this.data);.', this.orderService.getOrderData());
       }
     }
   }

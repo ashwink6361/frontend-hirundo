@@ -35,7 +35,6 @@ export class LoginComponent implements OnInit {
         this.User.password = user.password;
         this.User.deviceType = 'web';
         this.loginService.login(this.User).then(data => {
-            console.log('datadatadatadatadatadata',data);
             document.cookie = "token=" + data.token;
             localStorage.setItem('isLoggedin', 'true');
             localStorage.setItem('currentUser', JSON.stringify(data.data));
@@ -46,7 +45,6 @@ export class LoginComponent implements OnInit {
                 window.location.href = '/department';
             }
         }).catch(error => {
-            console.log("Error ", error);
             this.requestRunning = false;
             this.loginError = true;
             this.loginErrorMsg = error;

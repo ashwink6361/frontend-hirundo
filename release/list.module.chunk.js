@@ -57,7 +57,6 @@ var ListComponent = /** @class */ (function () {
         this.router = router;
         this.differs = differs;
         this.orders = [];
-        // public orders: Array<any> = [];
         this.loadingOrders = true;
         this.steps = [];
         this.activetab = [];
@@ -117,7 +116,6 @@ var ListComponent = /** @class */ (function () {
             _this.loadingOrders = false;
         })
             .catch(function (error) {
-            console.log('error', error);
         });
     };
     ListComponent.prototype.getOrderStatus = function (status) {
@@ -156,7 +154,6 @@ var ListComponent = /** @class */ (function () {
         };
         this.websocketService.updateOrder(order._id, opts).then(function (data) {
         }).catch(function (error) {
-            console.log("error", error);
         });
     };
     ;
@@ -170,7 +167,6 @@ var ListComponent = /** @class */ (function () {
         };
         this.websocketService.updateWaiterOrder(order, opts).then(function (data) {
         }).catch(function (error) {
-            console.log("error", error);
         });
     };
     ;
@@ -182,9 +178,7 @@ var ListComponent = /** @class */ (function () {
         };
         this.websocketService.changeOrderStep(order._id, opts).then(function (data) {
             _this.showToCall[order._id][stepKey] = false;
-            console.log("this.showToCall", _this.showToCall);
         }).catch(function (error) {
-            console.log("error", error);
         });
     };
     ;

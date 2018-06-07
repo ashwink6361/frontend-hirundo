@@ -14,7 +14,6 @@ import *  as _ from 'lodash';
 export class ListComponent implements DoCheck {
     @Input() orders: Array<any> = [];
     differ: any;
-    // public orders: Array<any> = [];
     public loadingOrders: boolean = true;
     public steps: Array<any> = [];
     public activetab: boolean[] = [];
@@ -75,7 +74,6 @@ export class ListComponent implements DoCheck {
             this.loadingOrders = false;
         })
             .catch(error => {
-                console.log('error', error);
             });
     }
 
@@ -111,7 +109,6 @@ export class ListComponent implements DoCheck {
         };
         this.websocketService.updateOrder(order._id, opts).then(data => {
         }).catch(error => {
-            console.log("error", error);
         });
     };
 
@@ -125,7 +122,6 @@ export class ListComponent implements DoCheck {
         };
         this.websocketService.updateWaiterOrder(order, opts).then(data => {
         }).catch(error => {
-            console.log("error", error);
         });
     };
 
@@ -137,9 +133,7 @@ export class ListComponent implements DoCheck {
         };
         this.websocketService.changeOrderStep(order._id, opts).then(data => {
             this.showToCall[order._id][stepKey] = false;   
-            console.log("this.showToCall", this.showToCall);                     
         }).catch(error => {
-            console.log("error", error);
         });
     };
 

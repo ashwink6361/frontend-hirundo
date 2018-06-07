@@ -40,20 +40,18 @@ export class ChooseCategoryComponent implements OnInit {
         }
       })
       .catch(error => {
-        console.log('error', error);
       });
   }
 
   showItems(category) {
     let orderdata = this.orderService.getOrderData();
     orderdata.selectedCategory = category;
-    // orderdata.categoryItems = [];
     orderdata.categoryItems = {};    
     this.orderService.getCategoryItem().then(data => {
       if(data.data.length){
         for (let i = 0; i < data.data.length; i++) {
           if (data.data[i].category._id == category._id) {
-            console.log('globalService.getStepData()',this.globalService.getStepData());
+            console.log(this.globalService.getStepData());
             var steps = [];
             if (this.globalService.getStepData()) {
               steps = this.globalService.getStepData();
@@ -68,12 +66,6 @@ export class ChooseCategoryComponent implements OnInit {
                 orderdata.categoryItems[steps[j]][k].itemTotal = 0;
               }
             }
-            console.log('orderdata.categoryItems',orderdata.categoryItems);
-            // orderdata.categoryItems = data.data[i].items;
-            // for (let j = 0; j < orderdata.categoryItems.length; j++) {
-            //   orderdata.categoryItems[j].quantity = 0;
-            //   orderdata.categoryItems[j].itemTotal = 0;
-            // }
           }
         }
       }
@@ -81,7 +73,6 @@ export class ChooseCategoryComponent implements OnInit {
       this.router.navigate(['/waiter/order/:id/choose-item']);
     })
       .catch(error => {
-        console.log('error', error);
       });
   }
 

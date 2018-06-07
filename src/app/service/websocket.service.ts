@@ -18,7 +18,6 @@ export class WebsocketService {
         this.http.get(url).toPromise()
             .then(data => {
                 this.socketUrl = data.json().socketUrl;
-                console.log(this.socketUrl);
                 this.connect();
             })
             .catch(error => {
@@ -34,7 +33,6 @@ export class WebsocketService {
             console.log("Socket connection done ");
         let user = JSON.parse(localStorage.getItem('currentUser'));
         this.socket.on('neworder', (data) => {
-            console.log("Received Order from Websocket Server", data);
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
                 this._orders.push(data);
@@ -242,7 +240,6 @@ export class WebsocketService {
                         }
                     }
                 }
-
             }
         });
     }

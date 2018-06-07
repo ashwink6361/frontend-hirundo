@@ -815,7 +815,6 @@ var WebsocketService = /** @class */ (function () {
         this.http.get(url).toPromise()
             .then(function (data) {
             _this.socketUrl = data.json().socketUrl;
-            console.log(_this.socketUrl);
             _this.connect();
         })
             .catch(function (error) {
@@ -832,7 +831,6 @@ var WebsocketService = /** @class */ (function () {
             console.log("Socket connection done ");
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.socket.on('neworder', function (data) {
-            console.log("Received Order from Websocket Server", data);
             var userType = _this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
                 _this._orders.push(data);
