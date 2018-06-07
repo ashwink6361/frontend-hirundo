@@ -54,8 +54,6 @@ export class WebsocketService {
                                 status: 0
                             });
                         }
-                        // this._orders.unshift(data);
-                        // break;
                     }
                 }
                 if (isItemExist) {
@@ -65,8 +63,6 @@ export class WebsocketService {
             }
         });
         this.socket.on('orderstatus', (data) => {
-            console.log(data, 'order status');
-            // if(data.by.id !== user._id) {
             for (var i = 0; i < this._orders.length; i++) {
                 if (data.id === this._orders[i]._id) {
                     var temp = _.cloneDeep(this._orders[i]);
@@ -113,12 +109,8 @@ export class WebsocketService {
                     if (stepStatus.length == temp.step.length) {
                         this._orders.splice(i, 1);
                     }
-                    // if(data.status == 1){
-                    //     this._orders.splice(i,1);
-                    // }
                 }
             }
-            // }
         });
         this.socket.on('tablestatus', (data) => {
             for (var i = 0; i < this._rooms.length; i++) {
@@ -154,8 +146,6 @@ export class WebsocketService {
             }
         });
         this.socket.on('newItem', (data) => {
-            console.log(data, 'newItem');
-            // this._orders.push(data);
             var tempArray = [];
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
@@ -164,6 +154,7 @@ export class WebsocketService {
                     let userType = this.authGuard.getCurrentUser().userType;
                     if (userType == 3) {
                         temp.step = data.step;
+                        temp.item = data.item;
                     }
                     else if (userType == 4) {
                         let steps = [];
@@ -183,6 +174,15 @@ export class WebsocketService {
                             }
                         }
                         temp.step = steps;
+                        let itemsTemp = [];
+                        if (data && data.item) {
+                            for (let j = 0; j < data.item.length; j++) {
+                                    if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
+                                        itemsTemp.push(data.item[j]);
+                                    }
+                            }
+                        }
+                        temp.item = itemsTemp;
                     }
                     temp.stepStatus = data.stepStatus;
                     temp.status = data.status;
@@ -197,15 +197,10 @@ export class WebsocketService {
                     if (stepStatus.length == temp.step.length) {
                         this._orders.splice(i, 1);
                     }
-                    // if(data.status == 1){
-                    //     this._orders.splice(i,1);
-                    // }
                 }
 
             }
-            console.log('in 1', data._id, tempArray.indexOf(data._id));
             if (tempArray.indexOf(data._id) < 0) {
-                console.log('in 2');
                 this._orders.push(data);
                 for (var i = 0; i < this._orders.length; i++) {
                     if (data._id === this._orders[i]._id) {
