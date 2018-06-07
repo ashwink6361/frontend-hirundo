@@ -28,7 +28,8 @@ export class OrderListComponent implements DoCheck {
     public remainingTime: Array<any> = [];
     public orderStepData: {};
     public barWidth: Array<any> = [];
-    constructor(public websocketService: WebsocketService, public authGuard: AuthGuard,private differs: IterableDiffers) {
+    public id;
+    constructor(public websocketService: WebsocketService, public authGuard: AuthGuard, private differs: IterableDiffers) {
         this.differ = differs.find([]).create(null);
     }
 
@@ -48,16 +49,16 @@ export class OrderListComponent implements DoCheck {
                         }
                         time[this.orders[i].step[k].step] = Math.max(...temp);
                         remtime[this.orders[i].step[k].step] = '0:00';
-                        if(this.orders[i].step[k].status == 1){
+                        if (this.orders[i].step[k].status == 1) {
                             let temparray = this.orders[i].step[k].step.split(' ');
                             let num = Number(temparray[1]);
-                            let stepTemp = temparray[0]+' '+ ++num;
+                            let stepTemp = temparray[0] + ' ' + ++num;
                             let temp = {
                                 tab: num,
                                 step: stepTemp,
                             }
                             this.stepdata[this.orders[i]._id] = temp;
-                        }else{
+                        } else {
                             let tempp = {
                                 tab: 0,
                                 step: ''
@@ -66,7 +67,7 @@ export class OrderListComponent implements DoCheck {
                             tempp.step = this.orders[i].step[0].step;
                             this.stepdata[this.orders[i]._id] = tempp;
                         }
-                        
+
                     }
                     // this.orderId.push(this.orders[i]._id);
                     // let step = [];
@@ -152,7 +153,7 @@ export class OrderListComponent implements DoCheck {
         return str;
     };
 
-    public updateOrder(order, time, status) {        
+    public updateOrder(order, time, status) {
         order.status = status;
         let items = [];
         for (let i = 0; i < order.item.length; i++) {
@@ -190,37 +191,46 @@ export class OrderListComponent implements DoCheck {
     };
 
     public updateStepItem(step, index, order, time, status) {
-        var id ;
-        let seconds = 0;
-        let timeInterval = 0;
-        
+        if (localStorage.getItem('step') != null) {
+            localStorage.removeItem('step');
+        }
+        localStorage.setItem('step', JSON.stringify(step));
+        // var id;
+        // let seconds = 0;
+        // let timeInterval = 0;
+
         // console.log("updateStepItem Hello", status);
-        if(status == 5){
-            console.log("Hello");
-            seconds = 0;
-            timeInterval = 0;
-            clearInterval(id);            
-        }
-        if(status != 5){
-            console.log("time * 60;",  seconds);
-            seconds = time * 60;
-            timeInterval = 1000;
-        }
-        let m = time - 1;        
+        // if (status == 5) {
+        //     console.log("Hello", id);
+        //     seconds = 0;
+        //     timeInterval = 0;
+        //     clearInterval(id);
+        // }
+        // if (status != 5) {
+        //     console.log("time * 60;", seconds);
+        let seconds = time * 60;
+        let timeInterval = 1000;
+        // }
+        let m = time - 1;
         let w = parseFloat((100 / seconds).toFixed(2));
         let t = 0;
         let s = 60;
         var width = 0;
-        id = setInterval(() => {
-            if(step.status != 1 && step.step == this.stepdata[order._id].step){
+        step = JSON.parse(localStorage.getItem('step'));  // Clones the object                
+        
+        this.id = setInterval(() => {
+                step = JSON.parse(localStorage.getItem('step'));  // Clones the object        
+            
+            console.log(step.status, "step.status");
+            if (step.status != 1 && step.status != 5 && step.step == this.stepdata[order._id].step) {
                 t = t + 1;
                 seconds = seconds - 1;
                 s = s - 1;
                 // console.log(step.step , this.stepdata[order._id].step, seconds, "asdsad+++++++")
                 if (seconds == 0 && step.status != 1 && step.step == this.stepdata[order._id].step) {
                     console.log("one time ", seconds);
-                    clearInterval(id);
-                    setTimeout(function(){step.status == 5 && step.step == this.stepdata[order._id].step}, 0);
+                    clearInterval(this.id);
+                    this.remainingTime[order._id][step.step] = '0:00';
                     let items = [];
                     this.completeButton = true;
                     for (let i = 0; i < order.item.length; i++) {
@@ -240,36 +250,37 @@ export class OrderListComponent implements DoCheck {
                         itemId: items,
                         step: this.stepdata[order._id].step
                     };
-                        this.websocketService.updateOrder(order._id, temp).then(data => {
-                            order.status = data.data.status;
-                            for (let i = 0; i < this.orders.length; i++) {
-                                if (this.orders[i]._id == data.data._id) {
-                                    this.orders[i].step = data.data.step;
-                                }
+                    this.websocketService.updateOrder(order._id, temp).then(data => {
+                        order.status = data.data.status;
+                        for (let i = 0; i < this.orders.length; i++) {
+                            if (this.orders[i]._id == data.data._id) {
+                                this.orders[i].step = data.data.step;
                             }
-                            for (let i = 0; i < data.data.step.length; i++) {
-                                if (data.data.step[i].step == step.step) {
-                                    step.status = data.data.step[i].status;
-                                }
+                        }
+                        for (let i = 0; i < data.data.step.length; i++) {
+                            if (data.data.step[i].step == step.step) {
+                                step.status = data.data.step[i].status;
                             }
-                        }).catch(error => {
-                            console.log("error", error);
-                        });
-                } else {
+                        }
+                    }).catch(error => {
+                        console.log("error", error);
+                    });
+                }
+                else {
                     width = width + w;
                     if (width < 100) {
-                        this.barWidth[step.step.replace(' ', '')+order._id+index] = width + '%';
+                        this.barWidth[step.step.replace(' ', '') + order._id + index] = width + '%';
                     } else {
-                        this.barWidth[step.step.replace(' ', '')+order._id+index] = '100%';
+                        this.barWidth[step.step.replace(' ', '') + order._id + index] = '100%';
                     }
                 }
                 if (t == 60) {
                     t = 0;
-                    if(m==0) {
+                    if (m == 0) {
                         m = 0;
                         s = 0;
                     } else {
-                        m = m-1;
+                        m = m - 1;
                         s = 60;
                     }
                 }
@@ -277,6 +288,7 @@ export class OrderListComponent implements DoCheck {
                 this.remainingTime[order._id][this.stepdata[order._id].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
             }
         }, timeInterval);
+        console.log(this.id, "after time interval");
 
         let items = [];
         for (let i = 0; i < order.item.length; i++) {
@@ -296,16 +308,23 @@ export class OrderListComponent implements DoCheck {
             itemId: items,
             step: this.stepdata[order._id].step
         };
-        this.websocketService.updateOrder(order._id, opts).then(data => {
+        this.websocketService.updateOrder(order._id, opts).then((data) => {
             order.status = data.data.status;
             order.step = data.data.step;
             for (let i = 0; i < data.data.step.length; i++) {
                 if (data.data.step[i].step == step.step) {
                     step.status = data.data.step[i].status;
-                    if(step.status == 5){
-                        clearInterval(id);
-                        seconds =0;
+                    
+                    if (step.status == 5) {
+                        console.log("Hello52929", this.id);
+                        seconds = 0;
+                        timeInterval = 0;
+                        clearInterval(this.id);
+                        setTimeout(this.id.data.handleId);
+                        this.remainingTime[order._id][step.step] = '0:00';
                     }
+                    localStorage.setItem('step',JSON.stringify(data.data.step[i]));
+                    
                 }
             }
             if (order.step) {
@@ -322,10 +341,10 @@ export class OrderListComponent implements DoCheck {
                     }
                 }
             }
-            if(data.data.status == 1){
-                for(var i=0; i<this.orders.length; i++) {
-                    if(data.data._id === this.orders[i]._id) {
-                        this.orders.splice(i,1);
+            if (data.data.status == 1) {
+                for (var i = 0; i < this.orders.length; i++) {
+                    if (data.data._id === this.orders[i]._id) {
+                        this.orders.splice(i, 1);
                     }
                 }
             }
@@ -334,7 +353,7 @@ export class OrderListComponent implements DoCheck {
         });
     };
 
-    showCompleteBtn(step, index, order, time){
+    showCompleteBtn(step, index, order, time) {
         this.completeButton = true;
     }
 
@@ -343,7 +362,7 @@ export class OrderListComponent implements DoCheck {
             tab: tab,
             step: step
         }
-        this.stepdata[orderId] = temp;        
+        this.stepdata[orderId] = temp;
     }
 
     ngDoCheck() {
@@ -448,7 +467,7 @@ export class OrderListComponent implements DoCheck {
 //                             tempp.step = this.orders[i].step[0].step;
 //                             this.stepdata[this.orders[i]._id] = tempp;
 //                         }
-                        
+
 //                     }
 //                     // this.orderId.push(this.orders[i]._id);
 //                     // let step = [];
@@ -634,7 +653,7 @@ export class OrderListComponent implements DoCheck {
 //                     }
 //                 }
 //             }
-            
+
 //         }).catch(error => {
 //             console.log("error", error);
 //         });
@@ -657,7 +676,7 @@ export class OrderListComponent implements DoCheck {
 //         if(step.status !== 5){
 //             if(step.status != 1 && step.step == this.stepdata[order._id].step){
 //                 console.log('seconds 2',seconds);
-                
+
 //                 t = t + 1;
 //                 seconds = seconds > 0 ? seconds - 1 : 0;
 //                 s = s - 1;
@@ -665,7 +684,7 @@ export class OrderListComponent implements DoCheck {
 //                 if (seconds == 0 && step.status != 1 && step.step == this.stepdata[order._id].step) {
 //                 console.log('inseconds 4',seconds);
 //             this.clearRunningInterval(this.id.data.handleId);
-                    
+
 //                     // clearInterval(id);
 //                     // id = 0;
 //                     let items = [];
@@ -798,7 +817,7 @@ export class OrderListComponent implements DoCheck {
 //         //             }
 //         //         }
 //         //     }
-            
+
 //         // }).catch(error => {
 //         //     console.log("error", error);
 //         // });
@@ -839,7 +858,7 @@ export class OrderListComponent implements DoCheck {
 //                     this.remainingTime[this.orders[i]._id][this.orders[i].step[a].step] = '0:00';
 //                     console.log(' 1 this.remainingTime[this.orders[i]._id][this.orders[i].step[a].step]++++++++++++',this.remainingTime[this.orders[i]._id][this.orders[i].step[a].step]);        
 //                     console.log(' 1 this.remainingTime++++++++++++',this.remainingTime);                      
-                                  
+
 //                             }
 //                         }
 //                     }      
