@@ -227,36 +227,43 @@ var OrderListComponent = /** @class */ (function () {
     ;
     OrderListComponent.prototype.updateStepItem = function (step, index, order, time, status) {
         var _this = this;
-        var id;
-        var seconds = 0;
-        var timeInterval = 0;
+        if (localStorage.getItem('step') != null) {
+            localStorage.removeItem('step');
+        }
+        localStorage.setItem('step', JSON.stringify(step));
+        // var id;
+        // let seconds = 0;
+        // let timeInterval = 0;
         // console.log("updateStepItem Hello", status);
-        if (status == 5) {
-            console.log("Hello");
-            seconds = 0;
-            timeInterval = 0;
-            clearInterval(id);
-        }
-        if (status != 5) {
-            console.log("time * 60;", seconds);
-            seconds = time * 60;
-            timeInterval = 1000;
-        }
+        // if (status == 5) {
+        //     console.log("Hello", id);
+        //     seconds = 0;
+        //     timeInterval = 0;
+        //     clearInterval(id);
+        // }
+        // if (status != 5) {
+        //     console.log("time * 60;", seconds);
+        var seconds = time * 60;
+        var timeInterval = 1000;
+        // }
         var m = time - 1;
         var w = parseFloat((100 / seconds).toFixed(2));
         var t = 0;
         var s = 60;
         var width = 0;
-        id = setInterval(function () {
-            if (step.status != 1 && step.step == _this.stepdata[order._id].step) {
+        step = JSON.parse(localStorage.getItem('step')); // Clones the object                
+        this.id = setInterval(function () {
+            step = JSON.parse(localStorage.getItem('step')); // Clones the object        
+            console.log(step.status, "step.status");
+            if (step.status != 1 && step.status != 5 && step.step == _this.stepdata[order._id].step) {
                 t = t + 1;
                 seconds = seconds - 1;
                 s = s - 1;
                 // console.log(step.step , this.stepdata[order._id].step, seconds, "asdsad+++++++")
                 if (seconds == 0 && step.status != 1 && step.step == _this.stepdata[order._id].step) {
                     console.log("one time ", seconds);
-                    clearInterval(id);
-                    setTimeout(function () { step.status == 5 && step.step == this.stepdata[order._id].step; }, 0);
+                    clearInterval(_this.id);
+                    _this.remainingTime[order._id][step.step] = '0:00';
                     var items_1 = [];
                     _this.completeButton = true;
                     for (var i = 0; i < order.item.length; i++) {
@@ -316,6 +323,7 @@ var OrderListComponent = /** @class */ (function () {
                 _this.remainingTime[order._id][_this.stepdata[order._id].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
             }
         }, timeInterval);
+        console.log(this.id, "after time interval");
         var items = [];
         for (var i = 0; i < order.item.length; i++) {
             for (var k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
@@ -341,9 +349,14 @@ var OrderListComponent = /** @class */ (function () {
                 if (data.data.step[i_1].step == step.step) {
                     step.status = data.data.step[i_1].status;
                     if (step.status == 5) {
-                        clearInterval(id);
+                        console.log("Hello52929", _this.id);
                         seconds = 0;
+                        timeInterval = 0;
+                        clearInterval(_this.id);
+                        setTimeout(_this.id.data.handleId);
+                        _this.remainingTime[order._id][step.step] = '0:00';
                     }
+                    localStorage.setItem('step', JSON.stringify(data.data.step[i_1]));
                 }
             }
             if (order.step) {
