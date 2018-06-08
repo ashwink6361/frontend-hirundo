@@ -1209,6 +1209,7 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('orderstatus', function (data) {
+            console.log('data', data);
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data.id === _this._orders[i]._id) {
                     var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);
@@ -1221,10 +1222,10 @@ var WebsocketService = /** @class */ (function () {
                         var steps = [];
                         var sts = [];
                         if (temp && temp.item) {
-                            for (var j_1 = 0; j_1 < temp.item.length; j_1++) {
+                            for (var j = 0; j < temp.item.length; j++) {
                                 for (var k_1 = 0; k_1 < data.step.length; k_1++) {
-                                    if (((temp.item[j_1].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(temp.item[j_1].category)) > -1)) {
-                                        if (temp.item[j_1].step == data.step[k_1].step) {
+                                    if (((temp.item[j].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
+                                        if (temp.item[j].step == data.step[k_1].step) {
                                             if (sts.indexOf(data.step[k_1].step) < 0) {
                                                 sts.push(data.step[k_1].step);
                                                 steps.push(data.step[k_1]);
@@ -1237,9 +1238,9 @@ var WebsocketService = /** @class */ (function () {
                         temp.step = steps;
                         var itemsTemp = [];
                         if (data && data.orderData.item) {
-                            for (var j_2 = 0; j_2 < data.orderData.item.length; j_2++) {
-                                if (((data.orderData.item[j_2].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(data.orderData.item[j_2].category)) > -1)) {
-                                    itemsTemp.push(data.orderData.item[j_2]);
+                            for (var j = 0; j < data.orderData.item.length; j++) {
+                                if (((data.orderData.item[j].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(data.orderData.item[j].category)) > -1)) {
+                                    itemsTemp.push(data.orderData.item[j]);
                                 }
                             }
                         }
@@ -1247,13 +1248,14 @@ var WebsocketService = /** @class */ (function () {
                     }
                     temp.stepStatus = data.stepStatus;
                     temp.status = data.status;
-                    if (temp && temp.item) {
-                        for (var j = 0; j < temp.item.length; j++) {
-                            if (data.order.itemId === temp.item[j].id._id && data.order.step === temp.item[j].step) {
-                                temp.item[j].status = data.order.status;
-                            }
-                        }
-                    }
+                    // if (temp && temp.item) {
+                    //     for (var j = 0; j < temp.item.length; j++) {
+                    //         if (data.order.itemId === temp.item[j].id._id && data.order.step === temp.item[j].step) {
+                    //             temp.item[j].status = data.order.status;
+                    //         }
+                    //     }
+                    // }
+                    console.log('tem.item', temp.item);
                     _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
                     var itemsToSplice = [];
                     if (temp.item.length) {
@@ -1449,9 +1451,9 @@ var WebsocketService = /** @class */ (function () {
                 var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);
                 var itemsTemp = [];
                 if (_this._orders[i] && _this._orders[i].item) {
-                    for (var j_3 = 0; j_3 < _this._orders[i].item.length; j_3++) {
-                        if (((_this._orders[i].item[j_3].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(_this._orders[i].item[j_3].category)) > -1)) {
-                            itemsTemp.push(_this._orders[i].item[j_3]);
+                    for (var j_1 = 0; j_1 < _this._orders[i].item.length; j_1++) {
+                        if (((_this._orders[i].item[j_1].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(_this._orders[i].item[j_1].category)) > -1)) {
+                            itemsTemp.push(_this._orders[i].item[j_1]);
                         }
                     }
                 }
@@ -1526,9 +1528,9 @@ var WebsocketService = /** @class */ (function () {
                     var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);
                     var itemsTemp = [];
                     if (res && res.orderData.item) {
-                        for (var j_4 = 0; j_4 < res.orderData.item.length; j_4++) {
-                            if (((res.orderData.item[j_4].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(res.orderData.item[j_4].category)) > -1)) {
-                                itemsTemp.push(_this._orders[i].item[j_4]);
+                        for (var j_2 = 0; j_2 < res.orderData.item.length; j_2++) {
+                            if (((res.orderData.item[j_2].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(res.orderData.item[j_2].category)) > -1)) {
+                                itemsTemp.push(_this._orders[i].item[j_2]);
                             }
                         }
                     }
@@ -1608,7 +1610,7 @@ var WebsocketService = /** @class */ (function () {
 /***/ "../../../../../src/app/shared/footer/footer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<footer>\n  <div class=\"footer-bottom\">\n    <div class=\"container\">\n      <div class=\"d-flex justify-space-between\">\n        <div class=\"copyright\">\n          &copy; 2018 Hirundo | All Rights Reserved.\n        </div>\n      </div>\n    </div>\n  </div>\n</footer>\n"
+module.exports = "<footer>\r\n  <div class=\"footer-bottom\">\r\n    <div class=\"container\">\r\n      <div class=\"d-flex justify-space-between\">\r\n        <div class=\"copyright\">\r\n          &copy; 2018 Hirundo | All Rights Reserved.\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</footer>\r\n"
 
 /***/ }),
 
@@ -1736,7 +1738,7 @@ var AuthGuard = /** @class */ (function () {
 /***/ "../../../../../src/app/shared/header-login/header-login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header>\n    <div class=\"menu-btn\" (click)=\"sidebar()\">\n        <i class=\"fas fa-bars\"></i>\n    </div>\n    <div class=\"logo\">\n        <img src=\"assets/images/logo.png\" alt=\"\" />\n    </div>\n    <div class=\"language-option\">\n        <a class=\"dropdown-toggle\" id=\"language\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n            <img src=\"assets/images/flags/English.png\" *ngIf=\"(currentLan=='en')\" alt=\"\" title=\"\">\n            <img src=\"assets/images/flags/Italian.png\" *ngIf=\"(currentLan=='it')\" alt=\"\" title=\"\">\n            <span class=\"fa fa-chevron-down\" aria-hidden=\"true\"></span>\n        </a>\n        <div class=\"dropdown-menu\" aria-labelledby=\"language\">\n            <a class=\"dropdown-item\" (click)=\"changeLang('en')\">\n                <img src=\"assets/images/flags/English.png\"> English</a>\n            <a class=\"dropdown-item\" (click)=\"changeLang('it')\">\n                <img src=\"assets/images/flags/Italian.png\"> Italian</a>\n        </div>\n    </div>\n</header>\n"
+module.exports = "<header>\r\n    <div class=\"menu-btn\" (click)=\"sidebar()\">\r\n        <i class=\"fas fa-bars\"></i>\r\n    </div>\r\n    <div class=\"logo\">\r\n        <img src=\"assets/images/logo.png\" alt=\"\" />\r\n    </div>\r\n    <div class=\"language-option\">\r\n        <a class=\"dropdown-toggle\" id=\"language\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\r\n            <img src=\"assets/images/flags/English.png\" *ngIf=\"(currentLan=='en')\" alt=\"\" title=\"\">\r\n            <img src=\"assets/images/flags/Italian.png\" *ngIf=\"(currentLan=='it')\" alt=\"\" title=\"\">\r\n            <span class=\"fa fa-chevron-down\" aria-hidden=\"true\"></span>\r\n        </a>\r\n        <div class=\"dropdown-menu\" aria-labelledby=\"language\">\r\n            <a class=\"dropdown-item\" (click)=\"changeLang('en')\">\r\n                <img src=\"assets/images/flags/English.png\"> English</a>\r\n            <a class=\"dropdown-item\" (click)=\"changeLang('it')\">\r\n                <img src=\"assets/images/flags/Italian.png\"> Italian</a>\r\n        </div>\r\n    </div>\r\n</header>\r\n"
 
 /***/ }),
 
@@ -1820,7 +1822,7 @@ var HeaderLoginComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/shared/header/header.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<mdb-navbar SideClass=\"navbar navbar-expand-lg navbar-light\">\n    <logo>\n        <a class=\"navbar-brand\" routerLink=\"/\">\n            <img src=\"/assets/images/logo_dark.png\" alt=\"\">\n        </a>\n    </logo>\n    <links>        \n        <ul class=\"navbar-nav ml-auto\">            \n            <li class=\"language-option\">\n                <div class=\"text-right\">\n                    <a class=\"dropdown-toggle\" id=\"language\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n                        <img src=\"assets/images/flags/English.png\" *ngIf=\"(currentLan=='en')\" alt=\"\" title=\"\">\n                        <img src=\"assets/images/flags/Italian.png\" *ngIf=\"(currentLan=='it')\" alt=\"\" title=\"\">\n                        <span class=\"fa fa-chevron-down\" aria-hidden=\"true\"></span>\n                    </a>\n                    <div class=\"dropdown-menu\" aria-labelledby=\"language\">\n                        <a class=\"dropdown-item\" (click)=\"changeLang('en')\">\n                            <img src=\"assets/images/flags/English.png\"> English</a>\n                        <a class=\"dropdown-item\" (click)=\"changeLang('it')\">\n                            <img src=\"assets/images/flags/Italian.png\"> Italian</a>\n                    </div>\n                </div>\n            </li>\n        </ul>\n    </links>\n</mdb-navbar>\n"
+module.exports = "<mdb-navbar SideClass=\"navbar navbar-expand-lg navbar-light\">\r\n    <logo>\r\n        <a class=\"navbar-brand\" routerLink=\"/\">\r\n            <img src=\"/assets/images/logo_dark.png\" alt=\"\">\r\n        </a>\r\n    </logo>\r\n    <links>        \r\n        <ul class=\"navbar-nav ml-auto\">            \r\n            <li class=\"language-option\">\r\n                <div class=\"text-right\">\r\n                    <a class=\"dropdown-toggle\" id=\"language\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\r\n                        <img src=\"assets/images/flags/English.png\" *ngIf=\"(currentLan=='en')\" alt=\"\" title=\"\">\r\n                        <img src=\"assets/images/flags/Italian.png\" *ngIf=\"(currentLan=='it')\" alt=\"\" title=\"\">\r\n                        <span class=\"fa fa-chevron-down\" aria-hidden=\"true\"></span>\r\n                    </a>\r\n                    <div class=\"dropdown-menu\" aria-labelledby=\"language\">\r\n                        <a class=\"dropdown-item\" (click)=\"changeLang('en')\">\r\n                            <img src=\"assets/images/flags/English.png\"> English</a>\r\n                        <a class=\"dropdown-item\" (click)=\"changeLang('it')\">\r\n                            <img src=\"assets/images/flags/Italian.png\"> Italian</a>\r\n                    </div>\r\n                </div>\r\n            </li>\r\n        </ul>\r\n    </links>\r\n</mdb-navbar>\r\n"
 
 /***/ }),
 
@@ -2040,7 +2042,7 @@ var SharedModule = /** @class */ (function () {
 /***/ "../../../../../src/app/shared/sidebar/sidebar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"sidebar\" [class.sidebartoggle]=\"appService.sidebarToggle\">\n    <div class=\"sidebar-user-detail\">\n        <img *ngIf=\"!authGuard.getCurrentUser().picture.small\" src=\"assets/images/profile-placeholder.jpg\" alt=\"\" />\n        <img *ngIf=\"authGuard.getCurrentUser().picture.small\" [src]=\"authGuard.getCurrentUser().picture.small\" alt=\"\" />        \n        <p>{{authGuard.getCurrentUser().firstName}}\n            <span *ngIf=\"authGuard.getCurrentUser().lastName\">&nbsp;{{authGuard.getCurrentUser().lastName}}</span>\n        </p>\n    </div>\n    <div class=\"sidebar-nav\">\n        <ul>\n            <li>\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter\">\n                    <i class=\"fas fa-tachometer-alt\"></i> Home</a>\n            </li>\n            <li>\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter/list\">\n                    <i class=\"fas fa-tags\"></i> Order List</a>\n            </li>\n            <li>\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter/profile\">\n                    <i class=\"far fa-user\"></i> Profile</a>\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 4\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department/profile\">\n                    <i class=\"far fa-user\"></i> Profile</a>\n            </li>\n            <li *ngIf=\"authGuard.getCurrentUser().userType == 4\">\n                <a class=\"waves-effect\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department\">\n                    <i class=\"fas fa-cart-plus\"></i> Orders</a>\n            </li>\n            <li>\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter/change-password\">\n                    <i class=\"fas fa-cog\"></i> Change Password</a>\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 4\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department/change-password\">\n                    <i class=\"fas fa-cog\"></i> Change Password</a>\n            </li>\n            <li>\n                <a class=\"waves-effect\" mdbRippleRadius (click)=\"appService.logout()\">\n                    <i class=\"fas fa-power-off\"></i> Logout</a>\n            </li>\n        </ul>\n    </div>\n</div>\n"
+module.exports = "<div class=\"sidebar\" [class.sidebartoggle]=\"appService.sidebarToggle\">\r\n    <div class=\"sidebar-user-detail\">\r\n        <img *ngIf=\"!authGuard.getCurrentUser().picture.small\" src=\"assets/images/profile-placeholder.jpg\" alt=\"\" />\r\n        <img *ngIf=\"authGuard.getCurrentUser().picture.small\" [src]=\"authGuard.getCurrentUser().picture.small\" alt=\"\" />        \r\n        <p>{{authGuard.getCurrentUser().firstName}}\r\n            <span *ngIf=\"authGuard.getCurrentUser().lastName\">&nbsp;{{authGuard.getCurrentUser().lastName}}</span>\r\n        </p>\r\n    </div>\r\n    <div class=\"sidebar-nav\">\r\n        <ul>\r\n            <li>\r\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter\">\r\n                    <i class=\"fas fa-tachometer-alt\"></i> Home</a>\r\n            </li>\r\n            <li>\r\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter/list\">\r\n                    <i class=\"fas fa-tags\"></i> Order List</a>\r\n            </li>\r\n            <li>\r\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter/profile\">\r\n                    <i class=\"far fa-user\"></i> Profile</a>\r\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 4\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department/profile\">\r\n                    <i class=\"far fa-user\"></i> Profile</a>\r\n            </li>\r\n            <li *ngIf=\"authGuard.getCurrentUser().userType == 4\">\r\n                <a class=\"waves-effect\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department\">\r\n                    <i class=\"fas fa-cart-plus\"></i> Orders</a>\r\n            </li>\r\n            <li>\r\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 3\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/waiter/change-password\">\r\n                    <i class=\"fas fa-cog\"></i> Change Password</a>\r\n                <a class=\"waves-effect\" *ngIf=\"authGuard.getCurrentUser().userType == 4\" mdbRippleRadius (click)=\"hideSidebar()\" routerLink=\"/department/change-password\">\r\n                    <i class=\"fas fa-cog\"></i> Change Password</a>\r\n            </li>\r\n            <li>\r\n                <a class=\"waves-effect\" mdbRippleRadius (click)=\"appService.logout()\">\r\n                    <i class=\"fas fa-power-off\"></i> Logout</a>\r\n            </li>\r\n        </ul>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -2119,7 +2121,7 @@ var SidebarComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/shared/steps/steps.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"tabs-container steps-container\">\n    <ul>\n        <!-- <li class=\"active\">Uscita 1</li> -->\n        <li *ngFor=\"let step of stepArray; let i = index;\" [class.active]=\"activetab[i]\" (click)=\"selectedTab(stepArray[i],i)\">{{step}}</li>\n        <li class=\"add-step\" (click)=\"addStep()\"><i class=\"fa fa-plus\"></i></li>\n    </ul>\n</div>"
+module.exports = "<div class=\"tabs-container steps-container\">\r\n    <ul>\r\n        <!-- <li class=\"active\">Uscita 1</li> -->\r\n        <li *ngFor=\"let step of stepArray; let i = index;\" [class.active]=\"activetab[i]\" (click)=\"selectedTab(stepArray[i],i)\">{{step}}</li>\r\n        <li class=\"add-step\" (click)=\"addStep()\"><i class=\"fa fa-plus\"></i></li>\r\n    </ul>\r\n</div>"
 
 /***/ }),
 
@@ -2286,7 +2288,7 @@ var StepsComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/shared/user-change-passowrd/user-change-passowrd.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid change-password-container\">\n  <div class=\"card\">\n    <div class=\"card-body\">\n      <div class=\"row\">\n        <div class=\"col-sm-6\">\n          <h4 class=\"card-title\">Change Password</h4>\n          <!-- <form [formGroup]=\"changePasswordForm\" (ngSubmit)=\"changePassword(changePasswordForm.value)\"> -->\n            <div class=\"alert-danger\" *ngIf=\"changePasswordError\">{{changePasswordErrorMsg}}</div>\n            <div class=\"alert-success\" *ngIf=\"changePasswordSuccess\">{{changePasswordSuccessMsg}}</div>            \n            <div class=\"md-form\">\n              <input type=\"password\" id=\"old-pass\" class=\"form-control\" [(ngModel)]=\"changePasswordData.oldPassword\" mdbActive>\n              <label for=\"old-pass\">Old Password</label>\n            </div>\n            <div class=\"md-form\">\n              <input type=\"password\" id=\"new-pass\" class=\"form-control\" [(ngModel)]=\"changePasswordData.newPassword\" mdbActive>\n              <label for=\"new-pass\">New Password</label>\n            </div>\n            <div class=\"md-form\">\n              <input type=\"password\" id=\"confirm-pass\" class=\"form-control\" [(ngModel)]=\"changePasswordData.confirmPassword\" mdbActive>\n              <label for=\"confirm-pass\">Confirm Password</label>\n            </div>\n            <!-- <small class=\"text-danger\" *ngIf=\"changePasswordForm.value.oldPassword==changePasswordForm.value.newPassword\">Old Password and New Password cannot be same.</small>             -->\n            <!-- <small class=\"text-danger\" *ngIf=\"changePasswordForm.value.newPassword!=changePasswordForm.value.confirmPassword\">New Password and Confirm Password must be same.</small> -->\n            <div class=\"text-center\">\n              <button type=\"submit\" class=\"btn btn-primary waves-light\" [disabled]=\"activeRequest\" mdbRippleRadius (click)=\"changePassword(changePasswordData)\">Submit</button>\n            </div>\n          <!-- </form> -->\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container-fluid change-password-container\">\r\n  <div class=\"card\">\r\n    <div class=\"card-body\">\r\n      <div class=\"row\">\r\n        <div class=\"col-sm-6\">\r\n          <h4 class=\"card-title\">Change Password</h4>\r\n          <!-- <form [formGroup]=\"changePasswordForm\" (ngSubmit)=\"changePassword(changePasswordForm.value)\"> -->\r\n            <div class=\"alert-danger\" *ngIf=\"changePasswordError\">{{changePasswordErrorMsg}}</div>\r\n            <div class=\"alert-success\" *ngIf=\"changePasswordSuccess\">{{changePasswordSuccessMsg}}</div>            \r\n            <div class=\"md-form\">\r\n              <input type=\"password\" id=\"old-pass\" class=\"form-control\" [(ngModel)]=\"changePasswordData.oldPassword\" mdbActive>\r\n              <label for=\"old-pass\">Old Password</label>\r\n            </div>\r\n            <div class=\"md-form\">\r\n              <input type=\"password\" id=\"new-pass\" class=\"form-control\" [(ngModel)]=\"changePasswordData.newPassword\" mdbActive>\r\n              <label for=\"new-pass\">New Password</label>\r\n            </div>\r\n            <div class=\"md-form\">\r\n              <input type=\"password\" id=\"confirm-pass\" class=\"form-control\" [(ngModel)]=\"changePasswordData.confirmPassword\" mdbActive>\r\n              <label for=\"confirm-pass\">Confirm Password</label>\r\n            </div>\r\n            <!-- <small class=\"text-danger\" *ngIf=\"changePasswordForm.value.oldPassword==changePasswordForm.value.newPassword\">Old Password and New Password cannot be same.</small>             -->\r\n            <!-- <small class=\"text-danger\" *ngIf=\"changePasswordForm.value.newPassword!=changePasswordForm.value.confirmPassword\">New Password and Confirm Password must be same.</small> -->\r\n            <div class=\"text-center\">\r\n              <button type=\"submit\" class=\"btn btn-primary waves-light\" [disabled]=\"activeRequest\" mdbRippleRadius (click)=\"changePassword(changePasswordData)\">Submit</button>\r\n            </div>\r\n          <!-- </form> -->\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 

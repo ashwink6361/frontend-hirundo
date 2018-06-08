@@ -418,6 +418,7 @@ export class WebsocketService {
             }
         });
         this.socket.on('orderstatus', (data) => {
+            console.log('data',data);
             for (var i = 0; i < this._orders.length; i++) {
                 if (data.id === this._orders[i]._id) {
                     var temp = _.cloneDeep(this._orders[i]);
@@ -456,14 +457,15 @@ export class WebsocketService {
                     }
                     temp.stepStatus = data.stepStatus;
                     temp.status = data.status;
-                    if (temp && temp.item) {
-                        for (var j = 0; j < temp.item.length; j++) {
-                            if (data.order.itemId === temp.item[j].id._id && data.order.step === temp.item[j].step) {
-                                temp.item[j].status = data.order.status;
-                            }
+                    // if (temp && temp.item) {
+                    //     for (var j = 0; j < temp.item.length; j++) {
+                    //         if (data.order.itemId === temp.item[j].id._id && data.order.step === temp.item[j].step) {
+                    //             temp.item[j].status = data.order.status;
+                    //         }
 
-                        }
-                    }
+                    //     }
+                    // }
+                    console.log('tem.item', temp.item);
                     this._orders[i] = _.cloneDeep(temp);
                     let itemsToSplice = [];
                     if (temp.item.length) {
