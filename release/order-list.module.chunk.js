@@ -285,6 +285,7 @@ var OrderListComponent = /** @class */ (function () {
                     localStorage.setItem('step', JSON.stringify(data.data.step[i_1]));
                 }
             }
+            console.log('order.step', order.step);
             if (order.step) {
                 for (var j = 0; j < order.step.length - 1; j++) {
                     if (order.step[j].status == 1) {
