@@ -789,6 +789,102 @@ var AppService = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_guard_auth_guard__ = __webpack_require__("../../../../../src/app/shared/guard/auth.guard.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_lodash__);
+// import { Injectable } from '@angular/core';
+// import * as io from 'socket.io-client';
+// import { Observable } from 'rxjs/Observable';
+// import { Http, Response } from '@angular/http';
+// import * as Rx from 'rxjs/Rx';
+// import 'rxjs/add/operator/toPromise';
+// import { AuthGuard } from '../shared/guard/auth.guard';
+// import *  as _ from 'lodash';
+// @Injectable()
+// export class WebsocketService {
+//     // Our socket connection
+//     private socket;
+//     private socketUrl;
+//     public _orders: Array<any> = [];
+//     public _rooms: Array<any> = [];
+//     constructor(private http: Http, private authGuard: AuthGuard) {
+//         let url = '/server/env';
+//         this.http.get(url).toPromise()
+//             .then(data => {
+//                 this.socketUrl = data.json().socketUrl;
+//                 this.connect();
+//             })
+//             .catch(error => {
+//                 console.log('connection scoket url not available')
+//             });
+//     }
+//     connect() {
+//         // If you aren't familiar with environment variables then
+//         // you can hard code `environment.ws_url` as `http://localhost:5000`
+//         // this.socket = io('http://localhost:5051');
+//         this.socket = io(this.socketUrl);
+//         if (this.socket.connected)
+//             console.log("Socket connection done ");
+//         let user = JSON.parse(localStorage.getItem('currentUser'));
+//         this.socket.on('neworder', (data) => {
+//             let userType = this.authGuard.getCurrentUser().userType;
+//             if (userType == 3) {
+//                 this._orders.push(data);
+//             }
+//             else if (userType == 4) {
+//                 let steps = [];
+//                 let sts = [];
+//                 let isItemExist = false;
+//                 for (let j = 0; j < data.item.length; j++) {
+//                     if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
+//                         isItemExist = true;
+//                         if (sts.indexOf(data.item[j].step) < 0) {
+//                             sts.push(data.item[j].step);
+//                             steps.push({
+//                                 itemId: [],
+//                                 step: data.item[j].step,
+//                                 status: 0
+//                             });
+//                         }
+//                     }
+//                 }
+//                 if (isItemExist) {
+//                     data.step = steps;
+//                     this._orders.push(data);
+//                 }
+//             }
+//         });
+//         this.socket.on('orderstatus', (data) => {
+//             for (var i = 0; i < this._orders.length; i++) {
+//                 if (data.id === this._orders[i]._id) {
+//                     var temp = _.cloneDeep(this._orders[i]);
+//                     let userType = this.authGuard.getCurrentUser().userType;
+//                     if (userType == 3) {
+//                         temp.step = data.step;
+//                     }
+//                     else if (userType == 4) {
+//                         let steps = [];
+//                         let sts = [];
+//                         if (temp && temp.item) {
+//                             for (let j = 0; j < temp.item.length; j++) {
+//                                 for (let k = 0; k < data.step.length; k++) {
+//                                     if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
+//                                         if (temp.item[j].step == data.step[k].step) {
+//                                             if (sts.indexOf(data.step[k].step) < 0) {
+//                                                 sts.push(data.step[k].step);
+//                                                 steps.push(data.step[k]);
+//                                             }
+//                                         }
+//                                     }
+//                                 }
+//                             }
+//                         }
+//                         temp.step = steps;
+//                     }
+//                     temp.stepStatus = data.stepStatus;
+//                     temp.status = data.status;
+//                     if (temp && temp.item) {
+//                         for (var j = 0; j < temp.item.length; j++) {
+//                             if (data.order.itemId === temp.item[j].id._id && data.order.step === temp.item[j].step) {
+//                                 temp.item[j].status = data.order.status;
+//                             }
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -798,6 +894,260 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+//                         }
+//                     }
+//                     let stepStatus = [];
+//                     for (let k in temp.step) {
+//                         if (temp.step[k].status == 1) {
+//                             stepStatus.push(temp.step[k].status);
+//                         }
+//                     }
+//                     this._orders[i] = _.cloneDeep(temp);
+//                     if (stepStatus.length == temp.step.length) {
+//                         this._orders.splice(i, 1);
+//                     }
+//                 }
+//             }
+//         });
+//         this.socket.on('tablestatus', (data) => {
+//             for (var i = 0; i < this._rooms.length; i++) {
+//                 if (data.room == this._rooms[i]._id) {
+//                     for (var j = 0; j < this._rooms[i].tables.length; j++) {
+//                         if (data.table == this._rooms[i].tables[j]._id) {
+//                             this._rooms[i].tables[j].status = data.status;
+//                             break;
+//                         }
+//                     }
+//                 }
+//             }
+//         });
+//         this.socket.on('changeStep', (data) => {
+//             for (var i = 0; i < this._orders.length; i++) {
+//                 if (data._id === this._orders[i]._id) {
+//                     this._orders[i].stepStatus = data.stepStatus;
+//                 }
+//             }
+//         });
+//         this.socket.on('itemDeleted', (data) => {
+//             for (var i = 0; i < this._orders.length; i++) {
+//                 if (data._id === this._orders[i]._id) {
+//                     this._orders[i] = data;
+//                 }
+//             }
+//         });
+//         this.socket.on('itemUpdated', (data) => {
+//             for (var i = 0; i < this._orders.length; i++) {
+//                 if (data._id === this._orders[i]._id) {
+//                     this._orders[i] = data;
+//                 }
+//             }
+//         });
+//         this.socket.on('newItem', (data) => {
+//             var tempArray = [];
+//             for (var i = 0; i < this._orders.length; i++) {
+//                 if (data._id === this._orders[i]._id) {
+//                     tempArray.push(this._orders[i]._id);
+//                     var temp = _.cloneDeep(this._orders[i]);
+//                     let userType = this.authGuard.getCurrentUser().userType;
+//                     if (userType == 3) {
+//                         temp.step = data.step;
+//                         temp.item = data.item;
+//                     }
+//                     else if (userType == 4) {
+//                         let steps = [];
+//                         let sts = [];
+//                         if (temp && temp.item) {
+//                             for (let j = 0; j < temp.item.length; j++) {
+//                                 for (let k = 0; k < data.step.length; k++) {
+//                                     if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
+//                                         if (temp.item[j].step == data.step[k].step) {
+//                                             if (sts.indexOf(data.step[k].step) < 0) {
+//                                                 sts.push(data.step[k].step);
+//                                                 steps.push(data.step[k]);
+//                                             }
+//                                         }
+//                                     }
+//                                 }
+//                             }
+//                         }
+//                         temp.step = steps;
+//                         let itemsTemp = [];
+//                         if (data && data.item) {
+//                             for (let j = 0; j < data.item.length; j++) {
+//                                     if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
+//                                         itemsTemp.push(data.item[j]);
+//                                     }
+//                             }
+//                         }
+//                         temp.item = itemsTemp;
+//                     }
+//                     temp.stepStatus = data.stepStatus;
+//                     temp.status = data.status;
+//                     let stepStatus = [];
+//                     for (let k in temp.step) {
+//                         if (temp.step[k].status == 1) {
+//                             stepStatus.push(temp.step[k].status);
+//                         }
+//                     }
+//                     this._orders[i] = _.cloneDeep(temp);
+//                     if (stepStatus.length == temp.step.length) {
+//                         this._orders.splice(i, 1);
+//                     }
+//                 }
+//             }
+//             if (tempArray.indexOf(data._id) < 0) {
+//                 this._orders.push(data);
+//                 for (var i = 0; i < this._orders.length; i++) {
+//                     if (data._id === this._orders[i]._id) {
+//                         var temp = _.cloneDeep(this._orders[i]);
+//                         let userType = this.authGuard.getCurrentUser().userType;
+//                         if (userType == 3) {
+//                             temp.step = data.step;
+//                         }
+//                         else if (userType == 4) {
+//                             let steps = [];
+//                             let sts = [];
+//                             if (temp && temp.item) {
+//                                 for (let j = 0; j < temp.item.length; j++) {
+//                                     for (let k = 0; k < data.step.length; k++) {
+//                                         if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
+//                                             if (temp.item[j].step == data.step[k].step) {
+//                                                 if (sts.indexOf(data.step[k].step) < 0) {
+//                                                     sts.push(data.step[k].step);
+//                                                     steps.push(data.step[k]);
+//                                                 }
+//                                             }
+//                                         }
+//                                     }
+//                                 }
+//                             }
+//                             temp.step = steps;
+//                         }
+//                         temp.stepStatus = data.stepStatus;
+//                         temp.status = data.status;
+//                         let stepStatus = [];
+//                         for (let k in temp.step) {
+//                             if (temp.step[k].status == 1) {
+//                                 stepStatus.push(temp.step[k].status);
+//                             }
+//                         }
+//                         this._orders[i] = _.cloneDeep(temp);
+//                         if (stepStatus.length == temp.step.length) {
+//                             this._orders.splice(i, 1);
+//                         }
+//                     }
+//                 }
+//             }
+//         });
+//     }
+//     public getOrders(): Promise<any> {
+//         let url = '/api/department/orders';
+//         let opts = {
+//             category: this.authGuard.getCurrentUser().category
+//         }
+//         return this.http.post(url, opts).toPromise()
+//             .then(data => {
+//                 let res = data.json();
+//                 this._orders = res.data;
+//                 for (var i = 0; i < this._orders.length; i++) {
+//                     let stepStatus = [];
+//                     for (let k in this._orders[i].step) {
+//                         if (this._orders[i].step[k].status == 1) {
+//                             stepStatus.push(this._orders[i].step[k].status);
+//                         }
+//                     }
+//                     if (stepStatus.length == this._orders[i].step.length) {
+//                         this._orders.splice(i, 1);
+//                     }
+//                 }
+//                 return this._orders;
+//             })
+//             .catch(error => {
+//                 this._orders = [];
+//                 return error;
+//             });
+//     }
+//     public getWaiterOrders(): Promise<any> {
+//         let url = '/api/waiter/orders';
+//         return this.http.get(url).toPromise()
+//             .then(data => {
+//                 let res = data.json();
+//                 this._orders = res.data;
+//                 return this._orders;
+//             })
+//             .catch(error => {
+//                 this._orders = [];
+//                 return error;
+//             });
+//     }
+//     public getRooms(): Promise<any> {
+//         let url1 = '/api/rooms';
+//         return this.http.get(url1).toPromise()
+//             .then(data => {
+//                 let res = data.json();
+//                 this._rooms = res.data;
+//                 return this._rooms;
+//             })
+//             .catch(error => {
+//                 this._rooms = [];
+//                 return error;
+//             });
+//     }
+//     public updateOrder(id, opts): Promise<any> {
+//         let url = '/api/department/orders/' + id;
+//         return this.http.put(url, opts).toPromise()
+//             .then(data => {
+//                 let res = data.json();
+//                 for (var i = 0; i < this._orders.length; i++) {
+//                     if (res._id === this._orders[i]._id) {
+//                         let stepStatus = [];
+//                         for (let k in res.step) {
+//                             if (res.step[k].status == 1) {
+//                                 stepStatus.push(res.step[k].status);
+//                             }
+//                         }
+//                         if (stepStatus.length == res.step.length) {
+//                             this._orders.splice(i, 1);
+//                         }
+//                     }
+//                 }
+//                 return data.json();
+//             })
+//             .catch(error => {
+//                 return error;
+//             });
+//     }
+//     public updateDeliveredOrder(id, opts): Promise<any> {
+//         let url = '/api/orderStep/' + id;
+//         return this.http.put(url, opts).toPromise()
+//             .then(data => {
+//                 return data.json();
+//             })
+//             .catch(error => {
+//                 return error;
+//             });
+//     }
+//     public updateWaiterOrder(id, opts): Promise<any> {
+//         let url = '/api/waiter/orders/' + id;
+//         return this.http.put(url, opts).toPromise()
+//             .then(data => {
+//                 return data.json();
+//             })
+//             .catch(error => {
+//                 return error;
+//             });
+//     }
+//     public changeOrderStep(id, opts): Promise<any> {
+//         let url = '/api/orderStep/' + id;
+//         return this.http.put(url, opts).toPromise()
+//             .then(data => {
+//                 return data.json();
+//             })
+//             .catch(error => {
+//                 return error;
+//             });
+//     }
+// }
 
 
 
@@ -865,18 +1215,19 @@ var WebsocketService = /** @class */ (function () {
                     var userType = _this.authGuard.getCurrentUser().userType;
                     if (userType == 3) {
                         temp.step = data.step;
+                        temp.item = data.orderData.item;
                     }
                     else if (userType == 4) {
                         var steps = [];
                         var sts = [];
                         if (temp && temp.item) {
                             for (var j_1 = 0; j_1 < temp.item.length; j_1++) {
-                                for (var k = 0; k < data.step.length; k++) {
+                                for (var k_1 = 0; k_1 < data.step.length; k_1++) {
                                     if (((temp.item[j_1].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(temp.item[j_1].category)) > -1)) {
-                                        if (temp.item[j_1].step == data.step[k].step) {
-                                            if (sts.indexOf(data.step[k].step) < 0) {
-                                                sts.push(data.step[k].step);
-                                                steps.push(data.step[k]);
+                                        if (temp.item[j_1].step == data.step[k_1].step) {
+                                            if (sts.indexOf(data.step[k_1].step) < 0) {
+                                                sts.push(data.step[k_1].step);
+                                                steps.push(data.step[k_1]);
                                             }
                                         }
                                     }
@@ -884,6 +1235,15 @@ var WebsocketService = /** @class */ (function () {
                             }
                         }
                         temp.step = steps;
+                        var itemsTemp = [];
+                        if (data && data.orderData.item) {
+                            for (var j_2 = 0; j_2 < data.orderData.item.length; j_2++) {
+                                if (((data.orderData.item[j_2].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(data.orderData.item[j_2].category)) > -1)) {
+                                    itemsTemp.push(data.orderData.item[j_2]);
+                                }
+                            }
+                        }
+                        temp.item = itemsTemp;
                     }
                     temp.stepStatus = data.stepStatus;
                     temp.status = data.status;
@@ -894,14 +1254,17 @@ var WebsocketService = /** @class */ (function () {
                             }
                         }
                     }
-                    var stepStatus = [];
-                    for (var k in temp.step) {
-                        if (temp.step[k].status == 1) {
-                            stepStatus.push(temp.step[k].status);
+                    _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
+                    var itemsToSplice = [];
+                    if (temp.item.length) {
+                        for (var k = 0; k < temp.item.length; k++) {
+                            itemsToSplice.push(temp.item[k].status);
                         }
                     }
-                    _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
-                    if (stepStatus.length == temp.step.length) {
+                    if (temp.item.length && itemsToSplice.length == temp.item.length && itemsToSplice.every(_this.isBelowThreshold)) {
+                        _this._orders.splice(i, 1);
+                    }
+                    if (temp.item.length == 0) {
                         _this._orders.splice(i, 1);
                     }
                 }
@@ -956,12 +1319,12 @@ var WebsocketService = /** @class */ (function () {
                         var sts = [];
                         if (temp && temp.item) {
                             for (var j = 0; j < temp.item.length; j++) {
-                                for (var k = 0; k < data.step.length; k++) {
+                                for (var k_2 = 0; k_2 < data.step.length; k_2++) {
                                     if (((temp.item[j].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
-                                        if (temp.item[j].step == data.step[k].step) {
-                                            if (sts.indexOf(data.step[k].step) < 0) {
-                                                sts.push(data.step[k].step);
-                                                steps.push(data.step[k]);
+                                        if (temp.item[j].step == data.step[k_2].step) {
+                                            if (sts.indexOf(data.step[k_2].step) < 0) {
+                                                sts.push(data.step[k_2].step);
+                                                steps.push(data.step[k_2]);
                                             }
                                         }
                                     }
@@ -982,13 +1345,22 @@ var WebsocketService = /** @class */ (function () {
                     temp.stepStatus = data.stepStatus;
                     temp.status = data.status;
                     var stepStatus = [];
-                    for (var k in temp.step) {
-                        if (temp.step[k].status == 1) {
-                            stepStatus.push(temp.step[k].status);
+                    for (var k_3 in temp.step) {
+                        if (temp.step[k_3].status == 1) {
+                            stepStatus.push(temp.step[k_3].status);
                         }
                     }
                     _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
-                    if (stepStatus.length == temp.step.length) {
+                    var itemsToSplice = [];
+                    if (temp.item.length) {
+                        for (var k = 0; k < temp.item.length; k++) {
+                            itemsToSplice.push(temp.item[k].status);
+                        }
+                    }
+                    if (temp.item.length && itemsToSplice.length == temp.item.length && itemsToSplice.every(_this.isBelowThreshold)) {
+                        _this._orders.splice(i, 1);
+                    }
+                    if (temp.item.length == 0) {
                         _this._orders.splice(i, 1);
                     }
                 }
@@ -1001,18 +1373,19 @@ var WebsocketService = /** @class */ (function () {
                         var userType = _this.authGuard.getCurrentUser().userType;
                         if (userType == 3) {
                             temp.step = data.step;
+                            temp.item = data.item;
                         }
                         else if (userType == 4) {
                             var steps = [];
                             var sts = [];
                             if (temp && temp.item) {
                                 for (var j = 0; j < temp.item.length; j++) {
-                                    for (var k = 0; k < data.step.length; k++) {
+                                    for (var k_4 = 0; k_4 < data.step.length; k_4++) {
                                         if (((temp.item[j].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
-                                            if (temp.item[j].step == data.step[k].step) {
-                                                if (sts.indexOf(data.step[k].step) < 0) {
-                                                    sts.push(data.step[k].step);
-                                                    steps.push(data.step[k]);
+                                            if (temp.item[j].step == data.step[k_4].step) {
+                                                if (sts.indexOf(data.step[k_4].step) < 0) {
+                                                    sts.push(data.step[k_4].step);
+                                                    steps.push(data.step[k_4]);
                                                 }
                                             }
                                         }
@@ -1020,17 +1393,35 @@ var WebsocketService = /** @class */ (function () {
                                 }
                             }
                             temp.step = steps;
+                            var itemsTemp = [];
+                            if (data && data.item) {
+                                for (var j = 0; j < data.item.length; j++) {
+                                    if (((data.item[j].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
+                                        itemsTemp.push(data.item[j]);
+                                    }
+                                }
+                            }
+                            temp.item = itemsTemp;
                         }
                         temp.stepStatus = data.stepStatus;
                         temp.status = data.status;
                         var stepStatus = [];
-                        for (var k in temp.step) {
-                            if (temp.step[k].status == 1) {
-                                stepStatus.push(temp.step[k].status);
+                        for (var k_5 in temp.step) {
+                            if (temp.step[k_5].status == 1) {
+                                stepStatus.push(temp.step[k_5].status);
                             }
                         }
                         _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
-                        if (stepStatus.length == temp.step.length) {
+                        var itemsToSplice = [];
+                        if (temp.item.length) {
+                            for (var k = 0; k < temp.item.length; k++) {
+                                itemsToSplice.push(temp.item[k].status);
+                            }
+                        }
+                        if (temp.item.length && itemsToSplice.length == temp.item.length && itemsToSplice.every(_this.isBelowThreshold)) {
+                            _this._orders.splice(i, 1);
+                        }
+                        if (temp.item.length == 0) {
                             _this._orders.splice(i, 1);
                         }
                     }
@@ -1038,6 +1429,11 @@ var WebsocketService = /** @class */ (function () {
             }
         });
     };
+    ;
+    WebsocketService.prototype.isBelowThreshold = function (currentValue) {
+        return currentValue == 1;
+    };
+    ;
     WebsocketService.prototype.getOrders = function () {
         var _this = this;
         var url = '/api/department/orders';
@@ -1048,15 +1444,39 @@ var WebsocketService = /** @class */ (function () {
             .then(function (data) {
             var res = data.json();
             _this._orders = res.data;
+            var orderid = [];
             for (var i = 0; i < _this._orders.length; i++) {
-                var stepStatus = [];
-                for (var k in _this._orders[i].step) {
-                    if (_this._orders[i].step[k].status == 1) {
-                        stepStatus.push(_this._orders[i].step[k].status);
+                var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);
+                var itemsTemp = [];
+                if (_this._orders[i] && _this._orders[i].item) {
+                    for (var j_3 = 0; j_3 < _this._orders[i].item.length; j_3++) {
+                        if (((_this._orders[i].item[j_3].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(_this._orders[i].item[j_3].category)) > -1)) {
+                            itemsTemp.push(_this._orders[i].item[j_3]);
+                        }
                     }
                 }
-                if (stepStatus.length == _this._orders[i].step.length) {
+                temp.item = itemsTemp;
+                _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
+                var itemsToSplice = [];
+                if (temp.item.length) {
+                    for (var k = 0; k < temp.item.length; k++) {
+                        itemsToSplice.push(temp.item[k].status);
+                    }
+                }
+                if (temp.item.length && itemsToSplice.length == temp.item.length && itemsToSplice.every(_this.isBelowThreshold)) {
                     _this._orders.splice(i, 1);
+                }
+                if (temp.item.length == 0) {
+                    orderid.push(_this._orders[i]._id);
+                }
+            }
+            if (orderid.length) {
+                for (var i = 0; i < orderid.length; i++) {
+                    for (var j = 0; j < _this._orders.length; j++) {
+                        if (orderid[i] == _this._orders[j]._id) {
+                            _this._orders.splice(j, 1);
+                        }
+                    }
                 }
             }
             return _this._orders;
@@ -1100,16 +1520,40 @@ var WebsocketService = /** @class */ (function () {
         return this.http.put(url, opts).toPromise()
             .then(function (data) {
             var res = data.json();
+            var orderid = [];
             for (var i = 0; i < _this._orders.length; i++) {
                 if (res._id === _this._orders[i]._id) {
-                    var stepStatus = [];
-                    for (var k in res.step) {
-                        if (res.step[k].status == 1) {
-                            stepStatus.push(res.step[k].status);
+                    var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);
+                    var itemsTemp = [];
+                    if (res && res.orderData.item) {
+                        for (var j_4 = 0; j_4 < res.orderData.item.length; j_4++) {
+                            if (((res.orderData.item[j_4].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(res.orderData.item[j_4].category)) > -1)) {
+                                itemsTemp.push(_this._orders[i].item[j_4]);
+                            }
                         }
                     }
-                    if (stepStatus.length == res.step.length) {
+                    temp.item = itemsTemp;
+                    _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
+                    var itemsToSplice = [];
+                    if (temp.item.length) {
+                        for (var k = 0; k < temp.item.length; k++) {
+                            itemsToSplice.push(temp.item[k].status);
+                        }
+                    }
+                    if (temp.item.length && itemsToSplice.length == temp.item.length && itemsToSplice.every(_this.isBelowThreshold)) {
                         _this._orders.splice(i, 1);
+                    }
+                    if (temp.item.length == 0) {
+                        orderid.push(_this._orders[i]._id);
+                    }
+                }
+            }
+            if (orderid.length) {
+                for (var i = 0; i < orderid.length; i++) {
+                    for (var j = 0; j < _this._orders.length; j++) {
+                        if (orderid[i] == _this._orders[j]._id) {
+                            _this._orders.splice(j, 1);
+                        }
                     }
                 }
             }

@@ -228,6 +228,9 @@ export class OrderListComponent implements DoCheck {
             step: this.stepdata[order._id].step
         };
         this.websocketService.updateOrder(order._id, opts).then((data) => {
+            console.log('data',data);
+            console.log('order',order);
+            
             order.status = data.data.status;
             order.step = data.data.step;
             for (let i = 0; i < data.data.step.length; i++) {
@@ -264,6 +267,8 @@ export class OrderListComponent implements DoCheck {
                     }
                 }
             }
+            console.log('order 111111111111111111111111',order);
+            
         }).catch(error => {
         });
     };
@@ -281,33 +286,36 @@ export class OrderListComponent implements DoCheck {
     }
 
     ngDoCheck() {
-        const change = this.differ.diff(this.orders);
-        if (change != null) {
-            if (this.orders.length) {
-                for (let i = 0; i < this.orders.length; i++) {
-                    let time = {};
-                    let remtime = {};
-                    for (let k = 0; k < this.orders[i].step.length; k++) {
-                        let temp = [];
-                        for (let l = 0; l < this.orders[i].item.length; l++) {
-                            if (this.orders[i].item[l].step == this.orders[i].step[k].step && temp.indexOf(this.orders[i].item[l].id.preparationTime) < 0) {
-                                temp.push(this.orders[i].item[l].id.preparationTime);
+        if(this.orders && this.orders.length){
+            const change = this.differ.diff(this.orders);
+            if (change != null) {
+                if (this.orders.length) {
+                    for (let i = 0; i < this.orders.length; i++) {
+                        let time = {};
+                        let remtime = {};
+                        for (let k = 0; k < this.orders[i].step.length; k++) {
+                            let temp = [];
+                            for (let l = 0; l < this.orders[i].item.length; l++) {
+                                if (this.orders[i].item[l].step == this.orders[i].step[k].step && temp.indexOf(this.orders[i].item[l].id.preparationTime) < 0) {
+                                    temp.push(this.orders[i].item[l].id.preparationTime);
+                                }
                             }
+                            time[this.orders[i].step[k].step] = Math.max(...temp);
+                            remtime[this.orders[i].step[k].step] = '0:00';
+                            let tempp = {
+                                tab: 0,
+                                step: ''
+                            }
+                            tempp.tab = 0;
+                            tempp.step = this.orders[i].step[0].step;
+                            this.stepdata[this.orders[i]._id] = tempp;
                         }
-                        time[this.orders[i].step[k].step] = Math.max(...temp);
-                        remtime[this.orders[i].step[k].step] = '0:00';
-                        let tempp = {
-                            tab: 0,
-                            step: ''
-                        }
-                        tempp.tab = 0;
-                        tempp.step = this.orders[i].step[0].step;
-                        this.stepdata[this.orders[i]._id] = tempp;
+                        this.times[this.orders[i]._id] = time;
+                        this.remainingTime[this.orders[i]._id] = remtime;
                     }
-                    this.times[this.orders[i]._id] = time;
-                    this.remainingTime[this.orders[i]._id] = remtime;
                 }
             }
         }
+        
     }
 }

@@ -146,39 +146,42 @@ export class ListComponent implements DoCheck {
     }
 
     ngDoCheck() {
-        const change = this.differ.diff(this.orders);
-        if(change != null){
-            if (this.orders.length) {
-                for (let i = 0; i < this.orders.length; i++) {
-                    let time = {};
-                    let call = {};                    
-                    for (let k = 0; k < this.orders[i].step.length; k++) {
-                        let temp = [];
-                        for (let l = 0; l < this.orders[i].item.length; l++) {
-                            if (this.orders[i].item[l].step == this.orders[i].step[k].step && temp.indexOf(this.orders[i].item[l].id.preparationTime) < 0) {
-                                temp.push(this.orders[i].item[l].id.preparationTime);
+        if(this.orders && this.orders.length){
+            const change = this.differ.diff(this.orders);
+            if(change != null){
+                if (this.orders.length) {
+                    for (let i = 0; i < this.orders.length; i++) {
+                        let time = {};
+                        let call = {};                    
+                        for (let k = 0; k < this.orders[i].step.length; k++) {
+                            let temp = [];
+                            for (let l = 0; l < this.orders[i].item.length; l++) {
+                                if (this.orders[i].item[l].step == this.orders[i].step[k].step && temp.indexOf(this.orders[i].item[l].id.preparationTime) < 0) {
+                                    temp.push(this.orders[i].item[l].id.preparationTime);
+                                }
                             }
+                            time[this.orders[i].step[k].step] = Math.max(...temp);
+                            call[this.orders[i].step[k].step] = true;                        
+                            let tempp = {
+                                tab: 0,
+                                step: ''
+                            }
+                            if(this.orders[i].step.length>1){
+                                tempp.tab = 1;
+                                tempp.step = this.orders[i].step[1].step;
+                            }
+                            else{
+                                tempp.tab = 0;
+                                tempp.step = this.orders[i].step[0].step;
+                            }
+                            this.stepdata[this.orders[i]._id] = tempp;
                         }
-                        time[this.orders[i].step[k].step] = Math.max(...temp);
-                        call[this.orders[i].step[k].step] = true;                        
-                        let tempp = {
-                            tab: 0,
-                            step: ''
-                        }
-                        if(this.orders[i].step.length>1){
-                            tempp.tab = 1;
-                            tempp.step = this.orders[i].step[1].step;
-                        }
-                        else{
-                            tempp.tab = 0;
-                            tempp.step = this.orders[i].step[0].step;
-                        }
-                        this.stepdata[this.orders[i]._id] = tempp;
+                        this.times[this.orders[i]._id] = time;
+                        this.showToCall[this.orders[i]._id] = call;                    
                     }
-                    this.times[this.orders[i]._id] = time;
-                    this.showToCall[this.orders[i]._id] = call;                    
                 }
             }
         }
+       
     }
 }
