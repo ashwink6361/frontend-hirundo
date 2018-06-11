@@ -246,6 +246,7 @@ export class OrderListComponent implements DoCheck {
                     localStorage.setItem('step',JSON.stringify(data.data.step[i]));
                 }
             }
+            console.log('order.step',order.step);
             if (order.step) {
                 for (let j = 0; j < order.step.length - 1; j++) {
                     if (order.step[j].status == 1) {
