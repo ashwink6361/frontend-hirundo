@@ -17,7 +17,6 @@ export class SidebarComponent implements OnInit {
         this.profileService.getCurrentUser().then(data => {
             localStorage.setItem('currentUser', JSON.stringify(data.data));
           }).catch(error => {
-            console.log("error", error);
           });
     }
 

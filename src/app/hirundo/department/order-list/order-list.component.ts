@@ -101,16 +101,19 @@ export class OrderListComponent implements DoCheck {
     public updateOrder(order, time, status) {
         order.status = status;
         let items = [];
+        let ids = [];
         for (let i = 0; i < order.item.length; i++) {
             for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
                 if (order.item[i].category == this.authGuard.getCurrentUser().category[k]) {
-                    items.push(order.item[i].id._id)
+                    items.push(order.item[i].id._id);
+                    ids.push(order.item[i]._id);                    
                 }
             }
         }
         let opts = {
             status: status,
-            itemId: items
+            itemId: items,
+            id: ids
         };
         this.websocketService.updateOrder(order._id, opts).then(data => {
         }).catch(error => {
@@ -120,11 +123,14 @@ export class OrderListComponent implements DoCheck {
     public updateItem(item, order, status) {
         item.status = status;
         let items = [];
-        items.push(item.id._id)
+        let ids = [];        
+        items.push(item.id._id);
+        ids.push(item._id);                            
         let opts = {
             status: status,
             itemId: items,
-            step: this.stepdata[order._id].step
+            step: this.stepdata[order._id].step,
+            id: ids            
         };
         this.websocketService.updateOrder(order, opts).then(data => {
         }).catch(error => {
@@ -154,6 +160,7 @@ export class OrderListComponent implements DoCheck {
                     clearInterval(this.id);
                     this.remainingTime[order._id][step.step] = '0:00';
                     let items = [];
+                    let ids = [];                    
                     this.completeButton = true;
                     for (let i = 0; i < order.item.length; i++) {
                         for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
@@ -161,7 +168,8 @@ export class OrderListComponent implements DoCheck {
                                 if (order.item[i].step == this.stepdata[order._id].step) {
                                     order.item[i].status = status;
                                     if (items.indexOf(order.item[i].id._id) < 0) {
-                                        items.push(order.item[i].id._id)
+                                        items.push(order.item[i].id._id);
+                                        ids.push(order.item[i]._id);                                        
                                     }
                                 }
                             }
@@ -170,7 +178,8 @@ export class OrderListComponent implements DoCheck {
                     let temp = {
                         status: 5,
                         itemId: items,
-                        step: this.stepdata[order._id].step
+                        step: this.stepdata[order._id].step,
+                        id: ids
                     };
                     this.websocketService.updateOrder(order._id, temp).then(data => {
                         order.status = data.data.status;
@@ -210,13 +219,15 @@ export class OrderListComponent implements DoCheck {
             }
         }, timeInterval);
         let items = [];
+        let ids = [];                            
         for (let i = 0; i < order.item.length; i++) {
             for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
                 if (((order.item[i].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(order.item[i].category)) > -1)) {
                     if (order.item[i].step == this.stepdata[order._id].step) {
                         order.item[i].status = status;
                         if (items.indexOf(order.item[i].id._id) < 0) {
-                            items.push(order.item[i].id._id)
+                            items.push(order.item[i].id._id);
+                            ids.push(order.item[i]._id);                            
                         }
                     }
                 }
@@ -225,12 +236,10 @@ export class OrderListComponent implements DoCheck {
         let opts = {
             status: status,
             itemId: items,
-            step: this.stepdata[order._id].step
+            step: this.stepdata[order._id].step,
+            id: ids
         };
         this.websocketService.updateOrder(order._id, opts).then((data) => {
-            console.log('data',data);
-            console.log('order',order);
-            
             order.status = data.data.status;
             order.step = data.data.step;
             for (let i = 0; i < data.data.step.length; i++) {
@@ -246,7 +255,6 @@ export class OrderListComponent implements DoCheck {
                     localStorage.setItem('step',JSON.stringify(data.data.step[i]));
                 }
             }
-            console.log('order.step',order.step);
             if (order.step) {
                 for (let j = 0; j < order.step.length - 1; j++) {
                     if (order.step[j].status == 1) {
@@ -268,8 +276,6 @@ export class OrderListComponent implements DoCheck {
                     }
                 }
             }
-            console.log('order 111111111111111111111111',order);
-            
         }).catch(error => {
         });
     };

@@ -46,14 +46,12 @@ export class GlobalService {
 
     public extractData(res: Response) {
         let body = res.json();
-        //console.log("Global Service called", body);
         if (body.hasOwnProperty('error')) {
             if (body.error.message === 'Token is required') {
                 localStorage.removeItem('isLoggedin');
                 localStorage.removeItem('currentUser');
                 localStorage.removeItem('token');
                 document.cookie = "token=" + '';
-                // window.location.href = '/';
             } else {
                 return Promise.resolve(body || {});
             }
@@ -64,7 +62,6 @@ export class GlobalService {
 
     public handleErrorPromise(error: Response | any) {
         let body = error.json();
-        console.log("Global Error Service called", error);
         if (error.status === 400) {
             return Promise.reject(body.error || error);
         } else {
@@ -72,7 +69,6 @@ export class GlobalService {
             localStorage.removeItem('currentUser');
             localStorage.removeItem('token');
             document.cookie = "token=" + '';
-            // window.location.href = '/';
         }
     }
 

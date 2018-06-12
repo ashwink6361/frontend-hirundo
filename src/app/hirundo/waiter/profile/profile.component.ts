@@ -30,7 +30,6 @@ export class ProfileComponent implements OnInit {
         this.createProfileForm();
       }
     }).catch(error => {
-      console.log("error", error);
     });
   }
   

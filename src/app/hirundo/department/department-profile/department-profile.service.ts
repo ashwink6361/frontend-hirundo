@@ -36,8 +36,6 @@ export class DepartmentProfileService {
   }
 
   getCookie(name) {
-    console.log('localStorage.getItem',localStorage.getItem('token'));
-    console.log('document.cookie',document.cookie);
     var value = "; " + document.cookie;
     var parts = value.split("; " + name + "=");
     if (parts.length == 2) return parts.pop().split(";").shift();

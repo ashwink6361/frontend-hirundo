@@ -61,17 +61,12 @@ app.use('/api/*', function (req, res, next) {
                 }
             });
         } else {
-            console.log('req.body',req.body);
             var formData = req.body;
             var fileObj = _.pairs(req.files);
             for (var i = 0; i < fileObj.length; i++) {
                 formData[fileObj[i][1].fieldname] = fs.createReadStream(__dirname + '/uploads/' + fileObj[i][1].filename);
                 fs.unlink(__dirname + '/uploads/' + fileObj[i][1].filename, function(error) {});
             }
-            console.log('uri',uri);
-            console.log('formData',formData);
-            console.log('headers',headers);
-
             request.post({
                 url: uri,
                 formData: formData,

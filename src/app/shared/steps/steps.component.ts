@@ -90,11 +90,9 @@ export class StepsComponent implements OnInit {
           }
         }
       }
-      console.log('orderdata+++++++++++++++', orderdata);      
       this.orderService.setOrderData(orderdata);
     })
       .catch(error => {
-        console.log('error', error);
       });
   }
 
