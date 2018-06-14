@@ -179,6 +179,7 @@ var OrderListComponent = /** @class */ (function () {
         if (localStorage.getItem('step') != null) {
             localStorage.removeItem('step');
         }
+        console.log(this.remainingTime[order._id], 'sadsa++++++++ top');
         localStorage.setItem('step', JSON.stringify(step));
         var seconds = time * 60;
         var timeInterval = 1000;
@@ -187,15 +188,26 @@ var OrderListComponent = /** @class */ (function () {
         var t = 0;
         var s = 60;
         var width = 0;
-        step = JSON.parse(localStorage.getItem('step')); // Clones the object                
+        step = JSON.parse(localStorage.getItem('step')); // Clones the object  
+        console.log(status, 'running click');
+        console.log('step.status != 5++++++++');
         this.id = setInterval(function () {
+            console.log('seconds33333', seconds);
+            console.log('t33333333333', t);
+            console.log('s33333333333333', s);
             step = JSON.parse(localStorage.getItem('step')); // Clones the object        
             if (step.status != 1 && step.status != 5 && step.step == _this.stepdata[order._id].step) {
+                console.log();
                 t = t + 1;
                 seconds = seconds - 1;
                 s = s - 1;
                 if (seconds == 0 && step.status != 1 && step.step == _this.stepdata[order._id].step) {
+                    console.log(_this.id);
                     clearInterval(_this.id);
+                    setTimeout(function () { clearInterval(this.id); }, 10);
+                    console.log('seconds444444', seconds);
+                    console.log('t44444444444443', t);
+                    console.log('s44444444444444', s);
                     _this.remainingTime[order._id][step.step] = '0:00';
                     var items_1 = [];
                     var ids_1 = [];
@@ -258,6 +270,20 @@ var OrderListComponent = /** @class */ (function () {
                 _this.remainingTime[order._id][_this.stepdata[order._id].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
             }
         }, timeInterval);
+        if (status == 5) {
+            console.log('this.id found++++++++', this.id);
+            if (this.id) {
+                console.log(this.remainingTime[order._id], 'asdasdh++++++');
+                console.log('this.id found+++++++++++++++++', this.id);
+                clearInterval(this.id);
+                console.log('seconds', seconds);
+                console.log('t', t);
+                console.log('s', s);
+            }
+            else {
+                console.log('this.id not found', this.id);
+            }
+        }
         var items = [];
         var ids = [];
         for (var i = 0; i < order.item.length; i++) {

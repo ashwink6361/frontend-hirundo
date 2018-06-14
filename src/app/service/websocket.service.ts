@@ -418,7 +418,7 @@ export class WebsocketService {
             }
         });
         this.socket.on('orderstatus', (data) => {
-            console.log('orderstatus',data);
+            console.log('data',data);
             for (var i = 0; i < this._orders.length; i++) {
                 if (data.id === this._orders[i]._id) {
                     var temp = _.cloneDeep(this._orders[i]);
@@ -465,6 +465,7 @@ export class WebsocketService {
 
                     //     }
                     // }
+                    console.log('tem.item', temp.item);
                     this._orders[i] = _.cloneDeep(temp);
                     let itemsToSplice = [];
                     if (temp.item.length) {
@@ -515,7 +516,6 @@ export class WebsocketService {
             }
         });
         this.socket.on('newItem', (data) => {
-            console.log('newItem',data);            
             var tempArray = [];
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {

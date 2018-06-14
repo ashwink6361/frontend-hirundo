@@ -106,7 +106,7 @@ export class OrderListComponent implements DoCheck {
             for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
                 if (order.item[i].category == this.authGuard.getCurrentUser().category[k]) {
                     items.push(order.item[i].id._id);
-                    ids.push(order.item[i]._id);                    
+                    ids.push(order.item[i]._id);
                 }
             }
         }
@@ -123,14 +123,14 @@ export class OrderListComponent implements DoCheck {
     public updateItem(item, order, status) {
         item.status = status;
         let items = [];
-        let ids = [];        
+        let ids = [];
         items.push(item.id._id);
-        ids.push(item._id);                            
+        ids.push(item._id);
         let opts = {
             status: status,
             itemId: items,
             step: this.stepdata[order._id].step,
-            id: ids            
+            id: ids
         };
         this.websocketService.updateOrder(order, opts).then(data => {
         }).catch(error => {
@@ -141,6 +141,7 @@ export class OrderListComponent implements DoCheck {
         if (localStorage.getItem('step') != null) {
             localStorage.removeItem('step');
         }
+        console.log(this.remainingTime[order._id], 'sadsa++++++++ top');
         localStorage.setItem('step', JSON.stringify(step));
         let seconds = time * 60;
         let timeInterval = 1000;
@@ -149,77 +150,87 @@ export class OrderListComponent implements DoCheck {
         let t = 0;
         let s = 60;
         var width = 0;
-        step = JSON.parse(localStorage.getItem('step'));  // Clones the object                
-        this.id = setInterval(() => {
-            step = JSON.parse(localStorage.getItem('step'));  // Clones the object        
-            if (step.status != 1 && step.status != 5 && step.step == this.stepdata[order._id].step) {
-                t = t + 1;
-                seconds = seconds - 1;
-                s = s - 1;
-                if (seconds == 0 && step.status != 1 && step.step == this.stepdata[order._id].step) {
-                    clearInterval(this.id);
-                    this.remainingTime[order._id][step.step] = '0:00';
-                    let items = [];
-                    let ids = [];                    
-                    this.completeButton = true;
-                    for (let i = 0; i < order.item.length; i++) {
-                        for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
-                            if (((order.item[i].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(order.item[i].category)) > -1)) {
-                                if (order.item[i].step == this.stepdata[order._id].step) {
-                                    order.item[i].status = status;
-                                    if (items.indexOf(order.item[i].id._id) < 0) {
-                                        items.push(order.item[i].id._id);
-                                        ids.push(order.item[i]._id);                                        
+        step = JSON.parse(localStorage.getItem('step'));  // Clones the object 
+            this.id = setInterval(() => {
+                step = JSON.parse(localStorage.getItem('step'));  // Clones the object        
+                if (step.status != 1 && step.status != 5 && step.step == this.stepdata[order._id].step) {
+                    console.log()
+                    t = t + 1;
+                    seconds = seconds - 1;
+                    s = s - 1;
+                    if (seconds == 0 && step.status != 1 && step.step == this.stepdata[order._id].step) {
+                        console.log(this.id);
+                        clearInterval(this.id);
+                        setTimeout(function() {clearInterval(this.id)}, 10);
+                        this.remainingTime[order._id][step.step] = '0:00';
+                        let items = [];
+                        let ids = [];
+                        this.completeButton = true;
+                        for (let i = 0; i < order.item.length; i++) {
+                            for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
+                                if (((order.item[i].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(order.item[i].category)) > -1)) {
+                                    if (order.item[i].step == this.stepdata[order._id].step) {
+                                        order.item[i].status = status;
+                                        if (items.indexOf(order.item[i].id._id) < 0) {
+                                            items.push(order.item[i].id._id);
+                                            ids.push(order.item[i]._id);
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    let temp = {
-                        status: 5,
-                        itemId: items,
-                        step: this.stepdata[order._id].step,
-                        id: ids
-                    };
-                    this.websocketService.updateOrder(order._id, temp).then(data => {
-                        order.status = data.data.status;
-                        for (let i = 0; i < this.orders.length; i++) {
-                            if (this.orders[i]._id == data.data._id) {
-                                this.orders[i].step = data.data.step;
+                        let temp = {
+                            status: 5,
+                            itemId: items,
+                            step: this.stepdata[order._id].step,
+                            id: ids
+                        };
+                        this.websocketService.updateOrder(order._id, temp).then(data => {
+                            order.status = data.data.status;
+                            for (let i = 0; i < this.orders.length; i++) {
+                                if (this.orders[i]._id == data.data._id) {
+                                    this.orders[i].step = data.data.step;
+                                }
                             }
-                        }
-                        for (let i = 0; i < data.data.step.length; i++) {
-                            if (data.data.step[i].step == step.step) {
-                                step.status = data.data.step[i].status;
+                            for (let i = 0; i < data.data.step.length; i++) {
+                                if (data.data.step[i].step == step.step) {
+                                    step.status = data.data.step[i].status;
+                                }
                             }
+                        }).catch(error => {
+                        });
+                    }
+                    else {
+                        width = width + w;
+                        if (width < 100) {
+                            this.barWidth[step.step.replace(' ', '') + order._id + index] = width + '%';
+                        } else {
+                            this.barWidth[step.step.replace(' ', '') + order._id + index] = '100%';
                         }
-                    }).catch(error => {
-                    });
-                }
-                else {
-                    width = width + w;
-                    if (width < 100) {
-                        this.barWidth[step.step.replace(' ', '') + order._id + index] = width + '%';
-                    } else {
-                        this.barWidth[step.step.replace(' ', '') + order._id + index] = '100%';
                     }
-                }
-                if (t == 60) {
-                    t = 0;
-                    if (m == 0) {
-                        m = 0;
-                        s = 0;
-                    } else {
-                        m = m - 1;
-                        s = 60;
+                    if (t == 60) {
+                        t = 0;
+                        if (m == 0) {
+                            m = 0;
+                            s = 0;
+                        } else {
+                            m = m - 1;
+                            s = 60;
+                        }
                     }
+                    var minutes = m;
+                    this.remainingTime[order._id][this.stepdata[order._id].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
                 }
-                var minutes = m;
-                this.remainingTime[order._id][this.stepdata[order._id].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
+            }, timeInterval);
+            if (status == 5) {
+            if (this.id) {
+                clearInterval(this.id);
             }
-        }, timeInterval);
+            else {
+            }
+        }
         let items = [];
-        let ids = [];                            
+        let ids = [];
         for (let i = 0; i < order.item.length; i++) {
             for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
                 if (((order.item[i].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(order.item[i].category)) > -1)) {
@@ -227,7 +238,7 @@ export class OrderListComponent implements DoCheck {
                         order.item[i].status = status;
                         if (items.indexOf(order.item[i].id._id) < 0) {
                             items.push(order.item[i].id._id);
-                            ids.push(order.item[i]._id);                            
+                            ids.push(order.item[i]._id);
                         }
                     }
                 }
@@ -252,7 +263,7 @@ export class OrderListComponent implements DoCheck {
                         setTimeout(this.id.data.handleId);
                         this.remainingTime[order._id][step.step] = '0:00';
                     }
-                    localStorage.setItem('step',JSON.stringify(data.data.step[i]));
+                    localStorage.setItem('step', JSON.stringify(data.data.step[i]));
                 }
             }
             if (order.step) {
@@ -293,7 +304,7 @@ export class OrderListComponent implements DoCheck {
     }
 
     ngDoCheck() {
-        if(this.orders && this.orders.length){
+        if (this.orders && this.orders.length) {
             const change = this.differ.diff(this.orders);
             if (change != null) {
                 if (this.orders.length) {
@@ -323,6 +334,6 @@ export class OrderListComponent implements DoCheck {
                 }
             }
         }
-        
+
     }
 }

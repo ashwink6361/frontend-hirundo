@@ -1203,7 +1203,7 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('orderstatus', function (data) {
-            console.log('orderstatus', data);
+            console.log('data', data);
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data.id === _this._orders[i]._id) {
                     var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);
@@ -1249,6 +1249,7 @@ var WebsocketService = /** @class */ (function () {
                     //         }
                     //     }
                     // }
+                    console.log('tem.item', temp.item);
                     _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
                     var itemsToSplice = [];
                     if (temp.item.length) {
@@ -1299,7 +1300,6 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('newItem', function (data) {
-            console.log('newItem', data);
             var tempArray = [];
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id === _this._orders[i]._id) {
