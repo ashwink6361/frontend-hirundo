@@ -821,31 +821,28 @@ var WebsocketService = /** @class */ (function () {
         // you can hard code `environment.ws_url` as `http://localhost:5000`
         // this.socket = io('http://localhost:5051');
         this.socket = __WEBPACK_IMPORTED_MODULE_1_socket_io_client__(this.socketUrl);
+        // this.socket = io(this.socketUrl, { 'transports': ['polling'] });
         console.log("this.socket ", this.socket);
         console.log("this.socket.connected ", this.socket.connected);
         if (this.socket.connected) {
             console.log("Socket connection done ");
         }
         var user = JSON.parse(localStorage.getItem('currentUser'));
-        // this.socket.on('connect', function(socket) {
-        //     console.log('this.socket',this.socket);            
-        //     this.socket.emit('connection');
-        //     console.log('connection');  
-        //     this.socket.emit('userAuth', {userId: user._id});     
-        //     console.log('userAuth');                                                    
-        //   });
         if (user) {
-            console.log('user', user);
             this.socket.emit('connection');
-            this.socket.emit('userAuth', { userId: user._id });
-            // this.socket.emit('connection', (data) => {
-            //     console.log('connection',data);            
-            //     this.socket.emit('userAuth', {userId: user._id}, (data) => {
-            //     console.log('userAuth',data);
-            //     });
-            // });
+            console.log('user', user);
+            this.socket.on('connected', function (data) {
+                console.log('connected', data);
+                if (data && _this.socket.id == data.socketId) {
+                    _this.socket.emit('userAuth', { userId: user._id });
+                    _this.socket.on('authConnected', function (data) {
+                        console.log('authConnected', data);
+                    });
+                }
+            });
         }
         this.socket.on('neworder', function (data) {
+            console.log('neworder', data);
             var userType = _this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
                 _this._orders.push(data);
@@ -937,6 +934,7 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('tablestatus', function (data) {
+            console.log('tablestatus', data);
             for (var i = 0; i < _this._rooms.length; i++) {
                 if (data.room == _this._rooms[i]._id) {
                     for (var j = 0; j < _this._rooms[i].tables.length; j++) {
@@ -949,6 +947,7 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('changeStep', function (data) {
+            console.log('changeStep', data);
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id === _this._orders[i]._id) {
                     _this._orders[i].stepStatus = data.stepStatus;
@@ -956,6 +955,7 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('itemDeleted', function (data) {
+            console.log('itemDeleted', data);
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id === _this._orders[i]._id) {
                     _this._orders[i] = data;
@@ -963,6 +963,7 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('itemUpdated', function (data) {
+            console.log('itemUpdated', data);
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id === _this._orders[i]._id) {
                     var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);

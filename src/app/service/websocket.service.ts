@@ -29,32 +29,28 @@ export class WebsocketService {
         // you can hard code `environment.ws_url` as `http://localhost:5000`
         // this.socket = io('http://localhost:5051');
         this.socket = io(this.socketUrl);
+        // this.socket = io(this.socketUrl, { 'transports': ['polling'] });
         console.log("this.socket ",this.socket);   
-        console.log("this.socket.connected ",this.socket.connected);        
-             
+        console.log("this.socket.connected ",this.socket.connected);   
         if (this.socket.connected){
             console.log("Socket connection done ");
         }
         let user = JSON.parse(localStorage.getItem('currentUser'));
-        // this.socket.on('connect', function(socket) {
-        //     console.log('this.socket',this.socket);            
-        //     this.socket.emit('connection');
-        //     console.log('connection');  
-        //     this.socket.emit('userAuth', {userId: user._id});     
-        //     console.log('userAuth');                                                    
-        //   });
-        if(user){
-            console.log('user',user);          
-            this.socket.emit('connection');   
-            this.socket.emit('userAuth', {userId: user._id});           
-            // this.socket.emit('connection', (data) => {
-            //     console.log('connection',data);            
-            //     this.socket.emit('userAuth', {userId: user._id}, (data) => {
-            //     console.log('userAuth',data);
-            //     });
-            // });
-        }
+        if (user) {
+            this.socket.emit('connection');
+            console.log('user', user);
+            this.socket.on('connected', (data) => {
+                console.log('connected', data);
+                if (data && this.socket.id == data.socketId) {
+                    this.socket.emit('userAuth', { userId: user._id });
+                    this.socket.on('authConnected', (data) => {
+                        console.log('authConnected', data);
+                    });
+                }
+            });
+        }        
         this.socket.on('neworder', (data) => {
+            console.log('neworder',data);          
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
                 this._orders.push(data);
@@ -147,6 +143,7 @@ export class WebsocketService {
             }
         });
         this.socket.on('tablestatus', (data) => {
+            console.log('tablestatus',data);                      
             for (var i = 0; i < this._rooms.length; i++) {
                 if (data.room == this._rooms[i]._id) {
                     for (var j = 0; j < this._rooms[i].tables.length; j++) {
@@ -159,6 +156,7 @@ export class WebsocketService {
             }
         });
         this.socket.on('changeStep', (data) => {
+            console.log('changeStep',data);                                  
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     this._orders[i].stepStatus = data.stepStatus;
@@ -166,6 +164,7 @@ export class WebsocketService {
             }
         });
         this.socket.on('itemDeleted', (data) => {
+            console.log('itemDeleted',data);                                              
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;
@@ -173,6 +172,7 @@ export class WebsocketService {
             }
         });
         this.socket.on('itemUpdated', (data) => {
+            console.log('itemUpdated',data);                                                          
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     var temp = _.cloneDeep(this._orders[i]);
