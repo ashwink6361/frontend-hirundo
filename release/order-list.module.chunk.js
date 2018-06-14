@@ -3,7 +3,7 @@ webpackJsonp(["order-list.module"],{
 /***/ "../../../../../src/app/hirundo/department/order-list/order-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"text-center\" *ngIf=\"!(orders && orders.length)\">No Order Found.</div>\r\n<div *ngIf=\"orders && orders.length\" class=\"order-list-container container-fluid\">\r\n    <div class=\"row\">\r\n        <div class=\"col-sm-6 col-md-3\"  *ngFor=\"let order of orders\">\r\n\r\n            <div class=\"card order-list\">\r\n        <div class=\"card-body\" [class.opacity]=\"order.status == 3\">\r\n            <h4 class=\"card-title\">\r\n                <div>\r\n                        <img src=\"assets/images/table.png\" alt=\"\">\r\n                        <span>{{order.tableName}}</span>\r\n                    </div>\r\n                <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div>\r\n            </h4>\r\n            <div class=\"card-text\">\r\n                <p>\r\n                    <i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\r\n                <p>\r\n                        <i class=\"far fa-clock\"></i> {{order.created_at | date:'hh:mm a'}}\r\n                    \r\n                </p>\r\n                <p>\r\n                    <i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\r\n            </div>\r\n            <div class=\"step-listing\">\r\n                <ul *ngIf=\"stepdata[order._id]\">\r\n                    <li *ngFor=\"let step of order.step; let i = index;\" (click)=\"selectedTab(step.step,i,order._id)\" [class.active]=\"step.step == stepdata[order._id].step\" [class.completed]=\"step.status == 1\">{{step.step}}</li>\r\n                </ul>\r\n            </div>\r\n            <div class=\"order-items-container\">\r\n                <div *ngFor=\"let item of order.item\">\r\n                    <div *ngIf=\"((item.department.indexOf(authGuard.getCurrentUser()._id)) > -1) || ((authGuard.getCurrentUser().category.indexOf(item.category)) > -1)\">\r\n                        <div class=\"order-item\" *ngIf=\"stepdata[order._id] && item.step == stepdata[order._id].step\">\r\n                            <label class=\"label item-status\">{{getOrderStatus(item.status)}}</label>\r\n                            <div class=\"order-item-img\">\r\n                                {{item.quantity}} X\r\n                            </div>\r\n                            <div class=\"order-item-detail\">\r\n                                {{item.id.name}}\r\n                                <ul>\r\n                                    <li *ngFor=\"let varient of item.variant\">\r\n                                        <i *ngIf=\"varient.status == 1\">+</i>\r\n                                        <i *ngIf=\"varient.status == 0\">-</i> {{varient.name}}\r\n                                    </li>\r\n                                </ul>\r\n                                <ul>\r\n                                    <li>\r\n                                        {{item.notes}}\r\n                                    </li>\r\n                                </ul>\r\n                            </div>\r\n                            <div class=\"order-quantity d-flex w-105\">\r\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 2)\">\r\n                                    <img src=\"assets/images/order-deliver.png\" alt=\"\" />\r\n                                </button>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class=\"order-call-btn\" *ngIf=\"order.step.length\">\r\n            <div *ngFor=\"let step of order.step; let indx = index;\">\r\n                <div *ngIf=\"stepdata[order._id].step == step.step\">\r\n                    <button type=\"submit\" *ngIf=\"stepdata[order._id] && (order.stepStatus == stepdata[order._id].step) && (step.status != 4) && (step.status != 5) && (step.status != 1)\" (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 4)\">Start ({{times[order._id][stepdata[order._id].step]}}:00)</button>                    \r\n                    <button type=\"submit\" *ngIf=\"step.status == 0 && (step.step == 'Uscita 1')\" (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 4)\">Start ({{times[order._id][stepdata[order._id].step]}}:00)</button>\r\n                    <div class=\"running-label\" *ngIf=\"stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 4)\"  (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 5)\"><span class=\"running\">Running {{remainingTime[order._id][stepdata[order._id].step]}}</span></div>\r\n                    <button *ngIf=\"stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 5)\" type=\"submit\" (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 1)\">Completed</button>\r\n                    <div *ngIf=\"stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 4)\" id=\"{{step.step.replace(' ','')+order._id+indx}}\" [ngStyle]=\"{'width': barWidth[step.step.replace(' ','')+order._id+indx]}\" class=\"progress-btn\"  (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 5)\"></div>\r\n                    <button class=\"bg-yellow\" *ngIf=\"stepdata[order._id] && (step.step != 'Uscita 1') && (step.status == 0) && (order.stepStatus != stepdata[order._id].step)\" type=\"submit\" [disabled]=\"true\">To Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n</div>\r\n</div>"
+module.exports = "<div class=\"text-center\" *ngIf=\"!(orders && orders.length)\">No Order Found.</div>\r\n<div *ngIf=\"orders && orders.length\" class=\"order-list-container container-fluid\">\r\n    <div class=\"row\">\r\n        <div class=\"col-sm-6 col-md-3\"  *ngFor=\"let order of orders\">\r\n\r\n            <div class=\"card order-list\">\r\n        <div class=\"card-body\" [class.opacity]=\"order.status == 3\">\r\n            <h4 class=\"card-title\">\r\n                <div>\r\n                        <img src=\"assets/images/table.png\" alt=\"\">\r\n                        <span>{{order.tableName}}</span>\r\n                    </div>\r\n                <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div>\r\n            </h4>\r\n            <div class=\"card-text\">\r\n                <p>\r\n                    <i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\r\n                <p>\r\n                        <i class=\"far fa-clock\"></i> {{order.created_at | date:'hh:mm a'}}\r\n                    \r\n                </p>\r\n                <p>\r\n                    <i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\r\n            </div>\r\n            <div class=\"step-listing\">\r\n                <ul *ngIf=\"stepdata[order._id]\">\r\n                    <li *ngFor=\"let step of order.step; let i = index;\" (click)=\"selectedTab(step.step,i,order._id)\" [class.active]=\"step.step == stepdata[order._id].step\" [class.completed]=\"step.status == 1\">{{step.step}}</li>\r\n                </ul>\r\n            </div>\r\n            <div class=\"order-items-container\">\r\n                <div *ngFor=\"let item of order.item\">\r\n                    <div *ngIf=\"((item.department.indexOf(authGuard.getCurrentUser()._id)) > -1) || ((authGuard.getCurrentUser().category.indexOf(item.category)) > -1)\">\r\n                        <div class=\"order-item\" *ngIf=\"stepdata[order._id] && item.step == stepdata[order._id].step\">\r\n                            <label class=\"label item-status\">{{getOrderStatus(item.status)}}</label>\r\n                            <div class=\"order-item-img\">\r\n                                {{item.quantity}} X\r\n                            </div>\r\n                            <div class=\"order-item-detail\">\r\n                                {{item.id.name}}\r\n                                <ul>\r\n                                    <li *ngFor=\"let varient of item.variant\">\r\n                                        <i *ngIf=\"varient.status == 1\">+</i>\r\n                                        <i *ngIf=\"varient.status == 0\">-</i> {{varient.name}}\r\n                                    </li>\r\n                                </ul>\r\n                                <ul>\r\n                                    <li>\r\n                                        {{item.notes}}\r\n                                    </li>\r\n                                </ul>\r\n                            </div>\r\n                            <div class=\"order-quantity d-flex w-105\">\r\n                                <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 2)\">\r\n                                    <img src=\"assets/images/order-deliver.png\" alt=\"\" />\r\n                                </button>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class=\"order-call-btn\" *ngIf=\"order.step.length\">\r\n            <div *ngFor=\"let step of order.step; let indx = index;\">\r\n                <!-- <div *ngIf=\"stepdata[order._id].step == step.step\">\r\n                    <button type=\"submit\" *ngIf=\"stepdata[order._id] && (order.stepStatus == stepdata[order._id].step) && (step.status != 4) && (step.status != 5) && (step.status != 1)\" (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 4)\">Start ({{times[order._id][stepdata[order._id].step]}}:00)</button>                    \r\n                    <button type=\"submit\" *ngIf=\"step.status == 0 && (step.step == 'Uscita 1')\" (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 4)\">Start ({{times[order._id][stepdata[order._id].step]}}:00)</button>\r\n                    <div class=\"running-label\" *ngIf=\"stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 4)\"  (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 5)\"><span class=\"running\">Running {{remainingTime[order._id][stepdata[order._id].step]}}</span></div>\r\n                    <button *ngIf=\"stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 5)\" type=\"submit\" (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 1)\">Completed</button>\r\n                    <div *ngIf=\"stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 4)\" id=\"{{step.step.replace(' ','')+order._id+indx}}\" [ngStyle]=\"{'width': barWidth[step.step.replace(' ','')+order._id+indx]}\" class=\"progress-btn\"  (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 5)\"></div>\r\n                    <button class=\"bg-yellow\" *ngIf=\"stepdata[order._id] && (step.step != 'Uscita 1') && (step.status == 0) && (order.stepStatus != stepdata[order._id].step)\" type=\"submit\" [disabled]=\"true\">To Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>\r\n                </div> -->\r\n                <div *ngIf=\"stepdata[order._id].step == step.step\">\r\n                    <button type=\"submit\" *ngIf=\"stepdata[order._id] && (order.stepStatus == stepdata[order._id].step) && itemStatus[order._id] && itemStatus[order._id][stepdata[order._id].step]\" (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 4)\">Start ({{times[order._id][stepdata[order._id].step]}}:00)</button>                    \r\n                    <button type=\"submit\" *ngIf=\"itemStatus[order._id] && itemStatus[order._id][stepdata[order._id].step] && (step.step == 'Uscita 1')\" (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 4)\">Start ({{times[order._id][stepdata[order._id].step]}}:00)</button>\r\n                    <div class=\"running-label\" *ngIf=\"stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 4) && itemStatus[order._id] && !itemStatus[order._id][stepdata[order._id].step]\"  (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 5)\"><span class=\"running\">Running {{remainingTime[order._id][stepdata[order._id].step]}}</span></div>\r\n                    <button *ngIf=\"stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 5) && itemStatus[order._id] && !itemStatus[order._id][stepdata[order._id].step]\" type=\"submit\" (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 1)\">Completed</button>\r\n                    <div *ngIf=\"stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 4) && itemStatus[order._id] && !itemStatus[order._id][stepdata[order._id].step]\" id=\"{{step.step.replace(' ','')+order._id+indx}}\" [ngStyle]=\"{'width': barWidth[step.step.replace(' ','')+order._id+indx]}\" class=\"progress-btn\"  (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 5)\"></div>\r\n                    <button class=\"bg-yellow\" *ngIf=\"stepdata[order._id] && (step.step != 'Uscita 1') && (step.status == 0) && (order.stepStatus != stepdata[order._id].step)\" type=\"submit\" [disabled]=\"true\">To Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n</div>\r\n</div>"
 
 /***/ }),
 
@@ -57,6 +57,8 @@ var OrderListComponent = /** @class */ (function () {
         this.stepdata = [];
         this.orderId = [];
         this.times = [];
+        this.itemStatus = [];
+        this.showStartButton = [];
         this.completeButton = false;
         this.remainingTime = [];
         this.barWidth = [];
@@ -67,6 +69,7 @@ var OrderListComponent = /** @class */ (function () {
         this.websocketService.getOrders().then(function (data) {
             _this.orders = data;
             if (_this.orders.length) {
+                _this.itemStatus = [];
                 for (var i = 0; i < _this.orders.length; i++) {
                     var time = {};
                     var remtime = {};
@@ -101,6 +104,17 @@ var OrderListComponent = /** @class */ (function () {
                     }
                     _this.times[_this.orders[i]._id] = time;
                     _this.remainingTime[_this.orders[i]._id] = remtime;
+                    var itemStatus = {};
+                    for (var m = 0; m < _this.orders[i].step.length; m++) {
+                        var startTemp = [];
+                        for (var n = 0; n < _this.orders[i].item.length; n++) {
+                            if (_this.orders[i].item[n].step == _this.orders[i].step[m].step && _this.orders[i].item[n].department.indexOf(_this.authGuard.getCurrentUser()._id) > -1) {
+                                startTemp.push(_this.orders[i].item[n].status);
+                            }
+                        }
+                        itemStatus[_this.orders[i].step[m].step] = startTemp.every(_this.isBelowThreshold);
+                    }
+                    _this.itemStatus[_this.orders[i]._id] = itemStatus;
                 }
             }
             _this.loadingOrders = false;
@@ -111,6 +125,10 @@ var OrderListComponent = /** @class */ (function () {
             _this.clock = Date.now();
         }, 1000);
     };
+    OrderListComponent.prototype.isBelowThreshold = function (currentValue) {
+        return currentValue == 0;
+    };
+    ;
     OrderListComponent.prototype.getOrderStatus = function (status) {
         var str = 'In progress';
         switch (status) {
@@ -136,6 +154,7 @@ var OrderListComponent = /** @class */ (function () {
     };
     ;
     OrderListComponent.prototype.updateOrder = function (order, time, status) {
+        var _this = this;
         order.status = status;
         var items = [];
         var ids = [];
@@ -153,11 +172,28 @@ var OrderListComponent = /** @class */ (function () {
             id: ids
         };
         this.websocketService.updateOrder(order._id, opts).then(function (data) {
+            if (_this.orders.length) {
+                _this.itemStatus = [];
+                for (var i = 0; i < _this.orders.length; i++) {
+                    var itemStatus = {};
+                    for (var m = 0; m < _this.orders[i].step.length; m++) {
+                        var startTemp = [];
+                        for (var n = 0; n < _this.orders[i].item.length; n++) {
+                            if (_this.orders[i].item[n].step == _this.orders[i].step[m].step && _this.orders[i].item[n].department.indexOf(_this.authGuard.getCurrentUser()._id) > -1) {
+                                startTemp.push(_this.orders[i].item[n].status);
+                            }
+                        }
+                        itemStatus[_this.orders[i].step[m].step] = startTemp.every(_this.isBelowThreshold);
+                    }
+                    _this.itemStatus[_this.orders[i]._id] = itemStatus;
+                }
+            }
         }).catch(function (error) {
         });
     };
     ;
     OrderListComponent.prototype.updateItem = function (item, order, status) {
+        var _this = this;
         item.status = status;
         var items = [];
         var ids = [];
@@ -170,6 +206,22 @@ var OrderListComponent = /** @class */ (function () {
             id: ids
         };
         this.websocketService.updateOrder(order, opts).then(function (data) {
+            if (_this.orders.length) {
+                _this.itemStatus = [];
+                for (var i = 0; i < _this.orders.length; i++) {
+                    var itemStatus = {};
+                    for (var m = 0; m < _this.orders[i].step.length; m++) {
+                        var startTemp = [];
+                        for (var n = 0; n < _this.orders[i].item.length; n++) {
+                            if (_this.orders[i].item[n].step == _this.orders[i].step[m].step && _this.orders[i].item[n].department.indexOf(_this.authGuard.getCurrentUser()._id) > -1) {
+                                startTemp.push(_this.orders[i].item[n].status);
+                            }
+                        }
+                        itemStatus[_this.orders[i].step[m].step] = startTemp.every(_this.isBelowThreshold);
+                    }
+                    _this.itemStatus[_this.orders[i]._id] = itemStatus;
+                }
+            }
         }).catch(function (error) {
         });
     };
@@ -188,13 +240,8 @@ var OrderListComponent = /** @class */ (function () {
         var t = 0;
         var s = 60;
         var width = 0;
-        step = JSON.parse(localStorage.getItem('step')); // Clones the object  
-        console.log(status, 'running click');
-        console.log('step.status != 5++++++++');
+        step = JSON.parse(localStorage.getItem('step')); // Clones the object 
         this.id = setInterval(function () {
-            console.log('seconds33333', seconds);
-            console.log('t33333333333', t);
-            console.log('s33333333333333', s);
             step = JSON.parse(localStorage.getItem('step')); // Clones the object        
             if (step.status != 1 && step.status != 5 && step.step == _this.stepdata[order._id].step) {
                 console.log();
@@ -205,9 +252,6 @@ var OrderListComponent = /** @class */ (function () {
                     console.log(_this.id);
                     clearInterval(_this.id);
                     setTimeout(function () { clearInterval(this.id); }, 10);
-                    console.log('seconds444444', seconds);
-                    console.log('t44444444444443', t);
-                    console.log('s44444444444444', s);
                     _this.remainingTime[order._id][step.step] = '0:00';
                     var items_1 = [];
                     var ids_1 = [];
@@ -243,6 +287,22 @@ var OrderListComponent = /** @class */ (function () {
                                 step.status = data.data.step[i].status;
                             }
                         }
+                        if (_this.orders.length) {
+                            _this.itemStatus = [];
+                            for (var i = 0; i < _this.orders.length; i++) {
+                                var itemStatus = {};
+                                for (var m_1 = 0; m_1 < _this.orders[i].step.length; m_1++) {
+                                    var startTemp = [];
+                                    for (var n = 0; n < _this.orders[i].item.length; n++) {
+                                        if (_this.orders[i].item[n].step == _this.orders[i].step[m_1].step && _this.orders[i].item[n].department.indexOf(_this.authGuard.getCurrentUser()._id) > -1) {
+                                            startTemp.push(_this.orders[i].item[n].status);
+                                        }
+                                    }
+                                    itemStatus[_this.orders[i].step[m_1].step] = startTemp.every(_this.isBelowThreshold);
+                                }
+                                _this.itemStatus[_this.orders[i]._id] = itemStatus;
+                            }
+                        }
                     }).catch(function (error) {
                     });
                 }
@@ -271,17 +331,10 @@ var OrderListComponent = /** @class */ (function () {
             }
         }, timeInterval);
         if (status == 5) {
-            console.log('this.id found++++++++', this.id);
             if (this.id) {
-                console.log(this.remainingTime[order._id], 'asdasdh++++++');
-                console.log('this.id found+++++++++++++++++', this.id);
                 clearInterval(this.id);
-                console.log('seconds', seconds);
-                console.log('t', t);
-                console.log('s', s);
             }
             else {
-                console.log('this.id not found', this.id);
             }
         }
         var items = [];
@@ -308,9 +361,25 @@ var OrderListComponent = /** @class */ (function () {
         this.websocketService.updateOrder(order._id, opts).then(function (data) {
             order.status = data.data.status;
             order.step = data.data.step;
-            for (var i_1 = 0; i_1 < data.data.step.length; i_1++) {
-                if (data.data.step[i_1].step == step.step) {
-                    step.status = data.data.step[i_1].status;
+            if (_this.orders.length) {
+                _this.itemStatus = [];
+                for (var i_1 = 0; i_1 < _this.orders.length; i_1++) {
+                    var itemStatus = {};
+                    for (var m_2 = 0; m_2 < _this.orders[i_1].step.length; m_2++) {
+                        var startTemp = [];
+                        for (var n = 0; n < _this.orders[i_1].item.length; n++) {
+                            if (_this.orders[i_1].item[n].step == _this.orders[i_1].step[m_2].step && _this.orders[i_1].item[n].department.indexOf(_this.authGuard.getCurrentUser()._id) > -1) {
+                                startTemp.push(_this.orders[i_1].item[n].status);
+                            }
+                        }
+                        itemStatus[_this.orders[i_1].step[m_2].step] = startTemp.every(_this.isBelowThreshold);
+                    }
+                    _this.itemStatus[_this.orders[i_1]._id] = itemStatus;
+                }
+            }
+            for (var i_2 = 0; i_2 < data.data.step.length; i_2++) {
+                if (data.data.step[i_2].step == step.step) {
+                    step.status = data.data.step[i_2].status;
                     if (step.status == 5) {
                         seconds = 0;
                         timeInterval = 0;
@@ -318,7 +387,7 @@ var OrderListComponent = /** @class */ (function () {
                         setTimeout(_this.id.data.handleId);
                         _this.remainingTime[order._id][step.step] = '0:00';
                     }
-                    localStorage.setItem('step', JSON.stringify(data.data.step[i_1]));
+                    localStorage.setItem('step', JSON.stringify(data.data.step[i_2]));
                 }
             }
             if (order.step) {
@@ -361,6 +430,7 @@ var OrderListComponent = /** @class */ (function () {
             var change = this.differ.diff(this.orders);
             if (change != null) {
                 if (this.orders.length) {
+                    this.itemStatus = [];
                     for (var i = 0; i < this.orders.length; i++) {
                         var time = {};
                         var remtime = {};
@@ -383,6 +453,17 @@ var OrderListComponent = /** @class */ (function () {
                         }
                         this.times[this.orders[i]._id] = time;
                         this.remainingTime[this.orders[i]._id] = remtime;
+                        var itemStatus = {};
+                        for (var m = 0; m < this.orders[i].step.length; m++) {
+                            var startTemp = [];
+                            for (var n = 0; n < this.orders[i].item.length; n++) {
+                                if (this.orders[i].item[n].step == this.orders[i].step[m].step && this.orders[i].item[n].department.indexOf(this.authGuard.getCurrentUser()._id) > -1) {
+                                    startTemp.push(this.orders[i].item[n].status);
+                                }
+                            }
+                            itemStatus[this.orders[i].step[m].step] = startTemp.every(this.isBelowThreshold);
+                        }
+                        this.itemStatus[this.orders[i]._id] = itemStatus;
                     }
                 }
             }

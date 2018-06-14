@@ -1295,8 +1295,47 @@ var WebsocketService = /** @class */ (function () {
         this.socket.on('itemUpdated', function (data) {
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id === _this._orders[i]._id) {
-                    _this._orders[i] = data;
+                    var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);
+                    var userType = _this.authGuard.getCurrentUser().userType;
+                    if (userType == 3) {
+                        temp.step = data.step;
+                        temp.item = data.item;
+                    }
+                    else if (userType == 4) {
+                        var steps = [];
+                        var sts = [];
+                        if (temp && temp.item) {
+                            for (var j = 0; j < temp.item.length; j++) {
+                                for (var k = 0; k < data.step.length; k++) {
+                                    if (((temp.item[j].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
+                                        if (temp.item[j].step == data.step[k].step) {
+                                            if (sts.indexOf(data.step[k].step) < 0) {
+                                                sts.push(data.step[k].step);
+                                                steps.push(data.step[k]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        temp.step = steps;
+                        var itemsTemp = [];
+                        if (data && data.item) {
+                            for (var j = 0; j < data.item.length; j++) {
+                                if (((data.item[j].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
+                                    itemsTemp.push(data.item[j]);
+                                }
+                            }
+                        }
+                        temp.item = itemsTemp;
+                    }
+                    temp.stepStatus = data.stepStatus;
+                    temp.status = data.status;
+                    _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
                 }
+                // if (data._id === this._orders[i]._id) {
+                //     this._orders[i] = data;
+                // }
             }
         });
         this.socket.on('newItem', function (data) {
