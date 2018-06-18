@@ -21,13 +21,16 @@ export class OrderListComponent implements DoCheck {
     public stepdata: Array<any> = [];
     public orderId: Array<any> = [];
     public times: Array<any> = [];
-    public itemStatus: Array<any> = [];   
-    public showStartButton: Array<any> = [];         
+    public itemStatusStart: Array<any> = [];
+    public itemStatusDelivered: Array<any> = [];
+    public itemStatusRunning: Array<any> = [];   
+    public itemStatusCompleted: Array<any> = [];   
     public completeButton = false;
     public remainingTime: Array<any> = [];
     public orderStepData: {};
     public barWidth: Array<any> = [];
     public id;
+    public itemsArray = [];
     constructor(public websocketService: WebsocketService, public authGuard: AuthGuard, private differs: IterableDiffers) {
         this.differ = differs.find([]).create(null);
     }
@@ -36,20 +39,33 @@ export class OrderListComponent implements DoCheck {
         this.websocketService.getOrders().then(data => {
             this.orders = data;
             if (this.orders.length) {
-                this.itemStatus = [];
+                this.itemStatusStart = [];
+                this.itemStatusDelivered = [];
+                this.itemStatusRunning = [];                
+                this.itemStatusCompleted = [];                
                 for (let i = 0; i < this.orders.length; i++) {
                     let time = {};
                     let remtime = {};
+                    let itemStatusStart = {};
+                    let itemStatusDelivered = {};
+                    let itemStatusRunning = {};
+                    let itemStatusCompleted = {};
                     for (let k = 0; k < this.orders[i].step.length; k++) {
                         let temp = [];
-                        for (let l = 0; l < this.orders[i].item.length; l++) {
-                            if (this.orders[i].item[l].step == this.orders[i].step[k].step && temp.indexOf(this.orders[i].item[l].id.preparationTime) < 0) {
-                                temp.push(this.orders[i].item[l].id.preparationTime);
+                        let startTemp = [];                        
+                        for (let l = 0; l < this.orders[i].step[k].item.length; l++) {
+                            if (temp.indexOf(this.orders[i].step[k].item[l].id.preparationTime) < 0) {
+                                temp.push(this.orders[i].step[k].item[l].id.preparationTime);
                             }
+                            startTemp.push(this.orders[i].step[k].item[l].status);
                         }
                         time[this.orders[i].step[k].step] = Math.max(...temp);
                         remtime[this.orders[i].step[k].step] = '0:00';
-                        if (this.orders[i].step[k].status == 1) {
+                        itemStatusStart[this.orders[i].step[k].step] = startTemp.every(this.isEqualToZero);
+                        itemStatusDelivered[this.orders[i].step[k].step] = startTemp.every(this.isEqualToOne);
+                        itemStatusRunning[this.orders[i].step[k].step] = startTemp.every(this.isEqualToFour);
+                        itemStatusCompleted[this.orders[i].step[k].step] = startTemp.every(this.isEqualToFive);
+                        if (startTemp.every(this.isEqualToOne)) {
                             let temparray = this.orders[i].step[k].step.split(' ');
                             let num = Number(temparray[1]);
                             let stepTemp = temparray[0] + ' ' + ++num;
@@ -58,6 +74,7 @@ export class OrderListComponent implements DoCheck {
                                 step: stepTemp,
                             }
                             this.stepdata[this.orders[i]._id] = temp;
+                            this.itemsArray[this.orders[i]._id] = this.orders[i].step[k].item;                            
                         } else {
                             let tempp = {
                                 tab: 0,
@@ -66,22 +83,15 @@ export class OrderListComponent implements DoCheck {
                             tempp.tab = 0;
                             tempp.step = this.orders[i].step[0].step;
                             this.stepdata[this.orders[i]._id] = tempp;
+                            this.itemsArray[this.orders[i]._id] = this.orders[i].step[0].item;
                         }
-
                     }
                     this.times[this.orders[i]._id] = time;
                     this.remainingTime[this.orders[i]._id] = remtime; 
-                    let itemStatus = {};
-                    for (let m = 0; m < this.orders[i].step.length; m++) {
-                        let startTemp = [];
-                        for (let n = 0; n < this.orders[i].item.length; n++) {
-                            if (this.orders[i].item[n].step == this.orders[i].step[m].step && this.orders[i].item[n].department.indexOf(this.authGuard.getCurrentUser()._id) > -1) {
-                                startTemp.push(this.orders[i].item[n].status);
-                            }
-                        }
-                        itemStatus[this.orders[i].step[m].step] = startTemp.every(this.isBelowThreshold);      
-                    }
-                    this.itemStatus[this.orders[i]._id] = itemStatus;                    
+                    this.itemStatusStart[this.orders[i]._id] = itemStatusStart;
+                    this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered; 
+                    this.itemStatusRunning[this.orders[i]._id] = itemStatusRunning;                   
+                    this.itemStatusCompleted[this.orders[i]._id] = itemStatusCompleted; 
                 }
             }
             this.loadingOrders = false;
@@ -93,10 +103,19 @@ export class OrderListComponent implements DoCheck {
         }, 1000);
     }
 
-    isBelowThreshold(currentValue) {
+    isEqualToZero(currentValue) {
         return currentValue == 0;
     };
-
+    isEqualToOne(currentValue) {
+        return currentValue == 1;
+    };
+    isEqualToFour(currentValue) {
+        return currentValue == 4;
+    }; 
+    isEqualToFive(currentValue) {
+        return currentValue == 5;
+    };
+    
     public getOrderStatus(status) {
         var str = 'In progress';
         switch (status) {
@@ -137,19 +156,33 @@ export class OrderListComponent implements DoCheck {
         };
         this.websocketService.updateOrder(order._id, opts).then(data => {
             if (this.orders.length) {
-                this.itemStatus = [];
+                this.itemStatusStart = [];
+                this.itemStatusDelivered = [];
+                this.itemStatusRunning = [];
+                this.itemStatusCompleted = [];
+                
                 for (let i = 0; i < this.orders.length; i++) {
-                    let itemStatus = {};
+                    let itemStatusStart = {};
+                    let itemStatusDelivered = {};
+                    let itemStatusRunning = {};
+                    let itemStatusCompleted = {};
+                    
                     for (let m = 0; m < this.orders[i].step.length; m++) {
                         let startTemp = [];
-                        for (let n = 0; n < this.orders[i].item.length; n++) {
-                            if (this.orders[i].item[n].step == this.orders[i].step[m].step && this.orders[i].item[n].department.indexOf(this.authGuard.getCurrentUser()._id) > -1) {
-                                startTemp.push(this.orders[i].item[n].status);
-                            }
+                        for (let n = 0; n < this.orders[i].step[m].item.length; n++) {
+                            startTemp.push(this.orders[i].step[m].item[n].status);
                         }
-                        itemStatus[this.orders[i].step[m].step] = startTemp.every(this.isBelowThreshold);      
+                        itemStatusStart[this.orders[i].step[m].step] = startTemp.every(this.isEqualToZero);      
+                        itemStatusDelivered[this.orders[i].step[m].step] = startTemp.every(this.isEqualToOne);                          
+                        itemStatusRunning[this.orders[i].step[m].step] = startTemp.every(this.isEqualToFour);                          
+                        itemStatusCompleted[this.orders[i].step[m].step] = startTemp.every(this.isEqualToFive);                          
+                   
                     }
-                    this.itemStatus[this.orders[i]._id] = itemStatus;                    
+                    this.itemStatusStart[this.orders[i]._id] = itemStatusStart;  
+                    this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered;   
+                    this.itemStatusRunning[this.orders[i]._id] = itemStatusRunning;                    
+                    this.itemStatusCompleted[this.orders[i]._id] = itemStatusCompleted;                    
+                                     
                 }
             }
         }).catch(error => {
@@ -170,19 +203,34 @@ export class OrderListComponent implements DoCheck {
         };
         this.websocketService.updateOrder(order, opts).then(data => {
             if (this.orders.length) {
-                this.itemStatus = [];
+                this.itemStatusStart = [];
+                this.itemStatusDelivered = [];
+                this.itemStatusRunning = [];
+                this.itemStatusCompleted = [];
+                
                 for (let i = 0; i < this.orders.length; i++) {
-                    let itemStatus = {};
+                    let itemStatusStart = {};
+                    let itemStatusDelivered = {};
+                    let itemStatusRunning = {};
+                    let itemStatusCompleted = {};
+                    
                     for (let m = 0; m < this.orders[i].step.length; m++) {
                         let startTemp = [];
-                        for (let n = 0; n < this.orders[i].item.length; n++) {
-                            if (this.orders[i].item[n].step == this.orders[i].step[m].step && this.orders[i].item[n].department.indexOf(this.authGuard.getCurrentUser()._id) > -1) {
-                                startTemp.push(this.orders[i].item[n].status);
-                            }
+                        for (let n = 0; n < this.orders[i].step[m].item.length; n++) {
+                            startTemp.push(this.orders[i].step[m].item[n].status);
                         }
-                        itemStatus[this.orders[i].step[m].step] = startTemp.every(this.isBelowThreshold);      
+                        itemStatusStart[this.orders[i].step[m].step] = startTemp.every(this.isEqualToZero);      
+                        itemStatusDelivered[this.orders[i].step[m].step] = startTemp.every(this.isEqualToOne); 
+                        itemStatusRunning[this.orders[i].step[m].step] = startTemp.every(this.isEqualToFour);      
+                        itemStatusCompleted[this.orders[i].step[m].step] = startTemp.every(this.isEqualToFive);      
+                             
                     }
-                    this.itemStatus[this.orders[i]._id] = itemStatus;                    
+                    this.itemStatusStart[this.orders[i]._id] = itemStatusStart;   
+                    this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered;
+                    this.itemStatusRunning[this.orders[i]._id] = itemStatusRunning;                    
+                    this.itemStatusCompleted[this.orders[i]._id] = itemStatusCompleted;                    
+                                        
+                                     
                 }
             }
         }).catch(error => {
@@ -246,19 +294,33 @@ export class OrderListComponent implements DoCheck {
                             }
                         }
                         if (this.orders.length) {
-                            this.itemStatus = [];
+                            this.itemStatusStart = [];
+                            this.itemStatusDelivered = [];
+                            this.itemStatusRunning = [];
+                            this.itemStatusCompleted = [];
+                            
                             for (let i = 0; i < this.orders.length; i++) {
-                                let itemStatus = {};
+                                let itemStatusStart = {};
+                                let itemStatusDelivered = {};
+                                let itemStatusRunning = {};
+                                let itemStatusCompleted = {};
+                                
                                 for (let m = 0; m < this.orders[i].step.length; m++) {
                                     let startTemp = [];
-                                    for (let n = 0; n < this.orders[i].item.length; n++) {
-                                        if (this.orders[i].item[n].step == this.orders[i].step[m].step && this.orders[i].item[n].department.indexOf(this.authGuard.getCurrentUser()._id) > -1) {
-                                            startTemp.push(this.orders[i].item[n].status);
-                                        }
+                                    for (let n = 0; n < this.orders[i].step[m].item.length; n++) {
+                                        startTemp.push(this.orders[i].step[m].item[n].status);
                                     }
-                                    itemStatus[this.orders[i].step[m].step] = startTemp.every(this.isBelowThreshold);      
+                                    itemStatusStart[this.orders[i].step[m].step] = startTemp.every(this.isEqualToZero);      
+                                    itemStatusDelivered[this.orders[i].step[m].step] = startTemp.every(this.isEqualToOne);      
+                                    itemStatusRunning[this.orders[i].step[m].step] = startTemp.every(this.isEqualToFour);      
+                                    itemStatusCompleted[this.orders[i].step[m].step] = startTemp.every(this.isEqualToFive);      
+                                    
                                 }
-                                this.itemStatus[this.orders[i]._id] = itemStatus;                    
+                                this.itemStatusStart[this.orders[i]._id] = itemStatusStart;    
+                                this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered;                    
+                                this.itemStatusRunning[this.orders[i]._id] = itemStatusRunning;                    
+                                this.itemStatusCompleted[this.orders[i]._id] = itemStatusCompleted;                    
+                                                
                             }
                         }
                     }).catch(error => {
@@ -311,19 +373,33 @@ export class OrderListComponent implements DoCheck {
             order.status = data.data.status;
             order.step = data.data.step;
             if (this.orders.length) {
-                this.itemStatus = [];                                                                                                                     
+                this.itemStatusStart = [];    
+                this.itemStatusDelivered = []; 
+                this.itemStatusRunning = [];                                                                                                                 
+                this.itemStatusCompleted = [];                                                                                                                 
+                                                                                                                                
                 for (let i = 0; i < this.orders.length; i++) {
-                    let itemStatus = {};
+                    let itemStatusStart = {};
+                    let itemStatusDelivered = {};
+                    let itemStatusRunning = {};
+                    let itemStatusCompleted = {};
+                    
                     for (let m = 0; m < this.orders[i].step.length; m++) {
                         let startTemp = [];
-                        for (let n = 0; n < this.orders[i].item.length; n++) {
-                            if (this.orders[i].item[n].step == this.orders[i].step[m].step && this.orders[i].item[n].department.indexOf(this.authGuard.getCurrentUser()._id) > -1) {
-                                startTemp.push(this.orders[i].item[n].status);
-                            }
+                        for (let n = 0; n < this.orders[i].step[m].item.length; n++) {
+                            startTemp.push(this.orders[i].step[m].item[n].status);
                         }
-                        itemStatus[this.orders[i].step[m].step] = startTemp.every(this.isBelowThreshold);      
+                        itemStatusStart[this.orders[i].step[m].step] = startTemp.every(this.isEqualToZero);   
+                        itemStatusDelivered[this.orders[i].step[m].step] = startTemp.every(this.isEqualToOne);      
+                        itemStatusRunning[this.orders[i].step[m].step] = startTemp.every(this.isEqualToFour);      
+                        itemStatusCompleted[this.orders[i].step[m].step] = startTemp.every(this.isEqualToFive);      
+                   
                     }
-                    this.itemStatus[this.orders[i]._id] = itemStatus;                    
+                    this.itemStatusStart[this.orders[i]._id] = itemStatusStart;  
+                    this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered; 
+                    this.itemStatusRunning[this.orders[i]._id] = itemStatusRunning;                    
+                    this.itemStatusCompleted[this.orders[i]._id] = itemStatusCompleted;                    
+                                       
                 }
             }
             for (let i = 0; i < data.data.step.length; i++) {
@@ -371,9 +447,10 @@ export class OrderListComponent implements DoCheck {
     selectedTab(step, tab, orderId) {
         let temp = {
             tab: tab,
-            step: step
+            step: step.step
         }
         this.stepdata[orderId] = temp;
+        this.itemsArray[orderId] = step.item;                                    
     }
 
     ngDoCheck() {
@@ -381,40 +458,59 @@ export class OrderListComponent implements DoCheck {
             const change = this.differ.diff(this.orders);
             if (change != null) {
                 if (this.orders.length) {
-                    this.itemStatus = [];
+                    this.itemStatusStart = [];
+                    this.itemStatusDelivered = [];
+                    this.itemStatusRunning = [];                
+                    this.itemStatusCompleted = [];                
                     for (let i = 0; i < this.orders.length; i++) {
                         let time = {};
                         let remtime = {};
+                        let itemStatusStart = {};
+                        let itemStatusDelivered = {};
+                        let itemStatusRunning = {};
+                        let itemStatusCompleted = {};
                         for (let k = 0; k < this.orders[i].step.length; k++) {
                             let temp = [];
-                            for (let l = 0; l < this.orders[i].item.length; l++) {
-                                if (this.orders[i].item[l].step == this.orders[i].step[k].step && temp.indexOf(this.orders[i].item[l].id.preparationTime) < 0) {
-                                    temp.push(this.orders[i].item[l].id.preparationTime);
+                            let startTemp = [];                        
+                            for (let l = 0; l < this.orders[i].step[k].item.length; l++) {
+                                if (temp.indexOf(this.orders[i].step[k].item[l].id.preparationTime) < 0) {
+                                    temp.push(this.orders[i].step[k].item[l].id.preparationTime);
                                 }
+                                startTemp.push(this.orders[i].step[k].item[l].status);
                             }
                             time[this.orders[i].step[k].step] = Math.max(...temp);
                             remtime[this.orders[i].step[k].step] = '0:00';
-                            let tempp = {
-                                tab: 0,
-                                step: ''
+                            itemStatusStart[this.orders[i].step[k].step] = startTemp.every(this.isEqualToZero);
+                            itemStatusDelivered[this.orders[i].step[k].step] = startTemp.every(this.isEqualToOne);
+                            itemStatusRunning[this.orders[i].step[k].step] = startTemp.every(this.isEqualToFour);
+                            itemStatusCompleted[this.orders[i].step[k].step] = startTemp.every(this.isEqualToFive);
+                            if (startTemp.every(this.isEqualToOne)) {
+                                let temparray = this.orders[i].step[k].step.split(' ');
+                                let num = Number(temparray[1]);
+                                let stepTemp = temparray[0] + ' ' + ++num;
+                                let temp = {
+                                    tab: num,
+                                    step: stepTemp,
+                                }
+                                this.stepdata[this.orders[i]._id] = temp;
+                                this.itemsArray[this.orders[i]._id] = this.orders[i].step[k].item;                                    
+                            } else {
+                                let tempp = {
+                                    tab: 0,
+                                    step: ''
+                                }
+                                tempp.tab = 0;
+                                tempp.step = this.orders[i].step[0].step;
+                                this.stepdata[this.orders[i]._id] = tempp;
+                                this.itemsArray[this.orders[i]._id] = this.orders[i].step[0].item;                                                                    
                             }
-                            tempp.tab = 0;
-                            tempp.step = this.orders[i].step[0].step;
-                            this.stepdata[this.orders[i]._id] = tempp;
                         }
                         this.times[this.orders[i]._id] = time;
-                        this.remainingTime[this.orders[i]._id] = remtime;
-                        let itemStatus = {};
-                        for (let m = 0; m < this.orders[i].step.length; m++) {
-                            let startTemp = [];
-                            for (let n = 0; n < this.orders[i].item.length; n++) {
-                                if (this.orders[i].item[n].step == this.orders[i].step[m].step && this.orders[i].item[n].department.indexOf(this.authGuard.getCurrentUser()._id) > -1) {
-                                    startTemp.push(this.orders[i].item[n].status);
-                                }
-                            }
-                            itemStatus[this.orders[i].step[m].step] = startTemp.every(this.isBelowThreshold);      
-                        }
-                        this.itemStatus[this.orders[i]._id] = itemStatus;                    
+                        this.remainingTime[this.orders[i]._id] = remtime; 
+                        this.itemStatusStart[this.orders[i]._id] = itemStatusStart;
+                        this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered; 
+                        this.itemStatusRunning[this.orders[i]._id] = itemStatusRunning;                   
+                        this.itemStatusCompleted[this.orders[i]._id] = itemStatusCompleted; 
                     }
                 }
             }
