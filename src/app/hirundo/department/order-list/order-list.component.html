@@ -22,39 +22,40 @@
                 <p>
                     <i class="far fa-user"></i> {{order.noOfPeople}}</p>
             </div>
-            <div class="step-listing">
+            <!-- <div class="step-listing">
                 <ul *ngIf="stepdata[order._id]">
                     <li *ngFor="let step of order.step; let i = index;" (click)="selectedTab(step.step,i,order._id)" [class.active]="step.step == stepdata[order._id].step" [class.completed]="step.status == 1">{{step.step}}</li>
                 </ul>
-            </div>
+            </div> -->
             <div class="order-items-container">
-                <div *ngFor="let item of order.item">
-                    <div *ngIf="((item.department.indexOf(authGuard.getCurrentUser()._id)) > -1) || ((authGuard.getCurrentUser().category.indexOf(item.category)) > -1)">
-                        <div class="order-item" *ngIf="stepdata[order._id] && item.step == stepdata[order._id].step">
-                            <label class="label item-status">{{getOrderStatus(item.status)}}</label>
-                            <div class="order-item-img">
-                                {{item.quantity}} X
+                <div *ngFor="let step of order.step; let i= index">
+                    <p (click)="selectedTab(step,i,order._id)" [class.active]="step.step == stepdata[order._id].step" [class.completed]="step.status == 1">{{step.step}}</p>
+                    <div *ngFor="let item of step.item">
+                            <div class="order-item">
+                                <label class="label item-status">{{getOrderStatus(item.status)}}</label>
+                                <div class="order-item-img">
+                                    {{item.quantity}} X
+                                </div>
+                                <div class="order-item-detail">
+                                    {{item.id.name}}
+                                    <ul>
+                                        <li *ngFor="let varient of item.variant">
+                                            <i *ngIf="varient.status == 1">+</i>
+                                            <i *ngIf="varient.status == 0">-</i> {{varient.name}}
+                                        </li>
+                                    </ul>
+                                    <ul>
+                                        <li>
+                                            {{item.notes}}
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="order-quantity d-flex w-105">
+                                    <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 2)">
+                                        <img src="assets/images/order-deliver.png" alt="" />
+                                    </button>
+                                </div>
                             </div>
-                            <div class="order-item-detail">
-                                {{item.id.name}}
-                                <ul>
-                                    <li *ngFor="let varient of item.variant">
-                                        <i *ngIf="varient.status == 1">+</i>
-                                        <i *ngIf="varient.status == 0">-</i> {{varient.name}}
-                                    </li>
-                                </ul>
-                                <ul>
-                                    <li>
-                                        {{item.notes}}
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="order-quantity d-flex w-105">
-                                <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 2)">
-                                    <img src="assets/images/order-deliver.png" alt="" />
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

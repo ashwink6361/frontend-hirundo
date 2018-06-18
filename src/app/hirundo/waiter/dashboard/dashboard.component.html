@@ -1,24 +1,11 @@
 <div class="tabs-container">
     <ul>
-        <!-- <li class="prev">
-          <i class="fas fa-chevron-left"></i>
-        </li> -->
         <li *ngFor="let room of roomData; let i= index" [class.active]="activeRoom[i]" (click)="getTables(room,i)">
             {{room.name}}
         </li>
-        <!-- <li class="next">
-          <i class="fas fa-chevron-right"></i>
-        </li> -->
       </ul>
 </div>
-<!-- <input class="form-control" [(ngModel)]="searchText" type="text" placeholder="Search Room" /> -->
 <section class="room-container">
-    <!-- <form [formGroup]="roomtable">
-        <select class="form-control" formControlName="room">
-            <option *ngFor="let room of roomData" [value]="room">{{room.name}}</option>
-        </select>
-    </form> -->
-    <!-- <div class="room-name">{{room.name}}</div> -->
     <div class="d-flex flex-wrap ">
         <div class="room" (click)="createOrder(table)" *ngFor="let table of tables" [ngStyle]="table.status == 0 ? {'background-color':'#c5c8cd'} : table.status == 1 ? {'background-color':'#add278'} : table.status == 2 ? {'background-color':'yellow'} : {'background-color':''}">
             <div class="table">

@@ -50,33 +50,34 @@ export class WebsocketService {
             });
         }        
         this.socket.on('neworder', (data) => {
-            console.log('neworder',data);          
-            let userType = this.authGuard.getCurrentUser().userType;
-            if (userType == 3) {
-                this._orders.push(data);
-            }
-            else if (userType == 4) {
-                let steps = [];
-                let sts = [];
-                let isItemExist = false;
-                for (let j = 0; j < data.item.length; j++) {
-                    if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
-                        isItemExist = true;
-                        if (sts.indexOf(data.item[j].step) < 0) {
-                            sts.push(data.item[j].step);
-                            steps.push({
-                                itemId: [],
-                                step: data.item[j].step,
-                                status: 0
-                            });
-                        }
-                    }
-                }
-                if (isItemExist) {
-                    data.step = steps;
-                    this._orders.push(data);
-                }
-            }
+            console.log('neworder',data); 
+            this._orders.push(data);        
+            // let userType = this.authGuard.getCurrentUser().userType;
+            // if (userType == 3) {
+            //     this._orders.push(data);
+            // }
+            // else if (userType == 4) {
+            //     let steps = [];
+            //     let sts = [];
+            //     let isItemExist = false;
+            //     for (let j = 0; j < data.item.length; j++) {
+            //         if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
+            //             isItemExist = true;
+            //             if (sts.indexOf(data.item[j].step) < 0) {
+            //                 sts.push(data.item[j].step);
+            //                 steps.push({
+            //                     itemId: [],
+            //                     step: data.item[j].step,
+            //                     status: 0
+            //                 });
+            //             }
+            //         }
+            //     }
+            //     if (isItemExist) {
+            //         data.step = steps;
+            //         this._orders.push(data);
+            //     }
+            // }
         });
         this.socket.on('orderstatus', (data) => {
             console.log('orderstatus',data);

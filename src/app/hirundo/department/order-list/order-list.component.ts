@@ -110,6 +110,8 @@ export class OrderListComponent implements DoCheck {
                 str = 'Cancelled'; break;
             case 4:
                 str = 'In progress'; break;
+            case 5:
+                str = 'Completed'; break;
             default:
                 break;
         }
