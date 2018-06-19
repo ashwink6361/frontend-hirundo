@@ -1378,7 +1378,7 @@ var AuthGuard = /** @class */ (function () {
     };
     AuthGuard.prototype.getCurrentUserId = function () {
         var user = JSON.parse(localStorage.getItem('currentUser'));
-        return user.id;
+        return user._id;
     };
     AuthGuard = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Injectable */])(),

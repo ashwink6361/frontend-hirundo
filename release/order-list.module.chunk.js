@@ -3,7 +3,7 @@ webpackJsonp(["order-list.module"],{
 /***/ "../../../../../src/app/hirundo/department/order-list/order-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"text-center\" *ngIf=\"!(orders && orders.length)\">No Order Found.</div>\n<div *ngIf=\"orders && orders.length\" class=\"order-list-container container-fluid\">\n    <div class=\"row\">\n        <div class=\"col-sm-6 col-md-3\" *ngFor=\"let order of orders\">\n            <div class=\"card order-list\">\n                <div class=\"card-body\" [class.opacity]=\"order.status == 3\">\n                    <h4 class=\"card-title\">\n                        <div>\n                            <img src=\"assets/images/table.png\" alt=\"\">\n                            <span>{{order.tableName}}</span>\n                        </div>\n                        <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div>\n                    </h4>\n                    <div class=\"card-text\">\n                        <p><i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\n                        <p><i class=\"far fa-clock\"></i> {{order.created_at | date:'hh:mm a'}}</p>\n                        <p><i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\n                    </div>\n                    <div class=\"step-listing\">\n                        <ul *ngIf=\"stepdata[order._id]\">\n                            <li *ngFor=\"let step of order.step; let i = index;\" (click)=\"selectedTab(step.step,i,order._id)\" [class.active]=\"step.step == stepdata[order._id].step\" [class.completed]=\"itemStatusDelivered[order._id] && itemStatusDelivered[order._id][stepdata[order._id].step]\">{{step.step}}</li>\n                        </ul>\n                    </div>\n                    <div class=\"order-items-container\">\n                        <div *ngFor=\"let step of order.step; let i= index\">\n                            <div *ngFor=\"let item of step.item\">\n                                <div class=\"order-item\" *ngIf=\"stepdata[order._id] && item.step == stepdata[order._id].step\">\n                                    <label class=\"label item-status\">{{getOrderStatus(item.status)}}</label>\n                                    <div class=\"order-item-img\">\n                                        {{item.quantity}} X\n                                    </div>\n                                    <div class=\"order-item-detail\">\n                                        {{item.id.name}}\n                                        <ul>\n                                            <li *ngFor=\"let varient of item.variant\">\n                                                <i *ngIf=\"varient.status == 1\">+</i>\n                                                <i *ngIf=\"varient.status == 0\">-</i> {{varient.name}}\n                                            </li>\n                                        </ul>\n                                        <ul>\n                                            <li>\n                                                {{item.notes}}\n                                            </li>\n                                        </ul>\n                                    </div>\n                                    <div class=\"order-quantity d-flex w-105\">\n                                        <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 2)\">\n                                            <img src=\"assets/images/order-deliver.png\" alt=\"\" />\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"order-call-btn\" *ngIf=\"order.step.length\">\n                    <div *ngFor=\"let step of order.step; let indx = index;\">\n                        <div *ngIf=\"stepdata[order._id].step == step.step\">\n                            <button type=\"submit\" *ngIf=\"stepdata[order._id] && (order.stepStatus == stepdata[order._id].step) && itemStatusStart[order._id] && itemStatusStart[order._id][stepdata[order._id].step]\"\n                                (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 4)\">Start ({{times[order._id][stepdata[order._id].step]}}:00)</button>\n                            <button type=\"submit\" *ngIf=\"itemStatusStart[order._id] && itemStatusStart[order._id][stepdata[order._id].step] && (step.step == 'Uscita 1')\"\n                                (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 4)\">Start ({{times[order._id][stepdata[order._id].step]}}:00)</button>\n                            <div class=\"running-label\" *ngIf=\"stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 4) && itemStatusStart[order._id] && !itemStatusStart[order._id][stepdata[order._id].step]\"\n                                (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 5)\">\n                                <span class=\"running\">Running {{remainingTime[order._id][stepdata[order._id].step]}}</span>\n                            </div>\n                            <button *ngIf=\"stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 5) && itemStatusStart[order._id] && !itemStatusStart[order._id][stepdata[order._id].step]\"\n                                type=\"submit\" (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 1)\">Completed</button>\n                            <div *ngIf=\"stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 4) && itemStatusStart[order._id] && !itemStatusStart[order._id][stepdata[order._id].step]\"\n                                id=\"{{step.step.replace(' ','')+order._id+indx}}\" [ngStyle]=\"{'width': barWidth[step.step.replace(' ','')+order._id+indx]}\"\n                                class=\"progress-btn\" (click)=\"updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 5)\"></div>\n                            <button class=\"bg-yellow\" *ngIf=\"stepdata[order._id] && (step.step != 'Uscita 1') && (step.status == 0) && (order.stepStatus != stepdata[order._id].step)\"\n                                type=\"submit\" [disabled]=\"true\">To Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "<div class=\"text-center\" *ngIf=\"!(orders && orders.length)\">No Order Found.</div>\n<div *ngIf=\"orders && orders.length\" class=\"order-list-container container-fluid\">\n    <div class=\"row\">\n        <div class=\"col-sm-6 col-md-3\" *ngFor=\"let order of orders\">\n            <div class=\"card order-list\">\n                <div class=\"card-body\" [class.opacity]=\"order.status == 3\">\n                    <h4 class=\"card-title\">\n                        <div>\n                            <img src=\"assets/images/table.png\" alt=\"\">\n                            <span>{{order.tableName}}</span>\n                        </div>\n                        <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div>\n                    </h4>\n                    <div class=\"card-text\">\n                        <p><i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\n                        <p><i class=\"far fa-clock\"></i> {{order.created_at | date:'hh:mm a'}}</p>\n                        <p><i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\n                    </div>\n                    <div class=\"step-listing\">\n                        <ul *ngIf=\"stepdata[order._id]\">\n                            <li *ngFor=\"let step of order.step; let i = index;\" (click)=\"selectedTab(step.step,i,order._id)\" [class.active]=\"step.step == stepdata[order._id].step\" [class.completed]=\"itemStatusDelivered[order._id] && itemStatusDelivered[order._id][stepdata[order._id].step]\">{{step.step}}</li>\n                        </ul>\n                    </div>\n                    <div class=\"order-items-container\">\n                        <div *ngFor=\"let step of order.step; let i= index\">\n                            <div *ngFor=\"let item of step.item\">\n                                <div class=\"order-item\" *ngIf=\"stepdata[order._id] && item.step == stepdata[order._id].step\">\n                                    <label class=\"label item-status\">{{getOrderStatus(item.status)}}</label>\n                                    <div class=\"order-item-img\">\n                                        {{item.quantity}} X\n                                    </div>\n                                    <div class=\"order-item-detail\">\n                                        {{item.id.name}}\n                                        <ul>\n                                            <li *ngFor=\"let varient of item.variant\">\n                                                <i *ngIf=\"varient.status == 1\">+</i>\n                                                <i *ngIf=\"varient.status == 0\">-</i> {{varient.name}}\n                                            </li>\n                                        </ul>\n                                        <ul>\n                                            <li>\n                                                {{item.notes}}\n                                            </li>\n                                        </ul>\n                                    </div>\n                                    <div class=\"order-quantity d-flex w-105\">\n                                        <button type=\"button\" class=\"btn btn-floting update-order-btn\" (click)=\"updateItem(item, order._id, 2)\">\n                                            <img src=\"assets/images/order-deliver.png\" alt=\"\" />\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"order-call-btn\" *ngIf=\"order.step.length\">\n                    <div *ngFor=\"let step of order.step\">\n                        <div *ngIf=\"stepdata[order._id].step == step.step\">\n                            <div *ngFor=\"let department of step.department\">\n                                <button type=\"submit\" *ngIf=\"(step.step == 'Uscita 1') && (authGuard.getCurrentUser()._id == department.id._id) && itemStatus[order._id] && !itemStatus[order._id][step.step]\" [class.grey-color]=\"department.status == 0\" [class.green-color]=\"department.status == 1\" (click)=\"updateDepartmentStatus(step.step)\">\n                                    <i class=\"fas fa-check-circle\"></i>\n                                </button>\n                                <button type=\"submit\" *ngIf=\"(step.step != 'Uscita 1') && (order.stepStatus == step.step) && (authGuard.getCurrentUserId() == department.id._id) && itemStatus[order._id] && !itemStatus[order._id][step.step]\" [class.grey-color]=\"department.status == 0\" [class.green-color]=\"department.status == 1\" (click)=\"updateDepartmentStatus(step.step)\">\n                                    <i class=\"fas fa-check-circle\"></i>\n                                </button>\n                                <button [class.grey-color]=\"department.status == 0\" [class.green-color]=\"department.status == 1\" [disabled]=\"true\">{{getFirstChar(department.id.firstName)}}</button>\n                            </div>\n                            <button type=\"submit\" *ngIf=\"(step.step == 'Uscita 1') && itemStatus[order._id] && !itemStatus[order._id][step.step]\" (click)=\"updateStepItem(step, order)\">Delivered</button>\n                            <button type=\"submit\" *ngIf=\"(step.step != 'Uscita 1') && (order.stepStatus == step.step) && itemStatus[order._id] && !itemStatus[order._id][step.step]\" (click)=\"updateStepItem(step, order)\">Delivered</button>\n                            <button class=\"bg-yellow\" *ngIf=\"(step.step != 'Uscita 1') && itemStatus[order._id] && !itemStatus[order._id][step.step] && (order.stepStatus != step.step)\" type=\"submit\" [disabled]=\"true\">To Call</button>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -583,6 +583,7 @@ var OrderListComponent = /** @class */ (function () {
                         }
                     }
                     _this.itemStatusDelivered[_this.orders[i]._id] = itemStatusDelivered;
+                    console.log('this.stepdata', _this.stepdata);
                 }
             }
             _this.loadingOrders = false;
@@ -674,54 +675,57 @@ var OrderListComponent = /** @class */ (function () {
     ;
     OrderListComponent.prototype.updateStepItem = function (step, order) {
         var _this = this;
-        var ids = [];
-        for (var i = 0; i < step.item.length; i++) {
-            step.item[i].status = 1;
-            if (ids.indexOf(step.item[i]._id) < 0) {
-                ids.push(order.item[i]._id);
-            }
-        }
-        var opts = {
-            step: this.stepdata[order._id].step,
-            id: ids
-        };
-        this.websocketService.updateOrder(order._id, opts).then(function (data) {
-            order = data.data;
-            if (_this.orders.length) {
-                _this.itemStatusDelivered = [];
-                for (var i = 0; i < _this.orders.length; i++) {
-                    var itemStatusDelivered = {};
-                    for (var m = 0; m < _this.orders[i].step.length; m++) {
-                        var startTemp = [];
-                        for (var n = 0; n < _this.orders[i].step[m].item.length; n++) {
-                            startTemp.push(_this.orders[i].step[m].item[n].status);
-                        }
-                        itemStatusDelivered[_this.orders[i].step[m].step] = startTemp.every(_this.isEqualToOne);
-                        if (startTemp.every(_this.isEqualToOne)) {
-                            var temparray = _this.orders[i].step[m].step.split(' ');
-                            var num = Number(temparray[1]);
-                            var stepTemp = temparray[0] + ' ' + ++num;
-                            var temp = {
-                                tab: num,
-                                step: stepTemp,
-                            };
-                            _this.stepdata[_this.orders[i]._id] = temp;
-                        }
-                        else {
-                            var tempp = {
-                                tab: 0,
-                                step: ''
-                            };
-                            tempp.tab = 0;
-                            tempp.step = _this.orders[i].step[0].step;
-                            _this.stepdata[_this.orders[i]._id] = tempp;
-                        }
-                    }
-                    _this.itemStatusDelivered[_this.orders[i]._id] = itemStatusDelivered;
+        var result = confirm("Do you want to deliver?");
+        if (result) {
+            var ids = [];
+            for (var i = 0; i < step.item.length; i++) {
+                step.item[i].status = 1;
+                if (ids.indexOf(step.item[i]._id) < 0) {
+                    ids.push(order.item[i]._id);
                 }
             }
-        }).catch(function (error) {
-        });
+            var opts = {
+                step: this.stepdata[order._id].step,
+                id: ids
+            };
+            this.websocketService.updateOrder(order._id, opts).then(function (data) {
+                order = data.data;
+                if (_this.orders.length) {
+                    _this.itemStatusDelivered = [];
+                    for (var i = 0; i < _this.orders.length; i++) {
+                        var itemStatusDelivered = {};
+                        for (var m = 0; m < _this.orders[i].step.length; m++) {
+                            var startTemp = [];
+                            for (var n = 0; n < _this.orders[i].step[m].item.length; n++) {
+                                startTemp.push(_this.orders[i].step[m].item[n].status);
+                            }
+                            itemStatusDelivered[_this.orders[i].step[m].step] = startTemp.every(_this.isEqualToOne);
+                            if (startTemp.every(_this.isEqualToOne)) {
+                                var temparray = _this.orders[i].step[m].step.split(' ');
+                                var num = Number(temparray[1]);
+                                var stepTemp = temparray[0] + ' ' + ++num;
+                                var temp = {
+                                    tab: num,
+                                    step: stepTemp,
+                                };
+                                _this.stepdata[_this.orders[i]._id] = temp;
+                            }
+                            else {
+                                var tempp = {
+                                    tab: 0,
+                                    step: ''
+                                };
+                                tempp.tab = 0;
+                                tempp.step = _this.orders[i].step[0].step;
+                                _this.stepdata[_this.orders[i]._id] = tempp;
+                            }
+                        }
+                        _this.itemStatusDelivered[_this.orders[i]._id] = itemStatusDelivered;
+                    }
+                }
+            }).catch(function (error) {
+            });
+        }
     };
     ;
     OrderListComponent.prototype.selectedTab = function (step, tab, orderId) {
@@ -730,6 +734,9 @@ var OrderListComponent = /** @class */ (function () {
             step: step
         };
         this.stepdata[orderId] = temp;
+    };
+    OrderListComponent.prototype.getFirstChar = function (text) {
+        return text.charAt();
     };
     OrderListComponent.prototype.ngDoCheck = function () {
         if (this.orders && this.orders.length) {
