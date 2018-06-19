@@ -28,27 +28,27 @@ export class WebsocketService {
         // If you aren't familiar with environment variables then
         // you can hard code `environment.ws_url` as `http://localhost:5000`
         // this.socket = io('http://localhost:5051');
-        this.socket = io(this.socketUrl);
+        // this.socket = io(this.socketUrl);
         // this.socket = io(this.socketUrl, { 'transports': ['polling'] });
-        console.log("this.socket ",this.socket);   
-        console.log("this.socket.connected ",this.socket.connected);   
-        if (this.socket.connected){
-            console.log("Socket connection done ");
-        }
-        let user = JSON.parse(localStorage.getItem('currentUser'));
-        if (user) {
-            this.socket.emit('connection');
-            console.log('user', user);
-            this.socket.on('connected', (data) => {
-                console.log('connected', data);
-                if (data && this.socket.id == data.socketId) {
-                    this.socket.emit('userAuth', { userId: user._id });
-                    this.socket.on('authConnected', (data) => {
-                        console.log('authConnected', data);
-                    });
-                }
-            });
-        }        
+        // console.log("this.socket ",this.socket);   
+        // console.log("this.socket.connected ",this.socket.connected);   
+        // if (this.socket.connected){
+        //     console.log("Socket connection done ");
+        // }
+        // let user = JSON.parse(localStorage.getItem('currentUser'));
+        // if (user) {
+        //     this.socket.emit('connection');
+        //     console.log('user', user);
+        //     this.socket.on('connected', (data) => {
+        //         console.log('connected', data);
+        //         if (data && this.socket.id == data.socketId) {
+        //             this.socket.emit('userAuth', { userId: user._id });
+        //             this.socket.on('authConnected', (data) => {
+        //                 console.log('authConnected', data);
+        //             });
+        //         }
+        //     });
+        // }        
         this.socket.on('neworder', (data) => {
             console.log('neworder',data); 
             this._orders.push(data);        
@@ -366,37 +366,14 @@ export class WebsocketService {
                 this._orders = res.data;
                 let orderid = [];
                 for (var i = 0; i < this._orders.length; i++) {
-                    var temp = _.cloneDeep(this._orders[i]);
-                    let itemsTemp = [];
-                    if (this._orders[i] && this._orders[i].item) {
-                        for (let j = 0; j < this._orders[i].item.length; j++) {
-                            if (((this._orders[i].item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(this._orders[i].item[j].category)) > -1)) {
-                                itemsTemp.push(this._orders[i].item[j]);
-                            }
-                        }
-                    }
-                    temp.item = itemsTemp;
-                    this._orders[i] = _.cloneDeep(temp);
                     let itemsToSplice = [];
-                    if (temp.item.length) {
-                        for (var k = 0; k < temp.item.length; k++) {
-                            itemsToSplice.push(temp.item[k].status);
+                    if (this._orders[i].item.length) {
+                        for (var k = 0; k < this._orders[i].item.length; k++) {
+                            itemsToSplice.push(this._orders[i].item[k].status);
                         }
                     }
-                    if (temp.item.length && itemsToSplice.length == temp.item.length && itemsToSplice.every(this.isBelowThreshold)) {
+                    if (itemsToSplice.length == this._orders[i].item.length && itemsToSplice.every(this.isBelowThreshold)) {
                         this._orders.splice(i, 1);
-                    }
-                    if (temp.item.length == 0) {
-                        orderid.push(this._orders[i]._id);
-                    }
-                }
-                if (orderid.length) {
-                    for (var i = 0; i < orderid.length; i++) {
-                        for (var j = 0; j < this._orders.length; j++) {
-                            if (orderid[i] == this._orders[j]._id) {
-                                this._orders.splice(j, 1);
-                            }
-                        }
                     }
                 }
                 return this._orders;
@@ -440,37 +417,14 @@ export class WebsocketService {
                 let orderid = [];
                 for (var i = 0; i < this._orders.length; i++) {
                     if (res._id === this._orders[i]._id) {
-                        var temp = _.cloneDeep(this._orders[i]);
-                        let itemsTemp = [];
-                        if (res && res.orderData.item) {
-                            for (let j = 0; j < res.orderData.item.length; j++) {
-                                if (((res.orderData.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(res.orderData.item[j].category)) > -1)) {
-                                    itemsTemp.push(this._orders[i].item[j]);
-                                }
-                            }
-                        }
-                        temp.item = itemsTemp;
-                        this._orders[i] = _.cloneDeep(temp);
                         let itemsToSplice = [];
-                        if (temp.item.length) {
-                            for (var k = 0; k < temp.item.length; k++) {
-                                itemsToSplice.push(temp.item[k].status);
+                        if (res.item.length) {
+                            for (var k = 0; k < res.item.length; k++) {
+                                itemsToSplice.push(res.item[k].status);
                             }
                         }
-                        if (temp.item.length && itemsToSplice.length == temp.item.length && itemsToSplice.every(this.isBelowThreshold)) {
+                        if (itemsToSplice.length == res.item.length && itemsToSplice.every(this.isBelowThreshold)) {
                             this._orders.splice(i, 1);
-                        }
-                        if (temp.item.length == 0) {
-                            orderid.push(this._orders[i]._id);
-                        }
-                    }
-                }
-                if (orderid.length) {
-                    for (var i = 0; i < orderid.length; i++) {
-                        for (var j = 0; j < this._orders.length; j++) {
-                            if (orderid[i] == this._orders[j]._id) {
-                                this._orders.splice(j, 1);
-                            }
                         }
                     }
                 }

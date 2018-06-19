@@ -775,14 +775,12 @@ var AppService = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return WebsocketService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_socket_io_client__ = __webpack_require__("../../../../socket.io-client/lib/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_socket_io_client___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_socket_io_client__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_guard_auth_guard__ = __webpack_require__("../../../../../src/app/shared/guard/auth.guard.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_lodash__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_toPromise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_guard_auth_guard__ = __webpack_require__("../../../../../src/app/shared/guard/auth.guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_lodash__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -792,7 +790,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
 
 
 
@@ -820,27 +817,27 @@ var WebsocketService = /** @class */ (function () {
         // If you aren't familiar with environment variables then
         // you can hard code `environment.ws_url` as `http://localhost:5000`
         // this.socket = io('http://localhost:5051');
-        this.socket = __WEBPACK_IMPORTED_MODULE_1_socket_io_client__(this.socketUrl);
+        // this.socket = io(this.socketUrl);
         // this.socket = io(this.socketUrl, { 'transports': ['polling'] });
-        console.log("this.socket ", this.socket);
-        console.log("this.socket.connected ", this.socket.connected);
-        if (this.socket.connected) {
-            console.log("Socket connection done ");
-        }
-        var user = JSON.parse(localStorage.getItem('currentUser'));
-        if (user) {
-            this.socket.emit('connection');
-            console.log('user', user);
-            this.socket.on('connected', function (data) {
-                console.log('connected', data);
-                if (data && _this.socket.id == data.socketId) {
-                    _this.socket.emit('userAuth', { userId: user._id });
-                    _this.socket.on('authConnected', function (data) {
-                        console.log('authConnected', data);
-                    });
-                }
-            });
-        }
+        // console.log("this.socket ",this.socket);   
+        // console.log("this.socket.connected ",this.socket.connected);   
+        // if (this.socket.connected){
+        //     console.log("Socket connection done ");
+        // }
+        // let user = JSON.parse(localStorage.getItem('currentUser'));
+        // if (user) {
+        //     this.socket.emit('connection');
+        //     console.log('user', user);
+        //     this.socket.on('connected', (data) => {
+        //         console.log('connected', data);
+        //         if (data && this.socket.id == data.socketId) {
+        //             this.socket.emit('userAuth', { userId: user._id });
+        //             this.socket.on('authConnected', (data) => {
+        //                 console.log('authConnected', data);
+        //             });
+        //         }
+        //     });
+        // }        
         this.socket.on('neworder', function (data) {
             console.log('neworder', data);
             _this._orders.push(data);
@@ -875,7 +872,7 @@ var WebsocketService = /** @class */ (function () {
             console.log('orderstatus', data);
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data.id === _this._orders[i]._id) {
-                    var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);
+                    var temp = __WEBPACK_IMPORTED_MODULE_4_lodash__["cloneDeep"](_this._orders[i]);
                     var userType = _this.authGuard.getCurrentUser().userType;
                     if (userType == 3) {
                         temp.step = data.step;
@@ -918,7 +915,7 @@ var WebsocketService = /** @class */ (function () {
                     //         }
                     //     }
                     // }
-                    _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
+                    _this._orders[i] = __WEBPACK_IMPORTED_MODULE_4_lodash__["cloneDeep"](temp);
                     var itemsToSplice = [];
                     if (temp.item.length) {
                         for (var k = 0; k < temp.item.length; k++) {
@@ -967,7 +964,7 @@ var WebsocketService = /** @class */ (function () {
             console.log('itemUpdated', data);
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id === _this._orders[i]._id) {
-                    var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);
+                    var temp = __WEBPACK_IMPORTED_MODULE_4_lodash__["cloneDeep"](_this._orders[i]);
                     var userType = _this.authGuard.getCurrentUser().userType;
                     if (userType == 3) {
                         temp.step = data.step;
@@ -1003,7 +1000,7 @@ var WebsocketService = /** @class */ (function () {
                     }
                     temp.stepStatus = data.stepStatus;
                     temp.status = data.status;
-                    _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
+                    _this._orders[i] = __WEBPACK_IMPORTED_MODULE_4_lodash__["cloneDeep"](temp);
                 }
                 // if (data._id === this._orders[i]._id) {
                 //     this._orders[i] = data;
@@ -1016,7 +1013,7 @@ var WebsocketService = /** @class */ (function () {
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id === _this._orders[i]._id) {
                     tempArray.push(_this._orders[i]._id);
-                    var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);
+                    var temp = __WEBPACK_IMPORTED_MODULE_4_lodash__["cloneDeep"](_this._orders[i]);
                     var userType = _this.authGuard.getCurrentUser().userType;
                     if (userType == 3) {
                         temp.step = data.step;
@@ -1058,7 +1055,7 @@ var WebsocketService = /** @class */ (function () {
                             stepStatus.push(temp.step[k_3].status);
                         }
                     }
-                    _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
+                    _this._orders[i] = __WEBPACK_IMPORTED_MODULE_4_lodash__["cloneDeep"](temp);
                     var itemsToSplice = [];
                     if (temp.item.length) {
                         for (var k = 0; k < temp.item.length; k++) {
@@ -1077,7 +1074,7 @@ var WebsocketService = /** @class */ (function () {
                 _this._orders.push(data);
                 for (var i = 0; i < _this._orders.length; i++) {
                     if (data._id === _this._orders[i]._id) {
-                        var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);
+                        var temp = __WEBPACK_IMPORTED_MODULE_4_lodash__["cloneDeep"](_this._orders[i]);
                         var userType = _this.authGuard.getCurrentUser().userType;
                         if (userType == 3) {
                             temp.step = data.step;
@@ -1119,7 +1116,7 @@ var WebsocketService = /** @class */ (function () {
                                 stepStatus.push(temp.step[k_5].status);
                             }
                         }
-                        _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
+                        _this._orders[i] = __WEBPACK_IMPORTED_MODULE_4_lodash__["cloneDeep"](temp);
                         var itemsToSplice = [];
                         if (temp.item.length) {
                             for (var k = 0; k < temp.item.length; k++) {
@@ -1154,37 +1151,14 @@ var WebsocketService = /** @class */ (function () {
             _this._orders = res.data;
             var orderid = [];
             for (var i = 0; i < _this._orders.length; i++) {
-                var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);
-                var itemsTemp = [];
-                if (_this._orders[i] && _this._orders[i].item) {
-                    for (var j_1 = 0; j_1 < _this._orders[i].item.length; j_1++) {
-                        if (((_this._orders[i].item[j_1].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(_this._orders[i].item[j_1].category)) > -1)) {
-                            itemsTemp.push(_this._orders[i].item[j_1]);
-                        }
-                    }
-                }
-                temp.item = itemsTemp;
-                _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
                 var itemsToSplice = [];
-                if (temp.item.length) {
-                    for (var k = 0; k < temp.item.length; k++) {
-                        itemsToSplice.push(temp.item[k].status);
+                if (_this._orders[i].item.length) {
+                    for (var k = 0; k < _this._orders[i].item.length; k++) {
+                        itemsToSplice.push(_this._orders[i].item[k].status);
                     }
                 }
-                if (temp.item.length && itemsToSplice.length == temp.item.length && itemsToSplice.every(_this.isBelowThreshold)) {
+                if (itemsToSplice.length == _this._orders[i].item.length && itemsToSplice.every(_this.isBelowThreshold)) {
                     _this._orders.splice(i, 1);
-                }
-                if (temp.item.length == 0) {
-                    orderid.push(_this._orders[i]._id);
-                }
-            }
-            if (orderid.length) {
-                for (var i = 0; i < orderid.length; i++) {
-                    for (var j = 0; j < _this._orders.length; j++) {
-                        if (orderid[i] == _this._orders[j]._id) {
-                            _this._orders.splice(j, 1);
-                        }
-                    }
                 }
             }
             return _this._orders;
@@ -1231,37 +1205,14 @@ var WebsocketService = /** @class */ (function () {
             var orderid = [];
             for (var i = 0; i < _this._orders.length; i++) {
                 if (res._id === _this._orders[i]._id) {
-                    var temp = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](_this._orders[i]);
-                    var itemsTemp = [];
-                    if (res && res.orderData.item) {
-                        for (var j_2 = 0; j_2 < res.orderData.item.length; j_2++) {
-                            if (((res.orderData.item[j_2].department.indexOf(_this.authGuard.getCurrentUser()._id)) > -1) || ((_this.authGuard.getCurrentUser().category.indexOf(res.orderData.item[j_2].category)) > -1)) {
-                                itemsTemp.push(_this._orders[i].item[j_2]);
-                            }
-                        }
-                    }
-                    temp.item = itemsTemp;
-                    _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](temp);
                     var itemsToSplice = [];
-                    if (temp.item.length) {
-                        for (var k = 0; k < temp.item.length; k++) {
-                            itemsToSplice.push(temp.item[k].status);
+                    if (res.item.length) {
+                        for (var k = 0; k < res.item.length; k++) {
+                            itemsToSplice.push(res.item[k].status);
                         }
                     }
-                    if (temp.item.length && itemsToSplice.length == temp.item.length && itemsToSplice.every(_this.isBelowThreshold)) {
+                    if (itemsToSplice.length == res.item.length && itemsToSplice.every(_this.isBelowThreshold)) {
                         _this._orders.splice(i, 1);
-                    }
-                    if (temp.item.length == 0) {
-                        orderid.push(_this._orders[i]._id);
-                    }
-                }
-            }
-            if (orderid.length) {
-                for (var i = 0; i < orderid.length; i++) {
-                    for (var j = 0; j < _this._orders.length; j++) {
-                        if (orderid[i] == _this._orders[j]._id) {
-                            _this._orders.splice(j, 1);
-                        }
                     }
                 }
             }
@@ -1303,7 +1254,7 @@ var WebsocketService = /** @class */ (function () {
     };
     WebsocketService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Injectable */])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__shared_guard_auth_guard__["a" /* AuthGuard */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__shared_guard_auth_guard__["a" /* AuthGuard */]) === "function" && _b || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__shared_guard_auth_guard__["a" /* AuthGuard */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__shared_guard_auth_guard__["a" /* AuthGuard */]) === "function" && _b || Object])
     ], WebsocketService);
     return WebsocketService;
     var _a, _b;
@@ -2195,13 +2146,6 @@ Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* pl
 
 module.exports = __webpack_require__("../../../../../src/main.ts");
 
-
-/***/ }),
-
-/***/ 1:
-/***/ (function(module, exports) {
-
-/* (ignored) */
 
 /***/ })
 

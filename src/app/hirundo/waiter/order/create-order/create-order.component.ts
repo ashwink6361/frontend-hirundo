@@ -14,7 +14,6 @@ import 'rxjs/Rx';
 export class CreateOrderComponent implements OnInit {
   private orderForm = {};
   private roomData = {};
-  private categoryList = [];
   public stepperForm: boolean = false;
   public showItem: boolean = false;
   public room = {};
@@ -41,21 +40,6 @@ export class CreateOrderComponent implements OnInit {
     }
     this.roomData = JSON.parse(localStorage.getItem('roomdata'));
     this.tableData = JSON.parse(localStorage.getItem('tabledata'));
-    this.orderService.getCategory()
-      .then(data => {
-        this.categoryList = data.data;
-        if (this.categoryList.length) {
-          for (var i = 0; i < this.categoryList.length; i++) {
-            this.categorySearchData.push({
-              _id: this.categoryList[i]._id,
-              name: this.categoryList[i].name,
-            });
-          }
-          this.dataService = this.completerService.local(this.categorySearchData, 'name', 'name');
-        }
-      })
-      .catch(error => {
-      });
   }
 
   makeOrder() {

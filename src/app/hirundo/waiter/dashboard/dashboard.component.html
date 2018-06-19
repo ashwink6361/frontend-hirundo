@@ -7,7 +7,7 @@
 </div>
 <section class="room-container">
     <div class="d-flex flex-wrap ">
-        <div class="room" (click)="createOrder(table)" *ngFor="let table of tables" [ngStyle]="table.status == 0 ? {'background-color':'#c5c8cd'} : table.status == 1 ? {'background-color':'#add278'} : table.status == 2 ? {'background-color':'yellow'} : {'background-color':''}">
+        <div class="room" (click)="createOrder(table)" *ngFor="let table of tables" [ngStyle]="table.orderId.length ? {'background-color':'#add278'} : {'background-color':'#c5c8cd'}">
             <div class="table">
                 <span>{{table.name}}</span>
             </div>

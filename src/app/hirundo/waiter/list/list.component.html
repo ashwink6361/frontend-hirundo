@@ -22,31 +22,33 @@
             </div>
             <div class="step-listing">
                 <ul *ngIf="stepdata[order._id]">
-                    <li *ngFor="let step of order.step; let i = index;" (click)="selectedTab(step.step,i,order._id)" [class.active]="step.step == stepdata[order._id].step" [class.completed]="step.status == 1 || step.step == 'Uscita 1'">{{step.step}}</li>
+                    <li *ngFor="let step of order.step; let i = index;" (click)="selectedTab(step.step,i,order._id)" [class.active]="step.step == stepdata[order._id].step" [class.completed]="itemStatusDelivered[order._id] && itemStatusDelivered[order._id][step.step] || step.step == 'Uscita 1'">{{step.step}}</li>
                 </ul>
             </div>
             <div class="order-items-container">
-                <div *ngFor="let item of order.item">
-                    <div class="order-item" *ngIf="stepdata[order._id] && item.step == stepdata[order._id].step">
-                        <label class="label item-status">{{getOrderStatus(item.status)}}</label>
-                        <div class="order-item-img">
-                            {{item.quantity}} X
-                        </div>
-                        <div class="order-item-detail">
-                            {{item.id.name}}
-                            <ul>
-                                <li *ngFor="let varient of item.variant">
-                                    <i *ngIf="varient.status == 1">+</i>
-                                    <i *ngIf="varient.status == 0">-</i> {{varient.name}}
-                                </li>
-                            </ul>
-                            <ul>
-                                <li>
-                                    {{item.notes}}
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="order-quantity d-flex">
+                <div *ngFor="let step of order.step">
+                    <div *ngFor="let item of step.item">
+                        <div class="order-item" *ngIf="stepdata[order._id] && item.step == stepdata[order._id].step">
+                            <label class="label item-status">{{getOrderStatus(item.status)}}</label>
+                            <div class="order-item-img">
+                                {{item.quantity}} X
+                            </div>
+                            <div class="order-item-detail">
+                                {{item.id.name}}
+                                <ul>
+                                    <li *ngFor="let varient of item.variant">
+                                        <i *ngIf="varient.status == 1">+</i>
+                                        <i *ngIf="varient.status == 0">-</i> {{varient.name}}
+                                    </li>
+                                </ul>
+                                <ul>
+                                    <li>
+                                        {{item.notes}}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="order-quantity d-flex">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -55,7 +57,7 @@
         <div class="order-call-btn" *ngIf="order.step.length">
             <div *ngFor="let step of order.step; let indx = index;">
                 <div *ngIf="stepdata[order._id].step == step.step">
-                    <button *ngIf="stepdata[order._id] && stepdata[order._id].step != 'Uscita 1' && step.status != 1" type="submit" (click)="changeStep(order, stepdata[order._id].step, step.step)"><span *ngIf="(!showToCall[order._id][step.step] || step.status == 4 || step.status == 5 )">In Progress</span><span *ngIf="showToCall[order._id][step.step] && step.status == 0">Call ({{times[order._id][stepdata[order._id].step]}}:00)</span></button>
+                    <button *ngIf="stepdata[order._id] && stepdata[order._id].step != 'Uscita 1' && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" type="submit" (click)="changeStep(order, step.step)">Call</button>
                 </div>
             </div>
         </div>

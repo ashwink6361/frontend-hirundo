@@ -3,7 +3,7 @@ webpackJsonp(["dashboard.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/dashboard/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"tabs-container\">\n    <ul>\n        <li *ngFor=\"let room of roomData; let i= index\" [class.active]=\"activeRoom[i]\" (click)=\"getTables(room,i)\">\n            {{room.name}}\n        </li>\n      </ul>\n</div>\n<section class=\"room-container\">\n    <div class=\"d-flex flex-wrap \">\n        <div class=\"room\" (click)=\"createOrder(table)\" *ngFor=\"let table of tables\" [ngStyle]=\"table.status == 0 ? {'background-color':'#c5c8cd'} : table.status == 1 ? {'background-color':'#add278'} : table.status == 2 ? {'background-color':'yellow'} : {'background-color':''}\">\n            <div class=\"table\">\n                <span>{{table.name}}</span>\n            </div>\n        </div>\n    </div>\n</section>\n"
+module.exports = "<div class=\"tabs-container\">\n    <ul>\n        <li *ngFor=\"let room of roomData; let i= index\" [class.active]=\"activeRoom[i]\" (click)=\"getTables(room,i)\">\n            {{room.name}}\n        </li>\n      </ul>\n</div>\n<section class=\"room-container\">\n    <div class=\"d-flex flex-wrap \">\n        <div class=\"room\" (click)=\"createOrder(table)\" *ngFor=\"let table of tables\" [ngStyle]=\"table.orderId.length ? {'background-color':'#add278'} : {'background-color':'#c5c8cd'}\">\n            <div class=\"table\">\n                <span>{{table.name}}</span>\n            </div>\n        </div>\n    </div>\n</section>\n"
 
 /***/ }),
 
@@ -78,43 +78,24 @@ var DashboardComponent = /** @class */ (function () {
     DashboardComponent.prototype.createOrder = function (table) {
         localStorage.setItem('tabledata', JSON.stringify(table));
         var room = JSON.parse(localStorage.getItem('roomdata'));
-        if (table.orderId != null && table.orderId._id) {
-            localStorage.setItem('orderId', JSON.stringify(table.orderId._id));
-            localStorage.setItem('orderItems', JSON.stringify(table.orderId.item));
-            for (var i = 0; i < table.orderId.step.length; i++) {
-                this.stepArray.push(table.orderId.step[i].step);
-            }
-            if (this.stepArray.length) {
-                this.globalService.setStepData(this.stepArray);
-            }
-            console.log(this.globalService.getStepData());
+        if (table.orderId.length) {
             var steps = [];
             var selectedItems = {};
-            if (this.globalService.getStepData()) {
-                steps = this.globalService.getStepData();
-            }
-            else {
-                steps = ['Uscita 1', 'Uscita 2'];
-            }
+            steps = ['Uscita 1', 'Uscita 2'];
             for (var j = 0; j < steps.length; j++) {
                 selectedItems[steps[j]] = [];
             }
             var data = {
-                roomId: table.orderId.room,
-                tableId: table.orderId.table,
-                noOfPeople: table.orderId.noOfPeople,
+                roomId: table.orderId[0].room,
+                tableId: table.orderId[0].table,
+                noOfPeople: table.orderId[0].noOfPeople,
                 selectedItems: selectedItems,
                 cartTotalPrice: 0,
                 cartTotalItem: 0
             };
             this.orderService.setOrderData(data);
         }
-        else {
-            localStorage.removeItem('orderId');
-            localStorage.removeItem('orderItems');
-        }
-        console.log(this.orderService.getOrderData());
-        if (table.status == 1) {
+        if (table.orderId.length) {
             this.orderService.showElement = false;
             if (this.orderService.getOrderData() && this.orderService.getOrderData().selectedItems) {
                 this.router.navigate(['/waiter/order/:id/cart']);
