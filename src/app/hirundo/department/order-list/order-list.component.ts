@@ -187,6 +187,143 @@ export class OrderListComponent implements DoCheck {
         });
     };
 
+    // public updateStepItem(step, index, order, status) {
+    //     console.log('status',status);
+    //     if(status == 1){
+    //         var result = confirm("Do you want to deliver?");
+    //         if (result) {
+    //             let items = [];
+    //             let ids = [];
+    //             for (let i = 0; i < order.item.length; i++) {
+    //                 for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
+    //                     if (((order.item[i].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(order.item[i].category)) > -1)) {
+    //                         if (order.item[i].step == this.stepdata[order._id].step) {
+    //                             order.item[i].status = status;
+    //                             if (items.indexOf(order.item[i].id._id) < 0) {
+    //                                 items.push(order.item[i].id._id);
+    //                                 ids.push(order.item[i]._id);
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //             let opts = {
+    //                 status: status,
+    //                 itemId: items,
+    //                 step: this.stepdata[order._id].step,
+    //                 id: ids
+    //             };
+    //             this.websocketService.updateOrder(order._id, opts).then((data) => {
+    //                 order.status = data.data.status;
+    //                 order.step = data.data.step;
+    //                 if (this.orders.length) {
+    //                     this.itemStatus = [];
+    //                     for (let i = 0; i < this.orders.length; i++) {
+    //                         let itemStatus = {};
+    //                         for (let m = 0; m < this.orders[i].step.length; m++) {
+    //                             let startTemp = [];
+    //                             for (let n = 0; n < this.orders[i].item.length; n++) {
+    //                                 if (this.orders[i].item[n].step == this.orders[i].step[m].step && this.orders[i].item[n].department.indexOf(this.authGuard.getCurrentUser()._id) > -1) {
+    //                                     startTemp.push(this.orders[i].item[n].status);
+    //                                 }
+    //                             }
+    //                             itemStatus[this.orders[i].step[m].step] = startTemp.every(this.isBelowThreshold);
+    //                         }
+    //                         this.itemStatus[this.orders[i]._id] = itemStatus;
+    //                     }
+    //                 }
+    //                 if (data.data.step) {
+    //                     for (let j = 0; j < data.data.step.length - 1; j++) {
+    //                         if (data.data.step[j].status == 1) {
+    //                             let temparray = data.data.step[j].step.split(' ');
+    //                             let num = Number(temparray[1]);
+    //                             let stepTemp = temparray[0] + ' ' + ++num;
+    //                             let temp = {
+    //                                 tab: num,
+    //                                 step: stepTemp,
+    //                             }
+    //                             this.stepdata[order._id] = temp;
+    //                         }
+    //                     }
+    //                 }
+    //                 if (data.data.status == 1) {
+    //                     for (var i = 0; i < this.orders.length; i++) {
+    //                         if (data.data._id === this.orders[i]._id) {
+    //                             this.orders.splice(i, 1);
+    //                         }
+    //                     }
+    //                 }
+    //             }).catch(error => {
+    //             });
+    //         }
+    //     }
+    //     else{
+    //         let items = [];
+    //         let ids = [];
+    //         for (let i = 0; i < order.item.length; i++) {
+    //             for (let k = 0; k < this.authGuard.getCurrentUser().category.length; k++) {
+    //                 if (((order.item[i].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(order.item[i].category)) > -1)) {
+    //                     if (order.item[i].step == this.stepdata[order._id].step) {
+    //                         order.item[i].status = status;
+    //                         if (items.indexOf(order.item[i].id._id) < 0) {
+    //                             items.push(order.item[i].id._id);
+    //                             ids.push(order.item[i]._id);
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         let opts = {
+    //             status: status,
+    //             itemId: items,
+    //             step: this.stepdata[order._id].step,
+    //             id: ids
+    //         };
+    //         this.websocketService.updateOrder(order._id, opts).then((data) => {
+    //             order.status = data.data.status;
+    //             order.step = data.data.step;
+    //             if (this.orders.length) {
+    //                 this.itemStatus = [];                                                                                                                     
+    //                 for (let i = 0; i < this.orders.length; i++) {
+    //                     let itemStatus = {};
+    //                     for (let m = 0; m < this.orders[i].step.length; m++) {
+    //                         let startTemp = [];
+    //                         for (let n = 0; n < this.orders[i].item.length; n++) {
+    //                             if (this.orders[i].item[n].step == this.orders[i].step[m].step && this.orders[i].item[n].department.indexOf(this.authGuard.getCurrentUser()._id) > -1) {
+    //                                 startTemp.push(this.orders[i].item[n].status);
+    //                             }
+    //                         }
+    //                         itemStatus[this.orders[i].step[m].step] = startTemp.every(this.isBelowThreshold);      
+    //                     }
+    //                     this.itemStatus[this.orders[i]._id] = itemStatus;                    
+    //                 }
+    //             }
+    //             if (order.step) {
+    //                 for (let j = 0; j < order.step.length - 1; j++) {
+    //                     if (order.step[j].status == 1) {
+    //                         let temparray = order.step[j].step.split(' ');
+    //                         let num = Number(temparray[1]);
+    //                         let stepTemp = temparray[0] + ' ' + ++num;
+    //                         let temp = {
+    //                             tab: num,
+    //                             step: stepTemp,
+    //                         }
+    //                         this.stepdata[order._id] = temp;
+    //                     }
+    //                 }
+    //             }
+    //             if (data.data.status == 1) {
+    //                 for (var i = 0; i < this.orders.length; i++) {
+    //                     if (data.data._id === this.orders[i]._id) {
+    //                         this.orders.splice(i, 1);
+    //                     }
+    //                 }
+    //             }
+    //         }).catch(error => {
+    //         });
+    //     }
+    // };
+
     public updateStepItem(step, index, order, time, status) {
         if (localStorage.getItem('step') != null) {
             localStorage.removeItem('step');
@@ -384,6 +521,10 @@ export class OrderListComponent implements DoCheck {
         }
         this.stepdata[orderId] = temp;
     }
+
+    // getFirstChar(text){
+    //     return text.charAt();
+    // }
 
     ngDoCheck() {
         if (this.orders && this.orders.length) {
