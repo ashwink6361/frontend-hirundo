@@ -28,27 +28,27 @@ export class WebsocketService {
         // If you aren't familiar with environment variables then
         // you can hard code `environment.ws_url` as `http://localhost:5000`
         // this.socket = io('http://localhost:5051');
-        // this.socket = io(this.socketUrl);
+        this.socket = io(this.socketUrl);
         // this.socket = io(this.socketUrl, { 'transports': ['polling'] });
-        // console.log("this.socket ",this.socket);   
-        // console.log("this.socket.connected ",this.socket.connected);   
-        // if (this.socket.connected){
-        //     console.log("Socket connection done ");
-        // }
-        // let user = JSON.parse(localStorage.getItem('currentUser'));
-        // if (user) {
-        //     this.socket.emit('connection');
-        //     console.log('user', user);
-        //     this.socket.on('connected', (data) => {
-        //         console.log('connected', data);
-        //         if (data && this.socket.id == data.socketId) {
-        //             this.socket.emit('userAuth', { userId: user._id });
-        //             this.socket.on('authConnected', (data) => {
-        //                 console.log('authConnected', data);
-        //             });
-        //         }
-        //     });
-        // }        
+        console.log("this.socket ",this.socket);   
+        console.log("this.socket.connected ",this.socket.connected);   
+        if (this.socket.connected){
+            console.log("Socket connection done ");
+        }
+        let user = JSON.parse(localStorage.getItem('currentUser'));
+        if (user) {
+            this.socket.emit('connection');
+            console.log('user', user);
+            this.socket.on('connected', (data) => {
+                console.log('connected', data);
+                if (data && this.socket.id == data.socketId) {
+                    this.socket.emit('userAuth', { userId: user._id });
+                    this.socket.on('authConnected', (data) => {
+                        console.log('authConnected', data);
+                    });
+                }
+            });
+        }        
         this.socket.on('neworder', (data) => {
             console.log('neworder',data); 
             this._orders.push(data);        

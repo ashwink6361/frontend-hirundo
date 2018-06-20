@@ -875,7 +875,7 @@ function updateLink(linkElement, obj) {
 
 /***/ }),
 
-/***/ 2:
+/***/ 3:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__("../../../../font-awesome/css/font-awesome.css");
@@ -887,5 +887,5 @@ module.exports = __webpack_require__("../../../../../src/styles.scss");
 
 /***/ })
 
-},[2]);
+},[3]);
 //# sourceMappingURL=styles.bundle.js.map

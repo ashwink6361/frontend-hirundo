@@ -205,6 +205,8 @@ export class ListComponent implements DoCheck {
     public loadingOrders: boolean = true;
     public stepdata: Array<any> = [];
     public itemStatusDelivered: Array<any> = [];
+    public showToCall: Array<any> = [];  
+    
     constructor(public websocketService: WebsocketService, private globalService: GlobalService, public router: Router,private differs: IterableDiffers) {
         this.differ = differs.find([]).create(null);
      }
@@ -216,18 +218,20 @@ export class ListComponent implements DoCheck {
                 this.itemStatusDelivered = [];
                 for (let i = 0; i < this.orders.length; i++) {
                     let itemStatusDelivered = {};
+                    let call = {};                    
                     for (let k = 0; k < this.orders[i].step.length; k++) {
                         let startTemp = [];                        
                         for (let l = 0; l < this.orders[i].step[k].itemId.length; l++) {
                             startTemp.push(this.orders[i].step[k].itemId[l].status);
                         }
                         itemStatusDelivered[this.orders[i].step[k].step] = startTemp.every(this.isEqualToOne);
+                        call[this.orders[i].step[k].step] = true;                        
                         if (startTemp.every(this.isEqualToOne)) {
                             let temparray = this.orders[i].step[k].step.split(' ');
                             let num = Number(temparray[1]);
                             let stepTemp = temparray[0] + ' ' + ++num;
                             let temp = {
-                                tab: num,
+                                tab: Number(temparray[1]),
                                 step: stepTemp,
                             }
                             this.stepdata[this.orders[i]._id] = temp;
@@ -248,6 +252,7 @@ export class ListComponent implements DoCheck {
                         }
                     }
                     this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered; 
+                    this.showToCall[this.orders[i]._id] = call;                    
                 }
             }
             this.loadingOrders = false;
@@ -286,6 +291,7 @@ export class ListComponent implements DoCheck {
             step: step
         };
         this.websocketService.changeOrderStep(order._id, opts).then(data => {
+            this.showToCall[order._id][step] = false;               
             if (this.orders.length) {
                 this.itemStatusDelivered = [];
                 for (let i = 0; i < this.orders.length; i++) {
@@ -320,18 +326,20 @@ export class ListComponent implements DoCheck {
                     this.itemStatusDelivered = [];
                     for (let i = 0; i < this.orders.length; i++) {
                         let itemStatusDelivered = {};
+                        let call = {};                                            
                         for (let k = 0; k < this.orders[i].step.length; k++) {
                             let startTemp = [];                        
                             for (let l = 0; l < this.orders[i].step[k].itemId.length; l++) {
                                 startTemp.push(this.orders[i].step[k].itemId[l].status);
                             }
                             itemStatusDelivered[this.orders[i].step[k].step] = startTemp.every(this.isEqualToOne);
+                            call[this.orders[i].step[k].step] = true;                                                    
                             if (startTemp.every(this.isEqualToOne)) {
                                 let temparray = this.orders[i].step[k].step.split(' ');
                                 let num = Number(temparray[1]);
                                 let stepTemp = temparray[0] + ' ' + ++num;
                                 let temp = {
-                                    tab: num,
+                                    tab: Number(temparray[1]),
                                     step: stepTemp,
                                 }
                                 this.stepdata[this.orders[i]._id] = temp;
@@ -352,6 +360,7 @@ export class ListComponent implements DoCheck {
                             }
                         }
                         this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered; 
+                        this.showToCall[this.orders[i]._id] = call;                                            
                     }
                 }
             }

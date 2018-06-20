@@ -7,7 +7,7 @@
                     <h4 class="card-title">
                         <div>
                             <img src="assets/images/table.png" alt="">
-                            <span>{{order.tableName}}/<span class="order-number">N:{{order.orderId}}</span></span>
+                            <span>{{order.tableName}}/<span class="order-number">N.{{order.orderId}}</span></span>
                         </div>
                         <!-- <div class="status" [class.bg-red]="order.status == 0" [class.bg-green]="order.status == 2" [class.bg-yellow]="order.status == 4">{{getOrderStatus(order.status)}}</div> -->
                     </h4>
@@ -18,14 +18,14 @@
                     </div>
                     <div class="step-listing">
                         <ul *ngIf="stepdata[order._id]">
-                            <li *ngFor="let step of order.step; let i = index;" (click)="selectedTab(step.step,i,order._id)" [class.active]="step.step == stepdata[order._id].step" [class.completed]="itemStatusDelivered[order._id] && itemStatusDelivered[order._id][stepdata[order._id].step]">{{step.step}}</li>
+                            <li *ngFor="let step of order.step; let i = index;" (click)="selectedTab(step.step,i,order._id)" [class.active]="step.step == stepdata[order._id].step" [class.completed]="itemStatusDelivered[order._id] && itemStatusDelivered[order._id][step.step]">{{step.step}}</li>
                         </ul>
                     </div>
                     <div class="order-items-container">
                         <div *ngFor="let step of order.step; let i= index">
                             <div *ngFor="let item of step.itemId">
                                 <div class="order-item" *ngIf="stepdata[order._id] && item.step == stepdata[order._id].step">
-                                    <label class="label item-status">{{getOrderStatus(item.status)}}</label>
+                                    <!-- <label class="label item-status">{{getOrderStatus(item.status)}}</label> -->
                                     <div class="order-item-img">
                                         {{item.quantity}} X
                                     </div>
@@ -57,10 +57,10 @@
                     <div *ngFor="let step of order.step">
                         <div *ngIf="stepdata[order._id].step == step.step">
                             <span *ngFor="let department of step.department">
-                                <span class="department-checkbtn" *ngIf="(step.step == 'Uscita 1') && (authGuard.getCurrentUser()._id == department.id._id) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1" (click)="updateDepartmentStatus(order,step.step)">
+                                <span class="department-checkbtn" *ngIf="(step.step == 'Uscita 1') && (authGuard.getCurrentUser()._id == department.id._id) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1" (click)="updateDepartmentStatus(department,order,step.step)">
                                     <i class="fas fa-check-circle"></i>
                                 </span>
-                                <span class="department-checkbtn" *ngIf="(step.step != 'Uscita 1') && stepdata[order._id] && (order.stepStatus == step.step) && (authGuard.getCurrentUserId() == department.id._id) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1" (click)="updateDepartmentStatus(order,step.step)">
+                                <span class="department-checkbtn" *ngIf="(step.step != 'Uscita 1') && stepdata[order._id] && (order.stepStatus == step.step) && (authGuard.getCurrentUserId() == department.id._id) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1" (click)="updateDepartmentStatus(department,order,step.step)">
                                     <i class="fas fa-check-circle"></i>
                                 </span>
                                 <span class="department-name" [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1">{{getFirstChar(department.id.firstName)}}</span>
