@@ -69,7 +69,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var ProfileService = /** @class */ (function () {
     function ProfileService(http) {
+        var _this = this;
         this.http = http;
+        var url = '/server/env';
+        this.http.get(url).toPromise()
+            .then(function (data) {
+            _this.apiUrl = data.json().apiUrl;
+        })
+            .catch(function (error) {
+            console.log('connection scoket url not available');
+        });
     }
     ProfileService.prototype.updateProfile = function (opts) {
         var url = "api/user";
@@ -93,7 +102,7 @@ var ProfileService = /** @class */ (function () {
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
         headers.append('privatekey', 'BbZJjyoXAdr8BUZuiKKARWimKfrSmQ6fv8kZ7OFfc');
         var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({ headers: headers });
-        return this.http.post('http://localhost:5051/' + url, fd, options).toPromise()
+        return this.http.post(this.apiUrl + url, fd, options).toPromise()
             .then(this.extractData)
             .catch(this.handleErrorPromise);
     };
