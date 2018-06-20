@@ -7,9 +7,9 @@
                     <h4 class="card-title">
                         <div>
                             <img src="assets/images/table.png" alt="">
-                            <span>{{order.tableName}}</span>
+                            <span>{{order.tableName}}/<span class="order-number">N:{{order.orderId}}</span></span>
                         </div>
-                        <div class="status" [class.bg-red]="order.status == 0" [class.bg-green]="order.status == 2" [class.bg-yellow]="order.status == 4">{{getOrderStatus(order.status)}}</div>
+                        <!-- <div class="status" [class.bg-red]="order.status == 0" [class.bg-green]="order.status == 2" [class.bg-yellow]="order.status == 4">{{getOrderStatus(order.status)}}</div> -->
                     </h4>
                     <div class="card-text">
                         <p><i class="fas fa-cube"></i> {{order.room.name}}</p>
@@ -57,13 +57,13 @@
                     <div *ngFor="let step of order.step">
                         <div *ngIf="stepdata[order._id].step == step.step">
                             <span *ngFor="let department of step.department">
-                                <span *ngIf="(step.step == 'Uscita 1') && (authGuard.getCurrentUser()._id == department.id._id) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" [class.grey-color]="department.status == 0" [class.green-color]="department.status == 1" (click)="updateDepartmentStatus(order,step.step)">
+                                <span class="department-checkbtn" *ngIf="(step.step == 'Uscita 1') && (authGuard.getCurrentUser()._id == department.id._id) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1" (click)="updateDepartmentStatus(order,step.step)">
                                     <i class="fas fa-check-circle"></i>
                                 </span>
-                                <span *ngIf="(step.step != 'Uscita 1') && stepdata[order._id] && (order.stepStatus == step.step) && (authGuard.getCurrentUserId() == department.id._id) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" [class.grey-color]="department.status == 0" [class.green-color]="department.status == 1" (click)="updateDepartmentStatus(order,step.step)">
+                                <span class="department-checkbtn" *ngIf="(step.step != 'Uscita 1') && stepdata[order._id] && (order.stepStatus == step.step) && (authGuard.getCurrentUserId() == department.id._id) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1" (click)="updateDepartmentStatus(order,step.step)">
                                     <i class="fas fa-check-circle"></i>
                                 </span>
-                                <span [class.grey-color]="department.status == 0" [class.green-color]="department.status == 1">{{getFirstChar(department.id.firstName)}}</span>
+                                <span class="department-name" [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1">{{getFirstChar(department.id.firstName)}}</span>
                             </span>
                             <button type="submit" *ngIf="stepdata[order._id] && (step.step == 'Uscita 1') && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" (click)="updateStepItem(step, order)">Delivered</button>
                             <button type="submit" *ngIf="(step.step != 'Uscita 1') && stepdata[order._id] && (order.stepStatus == step.step) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" (click)="updateStepItem(step, order)">Delivered</button>
