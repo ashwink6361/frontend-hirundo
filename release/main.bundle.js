@@ -1252,6 +1252,16 @@ var WebsocketService = /** @class */ (function () {
             return error;
         });
     };
+    WebsocketService.prototype.updateDepartmentStatus = function (id, opts) {
+        var url = '/api/department/status/' + id;
+        return this.http.put(url, opts).toPromise()
+            .then(function (data) {
+            return data.json();
+        })
+            .catch(function (error) {
+            return error;
+        });
+    };
     WebsocketService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Injectable */])(),
         __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Http */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__shared_guard_auth_guard__["a" /* AuthGuard */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__shared_guard_auth_guard__["a" /* AuthGuard */]) === "function" && _b || Object])

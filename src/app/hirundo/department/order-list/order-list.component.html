@@ -23,7 +23,7 @@
                     </div>
                     <div class="order-items-container">
                         <div *ngFor="let step of order.step; let i= index">
-                            <div *ngFor="let item of step.item">
+                            <div *ngFor="let item of step.itemId">
                                 <div class="order-item" *ngIf="stepdata[order._id] && item.step == stepdata[order._id].step">
                                     <label class="label item-status">{{getOrderStatus(item.status)}}</label>
                                     <div class="order-item-img">
@@ -56,18 +56,18 @@
                 <div class="order-call-btn" *ngIf="order.step.length">
                     <div *ngFor="let step of order.step">
                         <div *ngIf="stepdata[order._id].step == step.step">
-                            <div *ngFor="let department of step.department">
-                                <button type="submit" *ngIf="(step.step == 'Uscita 1') && (authGuard.getCurrentUser()._id == department.id._id) && itemStatus[order._id] && !itemStatus[order._id][step.step]" [class.grey-color]="department.status == 0" [class.green-color]="department.status == 1" (click)="updateDepartmentStatus(step.step)">
+                            <span *ngFor="let department of step.department">
+                                <span *ngIf="(step.step == 'Uscita 1') && (authGuard.getCurrentUser()._id == department.id._id) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" [class.grey-color]="department.status == 0" [class.green-color]="department.status == 1" (click)="updateDepartmentStatus(order,step.step)">
                                     <i class="fas fa-check-circle"></i>
-                                </button>
-                                <button type="submit" *ngIf="(step.step != 'Uscita 1') && (order.stepStatus == step.step) && (authGuard.getCurrentUserId() == department.id._id) && itemStatus[order._id] && !itemStatus[order._id][step.step]" [class.grey-color]="department.status == 0" [class.green-color]="department.status == 1" (click)="updateDepartmentStatus(step.step)">
+                                </span>
+                                <span *ngIf="(step.step != 'Uscita 1') && stepdata[order._id] && (order.stepStatus == step.step) && (authGuard.getCurrentUserId() == department.id._id) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" [class.grey-color]="department.status == 0" [class.green-color]="department.status == 1" (click)="updateDepartmentStatus(order,step.step)">
                                     <i class="fas fa-check-circle"></i>
-                                </button>
-                                <button [class.grey-color]="department.status == 0" [class.green-color]="department.status == 1" [disabled]="true">{{getFirstChar(department.id.firstName)}}</button>
-                            </div>
-                            <button type="submit" *ngIf="(step.step == 'Uscita 1') && itemStatus[order._id] && !itemStatus[order._id][step.step]" (click)="updateStepItem(step, order)">Delivered</button>
-                            <button type="submit" *ngIf="(step.step != 'Uscita 1') && (order.stepStatus == step.step) && itemStatus[order._id] && !itemStatus[order._id][step.step]" (click)="updateStepItem(step, order)">Delivered</button>
-                            <button class="bg-yellow" *ngIf="(step.step != 'Uscita 1') && itemStatus[order._id] && !itemStatus[order._id][step.step] && (order.stepStatus != step.step)" type="submit" [disabled]="true">To Call</button>
+                                </span>
+                                <span [class.grey-color]="department.status == 0" [class.green-color]="department.status == 1">{{getFirstChar(department.id.firstName)}}</span>
+                            </span>
+                            <button type="submit" *ngIf="stepdata[order._id] && (step.step == 'Uscita 1') && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" (click)="updateStepItem(step, order)">Delivered</button>
+                            <button type="submit" *ngIf="(step.step != 'Uscita 1') && stepdata[order._id] && (order.stepStatus == step.step) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" (click)="updateStepItem(step, order)">Delivered</button>
+                            <button class="bg-yellow" *ngIf="(step.step != 'Uscita 1') && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step] && stepdata[order._id] && (order.stepStatus != step.step)" type="submit" [disabled]="true">To Call</button>
                         </div>
                     </div>
                 </div>

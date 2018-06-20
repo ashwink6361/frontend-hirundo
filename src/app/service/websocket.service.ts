@@ -464,4 +464,14 @@ export class WebsocketService {
                 return error;
             });
     }
+    public updateDepartmentStatus(id, opts): Promise<any> {
+        let url = '/api/department/status/' + id;
+        return this.http.put(url, opts).toPromise()
+            .then(data => {
+                return data.json();
+            })
+            .catch(error => {
+                return error;
+            });
+    }
 }

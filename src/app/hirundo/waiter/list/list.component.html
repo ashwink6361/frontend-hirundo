@@ -27,7 +27,7 @@
             </div>
             <div class="order-items-container">
                 <div *ngFor="let step of order.step">
-                    <div *ngFor="let item of step.item">
+                    <div *ngFor="let item of step.itemId">
                         <div class="order-item" *ngIf="stepdata[order._id] && item.step == stepdata[order._id].step">
                             <label class="label item-status">{{getOrderStatus(item.status)}}</label>
                             <div class="order-item-img">
