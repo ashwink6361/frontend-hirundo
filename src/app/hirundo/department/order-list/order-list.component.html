@@ -77,6 +77,19 @@
                     <div *ngIf="stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 4) && itemStatus[order._id] && !itemStatus[order._id][stepdata[order._id].step]" id="{{step.step.replace(' ','')+order._id+indx}}" [ngStyle]="{'width': barWidth[step.step.replace(' ','')+order._id+indx]}" class="progress-btn"  (click)="updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 5)"></div>
                     <button class="bg-yellow" *ngIf="stepdata[order._id] && (step.step != 'Uscita 1') && (step.status == 0) && (order.stepStatus != stepdata[order._id].step)" type="submit" [disabled]="true">To Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>
                 </div>
+                <!-- new code -->
+                <!-- <div *ngIf="stepdata[order._id].step == step.step">
+                        <span (click)="updateStepItem(step, indx, order, 4)">
+                            <i class="fas fa-check-circle"></i>
+                        </span>
+                        <div *ngFor="let department of step.department">
+                            <button class="bg-grey" *ngIf="department.status == 0" [disabled]="true">{{getFirstChar(department.id.firstName)}}</button>
+                            <button class="bg-green" *ngIf="department.status == 1" [disabled]="true">{{getFirstChar(department.id.firstName)}}</button>                    
+                        </div>
+                        <button type="submit" *ngIf="stepdata[order._id] && (order.stepStatus == stepdata[order._id].step)" (click)="updateStepItem(step, indx, order, 1)">Delivered</button>                                        
+                        <button type="submit" *ngIf="stepdata[order._id] && (step.step == 'Uscita 1')"  (click)="updateStepItem(step,indx, order, 1)">Delivered</button>
+                        <button class="bg-yellow" *ngIf="stepdata[order._id] && (step.step != 'Uscita 1') && itemStatus[order._id] && itemStatus[order._id][stepdata[order._id].step] && (order.stepStatus != stepdata[order._id].step)" type="submit" [disabled]="true">To Call</button>
+                    </div> -->
             </div>
         </div>
     </div>
