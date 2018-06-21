@@ -854,64 +854,38 @@ var WebsocketService = /** @class */ (function () {
         });
         this.socket.on('orderstatus', function (data) {
             console.log('orderstatus', data);
+            var userType = _this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                for (var i = 0; i < _this._orders.length; i++) {
+                    if (data._id == _this._orders[i]._id) {
+                        _this._orders[i] = data;
+                        var itemsToSplice = [];
+                        if (data.item.length) {
+                            for (var k = 0; k < data.item.length; k++) {
+                                itemsToSplice.push(data.item[k].status);
+                            }
+                        }
+                        if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(_this.isBelowThreshold)) {
+                            _this._orders.splice(i, 1);
+                        }
+                    }
+                }
+            }
+        });
+        this.socket.on('orderstatusDept', function (data) {
+            console.log('orderstatusDept', data);
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id == _this._orders[i]._id) {
-                    // var temp = _.cloneDeep(this._orders[i]);
-                    // let userType = this.authGuard.getCurrentUser().userType;
-                    // if (userType == 3) {
-                    //     temp.step = data.step;
-                    //     temp.item = data.orderData.item;
-                    // }
-                    // else if (userType == 4) {
-                    //     let steps = [];
-                    //     let sts = [];
-                    //     if (temp && temp.item) {
-                    //         for (let j = 0; j < temp.item.length; j++) {
-                    //             for (let k = 0; k < data.step.length; k++) {
-                    //                 if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
-                    //                     if (temp.item[j].step == data.step[k].step) {
-                    //                         if (sts.indexOf(data.step[k].step) < 0) {
-                    //                             sts.push(data.step[k].step);
-                    //                             steps.push(data.step[k]);
-                    //                         }
-                    //                     }
-                    //                 }
-                    //             }
-                    //         }
-                    //     }
-                    //     temp.step = steps;
-                    //     let itemsTemp = [];
-                    //     if (data && data.orderData.item) {
-                    //         for (let j = 0; j < data.orderData.item.length; j++) {
-                    //             if (((data.orderData.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.orderData.item[j].category)) > -1)) {
-                    //                 itemsTemp.push(data.orderData.item[j]);
-                    //             }
-                    //         }
-                    //     }
-                    //     temp.item = itemsTemp;
-                    // }
-                    // temp.stepStatus = data.stepStatus;
-                    // temp.status = data.status;
-                    // if (temp && temp.item) {
-                    //     for (var j = 0; j < temp.item.length; j++) {
-                    //         if (data.order.itemId === temp.item[j].id._id && data.order.step === temp.item[j].step) {
-                    //             temp.item[j].status = data.order.status;
-                    //         }
-                    //     }
-                    // }
                     _this._orders[i] = data;
-                    // let itemsToSplice = [];
-                    // if (temp.item.length) {
-                    //     for (var k = 0; k < temp.item.length; k++) {
-                    //         itemsToSplice.push(temp.item[k].status);
-                    //     }
-                    // }
-                    // if (temp.item.length && itemsToSplice.length == temp.item.length && itemsToSplice.every(this.isBelowThreshold)) {
-                    //     this._orders.splice(i, 1);
-                    // }
-                    // if (temp.item.length == 0) {
-                    //     this._orders.splice(i, 1);
-                    // }
+                    var itemsToSplice = [];
+                    if (data.item.length) {
+                        for (var k = 0; k < data.item.length; k++) {
+                            itemsToSplice.push(data.item[k].status);
+                        }
+                    }
+                    if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(_this.isBelowThreshold)) {
+                        _this._orders.splice(i, 1);
+                    }
                 }
             }
         });
@@ -1086,15 +1060,19 @@ var WebsocketService = /** @class */ (function () {
         return this.http.put(url, opts).toPromise()
             .then(function (data) {
             var res = data.json();
+            console.log('res', res);
             for (var i = 0; i < _this._orders.length; i++) {
-                if (res._id === _this._orders[i]._id) {
+                if (res.data._id === _this._orders[i]._id) {
+                    console.log('res.item', res.data.item);
                     var itemsToSplice = [];
-                    if (res.item.length) {
-                        for (var k = 0; k < res.item.length; k++) {
-                            itemsToSplice.push(res.item[k].status);
+                    if (res.data.item.length) {
+                        for (var k = 0; k < res.data.item.length; k++) {
+                            itemsToSplice.push(res.data.item[k].status);
                         }
                     }
-                    if (itemsToSplice.length == res.item.length && itemsToSplice.every(_this.isBelowThreshold)) {
+                    console.log('itemsToSplice', itemsToSplice);
+                    console.log('res.item', res.data.item);
+                    if (itemsToSplice.length == res.data.item.length && itemsToSplice.every(_this.isBelowThreshold)) {
                         _this._orders.splice(i, 1);
                     }
                 }
