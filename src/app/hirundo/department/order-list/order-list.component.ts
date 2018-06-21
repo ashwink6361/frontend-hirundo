@@ -686,6 +686,8 @@ export class OrderListComponent implements DoCheck {
     public updateStepItem(step, order) {
         var result = confirm("Do you want to deliver?");
         if (result) {
+            console.log(step, 'step udpate');
+            console.log(order, 'step udpate');
             let ids = [];
             for (let i = 0; i < step.itemId.length; i++) {
                 step.itemId[i].status = 1;
