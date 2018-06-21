@@ -7,18 +7,24 @@
                     <h4 class="card-title">
                         <div>
                             <img src="assets/images/table.png" alt="">
-                            <span>{{order.tableName}}/<span class="order-number">N.{{order.orderId}}</span></span>
+                            <span>{{order.tableName}}/
+                                <span class="order-number">N.{{order.orderId}}</span>
+                            </span>
                         </div>
                         <!-- <div class="status" [class.bg-red]="order.status == 0" [class.bg-green]="order.status == 2" [class.bg-yellow]="order.status == 4">{{getOrderStatus(order.status)}}</div> -->
                     </h4>
                     <div class="card-text">
-                        <p><i class="fas fa-cube"></i> {{order.room.name}}</p>
-                        <p><i class="far fa-clock"></i> {{order.created_at | date:'hh:mm a'}}</p>
-                        <p><i class="far fa-user"></i> {{order.noOfPeople}}</p>
+                        <p>
+                            <i class="fas fa-cube"></i> {{order.room.name}}</p>
+                        <p>
+                            <i class="far fa-clock"></i> {{order.created_at | date:'hh:mm a'}}</p>
+                        <p>
+                            <i class="far fa-user"></i> {{order.noOfPeople}}</p>
                     </div>
                     <div class="step-listing">
                         <ul *ngIf="stepdata[order._id]">
-                            <li *ngFor="let step of order.step; let i = index;" (click)="selectedTab(step.step,i,order._id)" [class.active]="step.step == stepdata[order._id].step" [class.completed]="itemStatusDelivered[order._id] && itemStatusDelivered[order._id][step.step]">{{step.step}}</li>
+                            <li *ngFor="let step of order.step; let i = index;" (click)="selectedTab(step.step,i,order._id)" [class.active]="step.step == stepdata[order._id].step"
+                                [class.completed]="itemStatusDelivered[order._id] && itemStatusDelivered[order._id][step.step]">{{step.step}}</li>
                         </ul>
                     </div>
                     <div class="order-items-container">
@@ -56,18 +62,25 @@
                 <div class="order-call-btn" *ngIf="order.step.length">
                     <div *ngFor="let step of order.step">
                         <div *ngIf="stepdata[order._id].step == step.step">
-                            <span *ngFor="let department of step.department">
-                                <span class="department-checkbtn" *ngIf="(step.step == 'Uscita 1') && (authGuard.getCurrentUser()._id == department.id._id) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1" (click)="updateDepartmentStatus(department,order,step.step)">
-                                    <i class="fas fa-check-circle"></i>
+                            <div class="department-checkbtn-container">
+                                <span *ngFor="let department of step.department">
+                                    <span class="department-checkbtn" *ngIf="(step.step == 'Uscita 1') && (authGuard.getCurrentUser()._id == department.id._id) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]"
+                                        [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1" (click)="updateDepartmentStatus(department,order,step.step)">
+                                        <i class="fas fa-check-circle"></i>
+                                    </span>
+                                    <span class="department-checkbtn" *ngIf="(step.step != 'Uscita 1') && stepdata[order._id] && (order.stepStatus == step.step) && (authGuard.getCurrentUserId() == department.id._id) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]"
+                                        [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1" (click)="updateDepartmentStatus(department,order,step.step)">
+                                        <i class="fas fa-check-circle"></i>
+                                    </span>
+                                    <span class="department-name" [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1">{{getFirstChar(department.id.firstName)}}</span>
                                 </span>
-                                <span class="department-checkbtn" *ngIf="(step.step != 'Uscita 1') && stepdata[order._id] && (order.stepStatus == step.step) && (authGuard.getCurrentUserId() == department.id._id) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1" (click)="updateDepartmentStatus(department,order,step.step)">
-                                    <i class="fas fa-check-circle"></i>
-                                </span>
-                                <span class="department-name" [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1">{{getFirstChar(department.id.firstName)}}</span>
-                            </span>
-                            <button type="submit" *ngIf="stepdata[order._id] && (step.step == 'Uscita 1') && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" (click)="updateStepItem(step, order)">Delivered</button>
-                            <button type="submit" *ngIf="(step.step != 'Uscita 1') && stepdata[order._id] && (order.stepStatus == step.step) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]" (click)="updateStepItem(step, order)">Delivered</button>
-                            <button class="bg-yellow" *ngIf="(step.step != 'Uscita 1') && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step] && stepdata[order._id] && (order.stepStatus != step.step)" type="submit" [disabled]="true">To Call</button>
+                            </div>
+                            <button type="submit" *ngIf="stepdata[order._id] && (step.step == 'Uscita 1') && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]"
+                                (click)="updateStepItem(step, order)">Delivered</button>
+                            <button type="submit" *ngIf="(step.step != 'Uscita 1') && stepdata[order._id] && (order.stepStatus == step.step) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]"
+                                (click)="updateStepItem(step, order)">Delivered</button>
+                            <button class="bg-yellow" *ngIf="(step.step != 'Uscita 1') && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step] && stepdata[order._id] && (order.stepStatus != step.step)"
+                                type="submit" [disabled]="true">To Call</button>
                         </div>
                     </div>
                 </div>
