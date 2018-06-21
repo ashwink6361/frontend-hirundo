@@ -781,6 +781,8 @@ var AppService = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__ = __webpack_require__("../../../../rxjs/add/operator/toPromise.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_guard_auth_guard__ = __webpack_require__("../../../../../src/app/shared/guard/auth.guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_lodash__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -790,6 +792,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -858,7 +861,7 @@ var WebsocketService = /** @class */ (function () {
             if (userType == 3) {
                 for (var i = 0; i < _this._orders.length; i++) {
                     if (data._id == _this._orders[i]._id) {
-                        _this._orders[i] = data;
+                        _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](data);
                         var itemsToSplice = [];
                         if (data.item.length) {
                             for (var k = 0; k < data.item.length; k++) {
@@ -876,7 +879,7 @@ var WebsocketService = /** @class */ (function () {
             console.log('orderstatusDept', data);
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id == _this._orders[i]._id) {
-                    _this._orders[i] = data;
+                    _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](data);
                     var itemsToSplice = [];
                     if (data.item.length) {
                         for (var k = 0; k < data.item.length; k++) {

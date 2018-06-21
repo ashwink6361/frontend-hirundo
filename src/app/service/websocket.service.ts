@@ -71,7 +71,7 @@ export class WebsocketService {
             if (userType == 3) {
                 for (var i = 0; i < this._orders.length; i++) {
                     if (data._id == this._orders[i]._id) {
-                        this._orders[i] = data;
+                        this._orders[i] = _.cloneDeep(data);
                         let itemsToSplice = [];
                         if (data.item.length) {
                             for (var k = 0; k < data.item.length; k++) {
@@ -89,7 +89,7 @@ export class WebsocketService {
             console.log('orderstatusDept', data);
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id == this._orders[i]._id) {
-                    this._orders[i] = data;
+                    this._orders[i] = _.cloneDeep(data);
                     let itemsToSplice = [];
                     if (data.item.length) {
                         for (var k = 0; k < data.item.length; k++) {
