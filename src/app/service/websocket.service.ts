@@ -66,66 +66,39 @@ export class WebsocketService {
             }
         });
         this.socket.on('orderstatus', (data) => {
-            console.log('orderstatus',data);
+            console.log('orderstatus', data);
+            let userType = this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                for (var i = 0; i < this._orders.length; i++) {
+                    if (data._id == this._orders[i]._id) {
+                        this._orders[i] = data;
+                        let itemsToSplice = [];
+                        if (data.item.length) {
+                            for (var k = 0; k < data.item.length; k++) {
+                                itemsToSplice.push(data.item[k].status);
+                            }
+                        }
+                        if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(this.isBelowThreshold)) {
+                            this._orders.splice(i, 1);
+                        }
+                    }
+                }
+            }
+        });
+        this.socket.on('orderstatusDept', (data) => {
+            console.log('orderstatusDept', data);
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id == this._orders[i]._id) {
-                    // var temp = _.cloneDeep(this._orders[i]);
-                    // let userType = this.authGuard.getCurrentUser().userType;
-                    // if (userType == 3) {
-                    //     temp.step = data.step;
-                    //     temp.item = data.orderData.item;
-                    // }
-                    // else if (userType == 4) {
-                    //     let steps = [];
-                    //     let sts = [];
-                    //     if (temp && temp.item) {
-                    //         for (let j = 0; j < temp.item.length; j++) {
-                    //             for (let k = 0; k < data.step.length; k++) {
-                    //                 if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
-                    //                     if (temp.item[j].step == data.step[k].step) {
-                    //                         if (sts.indexOf(data.step[k].step) < 0) {
-                    //                             sts.push(data.step[k].step);
-                    //                             steps.push(data.step[k]);
-                    //                         }
-                    //                     }
-                    //                 }
-                    //             }
-                    //         }
-                    //     }
-                    //     temp.step = steps;
-                    //     let itemsTemp = [];
-                    //     if (data && data.orderData.item) {
-                    //         for (let j = 0; j < data.orderData.item.length; j++) {
-                    //             if (((data.orderData.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.orderData.item[j].category)) > -1)) {
-                    //                 itemsTemp.push(data.orderData.item[j]);
-                    //             }
-                    //         }
-                    //     }
-                    //     temp.item = itemsTemp;
-                    // }
-                    // temp.stepStatus = data.stepStatus;
-                    // temp.status = data.status;
-                    // if (temp && temp.item) {
-                    //     for (var j = 0; j < temp.item.length; j++) {
-                    //         if (data.order.itemId === temp.item[j].id._id && data.order.step === temp.item[j].step) {
-                    //             temp.item[j].status = data.order.status;
-                    //         }
-
-                    //     }
-                    // }
                     this._orders[i] = data;
-                    // let itemsToSplice = [];
-                    // if (temp.item.length) {
-                    //     for (var k = 0; k < temp.item.length; k++) {
-                    //         itemsToSplice.push(temp.item[k].status);
-                    //     }
-                    // }
-                    // if (temp.item.length && itemsToSplice.length == temp.item.length && itemsToSplice.every(this.isBelowThreshold)) {
-                    //     this._orders.splice(i, 1);
-                    // }
-                    // if (temp.item.length == 0) {
-                    //     this._orders.splice(i, 1);
-                    // }
+                    let itemsToSplice = [];
+                    if (data.item.length) {
+                        for (var k = 0; k < data.item.length; k++) {
+                            itemsToSplice.push(data.item[k].status);
+                        }
+                    }
+                    if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(this.isBelowThreshold)) {
+                        this._orders.splice(i, 1);
+                    }
                 }
             }
         });
@@ -298,15 +271,20 @@ export class WebsocketService {
         return this.http.put(url, opts).toPromise()
             .then(data => {
                 let res = data.json();
+                console.log('res',res);                
                 for (var i = 0; i < this._orders.length; i++) {
-                    if (res._id === this._orders[i]._id) {
+                    if (res.data._id === this._orders[i]._id) {
+                        console.log('res.item',res.data.item);
                         let itemsToSplice = [];
-                        if (res.item.length) {
-                            for (var k = 0; k < res.item.length; k++) {
-                                itemsToSplice.push(res.item[k].status);
+                        if (res.data.item.length) {
+                            for (var k = 0; k < res.data.item.length; k++) {
+                                itemsToSplice.push(res.data.item[k].status);
                             }
                         }
-                        if (itemsToSplice.length == res.item.length && itemsToSplice.every(this.isBelowThreshold)) {
+                        console.log('itemsToSplice',itemsToSplice);
+                        console.log('res.item',res.data.item);
+                        
+                        if (itemsToSplice.length == res.data.item.length && itemsToSplice.every(this.isBelowThreshold)) {
                             this._orders.splice(i, 1);
                         }
                     }
