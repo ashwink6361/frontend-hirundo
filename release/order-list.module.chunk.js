@@ -585,17 +585,13 @@ var OrderListComponent = /** @class */ (function () {
                     console.log('this.itemStatusDelivered', _this.itemStatusDelivered);
                     for (var m = 0; m < _this.orders[i].step.length; m++) {
                         if (!_this.itemStatusDelivered[_this.orders[i]._id][_this.orders[i].step[m].step]) {
-                            console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]', _this.itemStatusDelivered[_this.orders[i]._id][_this.orders[i].step[m].step]);
                             var temparray = _this.orders[i].step[m].step.split(' ');
-                            console.log('temparray', temparray);
                             var num = Number(temparray[1]);
                             var temp = {
                                 tab: num - 1,
                                 step: _this.orders[i].step[m].step,
                             };
-                            console.log('temp', temp);
                             _this.stepdata[_this.orders[i]._id] = temp;
-                            console.log('this.stepdata', _this.stepdata);
                             break;
                         }
                     }
@@ -646,7 +642,6 @@ var OrderListComponent = /** @class */ (function () {
         var ids = [];
         ids.push(item._id);
         var opts = {
-            // step: this.stepdata[order._id].step,
             id: ids
         };
         this.websocketService.updateOrder(order, opts).then(function (data) {
@@ -684,17 +679,13 @@ var OrderListComponent = /** @class */ (function () {
                     console.log('this.itemStatusDelivered', _this.itemStatusDelivered);
                     for (var m = 0; m < _this.orders[i].step.length; m++) {
                         if (!_this.itemStatusDelivered[_this.orders[i]._id][_this.orders[i].step[m].step]) {
-                            console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]', _this.itemStatusDelivered[_this.orders[i]._id][_this.orders[i].step[m].step]);
                             var temparray = _this.orders[i].step[m].step.split(' ');
-                            console.log('temparray', temparray);
                             var num = Number(temparray[1]);
                             var temp = {
                                 tab: num - 1,
                                 step: _this.orders[i].step[m].step,
                             };
-                            console.log('temp', temp);
                             _this.stepdata[_this.orders[i]._id] = temp;
-                            console.log('this.stepdata', _this.stepdata);
                             break;
                         }
                     }
@@ -706,7 +697,6 @@ var OrderListComponent = /** @class */ (function () {
     ;
     OrderListComponent.prototype.updateStepItem = function (step, order) {
         var _this = this;
-        console.log('step', step);
         var result = confirm("Do you want to deliver?");
         if (result) {
             var ids = [];
@@ -717,7 +707,6 @@ var OrderListComponent = /** @class */ (function () {
                 }
             }
             var opts = {
-                // step: this.stepdata[order._id].step,
                 id: ids
             };
             this.websocketService.updateOrder(order._id, opts).then(function (data) {
@@ -732,7 +721,6 @@ var OrderListComponent = /** @class */ (function () {
                                 startTemp.push(_this.orders[i].step[m].itemId[n].status);
                             }
                             itemStatusDelivered[_this.orders[i].step[m].step] = startTemp.every(_this.isEqualToOne);
-                            console.log('startTemp.every(this.isEqualToOne)', startTemp.every(_this.isEqualToOne));
                             // if (startTemp.every(this.isEqualToOne)) {
                             //     console.log('this.orders[i].step[m]',this.orders[i].step[m]);
                             //     let temparray = this.orders[i].step[m].step.split(' ');
@@ -763,17 +751,13 @@ var OrderListComponent = /** @class */ (function () {
                         console.log('this.itemStatusDelivered', _this.itemStatusDelivered);
                         for (var m = 0; m < _this.orders[i].step.length; m++) {
                             if (!_this.itemStatusDelivered[_this.orders[i]._id][_this.orders[i].step[m].step]) {
-                                console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]', _this.itemStatusDelivered[_this.orders[i]._id][_this.orders[i].step[m].step]);
                                 var temparray = _this.orders[i].step[m].step.split(' ');
-                                console.log('temparray', temparray);
                                 var num = Number(temparray[1]);
                                 var temp = {
                                     tab: num - 1,
                                     step: _this.orders[i].step[m].step,
                                 };
-                                console.log('temp', temp);
                                 _this.stepdata[_this.orders[i]._id] = temp;
-                                console.log('this.stepdata', _this.stepdata);
                                 break;
                             }
                         }
@@ -813,7 +797,6 @@ var OrderListComponent = /** @class */ (function () {
                             startTemp.push(_this.orders[i].step[m].itemId[n].status);
                         }
                         itemStatusDelivered[_this.orders[i].step[m].step] = startTemp.every(_this.isEqualToOne);
-                        console.log('startTemp.every(this.isEqualToOne)', startTemp.every(_this.isEqualToOne));
                         // if (startTemp.every(this.isEqualToOne)) {
                         //     let temparray = this.orders[i].step[m].step.split(' ');
                         //     let num = Number(temparray[1]);
@@ -837,17 +820,13 @@ var OrderListComponent = /** @class */ (function () {
                     console.log('this.itemStatusDelivered', _this.itemStatusDelivered);
                     for (var m = 0; m < _this.orders[i].step.length; m++) {
                         if (!_this.itemStatusDelivered[_this.orders[i]._id][_this.orders[i].step[m].step]) {
-                            console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]', _this.itemStatusDelivered[_this.orders[i]._id][_this.orders[i].step[m].step]);
                             var temparray = _this.orders[i].step[m].step.split(' ');
-                            console.log('temparray', temparray);
                             var num = Number(temparray[1]);
                             var temp = {
                                 tab: num - 1,
                                 step: _this.orders[i].step[m].step,
                             };
-                            console.log('temp', temp);
                             _this.stepdata[_this.orders[i]._id] = temp;
-                            console.log('this.stepdata', _this.stepdata);
                             break;
                         }
                     }
@@ -893,17 +872,13 @@ var OrderListComponent = /** @class */ (function () {
                         console.log('this.itemStatusDelivered', this.itemStatusDelivered);
                         for (var m = 0; m < this.orders[i].step.length; m++) {
                             if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
-                                console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]', this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]);
                                 var temparray = this.orders[i].step[m].step.split(' ');
-                                console.log('temparray', temparray);
                                 var num = Number(temparray[1]);
                                 var temp = {
                                     tab: num - 1,
                                     step: this.orders[i].step[m].step,
                                 };
-                                console.log('temp', temp);
                                 this.stepdata[this.orders[i]._id] = temp;
-                                console.log('this.stepdata', this.stepdata);
                                 break;
                             }
                         }

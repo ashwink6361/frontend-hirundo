@@ -208,6 +208,31 @@ export class WebsocketService {
                 // }
             }
         });
+
+        this.socket.on('checkouttable', (data) => {
+            console.log('checkouttable',data);    
+            if(this._rooms && this._rooms.length){
+                for (var i = 0; i < this._rooms.length; i++) {
+                    if (data.roomId == this._rooms[i]._id) {
+                        for (var j = 0; j < this._rooms[i].tables.length; j++) {
+                            if (data.tableId == this._rooms[i].tables[j]._id) {
+                                this._rooms[i].tables[j].orderId = [];
+                                break;
+                            }
+                        }
+                    }
+                }
+            }                  
+        });
+
+        this.socket.on('checklist', (data) => {
+            console.log('checklist',data);   
+            for (var i = 0; i < this._orders.length; i++) {
+                if (data._id === this._orders[i]._id) {
+                    this._orders[i] = data;
+                }
+            } 
+        });
     };
 
     isBelowThreshold(currentValue) {
@@ -223,18 +248,18 @@ export class WebsocketService {
             .then(data => {
                 let res = data.json();
                 this._orders = res.data;
-                let orderid = [];
-                for (var i = 0; i < this._orders.length; i++) {
-                    let itemsToSplice = [];
-                    if (this._orders[i].item.length) {
-                        for (var k = 0; k < this._orders[i].item.length; k++) {
-                            itemsToSplice.push(this._orders[i].item[k].status);
-                        }
-                    }
-                    if (itemsToSplice.length == this._orders[i].item.length && itemsToSplice.every(this.isBelowThreshold)) {
-                        this._orders.splice(i, 1);
-                    }
-                }
+                // let orderid = [];
+                // for (var i = 0; i < this._orders.length; i++) {
+                //     let itemsToSplice = [];
+                //     if (this._orders[i].item.length) {
+                //         for (var k = 0; k < this._orders[i].item.length; k++) {
+                //             itemsToSplice.push(this._orders[i].item[k].status);
+                //         }
+                //     }
+                //     if (itemsToSplice.length == this._orders[i].item.length && itemsToSplice.every(this.isBelowThreshold)) {
+                //         this._orders.splice(i, 1);
+                //     }
+                // }
                 return this._orders;
             })
             .catch(error => {
@@ -273,7 +298,6 @@ export class WebsocketService {
         return this.http.put(url, opts).toPromise()
             .then(data => {
                 let res = data.json();
-                let orderid = [];
                 for (var i = 0; i < this._orders.length; i++) {
                     if (res._id === this._orders[i]._id) {
                         let itemsToSplice = [];

@@ -579,18 +579,13 @@ export class OrderListComponent implements DoCheck {
                     console.log('this.itemStatusDelivered',this.itemStatusDelivered);
                     for (let m = 0; m < this.orders[i].step.length; m++) {
                         if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
-                            console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]',this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]);
                             let temparray = this.orders[i].step[m].step.split(' ');
-                            console.log('temparray',temparray);
                             let num = Number(temparray[1]);
                             let temp = {
                                 tab: num - 1,
                                 step: this.orders[i].step[m].step,
                             }
-                            console.log('temp',temp);
-                            
                             this.stepdata[this.orders[i]._id] = temp;
-                            console.log('this.stepdata',this.stepdata);
                             break;
                         }
                     }
@@ -635,7 +630,6 @@ export class OrderListComponent implements DoCheck {
         let ids = [];        
         ids.push(item._id);                            
         let opts = {
-            // step: this.stepdata[order._id].step,
             id: ids            
         };
         this.websocketService.updateOrder(order, opts).then(data => {
@@ -673,18 +667,13 @@ export class OrderListComponent implements DoCheck {
                     console.log('this.itemStatusDelivered',this.itemStatusDelivered);
                     for (let m = 0; m < this.orders[i].step.length; m++) {
                         if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
-                            console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]',this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]);
                             let temparray = this.orders[i].step[m].step.split(' ');
-                            console.log('temparray',temparray);
                             let num = Number(temparray[1]);
                             let temp = {
                                 tab: num - 1,
                                 step: this.orders[i].step[m].step,
                             }
-                            console.log('temp',temp);
-                            
                             this.stepdata[this.orders[i]._id] = temp;
-                            console.log('this.stepdata',this.stepdata);
                             break;
                         }
                     }
@@ -695,7 +684,6 @@ export class OrderListComponent implements DoCheck {
     };
 
     public updateStepItem(step, order) {
-        console.log('step',step);
         var result = confirm("Do you want to deliver?");
         if (result) {
             let ids = [];
@@ -706,7 +694,6 @@ export class OrderListComponent implements DoCheck {
                 }
             }
             let opts = {
-                // step: this.stepdata[order._id].step,
                 id: ids
             };
             this.websocketService.updateOrder(order._id, opts).then((data) => {
@@ -721,7 +708,6 @@ export class OrderListComponent implements DoCheck {
                                 startTemp.push(this.orders[i].step[m].itemId[n].status);
                             }
                             itemStatusDelivered[this.orders[i].step[m].step] = startTemp.every(this.isEqualToOne);
-                            console.log('startTemp.every(this.isEqualToOne)',startTemp.every(this.isEqualToOne));                            
                             // if (startTemp.every(this.isEqualToOne)) {
                             //     console.log('this.orders[i].step[m]',this.orders[i].step[m]);
                             //     let temparray = this.orders[i].step[m].step.split(' ');
@@ -756,18 +742,13 @@ export class OrderListComponent implements DoCheck {
                         console.log('this.itemStatusDelivered',this.itemStatusDelivered);
                         for (let m = 0; m < this.orders[i].step.length; m++) {
                             if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
-                                console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]',this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]);
                                 let temparray = this.orders[i].step[m].step.split(' ');
-                                console.log('temparray',temparray);
                                 let num = Number(temparray[1]);
                                 let temp = {
                                     tab: num - 1,
                                     step: this.orders[i].step[m].step,
                                 }
-                                console.log('temp',temp);
-                                
                                 this.stepdata[this.orders[i]._id] = temp;
-                                console.log('this.stepdata',this.stepdata);
                                 break;
                             }
                         }                                                        
@@ -808,7 +789,6 @@ export class OrderListComponent implements DoCheck {
                             startTemp.push(this.orders[i].step[m].itemId[n].status);
                         }
                         itemStatusDelivered[this.orders[i].step[m].step] = startTemp.every(this.isEqualToOne);
-                        console.log('startTemp.every(this.isEqualToOne)',startTemp.every(this.isEqualToOne));
                         // if (startTemp.every(this.isEqualToOne)) {
                         //     let temparray = this.orders[i].step[m].step.split(' ');
                         //     let num = Number(temparray[1]);
@@ -832,18 +812,13 @@ export class OrderListComponent implements DoCheck {
                     console.log('this.itemStatusDelivered',this.itemStatusDelivered);
                     for (let m = 0; m < this.orders[i].step.length; m++) {
                         if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
-                            console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]',this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]);
                             let temparray = this.orders[i].step[m].step.split(' ');
-                            console.log('temparray',temparray);
                             let num = Number(temparray[1]);
                             let temp = {
                                 tab: num - 1,
                                 step: this.orders[i].step[m].step,
                             }
-                            console.log('temp',temp);
-                            
                             this.stepdata[this.orders[i]._id] = temp;
-                            console.log('this.stepdata',this.stepdata);
                             break;
                         }
                     }
@@ -890,18 +865,13 @@ export class OrderListComponent implements DoCheck {
                         console.log('this.itemStatusDelivered',this.itemStatusDelivered);
                         for (let m = 0; m < this.orders[i].step.length; m++) {
                             if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
-                                console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]',this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]);
                                 let temparray = this.orders[i].step[m].step.split(' ');
-                                console.log('temparray',temparray);
                                 let num = Number(temparray[1]);
                                 let temp = {
                                     tab: num - 1,
                                     step: this.orders[i].step[m].step,
                                 }
-                                console.log('temp',temp);
-                                
                                 this.stepdata[this.orders[i]._id] = temp;
-                                console.log('this.stepdata',this.stepdata);
                                 break;
                             }
                         }

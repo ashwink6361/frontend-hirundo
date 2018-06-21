@@ -994,6 +994,29 @@ var WebsocketService = /** @class */ (function () {
                 // }
             }
         });
+        this.socket.on('checkouttable', function (data) {
+            console.log('checkouttable', data);
+            if (_this._rooms && _this._rooms.length) {
+                for (var i = 0; i < _this._rooms.length; i++) {
+                    if (data.roomId == _this._rooms[i]._id) {
+                        for (var j = 0; j < _this._rooms[i].tables.length; j++) {
+                            if (data.tableId == _this._rooms[i].tables[j]._id) {
+                                _this._rooms[i].tables[j].orderId = [];
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        this.socket.on('checklist', function (data) {
+            console.log('checklist', data);
+            for (var i = 0; i < _this._orders.length; i++) {
+                if (data._id === _this._orders[i]._id) {
+                    _this._orders[i] = data;
+                }
+            }
+        });
     };
     ;
     WebsocketService.prototype.isBelowThreshold = function (currentValue) {
@@ -1010,18 +1033,18 @@ var WebsocketService = /** @class */ (function () {
             .then(function (data) {
             var res = data.json();
             _this._orders = res.data;
-            var orderid = [];
-            for (var i = 0; i < _this._orders.length; i++) {
-                var itemsToSplice = [];
-                if (_this._orders[i].item.length) {
-                    for (var k = 0; k < _this._orders[i].item.length; k++) {
-                        itemsToSplice.push(_this._orders[i].item[k].status);
-                    }
-                }
-                if (itemsToSplice.length == _this._orders[i].item.length && itemsToSplice.every(_this.isBelowThreshold)) {
-                    _this._orders.splice(i, 1);
-                }
-            }
+            // let orderid = [];
+            // for (var i = 0; i < this._orders.length; i++) {
+            //     let itemsToSplice = [];
+            //     if (this._orders[i].item.length) {
+            //         for (var k = 0; k < this._orders[i].item.length; k++) {
+            //             itemsToSplice.push(this._orders[i].item[k].status);
+            //         }
+            //     }
+            //     if (itemsToSplice.length == this._orders[i].item.length && itemsToSplice.every(this.isBelowThreshold)) {
+            //         this._orders.splice(i, 1);
+            //     }
+            // }
             return _this._orders;
         })
             .catch(function (error) {
@@ -1063,7 +1086,6 @@ var WebsocketService = /** @class */ (function () {
         return this.http.put(url, opts).toPromise()
             .then(function (data) {
             var res = data.json();
-            var orderid = [];
             for (var i = 0; i < _this._orders.length; i++) {
                 if (res._id === _this._orders[i]._id) {
                     var itemsToSplice = [];
