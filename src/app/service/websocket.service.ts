@@ -71,7 +71,7 @@ export class WebsocketService {
             if (userType == 3) {
                 for (var i = 0; i < this._orders.length; i++) {
                     if (data._id == this._orders[i]._id) {
-                        this._orders[i] = data;
+                        this._orders[i] = _.cloneDeep(data);
                         let itemsToSplice = [];
                         if (data.item.length) {
                             for (var k = 0; k < data.item.length; k++) {
@@ -89,7 +89,7 @@ export class WebsocketService {
             console.log('orderstatusDept', data);
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id == this._orders[i]._id) {
-                    this._orders[i] = data;
+                    this._orders[i] = _.cloneDeep(data);
                     let itemsToSplice = [];
                     if (data.item.length) {
                         for (var k = 0; k < data.item.length; k++) {
@@ -133,55 +133,36 @@ export class WebsocketService {
                 }
             }
         });
+        this.socket.on('itemDeletedW', (data) => {
+            console.log('itemDeletedW', data);
+            let userType = this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                for (var i = 0; i < this._orders.length; i++) {
+                    if (data._id === this._orders[i]._id) {
+                        this._orders[i] = data;
+                    }
+                }
+            }
+        });
+        this.socket.on('itemUpdatedW', (data) => {
+            console.log('itemUpdatedW', data);
+            let userType = this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                for (var i = 0; i < this._orders.length; i++) {
+                    if (data._id === this._orders[i]._id) {
+                        this._orders[i] = data;
+                    }
+                }
+            }
+        });
         this.socket.on('itemUpdated', (data) => {
             console.log('itemUpdated',data);                                                          
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;
-                    // var temp = _.cloneDeep(this._orders[i]);
-                    // let userType = this.authGuard.getCurrentUser().userType;
-                    // if (userType == 3) {
-                    //     temp.step = data.step;
-                    //     temp.item = data.item;
-                    // }
-                    // else if (userType == 4) {
-                    //     let steps = [];
-                    //     let sts = [];
-                    //     if (temp && temp.item) {
-                    //         for (let j = 0; j < temp.item.length; j++) {
-                    //             for (let k = 0; k < data.step.length; k++) {
-                    //                 if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
-                    //                     if (temp.item[j].step == data.step[k].step) {
-                    //                         if (sts.indexOf(data.step[k].step) < 0) {
-                    //                             sts.push(data.step[k].step);
-                    //                             steps.push(data.step[k]);
-                    //                         }
-                    //                     }
-                    //                 }
-                    //             }
-                    //         }
-                    //     }
-                    //     temp.step = steps;
-                    //     let itemsTemp = [];
-                    //     if (data && data.item) {
-                    //         for (let j = 0; j < data.item.length; j++) {
-                    //             if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
-                    //                 itemsTemp.push(data.item[j]);
-                    //             }
-                    //         }
-                    //     }
-                    //     temp.item = itemsTemp;
-                    // }
-                    // temp.stepStatus = data.stepStatus;
-                    // temp.status = data.status;
-                    // this._orders[i] = _.cloneDeep(temp);
                 }
-                // if (data._id === this._orders[i]._id) {
-                //     this._orders[i] = data;
-                // }
             }
         });
-
         this.socket.on('checkouttable', (data) => {
             console.log('checkouttable',data);    
             if(this._rooms && this._rooms.length){
