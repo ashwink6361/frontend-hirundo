@@ -1,6 +1,5 @@
 <div class="text-center" *ngIf="!(orders && orders.length)">No Order Found.</div>
 <div *ngIf="orders && orders.length" class="order-list-container">
-    <!-- <div *ngIf="orders && orders.length"> -->
     <div class="card order-list" *ngFor="let order of orders">
         <div class="card-body" [class.opacity]="order.status == 3">
             <h4 class="card-title">
@@ -22,7 +21,7 @@
             </div>
             <div class="step-listing">
                 <ul *ngIf="stepdata[order._id]">
-                    <li *ngFor="let step of order.step; let i = index;" (click)="selectedTab(step.step,i,order._id)" [class.active]="step.step == stepdata[order._id].step" [class.completed]="showToCall[order._id] && !showToCall[order._id][step.step] || step.step == 'Uscita 1'">{{step.step}}</li>
+                    <li *ngFor="let step of order.step; let i = index;" (click)="selectedTab(step.step,i,order._id)" [class.active]="step.step == stepdata[order._id].step" [class.completed]="(itemStatusDelivered[order._id] && itemStatusDelivered[order._id][step.step]) || (step.step == 'Uscita 1')">{{step.step}}</li>
                 </ul>
             </div>
             <div class="order-items-container">
@@ -57,10 +56,9 @@
         <div class="order-call-btn" *ngIf="order.step.length">
             <div *ngFor="let step of order.step; let indx = index;">
                 <div *ngIf="stepdata[order._id].step == step.step">
-                    <button *ngIf="stepdata[order._id] && stepdata[order._id].step != 'Uscita 1' && showToCall[order._id] && showToCall[order._id][step.step]" type="submit" (click)="changeStep(order, step.step)">Call</button>
+                    <button *ngIf="stepdata[order._id] && stepdata[order._id].step != 'Uscita 1' && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step] && showToCall[order._id] && showToCall[order._id][step.step]" type="submit" (click)="changeStep(order, step.step)">Call</button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- </div> -->
 </div>

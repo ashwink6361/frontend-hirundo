@@ -3,7 +3,7 @@ webpackJsonp(["list.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/list/list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"text-center\" *ngIf=\"!(orders && orders.length)\">No Order Found.</div>\n<div *ngIf=\"orders && orders.length\" class=\"order-list-container\">\n    <!-- <div *ngIf=\"orders && orders.length\"> -->\n    <div class=\"card order-list\" *ngFor=\"let order of orders\">\n        <div class=\"card-body\" [class.opacity]=\"order.status == 3\">\n            <h4 class=\"card-title\">\n                <div>\n                    <img src=\"assets/images/table.png\" alt=\"\">\n                    <span>{{order.tableName}}/<span class=\"order-number\">N.{{order.orderId}}</span></span>\n                </div>\n                <!-- <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div> -->\n            </h4>\n            <div class=\"card-text\">\n                <p>\n                    <i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\n                <p>\n                    <i class=\"far fa-clock\"></i>\n                    <span>{{order.created_at | date:'hh:mm a'}}</span>\n                </p>\n                <p>\n                    <i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\n            </div>\n            <div class=\"step-listing\">\n                <ul *ngIf=\"stepdata[order._id]\">\n                    <li *ngFor=\"let step of order.step; let i = index;\" (click)=\"selectedTab(step.step,i,order._id)\" [class.active]=\"step.step == stepdata[order._id].step\" [class.completed]=\"showToCall[order._id] && !showToCall[order._id][step.step] || step.step == 'Uscita 1'\">{{step.step}}</li>\n                </ul>\n            </div>\n            <div class=\"order-items-container\">\n                <div *ngFor=\"let step of order.step\">\n                    <div *ngFor=\"let item of step.itemId\">\n                        <div class=\"order-item\" *ngIf=\"stepdata[order._id] && item.step == stepdata[order._id].step\">\n                            <label class=\"label item-status\">{{getOrderStatus(item.status)}}</label>\n                            <div class=\"order-item-img\">\n                                {{item.quantity}} X\n                            </div>\n                            <div class=\"order-item-detail\">\n                                {{item.id.name}}\n                                <ul>\n                                    <li *ngFor=\"let varient of item.variant\">\n                                        <i *ngIf=\"varient.status == 1\">+</i>\n                                        <i *ngIf=\"varient.status == 0\">-</i> {{varient.name}}\n                                    </li>\n                                </ul>\n                                <ul>\n                                    <li>\n                                        {{item.notes}}\n                                    </li>\n                                </ul>\n                            </div>\n                            <div class=\"order-quantity d-flex\">\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"order-call-btn\" *ngIf=\"order.step.length\">\n            <div *ngFor=\"let step of order.step; let indx = index;\">\n                <div *ngIf=\"stepdata[order._id].step == step.step\">\n                    <button *ngIf=\"stepdata[order._id] && stepdata[order._id].step != 'Uscita 1' && showToCall[order._id] && showToCall[order._id][step.step]\" type=\"submit\" (click)=\"changeStep(order, step.step)\">Call</button>\n                </div>\n            </div>\n        </div>\n    </div>\n    <!-- </div> -->\n</div>\n"
+module.exports = "<div class=\"text-center\" *ngIf=\"!(orders && orders.length)\">No Order Found.</div>\n<div *ngIf=\"orders && orders.length\" class=\"order-list-container\">\n    <div class=\"card order-list\" *ngFor=\"let order of orders\">\n        <div class=\"card-body\" [class.opacity]=\"order.status == 3\">\n            <h4 class=\"card-title\">\n                <div>\n                    <img src=\"assets/images/table.png\" alt=\"\">\n                    <span>{{order.tableName}}/<span class=\"order-number\">N.{{order.orderId}}</span></span>\n                </div>\n                <!-- <div class=\"status\" [class.bg-red]=\"order.status == 0\" [class.bg-green]=\"order.status == 2\" [class.bg-yellow]=\"order.status == 4\">{{getOrderStatus(order.status)}}</div> -->\n            </h4>\n            <div class=\"card-text\">\n                <p>\n                    <i class=\"fas fa-cube\"></i> {{order.room.name}}</p>\n                <p>\n                    <i class=\"far fa-clock\"></i>\n                    <span>{{order.created_at | date:'hh:mm a'}}</span>\n                </p>\n                <p>\n                    <i class=\"far fa-user\"></i> {{order.noOfPeople}}</p>\n            </div>\n            <div class=\"step-listing\">\n                <ul *ngIf=\"stepdata[order._id]\">\n                    <li *ngFor=\"let step of order.step; let i = index;\" (click)=\"selectedTab(step.step,i,order._id)\" [class.active]=\"step.step == stepdata[order._id].step\" [class.completed]=\"(itemStatusDelivered[order._id] && itemStatusDelivered[order._id][step.step]) || (step.step == 'Uscita 1')\">{{step.step}}</li>\n                </ul>\n            </div>\n            <div class=\"order-items-container\">\n                <div *ngFor=\"let step of order.step\">\n                    <div *ngFor=\"let item of step.itemId\">\n                        <div class=\"order-item\" *ngIf=\"stepdata[order._id] && item.step == stepdata[order._id].step\">\n                            <label class=\"label item-status\">{{getOrderStatus(item.status)}}</label>\n                            <div class=\"order-item-img\">\n                                {{item.quantity}} X\n                            </div>\n                            <div class=\"order-item-detail\">\n                                {{item.id.name}}\n                                <ul>\n                                    <li *ngFor=\"let varient of item.variant\">\n                                        <i *ngIf=\"varient.status == 1\">+</i>\n                                        <i *ngIf=\"varient.status == 0\">-</i> {{varient.name}}\n                                    </li>\n                                </ul>\n                                <ul>\n                                    <li>\n                                        {{item.notes}}\n                                    </li>\n                                </ul>\n                            </div>\n                            <div class=\"order-quantity d-flex\">\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"order-call-btn\" *ngIf=\"order.step.length\">\n            <div *ngFor=\"let step of order.step; let indx = index;\">\n                <div *ngIf=\"stepdata[order._id].step == step.step\">\n                    <button *ngIf=\"stepdata[order._id] && stepdata[order._id].step != 'Uscita 1' && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step] && showToCall[order._id] && showToCall[order._id][step.step]\" type=\"submit\" (click)=\"changeStep(order, step.step)\">Call</button>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -254,34 +254,78 @@ var ListComponent = /** @class */ (function () {
                         }
                         itemStatusDelivered[_this.orders[i].step[k].step] = startTemp.every(_this.isEqualToOne);
                         call[_this.orders[i].step[k].step] = true;
-                        if (startTemp.every(_this.isEqualToOne)) {
-                            var temparray = _this.orders[i].step[k].step.split(' ');
-                            var num = Number(temparray[1]);
-                            var stepTemp = temparray[0] + ' ' + ++num;
-                            var temp = {
-                                tab: Number(temparray[1]),
-                                step: stepTemp,
-                            };
-                            _this.stepdata[_this.orders[i]._id] = temp;
-                        }
-                        else {
-                            var tempp = {
-                                tab: 0,
-                                step: ''
-                            };
-                            if (_this.orders[i].step.length > 1) {
-                                tempp.tab = 1;
-                                tempp.step = _this.orders[i].step[1].step;
-                            }
-                            else {
-                                tempp.tab = 0;
-                                tempp.step = _this.orders[i].step[0].step;
-                            }
-                            _this.stepdata[_this.orders[i]._id] = tempp;
-                        }
+                        // if (startTemp.every(this.isEqualToOne)) {
+                        //     let temparray = this.orders[i].step[k].step.split(' ');
+                        //     let num = Number(temparray[1]);
+                        //     let stepTemp = temparray[0] + ' ' + ++num;
+                        //     let temp = {
+                        //         tab: Number(temparray[1]),
+                        //         step: stepTemp,
+                        //     }
+                        //     this.stepdata[this.orders[i]._id] = temp;
+                        // } else {
+                        //     let tempp = {
+                        //         tab: 0,
+                        //         step: ''
+                        //     }
+                        //     if(this.orders[i].step.length>1){
+                        //         tempp.tab = 1;
+                        //         tempp.step = this.orders[i].step[1].step;
+                        //     }
+                        //     else{
+                        //         tempp.tab = 0;
+                        //         tempp.step = this.orders[i].step[0].step;
+                        //     }
+                        //     this.stepdata[this.orders[i]._id] = tempp;
+                        // }
                     }
                     _this.itemStatusDelivered[_this.orders[i]._id] = itemStatusDelivered;
                     _this.showToCall[_this.orders[i]._id] = call;
+                    console.log('this.itemStatusDelivered', _this.itemStatusDelivered);
+                    if (_this.orders[i].step.length > 2) {
+                        for (var m = 0; m < _this.orders[i].step.length; m++) {
+                            if (!_this.itemStatusDelivered[_this.orders[i]._id][_this.orders[i].step[m].step]) {
+                                console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]', _this.itemStatusDelivered[_this.orders[i]._id][_this.orders[i].step[m].step]);
+                                if (_this.orders[i].step[m].step != 'Uscita 1') {
+                                    var temparray = _this.orders[i].step[m].step.split(' ');
+                                    console.log('temparray', temparray);
+                                    var num = Number(temparray[1]);
+                                    var temp = {
+                                        tab: num - 1,
+                                        step: _this.orders[i].step[m].step,
+                                    };
+                                    console.log('temp', temp);
+                                    _this.stepdata[_this.orders[i]._id] = temp;
+                                    console.log('this.stepdata', _this.stepdata);
+                                    break;
+                                }
+                                else {
+                                    var temp = {
+                                        tab: 1,
+                                        step: _this.orders[i].step[1].step,
+                                    };
+                                    console.log('temp', temp);
+                                    _this.stepdata[_this.orders[i]._id] = temp;
+                                    console.log('this.stepdata', _this.stepdata);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (_this.orders[i].step.length == 2) {
+                        var tempp = {
+                            tab: 1,
+                            step: _this.orders[i].step[1].step
+                        };
+                        _this.stepdata[_this.orders[i]._id] = tempp;
+                    }
+                    if (_this.orders[i].step.length == 1) {
+                        var tempp = {
+                            tab: 0,
+                            step: _this.orders[i].step[0].step
+                        };
+                        _this.stepdata[_this.orders[i]._id] = tempp;
+                    }
                 }
             }
             _this.loadingOrders = false;
@@ -366,34 +410,77 @@ var ListComponent = /** @class */ (function () {
                             }
                             itemStatusDelivered[this.orders[i].step[k].step] = startTemp.every(this.isEqualToOne);
                             call[this.orders[i].step[k].step] = true;
-                            if (startTemp.every(this.isEqualToOne)) {
-                                var temparray = this.orders[i].step[k].step.split(' ');
-                                var num = Number(temparray[1]);
-                                var stepTemp = temparray[0] + ' ' + ++num;
-                                var temp = {
-                                    tab: Number(temparray[1]),
-                                    step: stepTemp,
-                                };
-                                this.stepdata[this.orders[i]._id] = temp;
-                            }
-                            else {
-                                var tempp = {
-                                    tab: 0,
-                                    step: ''
-                                };
-                                if (this.orders[i].step.length > 1) {
-                                    tempp.tab = 1;
-                                    tempp.step = this.orders[i].step[1].step;
-                                }
-                                else {
-                                    tempp.tab = 0;
-                                    tempp.step = this.orders[i].step[0].step;
-                                }
-                                this.stepdata[this.orders[i]._id] = tempp;
-                            }
+                            // if (startTemp.every(this.isEqualToOne)) {
+                            //     let temparray = this.orders[i].step[k].step.split(' ');
+                            //     let num = Number(temparray[1]);
+                            //     let stepTemp = temparray[0] + ' ' + ++num;
+                            //     let temp = {
+                            //         tab: Number(temparray[1]),
+                            //         step: stepTemp,
+                            //     }
+                            //     this.stepdata[this.orders[i]._id] = temp;
+                            // } else {
+                            //     let tempp = {
+                            //         tab: 0,
+                            //         step: ''
+                            //     }
+                            //     if(this.orders[i].step.length>1){
+                            //         tempp.tab = 1;
+                            //         tempp.step = this.orders[i].step[1].step;
+                            //     }
+                            //     else{
+                            //         tempp.tab = 0;
+                            //         tempp.step = this.orders[i].step[0].step;
+                            //     }
+                            //     this.stepdata[this.orders[i]._id] = tempp;
+                            // }
                         }
                         this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered;
                         this.showToCall[this.orders[i]._id] = call;
+                        if (this.orders[i].step.length > 2) {
+                            for (var m = 0; m < this.orders[i].step.length; m++) {
+                                if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
+                                    console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]', this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]);
+                                    if (this.orders[i].step[m].step != 'Uscita 1') {
+                                        var temparray = this.orders[i].step[m].step.split(' ');
+                                        console.log('temparray', temparray);
+                                        var num = Number(temparray[1]);
+                                        var temp = {
+                                            tab: num - 1,
+                                            step: this.orders[i].step[m].step,
+                                        };
+                                        console.log('temp', temp);
+                                        this.stepdata[this.orders[i]._id] = temp;
+                                        console.log('this.stepdata', this.stepdata);
+                                        break;
+                                    }
+                                    else {
+                                        var temp = {
+                                            tab: 1,
+                                            step: this.orders[i].step[1].step,
+                                        };
+                                        console.log('temp', temp);
+                                        this.stepdata[this.orders[i]._id] = temp;
+                                        console.log('this.stepdata', this.stepdata);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (this.orders[i].step.length == 2) {
+                            var tempp = {
+                                tab: 1,
+                                step: this.orders[i].step[1].step
+                            };
+                            this.stepdata[this.orders[i]._id] = tempp;
+                        }
+                        if (this.orders[i].step.length == 1) {
+                            var tempp = {
+                                tab: 0,
+                                step: this.orders[i].step[0].step
+                            };
+                            this.stepdata[this.orders[i]._id] = tempp;
+                        }
                     }
                 }
             }

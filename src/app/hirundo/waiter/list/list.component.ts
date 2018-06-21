@@ -226,33 +226,78 @@ export class ListComponent implements DoCheck {
                         }
                         itemStatusDelivered[this.orders[i].step[k].step] = startTemp.every(this.isEqualToOne);
                         call[this.orders[i].step[k].step] = true;                        
-                        if (startTemp.every(this.isEqualToOne)) {
-                            let temparray = this.orders[i].step[k].step.split(' ');
-                            let num = Number(temparray[1]);
-                            let stepTemp = temparray[0] + ' ' + ++num;
-                            let temp = {
-                                tab: Number(temparray[1]),
-                                step: stepTemp,
-                            }
-                            this.stepdata[this.orders[i]._id] = temp;
-                        } else {
-                            let tempp = {
-                                tab: 0,
-                                step: ''
-                            }
-                            if(this.orders[i].step.length>1){
-                                tempp.tab = 1;
-                                tempp.step = this.orders[i].step[1].step;
-                            }
-                            else{
-                                tempp.tab = 0;
-                                tempp.step = this.orders[i].step[0].step;
-                            }
-                            this.stepdata[this.orders[i]._id] = tempp;
-                        }
+                        // if (startTemp.every(this.isEqualToOne)) {
+                        //     let temparray = this.orders[i].step[k].step.split(' ');
+                        //     let num = Number(temparray[1]);
+                        //     let stepTemp = temparray[0] + ' ' + ++num;
+                        //     let temp = {
+                        //         tab: Number(temparray[1]),
+                        //         step: stepTemp,
+                        //     }
+                        //     this.stepdata[this.orders[i]._id] = temp;
+                        // } else {
+                        //     let tempp = {
+                        //         tab: 0,
+                        //         step: ''
+                        //     }
+                        //     if(this.orders[i].step.length>1){
+                        //         tempp.tab = 1;
+                        //         tempp.step = this.orders[i].step[1].step;
+                        //     }
+                        //     else{
+                        //         tempp.tab = 0;
+                        //         tempp.step = this.orders[i].step[0].step;
+                        //     }
+                        //     this.stepdata[this.orders[i]._id] = tempp;
+                        // }
                     }
                     this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered; 
-                    this.showToCall[this.orders[i]._id] = call;                    
+                    this.showToCall[this.orders[i]._id] = call;  
+                    console.log('this.itemStatusDelivered',this.itemStatusDelivered);
+                    if(this.orders[i].step.length>2){
+                        for (let m = 0; m < this.orders[i].step.length; m++) {
+                            if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
+                                console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]',this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]);
+                                if(this.orders[i].step[m].step != 'Uscita 1'){
+                                    let temparray = this.orders[i].step[m].step.split(' ');
+                                    console.log('temparray',temparray);
+                                    let num = Number(temparray[1]);
+                                    let temp = {
+                                        tab: num - 1,
+                                        step: this.orders[i].step[m].step,
+                                    }
+                                    console.log('temp',temp);
+                                    this.stepdata[this.orders[i]._id] = temp;
+                                    console.log('this.stepdata',this.stepdata);
+                                    break;
+                                }
+                                else{
+                                    let temp = {
+                                        tab: 1,
+                                        step: this.orders[i].step[1].step,
+                                    }
+                                    console.log('temp',temp);
+                                    this.stepdata[this.orders[i]._id] = temp;
+                                    console.log('this.stepdata',this.stepdata);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if(this.orders[i].step.length == 2){
+                        let tempp = {
+                            tab: 1,
+                            step: this.orders[i].step[1].step
+                        }
+                        this.stepdata[this.orders[i]._id] = tempp;
+                    }
+                    if(this.orders[i].step.length == 1){
+                        let tempp = {
+                            tab: 0,
+                            step: this.orders[i].step[0].step
+                        }
+                        this.stepdata[this.orders[i]._id] = tempp;
+                    }               
                 }
             }
             this.loadingOrders = false;
@@ -334,33 +379,77 @@ export class ListComponent implements DoCheck {
                             }
                             itemStatusDelivered[this.orders[i].step[k].step] = startTemp.every(this.isEqualToOne);
                             call[this.orders[i].step[k].step] = true;                                                    
-                            if (startTemp.every(this.isEqualToOne)) {
-                                let temparray = this.orders[i].step[k].step.split(' ');
-                                let num = Number(temparray[1]);
-                                let stepTemp = temparray[0] + ' ' + ++num;
-                                let temp = {
-                                    tab: Number(temparray[1]),
-                                    step: stepTemp,
-                                }
-                                this.stepdata[this.orders[i]._id] = temp;
-                            } else {
-                                let tempp = {
-                                    tab: 0,
-                                    step: ''
-                                }
-                                if(this.orders[i].step.length>1){
-                                    tempp.tab = 1;
-                                    tempp.step = this.orders[i].step[1].step;
-                                }
-                                else{
-                                    tempp.tab = 0;
-                                    tempp.step = this.orders[i].step[0].step;
-                                }
-                                this.stepdata[this.orders[i]._id] = tempp;
-                            }
+                            // if (startTemp.every(this.isEqualToOne)) {
+                            //     let temparray = this.orders[i].step[k].step.split(' ');
+                            //     let num = Number(temparray[1]);
+                            //     let stepTemp = temparray[0] + ' ' + ++num;
+                            //     let temp = {
+                            //         tab: Number(temparray[1]),
+                            //         step: stepTemp,
+                            //     }
+                            //     this.stepdata[this.orders[i]._id] = temp;
+                            // } else {
+                            //     let tempp = {
+                            //         tab: 0,
+                            //         step: ''
+                            //     }
+                            //     if(this.orders[i].step.length>1){
+                            //         tempp.tab = 1;
+                            //         tempp.step = this.orders[i].step[1].step;
+                            //     }
+                            //     else{
+                            //         tempp.tab = 0;
+                            //         tempp.step = this.orders[i].step[0].step;
+                            //     }
+                            //     this.stepdata[this.orders[i]._id] = tempp;
+                            // }
                         }
                         this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered; 
-                        this.showToCall[this.orders[i]._id] = call;                                            
+                        this.showToCall[this.orders[i]._id] = call;  
+                        if(this.orders[i].step.length>2){
+                            for (let m = 0; m < this.orders[i].step.length; m++) {
+                                if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
+                                    console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]',this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]);
+                                    if(this.orders[i].step[m].step != 'Uscita 1'){
+                                        let temparray = this.orders[i].step[m].step.split(' ');
+                                        console.log('temparray',temparray);
+                                        let num = Number(temparray[1]);
+                                        let temp = {
+                                            tab: num - 1,
+                                            step: this.orders[i].step[m].step,
+                                        }
+                                        console.log('temp',temp);
+                                        this.stepdata[this.orders[i]._id] = temp;
+                                        console.log('this.stepdata',this.stepdata);
+                                        break;
+                                    }
+                                    else{
+                                        let temp = {
+                                            tab: 1,
+                                            step: this.orders[i].step[1].step,
+                                        }
+                                        console.log('temp',temp);
+                                        this.stepdata[this.orders[i]._id] = temp;
+                                        console.log('this.stepdata',this.stepdata);
+                                        break;
+                                    } 
+                                }
+                            }
+                        }
+                        if(this.orders[i].step.length == 2){
+                            let tempp = {
+                                tab: 1,
+                                step: this.orders[i].step[1].step
+                            }
+                            this.stepdata[this.orders[i]._id] = tempp;
+                        }
+                        if(this.orders[i].step.length == 1){
+                            let tempp = {
+                                tab: 0,
+                                step: this.orders[i].step[0].step
+                            }
+                            this.stepdata[this.orders[i]._id] = tempp;
+                        }                                          
                     }
                 }
             }
