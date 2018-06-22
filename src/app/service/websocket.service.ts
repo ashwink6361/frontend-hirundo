@@ -121,6 +121,28 @@ export class WebsocketService {
                 }
             }
         });
+        this.socket.on('itemDeletedW', (data) => {
+            console.log('itemDeletedW', data);
+            let userType = this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                for (var i = 0; i < this._orders.length; i++) {
+                    if (data._id === this._orders[i]._id) {
+                        this._orders[i] = data;
+                    }
+                }
+            }
+        });
+        this.socket.on('itemUpdatedW', (data) => {
+            console.log('itemUpdatedW', data);
+            let userType = this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                for (var i = 0; i < this._orders.length; i++) {
+                    if (data._id === this._orders[i]._id) {
+                        this._orders[i] = data;
+                    }
+                }
+            }
+        });
         this.socket.on('itemUpdated', (data) => {
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
@@ -128,7 +150,6 @@ export class WebsocketService {
                 }
             }
         });
-
         this.socket.on('checkouttable', (data) => {
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 3) {

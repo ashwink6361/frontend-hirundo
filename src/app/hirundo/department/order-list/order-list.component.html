@@ -50,7 +50,10 @@
                                         </ul>
                                     </div>
                                     <div class="order-quantity d-flex w-105">
-                                        <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 2)">
+                                        <button type="button" class="btn btn-floting update-order-btn" *ngIf="(step.step == 'Uscita 1')" (click)="updateItem(item, order._id, 2)">
+                                            <img src="assets/images/order-deliver.png" alt="" />
+                                        </button>
+                                        <button type="button" class="btn btn-floting update-order-btn" *ngIf="(step.step != 'Uscita 1') && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step] && stepdata[order._id] && (order.stepStatus == step.step)" (click)="updateItem(item, order._id, 2)">
                                             <img src="assets/images/order-deliver.png" alt="" />
                                         </button>
                                     </div>
@@ -76,12 +79,35 @@
                                 </span>
                             </div>
                             <button type="submit" *ngIf="stepdata[order._id] && (step.step == 'Uscita 1') && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]"
-                                (click)="updateStepItem(step, order)">Delivered</button>
+                            (click)="updateStepItem(step, order)">Delivered</button>
                             <button type="submit" *ngIf="(step.step != 'Uscita 1') && stepdata[order._id] && (order.stepStatus == step.step) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]"
-                                (click)="updateStepItem(step, order)">Delivered</button>
+                            (click)="updateStepItem(step, order)">Delivered</button>
                             <button class="bg-yellow" *ngIf="(step.step != 'Uscita 1') && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step] && stepdata[order._id] && (order.stepStatus != step.step)"
                                 type="submit" [disabled]="true">To Call</button>
                         </div>
+
+                        <!-- Modal -->
+
+                        <div class="modal fade modal-sm" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="exampleModalLabel">Confirm Deliver</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="updateStepItem(step, order)">Confirm</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

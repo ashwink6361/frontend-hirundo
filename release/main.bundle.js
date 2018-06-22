@@ -912,6 +912,28 @@ var WebsocketService = /** @class */ (function () {
                 }
             }
         });
+        this.socket.on('itemDeletedW', function (data) {
+            console.log('itemDeletedW', data);
+            var userType = _this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                for (var i = 0; i < _this._orders.length; i++) {
+                    if (data._id === _this._orders[i]._id) {
+                        _this._orders[i] = data;
+                    }
+                }
+            }
+        });
+        this.socket.on('itemUpdatedW', function (data) {
+            console.log('itemUpdatedW', data);
+            var userType = _this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                for (var i = 0; i < _this._orders.length; i++) {
+                    if (data._id === _this._orders[i]._id) {
+                        _this._orders[i] = data;
+                    }
+                }
+            }
+        });
         this.socket.on('itemUpdated', function (data) {
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id === _this._orders[i]._id) {
