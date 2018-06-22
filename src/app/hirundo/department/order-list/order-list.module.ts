@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule,NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrderListComponent } from './order-list.component';
 import { OrderListRouting } from './order-list.routes';
@@ -11,6 +11,7 @@ import { OrderByPipe } from '../../orderby';
     OrderListRouting
   ],
   declarations: [OrderListComponent, OrderByPipe],
+  schemas: [ NO_ERRORS_SCHEMA ],
   providers: [
     WebsocketService,
     OrderListService

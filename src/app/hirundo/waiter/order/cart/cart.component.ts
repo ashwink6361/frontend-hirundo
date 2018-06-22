@@ -30,36 +30,33 @@ export class CartComponent implements OnInit {
   public nonVariantData: boolean = false;  
   public orderItemsTotalPrice = 0;
   public orderItemsTotalItem = 0;         
-           
   constructor(private orderService: OrderService, private router: Router, private globalService: GlobalService) { }
 
   ngOnInit() {
-    if (localStorage.getItem('orderId')) {
-      this.orderId = JSON.parse(localStorage.getItem('orderId'));
-      this.orderItems = JSON.parse(localStorage.getItem('orderItems'));
-      this.tableData = JSON.parse(localStorage.getItem('tabledata'));
+    this.tableData = JSON.parse(localStorage.getItem('tabledata'));
+    if (this.tableData.orderId.length) {
       var cp = 0;
       var itemno = 0;
       var varicost = 0;
       this.orderItemsTotalPrice = 0;
       this.orderItemsTotalItem = 0;
-      if (this.orderItems.length) {
-        for (var i = 0; i < this.orderItems.length; i++) {
+      for (var k = 0; k < this.tableData.orderId.length; k++) {
+        for (var i = 0; i < this.tableData.orderId[k].item.length; i++) {
           varicost = 0;
-          itemno += this.orderItems[i].quantity;
-          if (this.orderItems[i].variant) {
-            for (var j = 0; j < this.orderItems[i].variant.length; j++) {
-              if (this.orderItems[i].variant[j].status == 1) {
-                varicost += this.orderItems[i].variant[j].price;
+          itemno += this.tableData.orderId[k].item[i].quantity;
+          if (this.tableData.orderId[k].item[i].variant) {
+            for (var j = 0; j < this.tableData.orderId[k].item[i].variant.length; j++) {
+              if (this.tableData.orderId[k].item[i].variant[j].status == 1) {
+                varicost += this.tableData.orderId[k].item[i].variant[j].price;
               }
             }
           }
-          cp += (this.orderItems[i].price + varicost) * this.orderItems[i].quantity;
-          this.orderItemsTotalPrice = cp + this.tableData.orderId.noOfPeople + (0.5 * this.tableData.orderId.noOfPeople);
+          cp += (this.tableData.orderId[k].item[i].price + varicost) * this.tableData.orderId[k].item[i].quantity;
+          this.orderItemsTotalPrice = cp + this.tableData.orderId[0].noOfPeople + (0.5 * this.tableData.orderId[0].noOfPeople);
           this.orderItemsTotalItem = itemno;
         }
       }
-    }
+    }      
   }
 
   createOrder() {
@@ -110,24 +107,13 @@ export class CartComponent implements OnInit {
       noOfPeople: data.noOfPeople,
       item: itemarray
     }
-    if (this.orderId) {
-      this.orderService.updateOrder(itemarray, this.orderId)
-        .then(data => {
-          this.router.navigate(['/waiter/list']);
-          this.orderService.showElement = false;
-        })
-        .catch(error => {
-        });
-    }
-    else {
-      this.orderService.createOrder(createorder)
-        .then(data => {
-          this.router.navigate(['/waiter/list']);
-          this.orderService.showElement = false;
-        })
-        .catch(error => {
-        });
-    }
+    this.orderService.createOrder(createorder)
+      .then(data => {
+        this.router.navigate(['/waiter/list']);
+        this.orderService.showElement = false;
+      })
+      .catch(error => {
+      });
   }
 
   deleteItemFromCart(article) {

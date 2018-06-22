@@ -1,98 +1,116 @@
 <div class="text-center" *ngIf="!(orders && orders.length)">No Order Found.</div>
 <div *ngIf="orders && orders.length" class="order-list-container container-fluid">
     <div class="row">
-        <div class="col-sm-6 col-md-3"  *ngFor="let order of orders">
-
+        <div class="col-sm-6 col-md-3" *ngFor="let order of orders">
             <div class="card order-list">
-        <div class="card-body" [class.opacity]="order.status == 3">
-            <h4 class="card-title">
-                <div>
-                        <img src="assets/images/table.png" alt="">
-                        <span>{{order.tableName}}</span>
+                <div class="card-body" [class.opacity]="order.status == 3">
+                    <h4 class="card-title">
+                        <div>
+                            <img src="assets/images/table.png" alt="">
+                            <span>{{order.tableName}}/
+                                <span class="order-number">N.{{order.orderId}}</span>
+                            </span>
+                        </div>
+                        <!-- <div class="status" [class.bg-red]="order.status == 0" [class.bg-green]="order.status == 2" [class.bg-yellow]="order.status == 4">{{getOrderStatus(order.status)}}</div> -->
+                    </h4>
+                    <div class="card-text">
+                        <p>
+                            <i class="fas fa-cube"></i> {{order.room.name}}</p>
+                        <p>
+                            <i class="far fa-clock"></i> {{order.created_at | date:'hh:mm a'}}</p>
+                        <p>
+                            <i class="far fa-user"></i> {{order.noOfPeople}}</p>
                     </div>
-                <div class="status" [class.bg-red]="order.status == 0" [class.bg-green]="order.status == 2" [class.bg-yellow]="order.status == 4">{{getOrderStatus(order.status)}}</div>
-            </h4>
-            <div class="card-text">
-                <p>
-                    <i class="fas fa-cube"></i> {{order.room.name}}</p>
-                <p>
-                        <i class="far fa-clock"></i> {{order.created_at | date:'hh:mm a'}}
-                    
-                </p>
-                <p>
-                    <i class="far fa-user"></i> {{order.noOfPeople}}</p>
-            </div>
-            <div class="step-listing">
-                <ul *ngIf="stepdata[order._id]">
-                    <li *ngFor="let step of order.step; let i = index;" (click)="selectedTab(step.step,i,order._id)" [class.active]="step.step == stepdata[order._id].step" [class.completed]="step.status == 1">{{step.step}}</li>
-                </ul>
-            </div>
-            <div class="order-items-container">
-                <div *ngFor="let item of order.item">
-                    <div *ngIf="((item.department.indexOf(authGuard.getCurrentUser()._id)) > -1) || ((authGuard.getCurrentUser().category.indexOf(item.category)) > -1)">
-                        <div class="order-item" *ngIf="stepdata[order._id] && item.step == stepdata[order._id].step">
-                            <label class="label item-status">{{getOrderStatus(item.status)}}</label>
-                            <div class="order-item-img">
-                                {{item.quantity}} X
-                            </div>
-                            <div class="order-item-detail">
-                                {{item.id.name}}
-                                <ul>
-                                    <li *ngFor="let varient of item.variant">
-                                        <i *ngIf="varient.status == 1">+</i>
-                                        <i *ngIf="varient.status == 0">-</i> {{varient.name}}
-                                    </li>
-                                </ul>
-                                <ul>
-                                    <li>
-                                        {{item.notes}}
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="order-quantity d-flex w-105">
-                                <button type="button" class="btn btn-floting update-order-btn" (click)="updateItem(item, order._id, 2)">
-                                    <img src="assets/images/order-deliver.png" alt="" />
-                                </button>
+                    <div class="step-listing">
+                        <ul *ngIf="stepdata[order._id]">
+                            <li *ngFor="let step of order.step; let i = index;" (click)="selectedTab(step.step,i,order._id)" [class.active]="step.step == stepdata[order._id].step"
+                                [class.completed]="itemStatusDelivered[order._id] && itemStatusDelivered[order._id][step.step]">{{step.step}}</li>
+                        </ul>
+                    </div>
+                    <div class="order-items-container">
+                        <div *ngFor="let step of order.step; let i= index">
+                            <div *ngFor="let item of step.itemId">
+                                <div class="order-item" *ngIf="stepdata[order._id] && item.step == stepdata[order._id].step">
+                                    <!-- <label class="label item-status">{{getOrderStatus(item.status)}}</label> -->
+                                    <div class="order-item-img">
+                                        {{item.quantity}} X
+                                    </div>
+                                    <div class="order-item-detail">
+                                        {{item.id.name}}
+                                        <ul>
+                                            <li *ngFor="let varient of item.variant">
+                                                <i *ngIf="varient.status == 1">+</i>
+                                                <i *ngIf="varient.status == 0">-</i> {{varient.name}}
+                                            </li>
+                                        </ul>
+                                        <ul>
+                                            <li>
+                                                {{item.notes}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="order-quantity d-flex w-105">
+                                        <button type="button" class="btn btn-floting update-order-btn" *ngIf="(step.step == 'Uscita 1')" (click)="updateItem(item, order._id, 2)">
+                                            <img src="assets/images/order-deliver.png" alt="" />
+                                        </button>
+                                        <button type="button" class="btn btn-floting update-order-btn" *ngIf="(step.step != 'Uscita 1') && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step] && stepdata[order._id] && (order.stepStatus == step.step)" (click)="updateItem(item, order._id, 2)">
+                                            <img src="assets/images/order-deliver.png" alt="" />
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="order-call-btn" *ngIf="order.step.length">
-            <div *ngFor="let step of order.step; let indx = index;">
-                <!-- <div *ngIf="stepdata[order._id].step == step.step">
-                    <button type="submit" *ngIf="stepdata[order._id] && (order.stepStatus == stepdata[order._id].step) && (step.status != 4) && (step.status != 5) && (step.status != 1)" (click)="updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 4)">Start ({{times[order._id][stepdata[order._id].step]}}:00)</button>                    
-                    <button type="submit" *ngIf="step.status == 0 && (step.step == 'Uscita 1')" (click)="updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 4)">Start ({{times[order._id][stepdata[order._id].step]}}:00)</button>
-                    <div class="running-label" *ngIf="stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 4)"  (click)="updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 5)"><span class="running">Running {{remainingTime[order._id][stepdata[order._id].step]}}</span></div>
-                    <button *ngIf="stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 5)" type="submit" (click)="updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 1)">Completed</button>
-                    <div *ngIf="stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 4)" id="{{step.step.replace(' ','')+order._id+indx}}" [ngStyle]="{'width': barWidth[step.step.replace(' ','')+order._id+indx]}" class="progress-btn"  (click)="updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 5)"></div>
-                    <button class="bg-yellow" *ngIf="stepdata[order._id] && (step.step != 'Uscita 1') && (step.status == 0) && (order.stepStatus != stepdata[order._id].step)" type="submit" [disabled]="true">To Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>
-                </div> -->
-                <div *ngIf="stepdata[order._id].step == step.step">
-                    <button type="submit" *ngIf="stepdata[order._id] && (order.stepStatus == stepdata[order._id].step) && itemStatus[order._id] && itemStatus[order._id][stepdata[order._id].step]" (click)="updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 4)">Start ({{times[order._id][stepdata[order._id].step]}}:00)</button>                    
-                    <button type="submit" *ngIf="itemStatus[order._id] && itemStatus[order._id][stepdata[order._id].step] && (step.step == 'Uscita 1')" (click)="updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 4)">Start ({{times[order._id][stepdata[order._id].step]}}:00)</button>
-                    <div class="running-label" *ngIf="stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 4) && itemStatus[order._id] && !itemStatus[order._id][stepdata[order._id].step]"  (click)="updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 5)"><span class="running">Running {{remainingTime[order._id][stepdata[order._id].step]}}</span></div>
-                    <button *ngIf="stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 5) && itemStatus[order._id] && !itemStatus[order._id][stepdata[order._id].step]" type="submit" (click)="updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 1)">Completed</button>
-                    <div *ngIf="stepdata[order._id] && (step.step == stepdata[order._id].step) && (step.status == 4) && itemStatus[order._id] && !itemStatus[order._id][stepdata[order._id].step]" id="{{step.step.replace(' ','')+order._id+indx}}" [ngStyle]="{'width': barWidth[step.step.replace(' ','')+order._id+indx]}" class="progress-btn"  (click)="updateStepItem(step,indx, order, times[order._id][stepdata[order._id].step], 5)"></div>
-                    <button class="bg-yellow" *ngIf="stepdata[order._id] && (step.step != 'Uscita 1') && (step.status == 0) && (order.stepStatus != stepdata[order._id].step)" type="submit" [disabled]="true">To Call ({{times[order._id][stepdata[order._id].step]}}:00)</button>
-                </div>
-                <!-- new code -->
-                <!-- <div *ngIf="stepdata[order._id].step == step.step">
-                        <span (click)="updateStepItem(step, indx, order, 4)">
-                            <i class="fas fa-check-circle"></i>
-                        </span>
-                        <div *ngFor="let department of step.department">
-                            <button class="bg-grey" *ngIf="department.status == 0" [disabled]="true">{{getFirstChar(department.id.firstName)}}</button>
-                            <button class="bg-green" *ngIf="department.status == 1" [disabled]="true">{{getFirstChar(department.id.firstName)}}</button>                    
+                <div class="order-call-btn" *ngIf="order.step.length">
+                    <div *ngFor="let step of order.step">
+                        <div *ngIf="stepdata[order._id].step == step.step">
+                            <div class="department-checkbtn-container">
+                                <span *ngFor="let department of step.department">
+                                    <span class="department-checkbtn" *ngIf="(step.step == 'Uscita 1') && (authGuard.getCurrentUser()._id == department.id._id) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]"
+                                        [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1" (click)="updateDepartmentStatus(department,order,step.step)">
+                                        <i class="fas fa-check-circle"></i>
+                                    </span>
+                                    <span class="department-checkbtn" *ngIf="(step.step != 'Uscita 1') && stepdata[order._id] && (order.stepStatus == step.step) && (authGuard.getCurrentUserId() == department.id._id) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]"
+                                        [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1" (click)="updateDepartmentStatus(department,order,step.step)">
+                                        <i class="fas fa-check-circle"></i>
+                                    </span>
+                                    <span class="department-name" [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1">{{getFirstChar(department.id.firstName)}}</span>
+                                </span>
+                            </div>
+                            <button type="submit" *ngIf="stepdata[order._id] && (step.step == 'Uscita 1') && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]"
+                            (click)="updateStepItem(step, order)">Delivered</button>
+                            <button type="submit" *ngIf="(step.step != 'Uscita 1') && stepdata[order._id] && (order.stepStatus == step.step) && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]"
+                            (click)="updateStepItem(step, order)">Delivered</button>
+                            <button class="bg-yellow" *ngIf="(step.step != 'Uscita 1') && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step] && stepdata[order._id] && (order.stepStatus != step.step)"
+                                type="submit" [disabled]="true">To Call</button>
                         </div>
-                        <button type="submit" *ngIf="stepdata[order._id] && (order.stepStatus == stepdata[order._id].step)" (click)="updateStepItem(step, indx, order, 1)">Delivered</button>                                        
-                        <button type="submit" *ngIf="stepdata[order._id] && (step.step == 'Uscita 1')"  (click)="updateStepItem(step,indx, order, 1)">Delivered</button>
-                        <button class="bg-yellow" *ngIf="stepdata[order._id] && (step.step != 'Uscita 1') && itemStatus[order._id] && itemStatus[order._id][stepdata[order._id].step] && (order.stepStatus != stepdata[order._id].step)" type="submit" [disabled]="true">To Call</button>
-                    </div> -->
+
+                        <!-- Modal -->
+
+                        <div class="modal fade modal-sm" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="exampleModalLabel">Confirm Deliver</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="updateStepItem(step, order)">Confirm</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-</div>
 </div>

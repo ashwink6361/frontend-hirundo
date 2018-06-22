@@ -34,44 +34,24 @@ export class DashboardComponent implements OnInit {
   createOrder(table) {
     localStorage.setItem('tabledata', JSON.stringify(table));
     let room = JSON.parse(localStorage.getItem('roomdata'));
-    if (table.orderId != null && table.orderId._id) {
-      localStorage.setItem('orderId', JSON.stringify(table.orderId._id));
-      localStorage.setItem('orderItems', JSON.stringify(table.orderId.item));
-      for (var i = 0; i < table.orderId.step.length; i++) {
-        this.stepArray.push(table.orderId.step[i].step);
-      }
-      if (this.stepArray.length) {
-        this.globalService.setStepData(this.stepArray);
-      }
-      console.log(this.globalService.getStepData());
+    if (table.orderId.length) {
       var steps = [];
       let selectedItems = {};
-      if (this.globalService.getStepData()) {
-        steps = this.globalService.getStepData();
-      }
-      else {
-        steps = ['Uscita 1', 'Uscita 2'];
-      }
+      steps = ['Uscita 1', 'Uscita 2'];
       for (let j = 0; j < steps.length; j++) {
         selectedItems[steps[j]] = [];
       }
       let data = {
-        roomId: table.orderId.room,
-        tableId: table.orderId.table,
-        noOfPeople: table.orderId.noOfPeople,
+        roomId: table.orderId[0].room,
+        tableId: table.orderId[0].table,
+        noOfPeople: table.orderId[0].noOfPeople,
         selectedItems: selectedItems,
         cartTotalPrice: 0,
         cartTotalItem: 0
       }
       this.orderService.setOrderData(data);
     }
-    else {
-      localStorage.removeItem('orderId');
-      localStorage.removeItem('orderItems');
-    }
-    console.log(this.orderService.getOrderData());
-    
-    if (table.status == 1) {
+    if (table.orderId.length) {
       this.orderService.showElement = false;
       if(this.orderService.getOrderData() && this.orderService.getOrderData().selectedItems){
         this.router.navigate(['/waiter/order/:id/cart']);

@@ -1,360 +1,3 @@
-// import { Injectable } from '@angular/core';
-// import * as io from 'socket.io-client';
-// import { Observable } from 'rxjs/Observable';
-// import { Http, Response } from '@angular/http';
-// import * as Rx from 'rxjs/Rx';
-// import 'rxjs/add/operator/toPromise';
-// import { AuthGuard } from '../shared/guard/auth.guard';
-// import *  as _ from 'lodash';
-// @Injectable()
-// export class WebsocketService {
-//     // Our socket connection
-//     private socket;
-//     private socketUrl;
-//     public _orders: Array<any> = [];
-//     public _rooms: Array<any> = [];
-//     constructor(private http: Http, private authGuard: AuthGuard) {
-//         let url = '/server/env';
-//         this.http.get(url).toPromise()
-//             .then(data => {
-//                 this.socketUrl = data.json().socketUrl;
-//                 this.connect();
-//             })
-//             .catch(error => {
-//                 console.log('connection scoket url not available')
-//             });
-//     }
-//     connect() {
-//         // If you aren't familiar with environment variables then
-//         // you can hard code `environment.ws_url` as `http://localhost:5000`
-//         // this.socket = io('http://localhost:5051');
-//         this.socket = io(this.socketUrl);
-//         if (this.socket.connected)
-//             console.log("Socket connection done ");
-//         let user = JSON.parse(localStorage.getItem('currentUser'));
-//         this.socket.on('neworder', (data) => {
-//             let userType = this.authGuard.getCurrentUser().userType;
-//             if (userType == 3) {
-//                 this._orders.push(data);
-//             }
-//             else if (userType == 4) {
-//                 let steps = [];
-//                 let sts = [];
-//                 let isItemExist = false;
-//                 for (let j = 0; j < data.item.length; j++) {
-//                     if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
-//                         isItemExist = true;
-//                         if (sts.indexOf(data.item[j].step) < 0) {
-//                             sts.push(data.item[j].step);
-//                             steps.push({
-//                                 itemId: [],
-//                                 step: data.item[j].step,
-//                                 status: 0
-//                             });
-//                         }
-//                     }
-//                 }
-//                 if (isItemExist) {
-//                     data.step = steps;
-//                     this._orders.push(data);
-//                 }
-//             }
-//         });
-//         this.socket.on('orderstatus', (data) => {
-//             for (var i = 0; i < this._orders.length; i++) {
-//                 if (data.id === this._orders[i]._id) {
-//                     var temp = _.cloneDeep(this._orders[i]);
-//                     let userType = this.authGuard.getCurrentUser().userType;
-//                     if (userType == 3) {
-//                         temp.step = data.step;
-//                     }
-//                     else if (userType == 4) {
-//                         let steps = [];
-//                         let sts = [];
-//                         if (temp && temp.item) {
-//                             for (let j = 0; j < temp.item.length; j++) {
-//                                 for (let k = 0; k < data.step.length; k++) {
-//                                     if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
-//                                         if (temp.item[j].step == data.step[k].step) {
-//                                             if (sts.indexOf(data.step[k].step) < 0) {
-//                                                 sts.push(data.step[k].step);
-//                                                 steps.push(data.step[k]);
-//                                             }
-//                                         }
-//                                     }
-//                                 }
-//                             }
-//                         }
-//                         temp.step = steps;
-//                     }
-//                     temp.stepStatus = data.stepStatus;
-//                     temp.status = data.status;
-//                     if (temp && temp.item) {
-//                         for (var j = 0; j < temp.item.length; j++) {
-//                             if (data.order.itemId === temp.item[j].id._id && data.order.step === temp.item[j].step) {
-//                                 temp.item[j].status = data.order.status;
-//                             }
-
-//                         }
-//                     }
-//                     let stepStatus = [];
-//                     for (let k in temp.step) {
-//                         if (temp.step[k].status == 1) {
-//                             stepStatus.push(temp.step[k].status);
-//                         }
-//                     }
-//                     this._orders[i] = _.cloneDeep(temp);
-//                     if (stepStatus.length == temp.step.length) {
-//                         this._orders.splice(i, 1);
-//                     }
-//                 }
-//             }
-//         });
-//         this.socket.on('tablestatus', (data) => {
-//             for (var i = 0; i < this._rooms.length; i++) {
-//                 if (data.room == this._rooms[i]._id) {
-//                     for (var j = 0; j < this._rooms[i].tables.length; j++) {
-//                         if (data.table == this._rooms[i].tables[j]._id) {
-//                             this._rooms[i].tables[j].status = data.status;
-//                             break;
-//                         }
-//                     }
-//                 }
-//             }
-//         });
-//         this.socket.on('changeStep', (data) => {
-//             for (var i = 0; i < this._orders.length; i++) {
-//                 if (data._id === this._orders[i]._id) {
-//                     this._orders[i].stepStatus = data.stepStatus;
-//                 }
-//             }
-//         });
-//         this.socket.on('itemDeleted', (data) => {
-//             for (var i = 0; i < this._orders.length; i++) {
-//                 if (data._id === this._orders[i]._id) {
-//                     this._orders[i] = data;
-//                 }
-//             }
-//         });
-//         this.socket.on('itemUpdated', (data) => {
-//             for (var i = 0; i < this._orders.length; i++) {
-//                 if (data._id === this._orders[i]._id) {
-//                     this._orders[i] = data;
-//                 }
-//             }
-//         });
-//         this.socket.on('newItem', (data) => {
-//             var tempArray = [];
-//             for (var i = 0; i < this._orders.length; i++) {
-//                 if (data._id === this._orders[i]._id) {
-//                     tempArray.push(this._orders[i]._id);
-//                     var temp = _.cloneDeep(this._orders[i]);
-//                     let userType = this.authGuard.getCurrentUser().userType;
-//                     if (userType == 3) {
-//                         temp.step = data.step;
-//                         temp.item = data.item;
-//                     }
-//                     else if (userType == 4) {
-//                         let steps = [];
-//                         let sts = [];
-//                         if (temp && temp.item) {
-//                             for (let j = 0; j < temp.item.length; j++) {
-//                                 for (let k = 0; k < data.step.length; k++) {
-//                                     if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
-//                                         if (temp.item[j].step == data.step[k].step) {
-//                                             if (sts.indexOf(data.step[k].step) < 0) {
-//                                                 sts.push(data.step[k].step);
-//                                                 steps.push(data.step[k]);
-//                                             }
-//                                         }
-//                                     }
-//                                 }
-//                             }
-//                         }
-//                         temp.step = steps;
-//                         let itemsTemp = [];
-//                         if (data && data.item) {
-//                             for (let j = 0; j < data.item.length; j++) {
-//                                     if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
-//                                         itemsTemp.push(data.item[j]);
-//                                     }
-//                             }
-//                         }
-//                         temp.item = itemsTemp;
-//                     }
-//                     temp.stepStatus = data.stepStatus;
-//                     temp.status = data.status;
-
-//                     let stepStatus = [];
-//                     for (let k in temp.step) {
-//                         if (temp.step[k].status == 1) {
-//                             stepStatus.push(temp.step[k].status);
-//                         }
-//                     }
-//                     this._orders[i] = _.cloneDeep(temp);
-//                     if (stepStatus.length == temp.step.length) {
-//                         this._orders.splice(i, 1);
-//                     }
-//                 }
-
-//             }
-//             if (tempArray.indexOf(data._id) < 0) {
-//                 this._orders.push(data);
-//                 for (var i = 0; i < this._orders.length; i++) {
-//                     if (data._id === this._orders[i]._id) {
-//                         var temp = _.cloneDeep(this._orders[i]);
-//                         let userType = this.authGuard.getCurrentUser().userType;
-//                         if (userType == 3) {
-//                             temp.step = data.step;
-//                         }
-//                         else if (userType == 4) {
-//                             let steps = [];
-//                             let sts = [];
-//                             if (temp && temp.item) {
-//                                 for (let j = 0; j < temp.item.length; j++) {
-//                                     for (let k = 0; k < data.step.length; k++) {
-//                                         if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
-//                                             if (temp.item[j].step == data.step[k].step) {
-//                                                 if (sts.indexOf(data.step[k].step) < 0) {
-//                                                     sts.push(data.step[k].step);
-//                                                     steps.push(data.step[k]);
-//                                                 }
-//                                             }
-//                                         }
-//                                     }
-//                                 }
-//                             }
-//                             temp.step = steps;
-//                         }
-//                         temp.stepStatus = data.stepStatus;
-//                         temp.status = data.status;
-//                         let stepStatus = [];
-//                         for (let k in temp.step) {
-//                             if (temp.step[k].status == 1) {
-//                                 stepStatus.push(temp.step[k].status);
-//                             }
-//                         }
-//                         this._orders[i] = _.cloneDeep(temp);
-//                         if (stepStatus.length == temp.step.length) {
-//                             this._orders.splice(i, 1);
-//                         }
-//                     }
-//                 }
-//             }
-//         });
-//     }
-
-//     public getOrders(): Promise<any> {
-//         let url = '/api/department/orders';
-//         let opts = {
-//             category: this.authGuard.getCurrentUser().category
-//         }
-//         return this.http.post(url, opts).toPromise()
-//             .then(data => {
-//                 let res = data.json();
-//                 this._orders = res.data;
-//                 for (var i = 0; i < this._orders.length; i++) {
-//                     let stepStatus = [];
-//                     for (let k in this._orders[i].step) {
-//                         if (this._orders[i].step[k].status == 1) {
-//                             stepStatus.push(this._orders[i].step[k].status);
-//                         }
-//                     }
-//                     if (stepStatus.length == this._orders[i].step.length) {
-//                         this._orders.splice(i, 1);
-//                     }
-//                 }
-
-//                 return this._orders;
-//             })
-//             .catch(error => {
-//                 this._orders = [];
-//                 return error;
-//             });
-//     }
-//     public getWaiterOrders(): Promise<any> {
-//         let url = '/api/waiter/orders';
-//         return this.http.get(url).toPromise()
-//             .then(data => {
-//                 let res = data.json();
-//                 this._orders = res.data;
-//                 return this._orders;
-//             })
-//             .catch(error => {
-//                 this._orders = [];
-//                 return error;
-//             });
-//     }
-//     public getRooms(): Promise<any> {
-//         let url1 = '/api/rooms';
-//         return this.http.get(url1).toPromise()
-//             .then(data => {
-//                 let res = data.json();
-//                 this._rooms = res.data;
-//                 return this._rooms;
-//             })
-//             .catch(error => {
-//                 this._rooms = [];
-//                 return error;
-//             });
-//     }
-//     public updateOrder(id, opts): Promise<any> {
-//         let url = '/api/department/orders/' + id;
-//         return this.http.put(url, opts).toPromise()
-//             .then(data => {
-//                 let res = data.json();
-//                 for (var i = 0; i < this._orders.length; i++) {
-//                     if (res._id === this._orders[i]._id) {
-//                         let stepStatus = [];
-//                         for (let k in res.step) {
-//                             if (res.step[k].status == 1) {
-//                                 stepStatus.push(res.step[k].status);
-//                             }
-//                         }
-//                         if (stepStatus.length == res.step.length) {
-//                             this._orders.splice(i, 1);
-//                         }
-//                     }
-//                 }
-//                 return data.json();
-//             })
-//             .catch(error => {
-//                 return error;
-//             });
-//     }
-//     public updateDeliveredOrder(id, opts): Promise<any> {
-//         let url = '/api/orderStep/' + id;
-//         return this.http.put(url, opts).toPromise()
-//             .then(data => {
-//                 return data.json();
-//             })
-//             .catch(error => {
-//                 return error;
-//             });
-//     }
-//     public updateWaiterOrder(id, opts): Promise<any> {
-//         let url = '/api/waiter/orders/' + id;
-//         return this.http.put(url, opts).toPromise()
-//             .then(data => {
-//                 return data.json();
-//             })
-//             .catch(error => {
-//                 return error;
-//             });
-//     }
-//     public changeOrderStep(id, opts): Promise<any> {
-//         let url = '/api/orderStep/' + id;
-//         return this.http.put(url, opts).toPromise()
-//             .then(data => {
-//                 return data.json();
-//             })
-//             .catch(error => {
-//                 return error;
-//             });
-//     }
-// }
-
-
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { Observable } from 'rxjs/Observable';
@@ -386,118 +29,88 @@ export class WebsocketService {
         // you can hard code `environment.ws_url` as `http://localhost:5000`
         // this.socket = io('http://localhost:5051');
         this.socket = io(this.socketUrl);
-        if (this.socket.connected)
+        // this.socket = io(this.socketUrl, { 'transports': ['polling'] });
+        if (this.socket.connected){
             console.log("Socket connection done ");
+        }
         let user = JSON.parse(localStorage.getItem('currentUser'));
-        this.socket.on('neworder', (data) => {
+        if (user) {
+            this.socket.emit('connection');
+            this.socket.on('connected', (data) => {
+                if (data && this.socket.id == data.socketId) {
+                    this.socket.emit('userAuth', { userId: user._id });
+                    this.socket.on('authConnected', (data) => {
+                    });
+                }
+            });
+        };   
+
+        this.socket.on('neworderAdmin', (data) => {
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
-                this._orders.push(data);
+                this._orders.unshift(data);
             }
-            else if (userType == 4) {
-                let steps = [];
-                let sts = [];
-                let isItemExist = false;
-                for (let j = 0; j < data.item.length; j++) {
-                    if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
-                        isItemExist = true;
-                        if (sts.indexOf(data.item[j].step) < 0) {
-                            sts.push(data.item[j].step);
-                            steps.push({
-                                itemId: [],
-                                step: data.item[j].step,
-                                status: 0
-                            });
-                        }
-                    }
-                }
-                if (isItemExist) {
-                    data.step = steps;
-                    this._orders.push(data);
-                }
+        });     
+
+        this.socket.on('neworder', (data) => {
+            let userType = this.authGuard.getCurrentUser().userType;
+            if (userType == 4) {
+                this._orders.push(data);
             }
         });
         this.socket.on('orderstatus', (data) => {
-            console.log('data',data);
+            let userType = this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                for (var i = 0; i < this._orders.length; i++) {
+                    if (data._id == this._orders[i]._id) {
+                        this._orders[i] = _.cloneDeep(data);
+                        let itemsToSplice = [];
+                        if (data.item.length) {
+                            for (var k = 0; k < data.item.length; k++) {
+                                itemsToSplice.push(data.item[k].status);
+                            }
+                        }
+                        if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(this.isBelowThreshold)) {
+                            this._orders.splice(i, 1);
+                        }
+                    }
+                }
+            }
+        });
+        this.socket.on('orderstatusDept', (data) => {
             for (var i = 0; i < this._orders.length; i++) {
-                if (data.id === this._orders[i]._id) {
-                    var temp = _.cloneDeep(this._orders[i]);
-                    let userType = this.authGuard.getCurrentUser().userType;
-                    if (userType == 3) {
-                        temp.step = data.step;
-                        temp.item = data.orderData.item;
-                    }
-                    else if (userType == 4) {
-                        let steps = [];
-                        let sts = [];
-                        if (temp && temp.item) {
-                            for (let j = 0; j < temp.item.length; j++) {
-                                for (let k = 0; k < data.step.length; k++) {
-                                    if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
-                                        if (temp.item[j].step == data.step[k].step) {
-                                            if (sts.indexOf(data.step[k].step) < 0) {
-                                                sts.push(data.step[k].step);
-                                                steps.push(data.step[k]);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        temp.step = steps;
-                        let itemsTemp = [];
-                        if (data && data.orderData.item) {
-                            for (let j = 0; j < data.orderData.item.length; j++) {
-                                if (((data.orderData.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.orderData.item[j].category)) > -1)) {
-                                    itemsTemp.push(data.orderData.item[j]);
-                                }
-                            }
-                        }
-                        temp.item = itemsTemp;
-                    }
-                    temp.stepStatus = data.stepStatus;
-                    temp.status = data.status;
-                    // if (temp && temp.item) {
-                    //     for (var j = 0; j < temp.item.length; j++) {
-                    //         if (data.order.itemId === temp.item[j].id._id && data.order.step === temp.item[j].step) {
-                    //             temp.item[j].status = data.order.status;
-                    //         }
-
-                    //     }
-                    // }
-                    console.log('tem.item', temp.item);
-                    this._orders[i] = _.cloneDeep(temp);
+                if (data._id == this._orders[i]._id) {
+                    this._orders[i] = _.cloneDeep(data);
                     let itemsToSplice = [];
-                    if (temp.item.length) {
-                        for (var k = 0; k < temp.item.length; k++) {
-                            itemsToSplice.push(temp.item[k].status);
+                    if (data.item.length) {
+                        for (var k = 0; k < data.item.length; k++) {
+                            itemsToSplice.push(data.item[k].status);
                         }
                     }
-                    if (temp.item.length && itemsToSplice.length == temp.item.length && itemsToSplice.every(this.isBelowThreshold)) {
-                        this._orders.splice(i, 1);
-                    }
-                    if (temp.item.length == 0) {
+                    if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(this.isBelowThreshold)) {
                         this._orders.splice(i, 1);
                     }
                 }
             }
         });
         this.socket.on('tablestatus', (data) => {
-            for (var i = 0; i < this._rooms.length; i++) {
-                if (data.room == this._rooms[i]._id) {
-                    for (var j = 0; j < this._rooms[i].tables.length; j++) {
-                        if (data.table == this._rooms[i].tables[j]._id) {
-                            this._rooms[i].tables[j].status = data.status;
-                            break;
+            if(this._rooms && this._rooms.length){
+                for (var i = 0; i < this._rooms.length; i++) {
+                    if (data.room._id == this._rooms[i]._id) {
+                        for (var j = 0; j < this._rooms[i].tables.length; j++) {
+                            if (data.table == this._rooms[i].tables[j]._id) {
+                                this._rooms[i].tables[j].orderId.push(data);
+                                break;
+                            }
                         }
                     }
                 }
-            }
+            }                  
         });
         this.socket.on('changeStep', (data) => {
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
-                    this._orders[i].stepStatus = data.stepStatus;
+                    this._orders[i] = data;
                 }
             }
         });
@@ -508,180 +121,83 @@ export class WebsocketService {
                 }
             }
         });
+        this.socket.on('itemDeletedW', (data) => {
+            console.log('itemDeletedW', data);
+            let userType = this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                for (var i = 0; i < this._orders.length; i++) {
+                    if (data._id === this._orders[i]._id) {
+                        this._orders[i] = data;
+                    }
+                }
+            }
+        });
+        this.socket.on('itemUpdatedW', (data) => {
+            console.log('itemUpdatedW', data);
+            let userType = this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                for (var i = 0; i < this._orders.length; i++) {
+                    if (data._id === this._orders[i]._id) {
+                        this._orders[i] = data;
+                    }
+                }
+            }
+        });
         this.socket.on('itemUpdated', (data) => {
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
-                    var temp = _.cloneDeep(this._orders[i]);
-                    let userType = this.authGuard.getCurrentUser().userType;
-                    if (userType == 3) {
-                        temp.step = data.step;
-                        temp.item = data.item;
-                    }
-                    else if (userType == 4) {
-                        let steps = [];
-                        let sts = [];
-                        if (temp && temp.item) {
-                            for (let j = 0; j < temp.item.length; j++) {
-                                for (let k = 0; k < data.step.length; k++) {
-                                    if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
-                                        if (temp.item[j].step == data.step[k].step) {
-                                            if (sts.indexOf(data.step[k].step) < 0) {
-                                                sts.push(data.step[k].step);
-                                                steps.push(data.step[k]);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        temp.step = steps;
-                        let itemsTemp = [];
-                        if (data && data.item) {
-                            for (let j = 0; j < data.item.length; j++) {
-                                if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
-                                    itemsTemp.push(data.item[j]);
-                                }
-                            }
-                        }
-                        temp.item = itemsTemp;
-                    }
-                    temp.stepStatus = data.stepStatus;
-                    temp.status = data.status;
-                    this._orders[i] = _.cloneDeep(temp);
+                    this._orders[i] = data;
                 }
-                // if (data._id === this._orders[i]._id) {
-                //     this._orders[i] = data;
-                // }
             }
         });
-        this.socket.on('newItem', (data) => {
-            var tempArray = [];
+        this.socket.on('checkouttable', (data) => {
+            let userType = this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                if(this._rooms && this._rooms.length){
+                    for (var i = 0; i < this._rooms.length; i++) {
+                        if (data.roomId == this._rooms[i]._id) {
+                            for (var j = 0; j < this._rooms[i].tables.length; j++) {
+                                if (data.tableId == this._rooms[i].tables[j]._id) {
+                                    this._rooms[i].tables[j].orderId = [];
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (this._orders && this._orders.length) {
+                    for (var i = 0; i < data.orderId.length; i++) {
+                        for (var j = 0; j < this._orders.length; j++) {
+                            if (data.orderId[i] == this._orders[j]._id) {
+                                this._orders.splice(j, 1);
+                            }
+                        }                        
+                    }  
+                } 
+            }  
+        });
+
+        this.socket.on('checkouttableD', (data) => {
+            let userType = this.authGuard.getCurrentUser().userType;
+            if (userType == 4) {
+                if (this._orders && this._orders.length) {
+                    for (var i = 0; i < data.orderId.length; i++) {
+                        for (var j = 0; j < this._orders.length; j++) {
+                            if (data.orderId[i] == this._orders[j]._id) {
+                                this._orders.splice(j, 1);
+                            }
+                        }                        
+                    }  
+                }  
+            }
+        });
+
+        this.socket.on('checklist', (data) => {
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
-                    tempArray.push(this._orders[i]._id);
-                    var temp = _.cloneDeep(this._orders[i]);
-                    let userType = this.authGuard.getCurrentUser().userType;
-                    if (userType == 3) {
-                        temp.step = data.step;
-                        temp.item = data.item;
-                    }
-                    else if (userType == 4) {
-                        let steps = [];
-                        let sts = [];
-                        if (temp && temp.item) {
-                            for (let j = 0; j < temp.item.length; j++) {
-                                for (let k = 0; k < data.step.length; k++) {
-                                    if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
-                                        if (temp.item[j].step == data.step[k].step) {
-                                            if (sts.indexOf(data.step[k].step) < 0) {
-                                                sts.push(data.step[k].step);
-                                                steps.push(data.step[k]);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        temp.step = steps;
-                        let itemsTemp = [];
-                        if (data && data.item) {
-                            for (let j = 0; j < data.item.length; j++) {
-                                if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
-                                    itemsTemp.push(data.item[j]);
-                                }
-                            }
-                        }
-                        temp.item = itemsTemp;
-                    }
-                    temp.stepStatus = data.stepStatus;
-                    temp.status = data.status;
-
-                    let stepStatus = [];
-                    for (let k in temp.step) {
-                        if (temp.step[k].status == 1) {
-                            stepStatus.push(temp.step[k].status);
-                        }
-                    }
-                    this._orders[i] = _.cloneDeep(temp);
-                    let itemsToSplice = [];
-                    if (temp.item.length) {
-                        for (var k = 0; k < temp.item.length; k++) {
-                            itemsToSplice.push(temp.item[k].status);
-                        }
-                    }
-                    if (temp.item.length && itemsToSplice.length == temp.item.length && itemsToSplice.every(this.isBelowThreshold)) {
-                        this._orders.splice(i, 1);
-                    }
-                    if (temp.item.length == 0) {
-                        this._orders.splice(i, 1);
-                    }
+                    this._orders[i] = data;
                 }
-
-            }
-            if (tempArray.indexOf(data._id) < 0) {
-                this._orders.push(data);
-                for (var i = 0; i < this._orders.length; i++) {
-                    if (data._id === this._orders[i]._id) {
-                        var temp = _.cloneDeep(this._orders[i]);
-                        let userType = this.authGuard.getCurrentUser().userType;
-                        if (userType == 3) {
-                            temp.step = data.step;
-                            temp.item = data.item;
-                        }
-                        else if (userType == 4) {
-                            let steps = [];
-                            let sts = [];
-                            if (temp && temp.item) {
-                                for (let j = 0; j < temp.item.length; j++) {
-                                    for (let k = 0; k < data.step.length; k++) {
-                                        if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
-                                            if (temp.item[j].step == data.step[k].step) {
-                                                if (sts.indexOf(data.step[k].step) < 0) {
-                                                    sts.push(data.step[k].step);
-                                                    steps.push(data.step[k]);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            temp.step = steps;
-                            let itemsTemp = [];
-                            if (data && data.item) {
-                                for (let j = 0; j < data.item.length; j++) {
-                                    if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
-                                        itemsTemp.push(data.item[j]);
-                                    }
-                                }
-                            }
-                            temp.item = itemsTemp;
-                        }
-                        temp.stepStatus = data.stepStatus;
-                        temp.status = data.status;
-                        let stepStatus = [];
-                        for (let k in temp.step) {
-                            if (temp.step[k].status == 1) {
-                                stepStatus.push(temp.step[k].status);
-                            }
-                        }
-                        this._orders[i] = _.cloneDeep(temp);
-                        let itemsToSplice = [];
-                        if (temp.item.length) {
-                            for (var k = 0; k < temp.item.length; k++) {
-                                itemsToSplice.push(temp.item[k].status);
-                            }
-
-                        }
-                        if (temp.item.length && itemsToSplice.length == temp.item.length && itemsToSplice.every(this.isBelowThreshold)) {
-                            this._orders.splice(i, 1);
-                        }
-                        if (temp.item.length == 0) {
-                            this._orders.splice(i, 1);
-                        }
-                    }
-                }
-
-            }
+            } 
         });
     };
 
@@ -698,41 +214,6 @@ export class WebsocketService {
             .then(data => {
                 let res = data.json();
                 this._orders = res.data;
-                let orderid = [];
-                for (var i = 0; i < this._orders.length; i++) {
-                    var temp = _.cloneDeep(this._orders[i]);
-                    let itemsTemp = [];
-                    if (this._orders[i] && this._orders[i].item) {
-                        for (let j = 0; j < this._orders[i].item.length; j++) {
-                            if (((this._orders[i].item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(this._orders[i].item[j].category)) > -1)) {
-                                itemsTemp.push(this._orders[i].item[j]);
-                            }
-                        }
-                    }
-                    temp.item = itemsTemp;
-                    this._orders[i] = _.cloneDeep(temp);
-                    let itemsToSplice = [];
-                    if (temp.item.length) {
-                        for (var k = 0; k < temp.item.length; k++) {
-                            itemsToSplice.push(temp.item[k].status);
-                        }
-                    }
-                    if (temp.item.length && itemsToSplice.length == temp.item.length && itemsToSplice.every(this.isBelowThreshold)) {
-                        this._orders.splice(i, 1);
-                    }
-                    if (temp.item.length == 0) {
-                        orderid.push(this._orders[i]._id);
-                    }
-                }
-                if (orderid.length) {
-                    for (var i = 0; i < orderid.length; i++) {
-                        for (var j = 0; j < this._orders.length; j++) {
-                            if (orderid[i] == this._orders[j]._id) {
-                                this._orders.splice(j, 1);
-                            }
-                        }
-                    }
-                }
                 return this._orders;
             })
             .catch(error => {
@@ -771,40 +252,16 @@ export class WebsocketService {
         return this.http.put(url, opts).toPromise()
             .then(data => {
                 let res = data.json();
-                let orderid = [];
                 for (var i = 0; i < this._orders.length; i++) {
-                    if (res._id === this._orders[i]._id) {
-                        var temp = _.cloneDeep(this._orders[i]);
-                        let itemsTemp = [];
-                        if (res && res.orderData.item) {
-                            for (let j = 0; j < res.orderData.item.length; j++) {
-                                if (((res.orderData.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(res.orderData.item[j].category)) > -1)) {
-                                    itemsTemp.push(this._orders[i].item[j]);
-                                }
-                            }
-                        }
-                        temp.item = itemsTemp;
-                        this._orders[i] = _.cloneDeep(temp);
+                    if (res.data._id === this._orders[i]._id) {
                         let itemsToSplice = [];
-                        if (temp.item.length) {
-                            for (var k = 0; k < temp.item.length; k++) {
-                                itemsToSplice.push(temp.item[k].status);
+                        if (res.data.item.length) {
+                            for (var k = 0; k < res.data.item.length; k++) {
+                                itemsToSplice.push(res.data.item[k].status);
                             }
                         }
-                        if (temp.item.length && itemsToSplice.length == temp.item.length && itemsToSplice.every(this.isBelowThreshold)) {
+                        if (itemsToSplice.length == res.data.item.length && itemsToSplice.every(this.isBelowThreshold)) {
                             this._orders.splice(i, 1);
-                        }
-                        if (temp.item.length == 0) {
-                            orderid.push(this._orders[i]._id);
-                        }
-                    }
-                }
-                if (orderid.length) {
-                    for (var i = 0; i < orderid.length; i++) {
-                        for (var j = 0; j < this._orders.length; j++) {
-                            if (orderid[i] == this._orders[j]._id) {
-                                this._orders.splice(j, 1);
-                            }
                         }
                     }
                 }
@@ -836,6 +293,16 @@ export class WebsocketService {
     }
     public changeOrderStep(id, opts): Promise<any> {
         let url = '/api/orderStep/' + id;
+        return this.http.put(url, opts).toPromise()
+            .then(data => {
+                return data.json();
+            })
+            .catch(error => {
+                return error;
+            });
+    }
+    public updateDepartmentStatus(id, opts): Promise<any> {
+        let url = '/api/department/status/' + id;
         return this.http.put(url, opts).toPromise()
             .then(data => {
                 return data.json();
