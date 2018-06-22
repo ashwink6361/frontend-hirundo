@@ -853,6 +853,7 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('neworder', function (data) {
+            console.log('neworder', data);
             var userType = _this.authGuard.getCurrentUser().userType;
             if (userType == 4) {
                 _this._orders.push(data);

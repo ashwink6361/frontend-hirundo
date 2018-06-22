@@ -139,6 +139,7 @@ var CartComponent = /** @class */ (function () {
                     step: data.selectedItems[steps[a]][i].step,
                     department: data.selectedItems[steps[a]][i].category.department
                 };
+                console.log(data.selectedItems[steps[a]][i].category.department, 'department create order');
                 itemarray.push(item);
             }
         }

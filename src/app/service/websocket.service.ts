@@ -53,6 +53,7 @@ export class WebsocketService {
         });     
 
         this.socket.on('neworder', (data) => {
+            console.log('neworder' , data);
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 4) {
                 this._orders.push(data);
