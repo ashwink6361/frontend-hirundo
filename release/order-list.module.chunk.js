@@ -562,24 +562,6 @@ var OrderListComponent = /** @class */ (function () {
                             startTemp.push(_this.orders[i].step[k].itemId[l].status);
                         }
                         itemStatusDelivered[_this.orders[i].step[k].step] = startTemp.every(_this.isEqualToOne);
-                        // if (startTemp.every(this.isEqualToOne)) {
-                        //     let temparray = this.orders[i].step[k].step.split(' ');
-                        //     let num = Number(temparray[1]);
-                        //     let stepTemp = temparray[0] + ' ' + ++num;
-                        //     let temp = {
-                        //         tab: Number(temparray[1]),
-                        //         step: stepTemp,
-                        //     }
-                        //     this.stepdata[this.orders[i]._id] = temp;
-                        // } else {
-                        //     let tempp = {
-                        //         tab: 0,
-                        //         step: ''
-                        //     }
-                        //     tempp.tab = 0;
-                        //     tempp.step = this.orders[i].step[0].step;
-                        //     this.stepdata[this.orders[i]._id] = tempp;
-                        // }
                     }
                     _this.itemStatusDelivered[_this.orders[i]._id] = itemStatusDelivered;
                     console.log('this.itemStatusDelivered', _this.itemStatusDelivered);
@@ -656,24 +638,6 @@ var OrderListComponent = /** @class */ (function () {
                             startTemp.push(_this.orders[i].step[m].itemId[n].status);
                         }
                         itemStatusDelivered[_this.orders[i].step[m].step] = startTemp.every(_this.isEqualToOne);
-                        // if (startTemp.every(this.isEqualToOne)) {
-                        //     let temparray = this.orders[i].step[m].step.split(' ');
-                        //     let num = Number(temparray[1]);
-                        //     let stepTemp = temparray[0] + ' ' + ++num;
-                        //     let temp = {
-                        //         tab: Number(temparray[1]),
-                        //         step: stepTemp,
-                        //     }
-                        //     this.stepdata[this.orders[i]._id] = temp;
-                        // } else {
-                        //     let tempp = {
-                        //         tab: 0,
-                        //         step: ''
-                        //     }
-                        //     tempp.tab = 0;
-                        //     tempp.step = this.orders[i].step[0].step;
-                        //     this.stepdata[this.orders[i]._id] = tempp;
-                        // }
                     }
                     _this.itemStatusDelivered[_this.orders[i]._id] = itemStatusDelivered;
                     console.log('this.itemStatusDelivered', _this.itemStatusDelivered);
@@ -721,31 +685,6 @@ var OrderListComponent = /** @class */ (function () {
                                 startTemp.push(_this.orders[i].step[m].itemId[n].status);
                             }
                             itemStatusDelivered[_this.orders[i].step[m].step] = startTemp.every(_this.isEqualToOne);
-                            // if (startTemp.every(this.isEqualToOne)) {
-                            //     console.log('this.orders[i].step[m]',this.orders[i].step[m]);
-                            //     let temparray = this.orders[i].step[m].step.split(' ');
-                            //     console.log('temparray',temparray);
-                            //     let num = Number(temparray[1]);
-                            //     let stepTemp = temparray[0] + ' ' + ++num;
-                            //     console.log('stepTemp',stepTemp);
-                            //     let temp = {
-                            //         tab: Number(temparray[1]),
-                            //         step: stepTemp,
-                            //     }
-                            //     console.log('temp',temp);
-                            //     this.stepdata[this.orders[i]._id] = temp;
-                            //     console.log('this.stepdata',this.stepdata);
-                            // }
-                            // if(!startTemp.every(this.isEqualToOne)){
-                            //     console.log('this.orders[i].step[0]',this.orders[i].step[0]);                                
-                            //     let tempp = {
-                            //         tab: 0,
-                            //         step: ''
-                            //     }
-                            //     tempp.tab = 0;
-                            //     tempp.step = this.orders[i].step[0].step;
-                            //     this.stepdata[this.orders[i]._id] = tempp;
-                            // }
                         }
                         _this.itemStatusDelivered[_this.orders[i]._id] = itemStatusDelivered;
                         console.log('this.itemStatusDelivered', _this.itemStatusDelivered);
@@ -784,7 +723,6 @@ var OrderListComponent = /** @class */ (function () {
             step: step
         };
         this.websocketService.updateDepartmentStatus(order._id, opts).then(function (data) {
-            console.log('data', data);
             department.status = 1;
             order = data.data;
             if (_this.orders.length) {
@@ -797,24 +735,6 @@ var OrderListComponent = /** @class */ (function () {
                             startTemp.push(_this.orders[i].step[m].itemId[n].status);
                         }
                         itemStatusDelivered[_this.orders[i].step[m].step] = startTemp.every(_this.isEqualToOne);
-                        // if (startTemp.every(this.isEqualToOne)) {
-                        //     let temparray = this.orders[i].step[m].step.split(' ');
-                        //     let num = Number(temparray[1]);
-                        //     let stepTemp = temparray[0] + ' ' + ++num;
-                        //     let temp = {
-                        //         tab: Number(temparray[1]),
-                        //         step: stepTemp,
-                        //     }
-                        //     this.stepdata[this.orders[i]._id] = temp;
-                        // } else {
-                        //     let tempp = {
-                        //         tab: 0,
-                        //         step: ''
-                        //     }
-                        //     tempp.tab = 0;
-                        //     tempp.step = this.orders[i].step[0].step;
-                        //     this.stepdata[this.orders[i]._id] = tempp;
-                        // }
                     }
                     _this.itemStatusDelivered[_this.orders[i]._id] = itemStatusDelivered;
                     console.log('this.itemStatusDelivered', _this.itemStatusDelivered);
@@ -849,24 +769,6 @@ var OrderListComponent = /** @class */ (function () {
                                 startTemp.push(this.orders[i].step[m].itemId[n].status);
                             }
                             itemStatusDelivered[this.orders[i].step[m].step] = startTemp.every(this.isEqualToOne);
-                            // if (startTemp.every(this.isEqualToOne)) {
-                            //     let temparray = this.orders[i].step[m].step.split(' ');
-                            //     let num = Number(temparray[1]);
-                            //     let stepTemp = temparray[0] + ' ' + ++num;
-                            //     let temp = {
-                            //         tab: Number(temparray[1]),
-                            //         step: stepTemp,
-                            //     }
-                            //     this.stepdata[this.orders[i]._id] = temp;
-                            // } else {
-                            //     let tempp = {
-                            //         tab: 0,
-                            //         step: ''
-                            //     }
-                            //     tempp.tab = 0;
-                            //     tempp.step = this.orders[i].step[0].step;
-                            //     this.stepdata[this.orders[i]._id] = tempp;
-                            // }
                         }
                         this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered;
                         console.log('this.itemStatusDelivered', this.itemStatusDelivered);

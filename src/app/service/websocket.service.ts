@@ -30,28 +30,22 @@ export class WebsocketService {
         // this.socket = io('http://localhost:5051');
         this.socket = io(this.socketUrl);
         // this.socket = io(this.socketUrl, { 'transports': ['polling'] });
-        console.log("this.socket ",this.socket);   
-        console.log("this.socket.connected ",this.socket.connected);   
         if (this.socket.connected){
             console.log("Socket connection done ");
         }
         let user = JSON.parse(localStorage.getItem('currentUser'));
         if (user) {
             this.socket.emit('connection');
-            console.log('user', user);
             this.socket.on('connected', (data) => {
-                console.log('connected', data);
                 if (data && this.socket.id == data.socketId) {
                     this.socket.emit('userAuth', { userId: user._id });
                     this.socket.on('authConnected', (data) => {
-                        console.log('authConnected', data);
                     });
                 }
             });
-        }   
+        };   
 
         this.socket.on('neworderAdmin', (data) => {
-            console.log('neworderAdmin',data); 
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
                 this._orders.unshift(data);
@@ -59,14 +53,12 @@ export class WebsocketService {
         });     
 
         this.socket.on('neworder', (data) => {
-            console.log('neworder',data); 
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 4) {
                 this._orders.push(data);
             }
         });
         this.socket.on('orderstatus', (data) => {
-            console.log('orderstatus', data);
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
                 for (var i = 0; i < this._orders.length; i++) {
@@ -86,7 +78,6 @@ export class WebsocketService {
             }
         });
         this.socket.on('orderstatusDept', (data) => {
-            console.log('orderstatusDept', data);
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id == this._orders[i]._id) {
                     this._orders[i] = _.cloneDeep(data);
@@ -103,7 +94,6 @@ export class WebsocketService {
             }
         });
         this.socket.on('tablestatus', (data) => {
-            console.log('tablestatus',data);    
             if(this._rooms && this._rooms.length){
                 for (var i = 0; i < this._rooms.length; i++) {
                     if (data.room._id == this._rooms[i]._id) {
@@ -118,7 +108,6 @@ export class WebsocketService {
             }                  
         });
         this.socket.on('changeStep', (data) => {
-            console.log('changeStep',data);                                  
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;
@@ -126,7 +115,6 @@ export class WebsocketService {
             }
         });
         this.socket.on('itemDeleted', (data) => {
-            console.log('itemDeleted',data);                                              
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;
@@ -134,72 +122,56 @@ export class WebsocketService {
             }
         });
         this.socket.on('itemUpdated', (data) => {
-            console.log('itemUpdated',data);                                                          
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;
-                    // var temp = _.cloneDeep(this._orders[i]);
-                    // let userType = this.authGuard.getCurrentUser().userType;
-                    // if (userType == 3) {
-                    //     temp.step = data.step;
-                    //     temp.item = data.item;
-                    // }
-                    // else if (userType == 4) {
-                    //     let steps = [];
-                    //     let sts = [];
-                    //     if (temp && temp.item) {
-                    //         for (let j = 0; j < temp.item.length; j++) {
-                    //             for (let k = 0; k < data.step.length; k++) {
-                    //                 if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
-                    //                     if (temp.item[j].step == data.step[k].step) {
-                    //                         if (sts.indexOf(data.step[k].step) < 0) {
-                    //                             sts.push(data.step[k].step);
-                    //                             steps.push(data.step[k]);
-                    //                         }
-                    //                     }
-                    //                 }
-                    //             }
-                    //         }
-                    //     }
-                    //     temp.step = steps;
-                    //     let itemsTemp = [];
-                    //     if (data && data.item) {
-                    //         for (let j = 0; j < data.item.length; j++) {
-                    //             if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
-                    //                 itemsTemp.push(data.item[j]);
-                    //             }
-                    //         }
-                    //     }
-                    //     temp.item = itemsTemp;
-                    // }
-                    // temp.stepStatus = data.stepStatus;
-                    // temp.status = data.status;
-                    // this._orders[i] = _.cloneDeep(temp);
                 }
-                // if (data._id === this._orders[i]._id) {
-                //     this._orders[i] = data;
-                // }
             }
         });
 
         this.socket.on('checkouttable', (data) => {
-            console.log('checkouttable',data);    
-            if(this._rooms && this._rooms.length){
-                for (var i = 0; i < this._rooms.length; i++) {
-                    if (data.roomId == this._rooms[i]._id) {
-                        for (var j = 0; j < this._rooms[i].tables.length; j++) {
-                            if (data.tableId == this._rooms[i].tables[j]._id) {
-                                this._rooms[i].tables[j].orderId = [];
-                                break;
+            let userType = this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                if(this._rooms && this._rooms.length){
+                    for (var i = 0; i < this._rooms.length; i++) {
+                        if (data.roomId == this._rooms[i]._id) {
+                            for (var j = 0; j < this._rooms[i].tables.length; j++) {
+                                if (data.tableId == this._rooms[i].tables[j]._id) {
+                                    this._rooms[i].tables[j].orderId = [];
+                                    break;
+                                }
                             }
                         }
                     }
                 }
-            }                  
+                if (this._orders && this._orders.length) {
+                    for (var i = 0; i < data.orderId.length; i++) {
+                        for (var j = 0; j < this._orders.length; j++) {
+                            if (data.orderId[i] == this._orders[j]._id) {
+                                this._orders.splice(j, 1);
+                            }
+                        }                        
+                    }  
+                } 
+            }  
+        });
+
+        this.socket.on('checkouttableD', (data) => {
+            let userType = this.authGuard.getCurrentUser().userType;
+            if (userType == 4) {
+                if (this._orders && this._orders.length) {
+                    for (var i = 0; i < data.orderId.length; i++) {
+                        for (var j = 0; j < this._orders.length; j++) {
+                            if (data.orderId[i] == this._orders[j]._id) {
+                                this._orders.splice(j, 1);
+                            }
+                        }                        
+                    }  
+                }  
+            }
         });
 
         this.socket.on('checklist', (data) => {
-            console.log('checklist',data);   
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;
@@ -221,18 +193,6 @@ export class WebsocketService {
             .then(data => {
                 let res = data.json();
                 this._orders = res.data;
-                // let orderid = [];
-                // for (var i = 0; i < this._orders.length; i++) {
-                //     let itemsToSplice = [];
-                //     if (this._orders[i].item.length) {
-                //         for (var k = 0; k < this._orders[i].item.length; k++) {
-                //             itemsToSplice.push(this._orders[i].item[k].status);
-                //         }
-                //     }
-                //     if (itemsToSplice.length == this._orders[i].item.length && itemsToSplice.every(this.isBelowThreshold)) {
-                //         this._orders.splice(i, 1);
-                //     }
-                // }
                 return this._orders;
             })
             .catch(error => {
@@ -271,19 +231,14 @@ export class WebsocketService {
         return this.http.put(url, opts).toPromise()
             .then(data => {
                 let res = data.json();
-                console.log('res',res);                
                 for (var i = 0; i < this._orders.length; i++) {
                     if (res.data._id === this._orders[i]._id) {
-                        console.log('res.item',res.data.item);
                         let itemsToSplice = [];
                         if (res.data.item.length) {
                             for (var k = 0; k < res.data.item.length; k++) {
                                 itemsToSplice.push(res.data.item[k].status);
                             }
                         }
-                        console.log('itemsToSplice',itemsToSplice);
-                        console.log('res.item',res.data.item);
-                        
                         if (itemsToSplice.length == res.data.item.length && itemsToSplice.every(this.isBelowThreshold)) {
                             this._orders.splice(i, 1);
                         }

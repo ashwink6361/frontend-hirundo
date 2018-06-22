@@ -822,41 +822,34 @@ var WebsocketService = /** @class */ (function () {
         // this.socket = io('http://localhost:5051');
         this.socket = __WEBPACK_IMPORTED_MODULE_1_socket_io_client__(this.socketUrl);
         // this.socket = io(this.socketUrl, { 'transports': ['polling'] });
-        console.log("this.socket ", this.socket);
-        console.log("this.socket.connected ", this.socket.connected);
         if (this.socket.connected) {
             console.log("Socket connection done ");
         }
         var user = JSON.parse(localStorage.getItem('currentUser'));
         if (user) {
             this.socket.emit('connection');
-            console.log('user', user);
             this.socket.on('connected', function (data) {
-                console.log('connected', data);
                 if (data && _this.socket.id == data.socketId) {
                     _this.socket.emit('userAuth', { userId: user._id });
                     _this.socket.on('authConnected', function (data) {
-                        console.log('authConnected', data);
                     });
                 }
             });
         }
+        ;
         this.socket.on('neworderAdmin', function (data) {
-            console.log('neworderAdmin', data);
             var userType = _this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
                 _this._orders.unshift(data);
             }
         });
         this.socket.on('neworder', function (data) {
-            console.log('neworder', data);
             var userType = _this.authGuard.getCurrentUser().userType;
             if (userType == 4) {
                 _this._orders.push(data);
             }
         });
         this.socket.on('orderstatus', function (data) {
-            console.log('orderstatus', data);
             var userType = _this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
                 for (var i = 0; i < _this._orders.length; i++) {
@@ -876,7 +869,6 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('orderstatusDept', function (data) {
-            console.log('orderstatusDept', data);
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id == _this._orders[i]._id) {
                     _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](data);
@@ -893,7 +885,6 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('tablestatus', function (data) {
-            console.log('tablestatus', data);
             if (_this._rooms && _this._rooms.length) {
                 for (var i = 0; i < _this._rooms.length; i++) {
                     if (data.room._id == _this._rooms[i]._id) {
@@ -908,7 +899,6 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('changeStep', function (data) {
-            console.log('changeStep', data);
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id === _this._orders[i]._id) {
                     _this._orders[i] = data;
@@ -916,7 +906,6 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('itemDeleted', function (data) {
-            console.log('itemDeleted', data);
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id === _this._orders[i]._id) {
                     _this._orders[i] = data;
@@ -924,62 +913,46 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('itemUpdated', function (data) {
-            console.log('itemUpdated', data);
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id === _this._orders[i]._id) {
                     _this._orders[i] = data;
-                    // var temp = _.cloneDeep(this._orders[i]);
-                    // let userType = this.authGuard.getCurrentUser().userType;
-                    // if (userType == 3) {
-                    //     temp.step = data.step;
-                    //     temp.item = data.item;
-                    // }
-                    // else if (userType == 4) {
-                    //     let steps = [];
-                    //     let sts = [];
-                    //     if (temp && temp.item) {
-                    //         for (let j = 0; j < temp.item.length; j++) {
-                    //             for (let k = 0; k < data.step.length; k++) {
-                    //                 if (((temp.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(temp.item[j].category)) > -1)) {
-                    //                     if (temp.item[j].step == data.step[k].step) {
-                    //                         if (sts.indexOf(data.step[k].step) < 0) {
-                    //                             sts.push(data.step[k].step);
-                    //                             steps.push(data.step[k]);
-                    //                         }
-                    //                     }
-                    //                 }
-                    //             }
-                    //         }
-                    //     }
-                    //     temp.step = steps;
-                    //     let itemsTemp = [];
-                    //     if (data && data.item) {
-                    //         for (let j = 0; j < data.item.length; j++) {
-                    //             if (((data.item[j].department.indexOf(this.authGuard.getCurrentUser()._id)) > -1) || ((this.authGuard.getCurrentUser().category.indexOf(data.item[j].category)) > -1)) {
-                    //                 itemsTemp.push(data.item[j]);
-                    //             }
-                    //         }
-                    //     }
-                    //     temp.item = itemsTemp;
-                    // }
-                    // temp.stepStatus = data.stepStatus;
-                    // temp.status = data.status;
-                    // this._orders[i] = _.cloneDeep(temp);
                 }
-                // if (data._id === this._orders[i]._id) {
-                //     this._orders[i] = data;
-                // }
             }
         });
         this.socket.on('checkouttable', function (data) {
-            console.log('checkouttable', data);
-            if (_this._rooms && _this._rooms.length) {
-                for (var i = 0; i < _this._rooms.length; i++) {
-                    if (data.roomId == _this._rooms[i]._id) {
-                        for (var j = 0; j < _this._rooms[i].tables.length; j++) {
-                            if (data.tableId == _this._rooms[i].tables[j]._id) {
-                                _this._rooms[i].tables[j].orderId = [];
-                                break;
+            var userType = _this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                if (_this._rooms && _this._rooms.length) {
+                    for (var i = 0; i < _this._rooms.length; i++) {
+                        if (data.roomId == _this._rooms[i]._id) {
+                            for (var j = 0; j < _this._rooms[i].tables.length; j++) {
+                                if (data.tableId == _this._rooms[i].tables[j]._id) {
+                                    _this._rooms[i].tables[j].orderId = [];
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (_this._orders && _this._orders.length) {
+                    for (var i = 0; i < data.orderId.length; i++) {
+                        for (var j = 0; j < _this._orders.length; j++) {
+                            if (data.orderId[i] == _this._orders[j]._id) {
+                                _this._orders.splice(j, 1);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        this.socket.on('checkouttableD', function (data) {
+            var userType = _this.authGuard.getCurrentUser().userType;
+            if (userType == 4) {
+                if (_this._orders && _this._orders.length) {
+                    for (var i = 0; i < data.orderId.length; i++) {
+                        for (var j = 0; j < _this._orders.length; j++) {
+                            if (data.orderId[i] == _this._orders[j]._id) {
+                                _this._orders.splice(j, 1);
                             }
                         }
                     }
@@ -987,7 +960,6 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('checklist', function (data) {
-            console.log('checklist', data);
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id === _this._orders[i]._id) {
                     _this._orders[i] = data;
@@ -1010,18 +982,6 @@ var WebsocketService = /** @class */ (function () {
             .then(function (data) {
             var res = data.json();
             _this._orders = res.data;
-            // let orderid = [];
-            // for (var i = 0; i < this._orders.length; i++) {
-            //     let itemsToSplice = [];
-            //     if (this._orders[i].item.length) {
-            //         for (var k = 0; k < this._orders[i].item.length; k++) {
-            //             itemsToSplice.push(this._orders[i].item[k].status);
-            //         }
-            //     }
-            //     if (itemsToSplice.length == this._orders[i].item.length && itemsToSplice.every(this.isBelowThreshold)) {
-            //         this._orders.splice(i, 1);
-            //     }
-            // }
             return _this._orders;
         })
             .catch(function (error) {
@@ -1063,18 +1023,14 @@ var WebsocketService = /** @class */ (function () {
         return this.http.put(url, opts).toPromise()
             .then(function (data) {
             var res = data.json();
-            console.log('res', res);
             for (var i = 0; i < _this._orders.length; i++) {
                 if (res.data._id === _this._orders[i]._id) {
-                    console.log('res.item', res.data.item);
                     var itemsToSplice = [];
                     if (res.data.item.length) {
                         for (var k = 0; k < res.data.item.length; k++) {
                             itemsToSplice.push(res.data.item[k].status);
                         }
                     }
-                    console.log('itemsToSplice', itemsToSplice);
-                    console.log('res.item', res.data.item);
                     if (itemsToSplice.length == res.data.item.length && itemsToSplice.every(_this.isBelowThreshold)) {
                         _this._orders.splice(i, 1);
                     }

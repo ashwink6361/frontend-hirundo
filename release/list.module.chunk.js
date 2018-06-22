@@ -36,13 +36,6 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__global_service__ = __webpack_require__("../../../../../src/app/hirundo/global.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__ = __webpack_require__("../../../../rxjs/Rx.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Rx__);
-// import { Component, OnInit, IterableDiffers, Input, DoCheck } from '@angular/core';
-// import { WebsocketService } from '../../../service/websocket.service';
-// import { Router } from '@angular/router';
-// import { GlobalService } from '../../global.service'
-// import { Observable } from 'rxjs/Observable';
-// import 'rxjs/Rx';
-// import *  as _ from 'lodash';
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -52,174 +45,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-// @Component({
-//     selector: 'app-list',
-//     templateUrl: './list.component.html',
-//     styleUrls: ['./list.component.scss']
-// })
-// export class ListComponent implements DoCheck {
-//     @Input() orders: Array<any> = [];
-//     differ: any;
-//     public loadingOrders: boolean = true;
-//     public steps: Array<any> = [];
-//     public activetab: boolean[] = [];
-//     public stepdata: Array<any> = [];
-//     public orderId: Array<any> = [];
-//     public times: Array<any> = [];    
-//     public showToCall: Array<any> = [];  
-//     constructor(public websocketService: WebsocketService, private globalService: GlobalService, public router: Router,private differs: IterableDiffers) {
-//         this.differ = differs.find([]).create(null);
-//      }
-//     ngOnInit() {
-//         this.websocketService.getWaiterOrders().then(data => {
-//             this.orders = data;
-//             if (this.orders.length) {
-//                 for (let i = 0; i < this.orders.length; i++) {
-//                     let time = {};
-//                     let call = {};
-//                     for (let k = 0; k < this.orders[i].step.length; k++) {
-//                         let temp = [];
-//                         for (let l = 0; l < this.orders[i].item.length; l++) {
-//                             if (this.orders[i].item[l].step == this.orders[i].step[k].step && temp.indexOf(this.orders[i].item[l].id.preparationTime) < 0) {
-//                                 temp.push(this.orders[i].item[l].id.preparationTime);
-//                             }
-//                         }
-//                         time[this.orders[i].step[k].step] = Math.max(...temp);
-//                         call[this.orders[i].step[k].step] = true;
-//                         if(this.orders[i].step[k].status == 1){
-//                             let temparray = this.orders[i].step[k].step.split(' ');
-//                             let num = Number(temparray[1]);
-//                             let stepTemp = temparray[0]+' '+ ++num;
-//                             let temp = {
-//                                 tab: num,
-//                                 step: stepTemp,
-//                             }
-//                             this.stepdata[this.orders[i]._id] = temp;
-//                         }else{
-//                             let tempp = {
-//                                 tab: 0,
-//                                 step: ''
-//                             }
-//                             if(this.orders[i].step.length>1){
-//                                 tempp.tab = 1;
-//                                 tempp.step = this.orders[i].step[1].step;
-//                             }
-//                             else{
-//                                 tempp.tab = 0;
-//                                 tempp.step = this.orders[i].step[0].step;
-//                             }
-//                             this.stepdata[this.orders[i]._id] = tempp;
-//                         }
-//                     }
-//                     this.times[this.orders[i]._id] = time;
-//                     this.showToCall[this.orders[i]._id] = call;
-//                 }
-//             }
-//             this.loadingOrders = false;
-//         })
-//             .catch(error => {
-//             });
-//     }
-//     public getOrderStatus(status) {
-//         var str = 'In progress';
-//         switch (status) {
-//             case 0:
-//                 str = 'New order'; break;
-//             case 1:
-//                 str = 'Delivered'; break;
-//             case 2:
-//                 str = 'Prepared'; break;
-//             case 3:
-//                 str = 'Cancelled'; break;
-//             case 4:
-//                 str = 'In progress'; break;
-//             default:
-//                 break;
-//         }
-//         return str;
-//     };
-//     public updateOrder(order, status) {
-//         order.status = status;
-//         let items = [];
-//         for (let i = 0; i < order.item.length; i++) {
-//             items.push(order.item[i].id._id)
-//         }
-//         let opts = {
-//             status: status,
-//             itemId: items
-//         };
-//         this.websocketService.updateOrder(order._id, opts).then(data => {
-//         }).catch(error => {
-//         });
-//     };
-//     public updateItem(item, order, status) {
-//         item.status = status;
-//         let items = [];
-//         items.push(item.id._id)
-//         let opts = {
-//             status: status,
-//             itemId: items
-//         };
-//         this.websocketService.updateWaiterOrder(order, opts).then(data => {
-//         }).catch(error => {
-//         });
-//     };
-//     public changeStep(order, step, stepKey) {
-//         let items = [];
-//         let opts = {
-//             step: step
-//         };
-//         this.websocketService.changeOrderStep(order._id, opts).then(data => {
-//             this.showToCall[order._id][stepKey] = false;   
-//         }).catch(error => {
-//         });
-//     };
-//     selectedTab(step, tab, orderId) {        
-//         let temp = {
-//             tab: tab,
-//             step: step
-//         }
-//         this.stepdata[orderId] = temp;
-//     }
-//     ngDoCheck() {
-//         if(this.orders && this.orders.length){
-//             const change = this.differ.diff(this.orders);
-//             if(change != null){
-//                 if (this.orders.length) {
-//                     for (let i = 0; i < this.orders.length; i++) {
-//                         let time = {};
-//                         let call = {};                    
-//                         for (let k = 0; k < this.orders[i].step.length; k++) {
-//                             let temp = [];
-//                             for (let l = 0; l < this.orders[i].item.length; l++) {
-//                                 if (this.orders[i].item[l].step == this.orders[i].step[k].step && temp.indexOf(this.orders[i].item[l].id.preparationTime) < 0) {
-//                                     temp.push(this.orders[i].item[l].id.preparationTime);
-//                                 }
-//                             }
-//                             time[this.orders[i].step[k].step] = Math.max(...temp);
-//                             call[this.orders[i].step[k].step] = true;                        
-//                             let tempp = {
-//                                 tab: 0,
-//                                 step: ''
-//                             }
-//                             if(this.orders[i].step.length>1){
-//                                 tempp.tab = 1;
-//                                 tempp.step = this.orders[i].step[1].step;
-//                             }
-//                             else{
-//                                 tempp.tab = 0;
-//                                 tempp.step = this.orders[i].step[0].step;
-//                             }
-//                             this.stepdata[this.orders[i]._id] = tempp;
-//                         }
-//                         this.times[this.orders[i]._id] = time;
-//                         this.showToCall[this.orders[i]._id] = call;                    
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
 
 
 
@@ -254,30 +79,6 @@ var ListComponent = /** @class */ (function () {
                         }
                         itemStatusDelivered[_this.orders[i].step[k].step] = startTemp.every(_this.isEqualToOne);
                         call[_this.orders[i].step[k].step] = true;
-                        // if (startTemp.every(this.isEqualToOne)) {
-                        //     let temparray = this.orders[i].step[k].step.split(' ');
-                        //     let num = Number(temparray[1]);
-                        //     let stepTemp = temparray[0] + ' ' + ++num;
-                        //     let temp = {
-                        //         tab: Number(temparray[1]),
-                        //         step: stepTemp,
-                        //     }
-                        //     this.stepdata[this.orders[i]._id] = temp;
-                        // } else {
-                        //     let tempp = {
-                        //         tab: 0,
-                        //         step: ''
-                        //     }
-                        //     if(this.orders[i].step.length>1){
-                        //         tempp.tab = 1;
-                        //         tempp.step = this.orders[i].step[1].step;
-                        //     }
-                        //     else{
-                        //         tempp.tab = 0;
-                        //         tempp.step = this.orders[i].step[0].step;
-                        //     }
-                        //     this.stepdata[this.orders[i]._id] = tempp;
-                        // }
                     }
                     _this.itemStatusDelivered[_this.orders[i]._id] = itemStatusDelivered;
                     _this.showToCall[_this.orders[i]._id] = call;
@@ -285,18 +86,14 @@ var ListComponent = /** @class */ (function () {
                     if (_this.orders[i].step.length > 2) {
                         for (var m = 0; m < _this.orders[i].step.length; m++) {
                             if (!_this.itemStatusDelivered[_this.orders[i]._id][_this.orders[i].step[m].step]) {
-                                console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]', _this.itemStatusDelivered[_this.orders[i]._id][_this.orders[i].step[m].step]);
                                 if (_this.orders[i].step[m].step != 'Uscita 1') {
                                     var temparray = _this.orders[i].step[m].step.split(' ');
-                                    console.log('temparray', temparray);
                                     var num = Number(temparray[1]);
                                     var temp = {
                                         tab: num - 1,
                                         step: _this.orders[i].step[m].step,
                                     };
-                                    console.log('temp', temp);
                                     _this.stepdata[_this.orders[i]._id] = temp;
-                                    console.log('this.stepdata', _this.stepdata);
                                     break;
                                 }
                                 else {
@@ -304,9 +101,7 @@ var ListComponent = /** @class */ (function () {
                                         tab: 1,
                                         step: _this.orders[i].step[1].step,
                                     };
-                                    console.log('temp', temp);
                                     _this.stepdata[_this.orders[i]._id] = temp;
-                                    console.log('this.stepdata', _this.stepdata);
                                     break;
                                 }
                             }
@@ -410,30 +205,6 @@ var ListComponent = /** @class */ (function () {
                             }
                             itemStatusDelivered[this.orders[i].step[k].step] = startTemp.every(this.isEqualToOne);
                             call[this.orders[i].step[k].step] = true;
-                            // if (startTemp.every(this.isEqualToOne)) {
-                            //     let temparray = this.orders[i].step[k].step.split(' ');
-                            //     let num = Number(temparray[1]);
-                            //     let stepTemp = temparray[0] + ' ' + ++num;
-                            //     let temp = {
-                            //         tab: Number(temparray[1]),
-                            //         step: stepTemp,
-                            //     }
-                            //     this.stepdata[this.orders[i]._id] = temp;
-                            // } else {
-                            //     let tempp = {
-                            //         tab: 0,
-                            //         step: ''
-                            //     }
-                            //     if(this.orders[i].step.length>1){
-                            //         tempp.tab = 1;
-                            //         tempp.step = this.orders[i].step[1].step;
-                            //     }
-                            //     else{
-                            //         tempp.tab = 0;
-                            //         tempp.step = this.orders[i].step[0].step;
-                            //     }
-                            //     this.stepdata[this.orders[i]._id] = tempp;
-                            // }
                         }
                         this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered;
                         this.showToCall[this.orders[i]._id] = call;
@@ -443,15 +214,12 @@ var ListComponent = /** @class */ (function () {
                                     console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]', this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]);
                                     if (this.orders[i].step[m].step != 'Uscita 1') {
                                         var temparray = this.orders[i].step[m].step.split(' ');
-                                        console.log('temparray', temparray);
                                         var num = Number(temparray[1]);
                                         var temp = {
                                             tab: num - 1,
                                             step: this.orders[i].step[m].step,
                                         };
-                                        console.log('temp', temp);
                                         this.stepdata[this.orders[i]._id] = temp;
-                                        console.log('this.stepdata', this.stepdata);
                                         break;
                                     }
                                     else {
@@ -459,9 +227,7 @@ var ListComponent = /** @class */ (function () {
                                             tab: 1,
                                             step: this.orders[i].step[1].step,
                                         };
-                                        console.log('temp', temp);
                                         this.stepdata[this.orders[i]._id] = temp;
-                                        console.log('this.stepdata', this.stepdata);
                                         break;
                                     }
                                 }
