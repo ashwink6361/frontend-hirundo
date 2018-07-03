@@ -52,7 +52,7 @@ export class CartComponent implements OnInit {
             }
           }
           cp += (this.tableData.orderId[k].item[i].price + varicost) * this.tableData.orderId[k].item[i].quantity;
-          this.orderItemsTotalPrice = cp + this.tableData.orderId[0].noOfPeople + (0.5 * this.tableData.orderId[0].noOfPeople);
+          this.orderItemsTotalPrice = cp + (this.tableData.orderId[0].seatCost * this.tableData.orderId[0].noOfPeople);
           this.orderItemsTotalItem = itemno;
         }
       }
@@ -61,6 +61,7 @@ export class CartComponent implements OnInit {
 
   createOrder() {
     let data = this.orderService.getOrderData();
+    console.log('data',data);
     var itemarray = [];
     var steps = [];
     if (this.globalService.getStepData()) {
@@ -96,10 +97,9 @@ export class CartComponent implements OnInit {
           notes: data.selectedItems[steps[a]][i].ordernote ? data.selectedItems[steps[a]][i].ordernote : '',
           variant: vararray,
           step: data.selectedItems[steps[a]][i].step,
-          department: data.selectedItems[steps[a]][i].category.department
-          
+          department: data.selectedItems[steps[a]][i].category.department,
+          preparationTime: data.selectedItems[steps[a]][i].preparationTime          
         }
-        console.log(data.selectedItems[steps[a]][i].category.department, 'department create order');
         itemarray.push(item);
       }
     }
