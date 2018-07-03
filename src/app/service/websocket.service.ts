@@ -48,7 +48,11 @@ export class WebsocketService {
         this.socket.on('neworderAdmin', (data) => {
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
-                this._orders.unshift(data);
+                this._orders.push(data);
+                let audio = new Audio();
+                audio.src = "../../../assets/audio/beep.mp3";
+                audio.load();
+                audio.play();
             }
         });     
 
@@ -57,6 +61,10 @@ export class WebsocketService {
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 4) {
                 this._orders.push(data);
+                let audio = new Audio();
+                audio.src = "../../../assets/audio/beep.mp3";
+                audio.load();
+                audio.play();
             }
         });
         this.socket.on('orderstatus', (data) => {
@@ -114,6 +122,10 @@ export class WebsocketService {
                     this._orders[i] = data;
                 }
             }
+            let audio = new Audio();
+            audio.src = "../../../assets/audio/beep.mp3";
+            audio.load();
+            audio.play();
         });
         this.socket.on('itemDeleted', (data) => {
             for (var i = 0; i < this._orders.length; i++) {
@@ -206,10 +218,11 @@ export class WebsocketService {
         return currentValue == 1;
     };
 
-    public getOrders(): Promise<any> {
+    public getOrders(tab): Promise<any> {
         let url = '/api/department/orders';
         let opts = {
-            category: this.authGuard.getCurrentUser().category
+            category: this.authGuard.getCurrentUser().category,
+            tab: tab
         }
         return this.http.post(url, opts).toPromise()
             .then(data => {

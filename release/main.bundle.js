@@ -849,7 +849,11 @@ var WebsocketService = /** @class */ (function () {
         this.socket.on('neworderAdmin', function (data) {
             var userType = _this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
-                _this._orders.unshift(data);
+                _this._orders.push(data);
+                var audio = new Audio();
+                audio.src = "../../../assets/audio/beep.mp3";
+                audio.load();
+                audio.play();
             }
         });
         this.socket.on('neworder', function (data) {
@@ -857,6 +861,10 @@ var WebsocketService = /** @class */ (function () {
             var userType = _this.authGuard.getCurrentUser().userType;
             if (userType == 4) {
                 _this._orders.push(data);
+                var audio = new Audio();
+                audio.src = "../../../assets/audio/beep.mp3";
+                audio.load();
+                audio.play();
             }
         });
         this.socket.on('orderstatus', function (data) {
@@ -914,6 +922,10 @@ var WebsocketService = /** @class */ (function () {
                     _this._orders[i] = data;
                 }
             }
+            var audio = new Audio();
+            audio.src = "../../../assets/audio/beep.mp3";
+            audio.load();
+            audio.play();
         });
         this.socket.on('itemDeleted', function (data) {
             for (var i = 0; i < _this._orders.length; i++) {
@@ -1004,11 +1016,12 @@ var WebsocketService = /** @class */ (function () {
         return currentValue == 1;
     };
     ;
-    WebsocketService.prototype.getOrders = function () {
+    WebsocketService.prototype.getOrders = function (tab) {
         var _this = this;
         var url = '/api/department/orders';
         var opts = {
-            category: this.authGuard.getCurrentUser().category
+            category: this.authGuard.getCurrentUser().category,
+            tab: tab
         };
         return this.http.post(url, opts).toPromise()
             .then(function (data) {

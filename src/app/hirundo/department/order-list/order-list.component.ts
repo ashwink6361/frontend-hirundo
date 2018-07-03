@@ -539,12 +539,14 @@ export class OrderListComponent implements DoCheck {
     public loadingOrders: boolean = true;
     public stepdata: Array<any> = [];
     public itemStatusDelivered: Array<any> = [];
+    public activetab = 1;
     constructor(public websocketService: WebsocketService, public authGuard: AuthGuard, private differs: IterableDiffers) {
         this.differ = differs.find([]).create(null);
     }
 
     ngOnInit() {
-        this.websocketService.getOrders().then(data => {
+        this.activetab = 1;
+        this.websocketService.getOrders(this.activetab).then(data => {
             this.orders = data;
             if (this.orders.length) {
                 this.itemStatusDelivered = [];
@@ -664,36 +666,39 @@ export class OrderListComponent implements DoCheck {
             };
             this.websocketService.updateOrder(order._id, opts).then((data) => {
                 order = data.data;
-                if (this.orders.length) {
-                    this.itemStatusDelivered = [];
-                    for (let i = 0; i < this.orders.length; i++) {
-                        let itemStatusDelivered = {};
-                        for (let m = 0; m < this.orders[i].step.length; m++) {
-                            let startTemp = [];
-                            for (let n = 0; n < this.orders[i].step[m].itemId.length; n++) {
-                                startTemp.push(this.orders[i].step[m].itemId[n].status);
-                            }
-                            itemStatusDelivered[this.orders[i].step[m].step] = startTemp.every(this.isEqualToOne);
-                        }
-                        this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered;
-                        console.log('this.itemStatusDelivered',this.itemStatusDelivered);
-                        for (let m = 0; m < this.orders[i].step.length; m++) {
-                            if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
-                                let temparray = this.orders[i].step[m].step.split(' ');
-                                let num = Number(temparray[1]);
-                           
-                                let temp = {
-                                    tab: num - 1,
-                                    step: this.orders[i].step[m].step,
+                this.websocketService.getOrders(this.activetab).then(data => {
+                    this.orders = data;
+                    if (this.orders.length) {
+                        this.itemStatusDelivered = [];
+                        for (let i = 0; i < this.orders.length; i++) {
+                            let itemStatusDelivered = {};
+                            for (let k = 0; k < this.orders[i].step.length; k++) {
+                                let startTemp = [];                        
+                                for (let l = 0; l < this.orders[i].step[k].itemId.length; l++) {
+                                    startTemp.push(this.orders[i].step[k].itemId[l].status);
                                 }
-                                this.stepdata[this.orders[i]._id] = temp;
-                                break;
+                                itemStatusDelivered[this.orders[i].step[k].step] = startTemp.every(this.isEqualToOne);
                             }
-                        }                                                        
+                            this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered; 
+                            console.log('this.itemStatusDelivered',this.itemStatusDelivered);
+                            for (let m = 0; m < this.orders[i].step.length; m++) {
+                                if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
+                                    let temparray = this.orders[i].step[m].step.split(' ');
+                                    let num = Number(temparray[1]);
+                                    let temp = {
+                                        tab: num - 1,
+                                        step: this.orders[i].step[m].step,
+                                    }
+                                    this.stepdata[this.orders[i]._id] = temp;
+                                    break;
+                                }
+                            }
+                        }
                     }
-                    // var minutes = m;
-                    // this.remainingTime[order._id][this.stepdata[order._id].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
-                }
+                    this.loadingOrders = false;
+                })
+                .catch(error => {
+                });
             }).catch(error => {
             });
         }
@@ -786,5 +791,42 @@ export class OrderListComponent implements DoCheck {
                 }
             }
         }
+    }
+
+    public changeTab(tab){
+        this.activetab = tab;
+        this.websocketService.getOrders(this.activetab).then(data => {
+            this.orders = data;
+            if (this.orders.length) {
+                this.itemStatusDelivered = [];
+                for (let i = 0; i < this.orders.length; i++) {
+                    let itemStatusDelivered = {};
+                    for (let k = 0; k < this.orders[i].step.length; k++) {
+                        let startTemp = [];                        
+                        for (let l = 0; l < this.orders[i].step[k].itemId.length; l++) {
+                            startTemp.push(this.orders[i].step[k].itemId[l].status);
+                        }
+                        itemStatusDelivered[this.orders[i].step[k].step] = startTemp.every(this.isEqualToOne);
+                    }
+                    this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered; 
+                    console.log('this.itemStatusDelivered',this.itemStatusDelivered);
+                    for (let m = 0; m < this.orders[i].step.length; m++) {
+                        if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
+                            let temparray = this.orders[i].step[m].step.split(' ');
+                            let num = Number(temparray[1]);
+                            let temp = {
+                                tab: num - 1,
+                                step: this.orders[i].step[m].step,
+                            }
+                            this.stepdata[this.orders[i]._id] = temp;
+                            break;
+                        }
+                    }
+                }
+            }
+            this.loadingOrders = false;
+        })
+        .catch(error => {
+        });
     }
 }

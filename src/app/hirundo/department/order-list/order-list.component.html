@@ -1,12 +1,12 @@
 <div class="tabs-container">
     <ul>
-        <li [class.active]="">
+        <li [class.active]="activetab == 1" (click)="changeTab(1)">
             All
         </li>
-        <li [class.active]="">
+        <li [class.active]="activetab == 2" (click)="changeTab(2)">
             To Call 
         </li>
-        <li [class.active]="">
+        <li [class.active]="activetab == 3" (click)="changeTab(3)">
             Delivered
         </li>
       </ul>
@@ -17,14 +17,16 @@
         <div class="col-sm-6 col-md-3" *ngFor="let order of orders">
             <div class="card order-list">
                 <div class="card-body" [class.opacity]="order.status == 3">
-                    <h4 class="card-title">
+                    <h4 class="card-title" *ngIf="stepdata[order._id]">
                         <div>
                             <img src="assets/images/table.png" alt="">
                             <span>{{order.tableName}}/
                                 <span class="order-number">N.{{order.orderId}}</span>
                             </span>
                         </div>
-                        <!-- <div class="status" [class.bg-red]="order.status == 0" [class.bg-green]="order.status == 2" [class.bg-yellow]="order.status == 4">{{getOrderStatus(order.status)}}</div> -->
+                        <div *ngFor="let step of order.step">
+                            <span class="status bg-red" *ngIf="stepdata[order._id] && step.step == stepdata[order._id].step">New Order X{{step.preparationTime}}</span>
+                        </div>
                     </h4>
                     <div class="card-text">
                         <p>

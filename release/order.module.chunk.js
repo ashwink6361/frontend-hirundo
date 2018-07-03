@@ -93,7 +93,7 @@ var CartComponent = /** @class */ (function () {
                         }
                     }
                     cp += (this.tableData.orderId[k].item[i].price + varicost) * this.tableData.orderId[k].item[i].quantity;
-                    this.orderItemsTotalPrice = cp + (this.tableData.orderId[0].seatCost * this.tableData.orderId[0].noOfPeople);
+                    this.orderItemsTotalPrice = cp + (this.tableData.orderId[this.tableData.orderId.length - 1].seatCost * this.tableData.orderId[0].noOfPeople);
                     this.orderItemsTotalItem = itemno;
                 }
             }
