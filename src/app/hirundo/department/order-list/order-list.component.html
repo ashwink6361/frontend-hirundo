@@ -1,3 +1,16 @@
+<div class="tabs-container">
+    <ul>
+        <li [class.active]="">
+            All
+        </li>
+        <li [class.active]="">
+            To Call 
+        </li>
+        <li [class.active]="">
+            Delivered
+        </li>
+      </ul>
+</div>
 <div class="text-center" *ngIf="!(orders && orders.length)">No Order Found.</div>
 <div *ngIf="orders && orders.length" class="order-list-container container-fluid">
     <div class="row">
