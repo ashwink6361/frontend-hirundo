@@ -641,15 +641,15 @@ header {
     .room {
         margin: 0 3px 3px 0;
         background-color: $secondary;
-        max-width: 70px;
+        max-width: 100px;
         width: 100%;
-        height: 70px;
+        height: 100px;
         padding: 10px;
         cursor: pointer;
         .table {
-            max-width: 50px;
+            max-width: 80px;
             width: 100%;
-            height: 50px;
+            height: 80px;
             border-radius: 100%;
             background-color: #fff;
             display: flex;
@@ -795,10 +795,6 @@ header {
             border-top: none;
             padding-top: 0;
             padding-bottom: 5px;
-        }
-        @include respond-to($phone-md-min) {
-            height: 266px;
-            overflow-y: auto;
         }
     }
     .card-title {
