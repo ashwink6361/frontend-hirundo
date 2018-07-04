@@ -44,17 +44,20 @@ export class WebsocketService {
                 }
             });
         };   
-
-        this.socket.on('neworderAdmin', (data) => {
-            let userType = this.authGuard.getCurrentUser().userType;
-            if (userType == 3) {
-                this._orders.push(data);
+        
+        this.socket.on('neworderAdmin', (data) => {            
+            if(data.type === 'admin'){
+                console.log('in type');
                 let audio = new Audio();
                 audio.src = "../../../assets/audio/beep.mp3";
                 audio.load();
                 audio.play();
             }
-        });     
+            let userType = this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                this._orders.push(data);
+            }
+        });  
 
         this.socket.on('neworder', (data) => {
             console.log('neworder' , data);

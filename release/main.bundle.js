@@ -847,13 +847,16 @@ var WebsocketService = /** @class */ (function () {
         }
         ;
         this.socket.on('neworderAdmin', function (data) {
-            var userType = _this.authGuard.getCurrentUser().userType;
-            if (userType == 3) {
-                _this._orders.push(data);
+            if (data.type === 'admin') {
+                console.log('in type');
                 var audio = new Audio();
                 audio.src = "../../../assets/audio/beep.mp3";
                 audio.load();
                 audio.play();
+            }
+            var userType = _this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                _this._orders.push(data);
             }
         });
         this.socket.on('neworder', function (data) {
