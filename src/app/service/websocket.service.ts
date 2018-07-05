@@ -13,6 +13,9 @@ export class WebsocketService {
     private socketUrl;
     public _orders: Array<any> = [];
     public _rooms: Array<any> = [];
+    public socketEvent: boolean = false;
+    public orderId = '';
+    
     constructor(private http: Http, private authGuard: AuthGuard) {
         let url = '/server/env';
         this.http.get(url).toPromise()
@@ -25,11 +28,7 @@ export class WebsocketService {
             });
     }
     connect() {
-        // If you aren't familiar with environment variables then
-        // you can hard code `environment.ws_url` as `http://localhost:5000`
-        // this.socket = io('http://localhost:5051');
         this.socket = io(this.socketUrl);
-        // this.socket = io(this.socketUrl, { 'transports': ['polling'] });
         if (this.socket.connected){
             console.log("Socket connection done ");
         }
@@ -47,7 +46,6 @@ export class WebsocketService {
         
         this.socket.on('neworderAdmin', (data) => {            
             if(data.type === 'admin'){
-                console.log('in type');
                 let audio = new Audio();
                 audio.src = "../../../assets/audio/beep.mp3";
                 audio.load();
@@ -60,7 +58,8 @@ export class WebsocketService {
         });  
 
         this.socket.on('neworder', (data) => {
-            console.log('neworder' , data);
+            this.socketEvent = true;
+            this.orderId = data._id;
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 4) {
                 this._orders.push(data);
@@ -90,6 +89,8 @@ export class WebsocketService {
             }
         });
         this.socket.on('orderstatusDept', (data) => {
+            this.socketEvent = true; 
+            this.orderId = data._id;           
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id == this._orders[i]._id) {
                     this._orders[i] = _.cloneDeep(data);
@@ -120,6 +121,8 @@ export class WebsocketService {
             }                  
         });
         this.socket.on('changeStep', (data) => {
+            this.socketEvent = true;   
+            this.orderId = data._id;         
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;
@@ -130,7 +133,18 @@ export class WebsocketService {
             audio.load();
             audio.play();
         });
+        this.socket.on('orderkey', (data) => {
+            let userType = this.authGuard.getCurrentUser().userType;
+            if (userType == 3) {
+                let audio = new Audio();
+                audio.src = "../../../assets/audio/beep.mp3";
+                audio.load();
+                audio.play();
+            }
+        });
         this.socket.on('itemDeleted', (data) => {
+            this.socketEvent = true;   
+            this.orderId = data._id;        
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;
@@ -138,7 +152,6 @@ export class WebsocketService {
             }
         });
         this.socket.on('itemDeletedW', (data) => {
-            console.log('itemDeletedW', data);
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
                 for (var i = 0; i < this._orders.length; i++) {
@@ -149,7 +162,6 @@ export class WebsocketService {
             }
         });
         this.socket.on('itemUpdatedW', (data) => {
-            console.log('itemUpdatedW', data);
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 3) {
                 for (var i = 0; i < this._orders.length; i++) {
@@ -160,6 +172,8 @@ export class WebsocketService {
             }
         });
         this.socket.on('itemUpdated', (data) => {
+            this.socketEvent = true; 
+            this.orderId = data._id;           
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;
@@ -194,6 +208,8 @@ export class WebsocketService {
         });
 
         this.socket.on('checkouttableD', (data) => {
+            this.socketEvent = true; 
+            this.orderId = data._id;           
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 4) {
                 if (this._orders && this._orders.length) {
@@ -209,6 +225,8 @@ export class WebsocketService {
         });
 
         this.socket.on('checklist', (data) => {
+            this.socketEvent = true;     
+            this.orderId = data._id;       
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;

@@ -24,8 +24,14 @@
                                 <span class="order-number">N.{{order.orderId}}</span>
                             </span>
                         </div>
+                        <!-- <div class="status bg-red" *ngIf="remainingTime[order._id] && stepdata[order._id] && remainingTime[order._id][stepdata[order._id].step] != '00:00' && step.preparationTime">
+                            New Order X{{remainingTime[order._id][stepdata[order._id].step]}}
+                        </div> -->
                         <div *ngFor="let step of order.step">
-                            <span class="status bg-red" *ngIf="stepdata[order._id] && step.step == stepdata[order._id].step">New Order X{{step.preparationTime}}</span>
+                            <div class="status bg-red" *ngIf="remainingTime[order._id] && stepdata[order._id] && step.step == stepdata[order._id].step && remainingTime[order._id][stepdata[order._id].step] && remainingTime[order._id][stepdata[order._id].step] != '00:00'">
+                                New Order
+                            </div>
+                            <!-- <span class="status bg-red" *ngIf="stepdata[order._id] && step.step == stepdata[order._id].step">New Order X{{step.preparationTime}}</span> -->
                         </div>
                     </h4>
                     <div class="card-text">
