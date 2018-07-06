@@ -15,7 +15,7 @@ export class WebsocketService {
     public _rooms: Array<any> = [];
     public socketEvent: boolean = false;
     public orderId = '';
-    
+
     constructor(private http: Http, private authGuard: AuthGuard) {
         let url = '/server/env';
         this.http.get(url).toPromise()
@@ -29,7 +29,7 @@ export class WebsocketService {
     }
     connect() {
         this.socket = io(this.socketUrl);
-        if (this.socket.connected){
+        if (this.socket.connected) {
             console.log("Socket connection done ");
         }
         let user = JSON.parse(localStorage.getItem('currentUser'));
@@ -42,20 +42,22 @@ export class WebsocketService {
                     });
                 }
             });
-        };   
-        
-        this.socket.on('neworderAdmin', (data) => {            
-            if(data.type === 'admin'){
-                let audio = new Audio();
-                audio.src = "../../../assets/audio/beep.mp3";
-                audio.load();
-                audio.play();
-            }
+        };
+
+        this.socket.on('neworderAdmin', (data) => {
             let userType = this.authGuard.getCurrentUser().userType;
-            if (userType == 3) {
-                this._orders.push(data);
+            if (data.restro == this.authGuard.getCurrentUser().restro) {
+                if (data.type === 'admin') {
+                    let audio = new Audio();
+                    audio.src = "../../../assets/audio/beep.mp3";
+                    audio.load();
+                    audio.play();
+                }
+                if (userType == 3) {
+                    this._orders.unshift(data);
+                }
             }
-        });  
+        });
 
         this.socket.on('neworder', (data) => {
             this.socketEvent = true;
@@ -71,26 +73,28 @@ export class WebsocketService {
         });
         this.socket.on('orderstatus', (data) => {
             let userType = this.authGuard.getCurrentUser().userType;
-            if (userType == 3) {
-                for (var i = 0; i < this._orders.length; i++) {
-                    if (data._id == this._orders[i]._id) {
-                        this._orders[i] = _.cloneDeep(data);
-                        let itemsToSplice = [];
-                        if (data.item.length) {
-                            for (var k = 0; k < data.item.length; k++) {
-                                itemsToSplice.push(data.item[k].status);
+            if (data.restro == this.authGuard.getCurrentUser().restro) {
+                if (userType == 3) {
+                    for (var i = 0; i < this._orders.length; i++) {
+                        if (data._id == this._orders[i]._id) {
+                            this._orders[i] = _.cloneDeep(data);
+                            let itemsToSplice = [];
+                            if (data.item.length) {
+                                for (var k = 0; k < data.item.length; k++) {
+                                    itemsToSplice.push(data.item[k].status);
+                                }
                             }
-                        }
-                        if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(this.isBelowThreshold)) {
-                            this._orders.splice(i, 1);
+                            if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(this.isBelowThreshold)) {
+                                this._orders.splice(i, 1);
+                            }
                         }
                     }
                 }
             }
         });
         this.socket.on('orderstatusDept', (data) => {
-            this.socketEvent = true; 
-            this.orderId = data._id;           
+            this.socketEvent = true;
+            this.orderId = data._id;
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id == this._orders[i]._id) {
                     this._orders[i] = _.cloneDeep(data);
@@ -107,22 +111,24 @@ export class WebsocketService {
             }
         });
         this.socket.on('tablestatus', (data) => {
-            if(this._rooms && this._rooms.length){
-                for (var i = 0; i < this._rooms.length; i++) {
-                    if (data.room._id == this._rooms[i]._id) {
-                        for (var j = 0; j < this._rooms[i].tables.length; j++) {
-                            if (data.table == this._rooms[i].tables[j]._id) {
-                                this._rooms[i].tables[j].orderId.push(data);
-                                break;
+            if (data.restro == this.authGuard.getCurrentUser().restro) {
+                if (this._rooms && this._rooms.length) {
+                    for (var i = 0; i < this._rooms.length; i++) {
+                        if (data.room._id == this._rooms[i]._id) {
+                            for (var j = 0; j < this._rooms[i].tables.length; j++) {
+                                if (data.table == this._rooms[i].tables[j]._id) {
+                                    this._rooms[i].tables[j].orderId.push(data);
+                                    break;
+                                }
                             }
                         }
                     }
                 }
-            }                  
+            }
         });
         this.socket.on('changeStep', (data) => {
-            this.socketEvent = true;   
-            this.orderId = data._id;         
+            this.socketEvent = true;
+            this.orderId = data._id;
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;
@@ -135,16 +141,18 @@ export class WebsocketService {
         });
         this.socket.on('orderkey', (data) => {
             let userType = this.authGuard.getCurrentUser().userType;
-            if (userType == 3) {
-                let audio = new Audio();
-                audio.src = "../../../assets/audio/beep.mp3";
-                audio.load();
-                audio.play();
+            if (data.restro == this.authGuard.getCurrentUser().restro) {
+                if (userType == 3) {
+                    let audio = new Audio();
+                    audio.src = "../../../assets/audio/beep.mp3";
+                    audio.load();
+                    audio.play();
+                }
             }
         });
         this.socket.on('itemDeleted', (data) => {
-            this.socketEvent = true;   
-            this.orderId = data._id;        
+            this.socketEvent = true;
+            this.orderId = data._id;
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;
@@ -153,27 +161,31 @@ export class WebsocketService {
         });
         this.socket.on('itemDeletedW', (data) => {
             let userType = this.authGuard.getCurrentUser().userType;
-            if (userType == 3) {
-                for (var i = 0; i < this._orders.length; i++) {
-                    if (data._id === this._orders[i]._id) {
-                        this._orders[i] = data;
+            if (data.restro == this.authGuard.getCurrentUser().restro) {
+                if (userType == 3) {
+                    for (var i = 0; i < this._orders.length; i++) {
+                        if (data._id === this._orders[i]._id) {
+                            this._orders[i] = data;
+                        }
                     }
                 }
             }
         });
         this.socket.on('itemUpdatedW', (data) => {
             let userType = this.authGuard.getCurrentUser().userType;
-            if (userType == 3) {
-                for (var i = 0; i < this._orders.length; i++) {
-                    if (data._id === this._orders[i]._id) {
-                        this._orders[i] = data;
+            if (data.restro == this.authGuard.getCurrentUser().restro) {
+                if (userType == 3) {
+                    for (var i = 0; i < this._orders.length; i++) {
+                        if (data._id === this._orders[i]._id) {
+                            this._orders[i] = data;
+                        }
                     }
                 }
             }
         });
         this.socket.on('itemUpdated', (data) => {
-            this.socketEvent = true; 
-            this.orderId = data._id;           
+            this.socketEvent = true;
+            this.orderId = data._id;
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;
@@ -182,34 +194,36 @@ export class WebsocketService {
         });
         this.socket.on('checkouttable', (data) => {
             let userType = this.authGuard.getCurrentUser().userType;
-            if (userType == 3) {
-                if(this._rooms && this._rooms.length){
-                    for (var i = 0; i < this._rooms.length; i++) {
-                        if (data.roomId == this._rooms[i]._id) {
-                            for (var j = 0; j < this._rooms[i].tables.length; j++) {
-                                if (data.tableId == this._rooms[i].tables[j]._id) {
-                                    this._rooms[i].tables[j].orderId = [];
-                                    break;
+            if (data.restro == this.authGuard.getCurrentUser().restro) {
+                if (userType == 3) {
+                    if (this._rooms && this._rooms.length) {
+                        for (var i = 0; i < this._rooms.length; i++) {
+                            if (data.roomId == this._rooms[i]._id) {
+                                for (var j = 0; j < this._rooms[i].tables.length; j++) {
+                                    if (data.tableId == this._rooms[i].tables[j]._id) {
+                                        this._rooms[i].tables[j].orderId = [];
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (this._orders && this._orders.length) {
+                        for (var i = 0; i < data.orderId.length; i++) {
+                            for (var j = 0; j < this._orders.length; j++) {
+                                if (data.orderId[i] == this._orders[j]._id) {
+                                    this._orders.splice(j, 1);
                                 }
                             }
                         }
                     }
                 }
-                if (this._orders && this._orders.length) {
-                    for (var i = 0; i < data.orderId.length; i++) {
-                        for (var j = 0; j < this._orders.length; j++) {
-                            if (data.orderId[i] == this._orders[j]._id) {
-                                this._orders.splice(j, 1);
-                            }
-                        }                        
-                    }  
-                } 
-            }  
+            }
         });
 
         this.socket.on('checkouttableD', (data) => {
-            this.socketEvent = true; 
-            this.orderId = data._id;           
+            this.socketEvent = true;
+            this.orderId = data._id;
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 4) {
                 if (this._orders && this._orders.length) {
@@ -218,20 +232,20 @@ export class WebsocketService {
                             if (data.orderId[i] == this._orders[j]._id) {
                                 this._orders.splice(j, 1);
                             }
-                        }                        
-                    }  
-                }  
+                        }
+                    }
+                }
             }
         });
 
         this.socket.on('checklist', (data) => {
-            this.socketEvent = true;     
-            this.orderId = data._id;       
+            this.socketEvent = true;
+            this.orderId = data._id;
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;
                 }
-            } 
+            }
         });
     };
 
