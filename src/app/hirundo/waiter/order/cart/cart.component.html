@@ -89,7 +89,7 @@
                     Menu
                 </button>
             </div>
-            <button type="submit" *ngIf="!tableData.orderId.length" class="order-btn waves-light" [disabled]="!orderService.getOrderData().selectedItems"
+            <button type="submit" *ngIf="!tableData.orderId.length" class="order-btn waves-light" [disabled]="!orderService.getOrderData().selectedItems || loader"
                 (click)="createOrder()">
                 <span>Create Order</span>
             </button>

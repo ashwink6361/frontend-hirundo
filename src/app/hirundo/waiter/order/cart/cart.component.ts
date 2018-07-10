@@ -17,6 +17,7 @@ export class CartComponent implements OnInit {
   private noteList = [];
   public tableData: any;
   public showVarient: boolean = false;
+  public loader:boolean = false;
   public activeTab: boolean[] = [true, false];
   public variantData = {
     quantity: 0,
@@ -109,8 +110,10 @@ export class CartComponent implements OnInit {
       noOfPeople: data.noOfPeople,
       item: itemarray
     }
+    this.loader = true;
     this.orderService.createOrder(createorder)
       .then(data => {
+        this.loader = false;
         this.router.navigate(['/waiter/list']);
         this.orderService.showElement = false;
       })
