@@ -59,4 +59,10 @@ export class OrderService {
       .then(this.globalService.extractData)
       .catch(this.globalService.handleErrorPromise);
   }
+  addArticle(data): Promise<any> {
+    let url = '/api/item';
+    return this.http.post(url, data).toPromise()
+      .then(this.globalService.extractData)
+      .catch(this.globalService.handleErrorPromise);
+  }
 }

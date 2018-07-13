@@ -34,6 +34,14 @@ export class ItemComponent implements OnInit {
   public notes = [];
   public variantError = '';
   public articleData: any;
+  public AddDataArticle = {
+    name: '',
+    price: '',
+    category: '',
+    subCategory: ''
+  }
+  public loader: boolean = false;
+  public addArticleError = '';
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
@@ -51,7 +59,7 @@ export class ItemComponent implements OnInit {
           if (this.data.selectedItems[steps[k]].length) {
             let temp = 0;
             for (let j = 0; j < this.data.selectedItems[steps[k]].length; j++) {
-              if (this.data.selectedItems[steps[k]][j]._id == this.data.categoryItems[steps[k]][i]._id ) {
+              if (this.data.selectedItems[steps[k]][j]._id == this.data.categoryItems[steps[k]][i]._id) {
                 temp = temp + this.data.selectedItems[steps[k]][j].quantity;
                 this.data.categoryItems[steps[k]][i].itemTotal = temp;
               }
@@ -67,25 +75,25 @@ export class ItemComponent implements OnInit {
 
   increaseValue(article) {
     article.step = this.globalService.getTabData().step;
-    let currentStep =  this.globalService.getTabData().step;
+    let currentStep = this.globalService.getTabData().step;
     let data = this.orderService.getOrderData();
     if (data.selectedItems[currentStep].length) {
       let isExist = true;
       let isarr = [];
       for (let i = 0; i < data.selectedItems[currentStep].length; i++) {
         if (data.selectedItems[currentStep][i]._id == article._id) {
-            if (!data.selectedItems[currentStep][i].variant) {
-              data.selectedItems[currentStep][i].quantity += 1;
-              isarr.push(data.selectedItems[currentStep][i]._id);
-              for (let j = 0; j < data.categoryItems[currentStep].length; j++) {
-                if (data.categoryItems[currentStep][j]._id == data.selectedItems[currentStep][i]._id) {
-                  data.categoryItems[currentStep][j].itemTotal = data.categoryItems[currentStep][j].itemTotal + 1;
-                }
+          if (!data.selectedItems[currentStep][i].variant) {
+            data.selectedItems[currentStep][i].quantity += 1;
+            isarr.push(data.selectedItems[currentStep][i]._id);
+            for (let j = 0; j < data.categoryItems[currentStep].length; j++) {
+              if (data.categoryItems[currentStep][j]._id == data.selectedItems[currentStep][i]._id) {
+                data.categoryItems[currentStep][j].itemTotal = data.categoryItems[currentStep][j].itemTotal + 1;
               }
             }
-            if (data.selectedItems[currentStep][i].variant) {
-              isExist = false;
-            }
+          }
+          if (data.selectedItems[currentStep][i].variant) {
+            isExist = false;
+          }
         }
         if (data.selectedItems[currentStep][i]._id != article._id) {
           isExist = false;
@@ -114,13 +122,13 @@ export class ItemComponent implements OnInit {
     let itemno = 0;
     let varicost = 0;
     var steps = [];
-      if (this.globalService.getStepData()) {
-        steps = this.globalService.getStepData();
-      }
-      else {
-        steps = ['Uscita 1', 'Uscita 2'];
-      }
-    for(let a=0;a<steps.length;a++){
+    if (this.globalService.getStepData()) {
+      steps = this.globalService.getStepData();
+    }
+    else {
+      steps = ['Uscita 1', 'Uscita 2'];
+    }
+    for (let a = 0; a < steps.length; a++) {
       for (let i = 0; i < data.selectedItems[steps[a]].length; i++) {
         itemno += data.selectedItems[steps[a]][i].quantity;
         if (data.selectedItems[steps[a]][i].variant) {
@@ -175,7 +183,7 @@ export class ItemComponent implements OnInit {
       steps = ['Uscita 1', 'Uscita 2'];
     }
     let emptyArray = [];
-    for(let a=0;a<steps.length;a++){     
+    for (let a = 0; a < steps.length; a++) {
       if (data.selectedItems[steps[a]].length) {
         for (let i = 0; i < data.selectedItems[steps[a]].length; i++) {
           itemno += data.selectedItems[steps[a]][i].quantity;
@@ -192,11 +200,11 @@ export class ItemComponent implements OnInit {
         }
       }
       if (data.selectedItems[steps[a]].length == 0) {
-        if(emptyArray.indexOf(steps[a])<0){
+        if (emptyArray.indexOf(steps[a]) < 0) {
           emptyArray.push(steps[a]);
         }
       }
-      if(emptyArray.length == steps.length){
+      if (emptyArray.length == steps.length) {
         data.cartTotalPrice = 0;
         data.cartTotalItem = 0;
       }
@@ -211,12 +219,12 @@ export class ItemComponent implements OnInit {
 
   viewVarient(article) {
     this.orderService.getVariantAndNotes()
-    .then(data => {
-      this.variantList = data.data.variants;
-      this.noteList = data.data.notes;
-    })
-    .catch(error => {
-    });
+      .then(data => {
+        this.variantList = data.data.variants;
+        this.noteList = data.data.notes;
+      })
+      .catch(error => {
+      });
     this.showVarient = true;
     this.articleData = article;
     this.notes = [];
@@ -248,10 +256,22 @@ export class ItemComponent implements OnInit {
 
   addArticle() {
     this.articleAdd = true;
+    this.AddDataArticle = {
+      name: '',
+      price: '',
+      category: '',
+      subCategory: ''
+    }
   }
 
   hideArticle() {
     this.articleAdd = false;
+    this.AddDataArticle = {
+      name: '',
+      price: '',
+      category: '',
+      subCategory: ''
+    }
   }
 
   filterBySubcategory(subcategory, index) {
@@ -354,7 +374,7 @@ export class ItemComponent implements OnInit {
       else {
         steps = ['Uscita 1', 'Uscita 2'];
       }
-      for(let a=0;a<steps.length;a++){
+      for (let a = 0; a < steps.length; a++) {
         for (let i = 0; i < data.selectedItems[steps[a]].length; i++) {
           itemno += data.selectedItems[steps[a]][i].quantity;
           if (data.selectedItems[steps[a]][i].variant) {
@@ -372,6 +392,70 @@ export class ItemComponent implements OnInit {
       this.orderService.setOrderData(data);
       this.hideVarient();
       this.articles = this.orderService.getOrderData().categoryItems;
+    }
+  }
+
+  saveAddArticleData() {
+    if (this.AddDataArticle.name === '') {
+      this.addArticleError = 'Please enter name';
+      setTimeout(() => {
+        this.addArticleError = '';
+      }, 4000);
+    }
+    else if (this.AddDataArticle.price === '') {
+      this.addArticleError = 'Please enter price';
+      setTimeout(() => {
+        this.addArticleError = '';
+      }, 4000);
+    }
+    else {
+      this.AddDataArticle.category = this.orderService.getOrderData().selectedCategory._id;
+      if (this.selectedSubcategory[-1]) {
+        this.AddDataArticle.subCategory = '';
+      }
+      if (!this.selectedSubcategory[-1]) {
+        if (this.orderService.getOrderData().selectedCategory.subCategory.length) {
+          for (let i = 0; i < this.orderService.getOrderData().selectedCategory.subCategory.length; i++) {
+            if (this.selectedSubcategory[i]) {
+              this.AddDataArticle.subCategory = this.orderService.getOrderData().selectedCategory.subCategory[i];
+            }
+          }
+        }
+        else {
+          this.AddDataArticle.subCategory = '';
+        }
+      }
+      let opts = {
+        name: this.AddDataArticle.name,
+        price: Number(this.AddDataArticle.price),
+        category: this.AddDataArticle.category,
+        subCategory: this.AddDataArticle.subCategory
+      }
+      this.loader = true;
+      this.orderService.addArticle(opts)
+        .then(data => {
+          this.loader = false;
+          var steps = [];
+          if (this.globalService.getStepData()) {
+            steps = this.globalService.getStepData();
+          }
+          else {
+            steps = ['Uscita 1', 'Uscita 2'];
+          }
+          for (let j = 0; j < steps.length; j++) {
+            this.orderService.getOrderData().categoryItems[steps[j]].push(data.data);
+          }
+          this.hideArticle();
+        })
+        .catch(error => {
+        });
+    }
+  }
+
+  inputChanged(){
+    if((Number(this.AddDataArticle.price) % 1) != 0)
+    {
+      this.AddDataArticle.price =  parseFloat(this.AddDataArticle.price).toFixed(2);
     }
   }
 }
