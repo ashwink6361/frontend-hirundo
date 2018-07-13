@@ -1,0 +1,12 @@
+.tabs-container{
+    position: fixed;
+    top: 50px;
+    width: 100%;
+}
+
+.order-list-container{
+    margin-top: 50px;
+    .row{
+        flex-wrap: nowrap !important;
+    }
+}

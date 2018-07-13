@@ -15,7 +15,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".tabs-container {\n  position: fixed;\n  top: 50px;\n  width: 100%; }\n\n.order-list-container {\n  margin-top: 50px; }\n  .order-list-container .row {\n    -ms-flex-wrap: nowrap !important;\n        flex-wrap: nowrap !important; }\n", ""]);
 
 // exports
 
