@@ -62,7 +62,7 @@ export class GlobalService {
 
     public handleErrorPromise(error: Response | any) {
         let body = error.json();
-        if (error.status === 400) {
+        if (error.status === 400 || error.status === 401) {
             return Promise.reject(body.error || error);
         } else {
             localStorage.removeItem('isLoggedin');

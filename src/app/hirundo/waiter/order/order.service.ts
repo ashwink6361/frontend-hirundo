@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, Headers,RequestOptions } from '@angular/http';
 import { GlobalService } from '../../global.service';
 import 'rxjs/add/operator/toPromise';
 @Injectable()
@@ -61,7 +61,10 @@ export class OrderService {
   }
   addArticle(data): Promise<any> {
     let url = '/api/item';
-    return this.http.post(url, data).toPromise()
+    var headers = new Headers();
+    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post(url, data, options).toPromise()
       .then(this.globalService.extractData)
       .catch(this.globalService.handleErrorPromise);
   }

@@ -421,7 +421,7 @@ var GlobalService = /** @class */ (function () {
     };
     GlobalService.prototype.handleErrorPromise = function (error) {
         var body = error.json();
-        if (error.status === 400) {
+        if (error.status === 400 || error.status === 401) {
             return Promise.reject(body.error || error);
         }
         else {
@@ -730,7 +730,10 @@ var OrderService = /** @class */ (function () {
     };
     OrderService.prototype.addArticle = function (data) {
         var url = '/api/item';
-        return this.http.post(url, data).toPromise()
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]();
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({ headers: headers });
+        return this.http.post(url, data, options).toPromise()
             .then(this.globalService.extractData)
             .catch(this.globalService.handleErrorPromise);
     };

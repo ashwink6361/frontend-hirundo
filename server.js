@@ -40,7 +40,7 @@ app.use('/api/*', function (req, res, next) {
     var token = req.cookies.token;
     var headers = {        
         Authorization: 'Bearer ' + token,
-        privatekey: app.set('secretKey')    
+        // privatekey: app.set('secretKey')    
     }; 
     var urlArr = req.originalUrl.split('/');
     urlArr.splice(0, 2);
