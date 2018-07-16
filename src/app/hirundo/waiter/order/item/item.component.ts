@@ -45,6 +45,8 @@ export class ItemComponent implements OnInit {
   }
   public loader: boolean = false;
   public addArticleError = '';
+  public allergens = [];
+  public selectedIconImage = [];
   constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
@@ -262,6 +264,13 @@ export class ItemComponent implements OnInit {
   }
 
   addArticle() {
+    this.orderService.getAllergens().then(data=>{
+console.log('data',data);
+this.allergens = data.data;
+    })
+    .catch(error=>{
+      console.log('error',error);
+    });
     this.articleAdd = true;
     this.AddDataArticle = {
       name: '',
@@ -278,8 +287,9 @@ export class ItemComponent implements OnInit {
       price: '',
       category: '',
       subCategory: ''
-    }
-    console.log('this.orderService.getOrderData()',this.orderService.getOrderData());    
+    };
+    this.selectedIconImage = [];
+    this.allergens = [];
   }
 
   filterBySubcategory(subcategory, index) {
@@ -438,7 +448,8 @@ export class ItemComponent implements OnInit {
         name: this.AddDataArticle.name,
         price: Number(this.AddDataArticle.price),
         category: this.AddDataArticle.category,
-        subCategory: this.AddDataArticle.subCategory
+        subCategory: this.AddDataArticle.subCategory,
+        allergens: this.selectedIconImage ? JSON.stringify(this.selectedIconImage) : '',
       }
       this.loader = true;
       this.orderService.addArticle(opts)
@@ -472,4 +483,17 @@ export class ItemComponent implements OnInit {
       this.AddDataArticle.price =  parseFloat(this.AddDataArticle.price).toFixed(2);
     }
   }
+
+  selectedIcon(icon) {
+    if (this.selectedIconImage.indexOf(icon.image) === -1) {
+      this.selectedIconImage.push(icon.image);
+    }
+    this.showAllergenIcon = false;
+};
+
+  removeAllergens(indx, item) {
+  if (this.selectedIconImage.indexOf(item) > -1) {
+      this.selectedIconImage.splice(indx, 1);
+  }
+};
 }

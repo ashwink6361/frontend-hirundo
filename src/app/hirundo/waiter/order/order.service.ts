@@ -69,4 +69,10 @@ export class OrderService {
       .then(this.globalService.extractData)
       .catch(this.globalService.handleErrorPromise);
   }
+  getAllergens(): Promise<any> {
+    let url = '/api/allergen';
+    return this.http.get(url).toPromise()
+      .then(this.globalService.extractData)
+      .catch(this.globalService.handleErrorPromise);
+  }
 }

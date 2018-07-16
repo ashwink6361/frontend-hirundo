@@ -189,12 +189,35 @@
         </div>
         <div class="md-form">
             <label for="allergens">Allergens</label>
-            <button type="button" (click)="allergenIcon()">select</button>
-            <div class="icon-popup" *ngIf="showAllergenIcon">
-                <ul>
-                    <li></li>
-                </ul>
+            <div class="col-sm-5 d-flex-category">
+                <div class="d-flex allergens-icon">
+                    <div class="icon-preview" *ngFor="let item of selectedIconImage;let i=index;">
+                        <img [src]="item" />
+                        <button type="button" class="remove-icon" (click)="removeAllergens(i, item)">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="category-icon-container">
+                    <button type="button" class="form-control" (click)="allergenIcon()">
+                        <span>Select</span>
+                    </button>
+                    <div class="icon-popup" *ngIf="showAllergenIcon">
+                        <div class="icon-container" *ngFor="let allergen of allergens">
+                            <div (click)="selectedIcon(allergen)">
+                                <img [src]="allergen.image" alt="">
+                                <p>{{allergen.name}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <!-- <button type="button" (click)="allergenIcon()">select</button> -->
+            <!-- <div class="icon-popup" *ngIf="showAllergenIcon">
+                <ul *ngFor="let allergen of allergens;let i=index">
+                    <li><img [src]="allergen.image" />{{allergen.name}}</li>
+                </ul>
+            </div> -->
         </div>
     </div>
 </div>
