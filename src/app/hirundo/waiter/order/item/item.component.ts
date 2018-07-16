@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { GlobalService } from '../../../global.service'
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
+import *  as _ from 'lodash';
+
 @Component({
   selector: 'app-item',
   templateUrl: './item.component.html',
@@ -272,6 +274,7 @@ export class ItemComponent implements OnInit {
       category: '',
       subCategory: ''
     }
+    console.log('this.orderService.getOrderData()',this.orderService.getOrderData());    
   }
 
   filterBySubcategory(subcategory, index) {
@@ -409,6 +412,7 @@ export class ItemComponent implements OnInit {
       }, 4000);
     }
     else {
+      let orderdata = this.orderService.getOrderData();
       this.AddDataArticle.category = this.orderService.getOrderData().selectedCategory._id;
       if (this.selectedSubcategory[-1]) {
         this.AddDataArticle.subCategory = '';
@@ -434,6 +438,10 @@ export class ItemComponent implements OnInit {
       this.loader = true;
       this.orderService.addArticle(opts)
         .then(data => {
+          let itemTemp = _.cloneDeep(data.data);
+          itemTemp.quantity = 0;
+          itemTemp.itemTotal = 0;
+          let itemData = _.cloneDeep(itemTemp);
           this.loader = false;
           var steps = [];
           if (this.globalService.getStepData()) {
@@ -443,9 +451,10 @@ export class ItemComponent implements OnInit {
             steps = ['Uscita 1', 'Uscita 2'];
           }
           for (let j = 0; j < steps.length; j++) {
-            this.orderService.getOrderData().categoryItems[steps[j]].push(data.data);
+          orderdata.categoryItems[steps[j]][orderdata.categoryItems[steps[j]].length] = itemData;
           }
           this.hideArticle();
+          this.orderService.setOrderData(orderdata);          
         })
         .catch(error => {
         });

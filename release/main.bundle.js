@@ -729,6 +729,7 @@ var OrderService = /** @class */ (function () {
             .catch(this.globalService.handleErrorPromise);
     };
     OrderService.prototype.addArticle = function (data) {
+        console.log('data', data);
         var url = '/api/item';
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]();
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));

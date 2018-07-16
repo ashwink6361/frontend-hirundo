@@ -768,6 +768,8 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__global_service__ = __webpack_require__("../../../../../src/app/hirundo/global.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_Rx__ = __webpack_require__("../../../../rxjs/Rx.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_Rx__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -777,6 +779,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -1037,6 +1040,7 @@ var ItemComponent = /** @class */ (function () {
             category: '',
             subCategory: ''
         };
+        console.log('this.orderService.getOrderData()', this.orderService.getOrderData());
     };
     ItemComponent.prototype.filterBySubcategory = function (subcategory, index) {
         this.subcategory = subcategory;
@@ -1169,6 +1173,7 @@ var ItemComponent = /** @class */ (function () {
             }, 4000);
         }
         else {
+            var orderdata_1 = this.orderService.getOrderData();
             this.AddDataArticle.category = this.orderService.getOrderData().selectedCategory._id;
             if (this.selectedSubcategory[-1]) {
                 this.AddDataArticle.subCategory = '';
@@ -1194,6 +1199,10 @@ var ItemComponent = /** @class */ (function () {
             this.loader = true;
             this.orderService.addArticle(opts)
                 .then(function (data) {
+                var itemTemp = __WEBPACK_IMPORTED_MODULE_6_lodash__["cloneDeep"](data.data);
+                itemTemp.quantity = 0;
+                itemTemp.itemTotal = 0;
+                var itemData = __WEBPACK_IMPORTED_MODULE_6_lodash__["cloneDeep"](itemTemp);
                 _this.loader = false;
                 var steps = [];
                 if (_this.globalService.getStepData()) {
@@ -1203,9 +1212,10 @@ var ItemComponent = /** @class */ (function () {
                     steps = ['Uscita 1', 'Uscita 2'];
                 }
                 for (var j = 0; j < steps.length; j++) {
-                    _this.orderService.getOrderData().categoryItems[steps[j]].push(data.data);
+                    orderdata_1.categoryItems[steps[j]][orderdata_1.categoryItems[steps[j]].length] = itemData;
                 }
                 _this.hideArticle();
+                _this.orderService.setOrderData(orderdata_1);
             })
                 .catch(function (error) {
             });

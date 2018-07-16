@@ -60,6 +60,7 @@ export class OrderService {
       .catch(this.globalService.handleErrorPromise);
   }
   addArticle(data): Promise<any> {
+    console.log('data',data);
     let url = '/api/item';
     var headers = new Headers();
     headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
