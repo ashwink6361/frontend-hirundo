@@ -28,6 +28,7 @@ export class ItemComponent implements OnInit {
   public articleAdd: boolean = false;
   protected subcategory: string;
   public selectedSubcategory: boolean[] = [false];
+  public showAllergenIcon:boolean = false;
   public variantData = {
     quantity: 0,
     variant: [],
@@ -217,6 +218,10 @@ export class ItemComponent implements OnInit {
 
   viewCart() {
     this.router.navigate(['/waiter/order/:id/cart']);
+  }
+
+  allergenIcon() {
+    this.showAllergenIcon = !this.showAllergenIcon;
   }
 
   viewVarient(article) {
