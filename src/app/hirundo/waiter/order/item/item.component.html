@@ -188,8 +188,8 @@
             <input type="number" id="price" step="0.01" min="0" (change)="inputChanged()" [(ngModel)]="AddDataArticle.price" class="form-control">
         </div>
         <div class="md-form">
-            <label for="allergens">Allergens</label>
-            <div class="col-sm-5 d-flex-category">
+            <!-- <label for="allergens">Allergens</label> -->
+            <div class="d-flex-category">
                 <div class="d-flex allergens-icon">
                     <div class="icon-preview" *ngFor="let item of selectedIconImage;let i=index;">
                         <img [src]="item" />
@@ -199,8 +199,8 @@
                     </div>
                 </div>
                 <div class="category-icon-container">
-                    <button type="button" class="form-control" (click)="allergenIcon()">
-                        <span>Select</span>
+                    <button type="button" class="form-control btn btn-yellow" (click)="allergenIcon()">
+                        <span>Select Allergens</span>
                     </button>
                     <div class="icon-popup" *ngIf="showAllergenIcon">
                         <div class="icon-container" *ngFor="let allergen of allergens">

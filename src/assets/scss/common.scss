@@ -1100,6 +1100,18 @@ header {
     @extend .varient-container;
     &.showarticle {
         @extend .show-varient;
+        .modal-header{
+            position: fixed;
+            width: 100%;
+            z-index: 99;
+            background: #fff;
+        }
+        .varient-content{
+            padding: 50px 20px;
+            margin-top: 10px;
+            overflow-y: auto;
+            height: calc(100vh - 57px);
+        }
     }
 }
 
@@ -1202,15 +1214,15 @@ header {
         align-items: center;
         margin-right: 5px;
         color: #fff;
-        &:last-child{
+        &:last-child {
             margin-right: 0;
         }
     }
-    .department-checkbtn-container{
+    .department-checkbtn-container {
         margin-bottom: 10px;
         position: relative;
         padding-left: 52px;
-        .department-checkbtn{
+        .department-checkbtn {
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -1224,7 +1236,6 @@ header {
             top: -5px;
         }
     }
-    
     button {
         width: 100%;
         background: #00b900;
@@ -1261,7 +1272,76 @@ header {
     }
 }
 
-.varient-list{
+.varient-list {
     overflow-y: scroll;
     height: calc(100vh - 257px);
+}
+
+.allergens-icon {
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    .icon-preview {
+        background-color: #adadad;
+        padding: 10px;
+        border-radius: 5px;
+        margin-right: 10px;
+        height: 49px;
+        margin-bottom: 10px;
+        position: relative;
+        img {
+            width: 30px;
+        }
+        .remove-icon {
+            background-color: red;
+            color: #fff;
+            width: 15px;
+            height: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+            i {
+                font-size: 10px;
+            }
+        }
+    }
+}
+
+.category-icon-container {
+    position: relative;
+    .form-control{
+        margin: 0;
+        background-color: #fbc846 !important
+    }
+    .icon-popup {
+        display: flex;
+        flex-wrap: wrap;
+        background-color: #4b473f;
+        padding: 10px;
+        position: absolute;
+        top: 50px;
+        .icon-container {
+            margin-right: 10px;
+            margin-bottom: 10px;
+            text-align: center;
+            border: 1px solid #fff;
+            width: 92px;
+            cursor: pointer;
+            div {
+                padding: 5px;
+            }
+            img {
+                max-width: 40px;
+            }
+            p {
+                color: #fff;
+                margin: 10px 0;
+            }
+        }
+    }
 }
