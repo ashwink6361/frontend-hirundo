@@ -1249,11 +1249,25 @@ export class OrderListComponent implements DoCheck {
     }
 
     updateDepartmentStatus(department, order, step) {
-        let opts = {
-            step: step
-        };
-        this.websocketService.updateDepartmentStatus(order._id, opts).then((data) => {
+        if(department.status == 0){
             department.status = 1;
+            var opts = {
+                step: step,
+                status : 1
+            };
+        }
+        else {
+            department.status = 0;
+            var opts = {
+                step: step,
+                status : 0
+            };
+        }
+        // let opts = {
+        //     step: step
+        // };
+        this.websocketService.updateDepartmentStatus(order._id, opts).then((data) => {
+            // department.status = 1;
             order = data.data;
             if (this.orders.length) {
                 this.itemStatusDelivered = [];
