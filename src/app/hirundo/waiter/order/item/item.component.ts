@@ -41,8 +41,13 @@ export class ItemComponent implements OnInit {
     name: '',
     price: '',
     category: '',
-    subCategory: ''
+    subCategory: '',
+    quantity: 0,
+    variant: [],
+    notes: '',
+    isDeleted: true
   }
+  public articleNotes = [];  
   public loader: boolean = false;
   public addArticleError = '';
   public allergens = [];
@@ -264,20 +269,34 @@ export class ItemComponent implements OnInit {
   }
 
   addArticle() {
-    this.orderService.getAllergens().then(data=>{
-console.log('data',data);
-this.allergens = data.data;
-    })
-    .catch(error=>{
-      console.log('error',error);
-    });
+//     this.orderService.getAllergens().then(data=>{
+// console.log('data',data);
+// this.allergens = data.data;
+//     })
+//     .catch(error=>{
+//       console.log('error',error);
+//     });
+    this.orderService.getVariantAndNotes()
+      .then(data => {
+        this.variantList = data.data.variants;
+        this.noteList = data.data.notes;
+      })
+      .catch(error => {
+      });
     this.articleAdd = true;
     this.AddDataArticle = {
       name: '',
       price: '',
       category: '',
-      subCategory: ''
+      subCategory: '',
+      quantity: 0,
+      variant: [],
+      notes: '',
+      isDeleted: true
     }
+    this.articleNotes = [];
+    this.activeTab[0] = true;
+    this.activeTab[1] = false;
   }
 
   hideArticle() {
@@ -286,10 +305,22 @@ this.allergens = data.data;
       name: '',
       price: '',
       category: '',
-      subCategory: ''
+      subCategory: '',
+      quantity: 0,
+      variant: [],
+      notes: '',
+      isDeleted: true
     };
-    this.selectedIconImage = [];
-    this.allergens = [];
+    // this.selectedIconImage = [];
+    // this.allergens = [];
+    // this.showVarient = false;
+    // this.variantData = {
+    //   quantity: 0,
+    //   variant: [],
+    //   notes: ''
+    // };
+    this.articleNotes = [];
+    // this.articleData = {};
   }
 
   filterBySubcategory(subcategory, index) {
@@ -325,7 +356,7 @@ this.allergens = data.data;
     value++;
     this.variantData.quantity = value;
   }
-
+  
   addRemoveVariant(variant, status) {
     if (status == 0) {
       variant.status = 0;
@@ -414,8 +445,15 @@ this.allergens = data.data;
   }
 
   saveAddArticleData() {
+    let currentStep = this.globalService.getTabData().step;    
     if (this.AddDataArticle.name === '') {
       this.addArticleError = 'Please enter name';
+      setTimeout(() => {
+        this.addArticleError = '';
+      }, 4000);
+    }
+    else if (this.AddDataArticle.quantity == 0) {
+      this.addArticleError = 'Please enter quantity';
       setTimeout(() => {
         this.addArticleError = '';
       }, 4000);
@@ -449,16 +487,38 @@ this.allergens = data.data;
         price: Number(this.AddDataArticle.price),
         category: this.AddDataArticle.category,
         subCategory: this.AddDataArticle.subCategory,
-        allergens: this.selectedIconImage ? JSON.stringify(this.selectedIconImage) : '',
+        // quantity: this.AddDataArticle.quantity,
+        // variant: this.AddDataArticle.variant,
+        // notes: this.AddDataArticle.notes,
+        isDeleted: this.AddDataArticle.isDeleted
+        // allergens: this.selectedIconImage ? JSON.stringify(this.selectedIconImage) : '',
       }
       this.loader = true;
       this.orderService.addArticle(opts)
         .then(data => {
           let itemTemp = _.cloneDeep(data.data);
-          itemTemp.quantity = 0;
-          itemTemp.itemTotal = 0;
+          itemTemp.step = currentStep;
+          itemTemp.quantity = this.AddDataArticle.quantity;
+          itemTemp.variant = this.AddDataArticle.variant;
+          itemTemp.ordernote = this.AddDataArticle.notes;
+          // itemTemp.quantity = 0;
+          // itemTemp.itemTotal = itemTemp.quantity;
           let itemData = _.cloneDeep(itemTemp);
           this.loader = false;
+          // var steps = [];
+          // if (this.globalService.getStepData()) {
+          //   steps = this.globalService.getStepData();
+          // }
+          // else {
+          //   steps = ['Uscita 1', 'Uscita 2'];
+          // }
+          // for (let j = 0; j < steps.length; j++) {
+          // orderdata.categoryItems[steps[j]][orderdata.categoryItems[steps[j]].length] = itemData;
+          // }
+          orderdata.selectedItems[currentStep].push(itemData);
+          let cp = 0;
+          let itemno = 0;
+          let varicost = 0;
           var steps = [];
           if (this.globalService.getStepData()) {
             steps = this.globalService.getStepData();
@@ -466,11 +526,23 @@ this.allergens = data.data;
           else {
             steps = ['Uscita 1', 'Uscita 2'];
           }
-          for (let j = 0; j < steps.length; j++) {
-          orderdata.categoryItems[steps[j]][orderdata.categoryItems[steps[j]].length] = itemData;
+          for (let a = 0; a < steps.length; a++) {
+            for (let i = 0; i < orderdata.selectedItems[steps[a]].length; i++) {
+              itemno += orderdata.selectedItems[steps[a]][i].quantity;
+              if (orderdata.selectedItems[steps[a]][i].variant) {
+                for (let j = 0; j < orderdata.selectedItems[steps[a]][i].variant.length; j++) {
+                  if (orderdata.selectedItems[steps[a]][i].variant[j].status == 1) {
+                    varicost += orderdata.selectedItems[steps[a]][i].variant[j].price;
+                  }
+                }
+              }
+              cp += (orderdata.selectedItems[steps[a]][i].price + varicost) * orderdata.selectedItems[steps[a]][i].quantity;
+              orderdata.cartTotalPrice = cp;
+              orderdata.cartTotalItem = itemno;
+            }
           }
+          this.orderService.setOrderData(orderdata);  
           this.hideArticle();
-          this.orderService.setOrderData(orderdata);          
         })
         .catch(error => {
         });
@@ -496,4 +568,46 @@ this.allergens = data.data;
       this.selectedIconImage.splice(indx, 1);
   }
 };
+
+decreaseArticleQty() {
+  let value = this.AddDataArticle.quantity;
+  value = isNaN(value) ? 0 : value;
+  value < 1 ? value = 1 : '';
+  value--;
+  this.AddDataArticle.quantity = value;
+}
+
+increaseArticleQty() {
+  let value = this.AddDataArticle.quantity;
+  value = isNaN(value) ? 0 : value;
+  value++;
+  this.AddDataArticle.quantity = value;
+}
+addRemoveArticleVariant(variant, status) {
+  if (status == 0) {
+    variant.status = 0;
+  }
+  else {
+    variant.status = 1;
+  }
+  for (let i = 0; i < this.AddDataArticle.variant.length; i++) {
+    if (this.AddDataArticle.variant[i]._id == variant._id) {
+      this.AddDataArticle.variant.splice(i, 1);
+    }
+  }
+  this.AddDataArticle.variant.push(variant);
+}
+addArticleNote(event, note, i) {
+  if (event.target.checked) {
+    this.articleNotes.push(note);
+  }
+  else {
+    for (let i = 0; i < this.articleNotes.length; i++) {
+      if (this.articleNotes[i] == note) {
+        this.articleNotes.splice(i, 1);
+      }
+    }
+  }
+  this.AddDataArticle.notes = this.articleNotes.toString();
+}
 }
