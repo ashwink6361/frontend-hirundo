@@ -96,7 +96,7 @@
                                         [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1" (click)="updateDepartmentStatus(department,order,step.step)">
                                         <i class="fas fa-check-circle"></i>
                                     </span>
-                                    <span class="department-name"  [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1"><span *ngIf="authGuard.getCurrentUser()._id != department.id._id">{{getFirstChar(department.id.firstName)}}</span></span>
+                                    <span class="department-name"  [class.bg-grey]="department.status == 0" [class.bg-green]="department.status == 1" *ngIf="authGuard.getCurrentUser()._id != department.id._id">{{getFirstChar(department.id.firstName)}}</span>
                                 </span>
                             </div>
                             <button type="submit" *ngIf="stepdata[order._id] && (step.step == 'Uscita 1') && itemStatusDelivered[order._id] && !itemStatusDelivered[order._id][step.step]"
