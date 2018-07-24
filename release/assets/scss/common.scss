@@ -10,6 +10,9 @@ body {
 .w-105 {
     width: 105px !important;
 }
+.w-45 {
+    width: 45px !important;
+}
 
 .mw-160 {
     max-width: 160px !important;
@@ -764,7 +767,7 @@ header {
         border-top: 3px solid #fcab00;
         .order-item {
             display: flex;
-            padding: 5px 10px;
+            padding: 5px 0;
             align-items: center;
             position: relative;
             padding-top: 26px;
@@ -1225,7 +1228,7 @@ header {
     .department-checkbtn-container {
         margin-bottom: 10px;
         position: relative;
-        padding-left: 52px;
+        padding-left: 72px;
         height: 37px;
         .department-checkbtn {
             width: 40px;
@@ -1236,9 +1239,10 @@ header {
             align-items: center;
             margin-right: 5px;
             position: absolute;
-            left: 5px;
+            left: 18px;
             color: #fff;
             top: -5px;
+            cursor: pointer;
         }
     }
     button {
