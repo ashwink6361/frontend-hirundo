@@ -7,8 +7,8 @@
 const path = require('path');
 const projectName = 'MVP Hirundo';
 const port = 5052;
-const apiUrl = 'http://52.209.187.183:5051/';
-const socketUrl = 'http://52.209.187.183:5051';
+const apiUrl = 'http://34.247.139.146:5051/';
+const socketUrl = 'http://34.247.139.146:5051';
 module.exports = {
     env: 'development',
     server: {
