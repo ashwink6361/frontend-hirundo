@@ -10,6 +10,7 @@ body {
 .w-105 {
     width: 105px !important;
 }
+
 .w-45 {
     width: 45px !important;
 }
@@ -23,7 +24,7 @@ body {
     cursor: not-allowed;
 }
 
-.text-line{
+.text-line {
     text-decoration: line-through;
 }
 
@@ -1107,13 +1108,12 @@ header {
     @extend .varient-container;
     &.showarticle {
         @extend .show-varient;
-        .modal-header{
-            position: fixed;
+        .modal-header {
             width: 100%;
             z-index: 99;
             background: #fff;
         }
-        .varient-content{
+        .varient-content {
             padding: 50px 20px;
             margin-top: 10px;
             overflow-y: auto;
@@ -1323,7 +1323,7 @@ header {
 
 .category-icon-container {
     position: relative;
-    .form-control{
+    .form-control {
         margin: 0;
         background-color: #fbc846 !important
     }
