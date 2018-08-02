@@ -8,5 +8,13 @@
     margin-top: 50px;
     .row{
         flex-wrap: nowrap !important;
+        margin: 0;
     }
+}
+
+.order-card{
+    max-width: 447px;
+    margin-right: 20px;
+    width: 100%;    
+    min-width: 320px;
 }
