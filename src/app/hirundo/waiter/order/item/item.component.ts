@@ -6,6 +6,7 @@ import { GlobalService } from '../../../global.service'
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 import *  as _ from 'lodash';
+import { StepsComponent } from '../../../../shared/steps/steps.component';
 
 @Component({
   selector: 'app-item',
@@ -52,7 +53,7 @@ export class ItemComponent implements OnInit {
   public addArticleError = '';
   public allergens = [];
   public selectedIconImage = [];
-  constructor(private orderService: OrderService, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
+  constructor(private orderService: OrderService,public stepsComponent: StepsComponent, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
     this.data = this.orderService.getOrderData();
@@ -269,6 +270,7 @@ export class ItemComponent implements OnInit {
   }
 
   addArticle() {
+    this.stepsComponent.ngOnInit();
 //     this.orderService.getAllergens().then(data=>{
 // console.log('data',data);
 // this.allergens = data.data;
@@ -543,6 +545,7 @@ export class ItemComponent implements OnInit {
           }
           this.orderService.setOrderData(orderdata);  
           this.hideArticle();
+          this.stepsComponent.ngOnInit();
         })
         .catch(error => {
         });
@@ -609,5 +612,72 @@ addArticleNote(event, note, i) {
     }
   }
   this.AddDataArticle.notes = this.articleNotes.toString();
+}
+
+deleteItemFromCart(article) {
+  let data = this.orderService.getOrderData();
+  let currentStep = this.globalService.getTabData().step;
+  for (let i = 0; i < data.selectedItems[currentStep].length; i++) {
+    if (data.selectedItems[currentStep][i]._id == article._id && !article.variant) {
+      //non variant type data
+      for (let m = 0; m < data.categoryItems[currentStep].length; m++) {
+        if (data.categoryItems[currentStep][m]._id == data.selectedItems[currentStep][i]._id) {
+          data.categoryItems[currentStep][m].itemTotal = data.categoryItems[currentStep][m].itemTotal - data.selectedItems[currentStep][i].quantity;
+        }
+      }
+      if (!data.selectedItems[currentStep][i].variant && currentStep == data.selectedItems[currentStep][i].step) {
+        data.selectedItems[currentStep].splice(i, 1);
+      }
+    }
+    else if (data.selectedItems[currentStep][i]._id == article._id && article.variant) {
+      //variant type data
+      for (let m = 0; m < data.categoryItems[currentStep].length; m++) {
+        if (data.categoryItems[currentStep][m]._id == data.selectedItems[currentStep][i]._id) {
+          data.categoryItems[currentStep][m].itemTotal = data.categoryItems[currentStep][m].itemTotal - data.selectedItems[currentStep][i].quantity;
+        }
+      }
+      if (data.selectedItems[currentStep][i].variant && currentStep == data.selectedItems[currentStep][i].step) {
+        data.selectedItems[currentStep].splice(i, 1);
+      }
+    }
+  }
+  let cp = 0;
+  let itemno = 0;
+  let varicost = 0;
+  var steps = [];
+  if (this.globalService.getStepData()) {
+    steps = this.globalService.getStepData();
+  }
+  else {
+    steps = ['Uscita 1', 'Uscita 2'];
+  }
+  let emptyArray = [];
+  for (let a = 0; a < steps.length; a++) {
+    if (data.selectedItems[steps[a]].length) {
+      for (let i = 0; i < data.selectedItems[steps[a]].length; i++) {
+        itemno += data.selectedItems[steps[a]][i].quantity;
+        if (data.selectedItems[steps[a]][i].variant) {
+          for (let j = 0; j < data.selectedItems[steps[a]][i].variant.length; j++) {
+            if (data.selectedItems[steps[a]][i].variant[j].status == 1) {
+              varicost += data.selectedItems[steps[a]][i].variant[j].price;
+            }
+          }
+        }
+        cp += (data.selectedItems[steps[a]][i].price + varicost) * data.selectedItems[steps[a]][i].quantity;
+        data.cartTotalPrice = cp;
+        data.cartTotalItem = itemno;
+      }
+    }
+    if (data.selectedItems[steps[a]].length == 0) {
+      if (emptyArray.indexOf(steps[a]) < 0) {
+        emptyArray.push(steps[a]);
+      }
+    }
+    if (emptyArray.length == steps.length) {
+      data.cartTotalPrice = 0;
+      data.cartTotalItem = 0;
+    }
+  }
+  this.orderService.setOrderData(data);
 }
 }

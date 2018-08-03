@@ -93,6 +93,36 @@
                     </button>
                 </div>
             </div>
+            <div *ngIf="orderService.getOrderData().selectedItems">
+                <div *ngFor="let article of orderService.getOrderData().selectedItems[globalService.getTabData().step]">
+                    <div class="item-list align-items-center {{article.step}} {{globalService.getTabData().step}}" *ngIf="article.step == globalService.getTabData().step && article.isDeleted">
+                        <div class="item" [ngStyle]="{'background-color': article.category.color}">
+                            <img *ngIf="!article.logo.small && article.category.isIcon" class="icon-img" [src]="article.category.icon" alt="" />
+                            <img *ngIf="!article.logo.small && !article.category.isIcon && article.category.logo.small" [src]="article.category.logo.small"
+                                alt="Category Logo" />
+                            <img *ngIf="article.logo.small" [src]="article.logo.small" alt="Item Logo" />
+                            <span class="item-quantity" *ngIf="article.quantity>0">{{article.quantity}}</span>
+                        </div>
+                        <div class="item-name">
+                            <p class="name m-0">{{article.name}}</p>
+                            <p class="name m-0">&euro;{{article.price}}</p>
+                            <span *ngIf="article.variant && article.variant.length">
+                                <span *ngFor="let variant of article.variant" class="d-flex added-variand-name">
+                                    <span *ngIf="variant.status == 0">- {{variant.name}} </span>
+                                    <span *ngIf="variant.status == 1">+ {{variant.name}} &euro;{{variant.price}}</span>
+                                </span>
+                            </span>
+                            <span *ngIf="article.ordernote" class="d-flex added-variand-name">{{article.ordernote}}</span>
+                        </div>
+                        <!-- <button type="submit" class="btn btn-floating waves-light" (click)="viewVarient(article)">
+                            <i class="fas fa-edit"></i>
+                        </button> -->
+                        <button type="submit" class="btn btn-floating waves-light" (click)="deleteItemFromCart(article)">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
