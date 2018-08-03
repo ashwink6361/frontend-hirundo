@@ -865,7 +865,7 @@ var WebsocketService = /** @class */ (function () {
             if (data.restro == _this.authGuard.getCurrentUser().restro) {
                 if (data.type === 'admin') {
                     var audio = new Audio();
-                    audio.src = "../../../assets/audio/beep.mp3";
+                    audio.src = "../../../assets/audio/beep1.wav";
                     audio.load();
                     audio.play();
                 }
