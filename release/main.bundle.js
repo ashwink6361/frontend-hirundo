@@ -867,7 +867,11 @@ var WebsocketService = /** @class */ (function () {
                     var audio = new Audio();
                     audio.src = "../../../assets/audio/beep.mp3";
                     audio.load();
-                    audio.play();
+                    audio.play().then(function (data) {
+                        console.log(data, 'data webservice audio');
+                    }).catch(function (err) {
+                        console.log(err, 'err webservice audio');
+                    });
                 }
                 if (userType == 3) {
                     _this._orders.unshift(data);
