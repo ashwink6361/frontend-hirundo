@@ -49,7 +49,7 @@ export class WebsocketService {
             if (data.restro == this.authGuard.getCurrentUser().restro) {
                 if (data.type === 'admin') {
                     let audio = new Audio();
-                    audio.src = "../../../assets/audio/beep1.wav";
+                    audio.src = "../../../assets/audio/beep.ogg";
                     audio.load();
                     audio.play();
                 }
