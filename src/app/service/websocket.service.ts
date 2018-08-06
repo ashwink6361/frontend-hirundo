@@ -58,7 +58,7 @@ export class WebsocketService {
                     // audio.src = source;
 
                     let audio = new Audio();
-                    audio.src = "../../../assets/audio/beep1.wav";
+                    audio.src = "../../../assets/audio/beep.mp3";
                     audio.load();
                     audio.play();
 
@@ -89,7 +89,7 @@ export class WebsocketService {
                 // audio.src = source;
 
                 let audio = new Audio();
-                audio.src = "../../../assets/audio/beep1.wav";
+                audio.src = "../../../assets/audio/beep.mp3";
                 audio.load();
                 audio.play();
 

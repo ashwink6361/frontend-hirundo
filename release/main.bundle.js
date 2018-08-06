@@ -873,7 +873,7 @@ var WebsocketService = /** @class */ (function () {
                     // }, true);
                     // audio.src = source;
                     var audio = new Audio();
-                    audio.src = "../../../assets/audio/beep1.wav";
+                    audio.src = "../../../assets/audio/beep.mp3";
                     audio.load();
                     audio.play();
                     // let audio = new Audio();
@@ -901,7 +901,7 @@ var WebsocketService = /** @class */ (function () {
                 // }, true);
                 // audio.src = source;
                 var audio = new Audio();
-                audio.src = "../../../assets/audio/beep1.wav";
+                audio.src = "../../../assets/audio/beep.mp3";
                 audio.load();
                 audio.play();
                 // let audio = new Audio();
