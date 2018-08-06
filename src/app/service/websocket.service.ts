@@ -57,15 +57,15 @@ export class WebsocketService {
                     // }, true);
                     // audio.src = source;
 
-                    // let audio = new Audio();
-                    // audio.src = "../../../assets/audio/beep1.wav";
-                    // audio.load();
-                    // audio.play();
-
                     let audio = new Audio();
+                    audio.src = "../../../assets/audio/beep1.wav";
+                    audio.load();
                     audio.play();
-                    audio.src = "../../../assets/audio/beep.ogg";
-                    audio.play();
+
+                    // let audio = new Audio();
+                    // audio.play();
+                    // audio.src = "../../../assets/audio/beep.ogg";
+                    // audio.play();
                 }
                 if (userType == 3) {
                     this._orders.unshift(data);
@@ -88,15 +88,15 @@ export class WebsocketService {
                 // }, true);
                 // audio.src = source;
 
-                // let audio = new Audio();
-                // audio.src = "../../../assets/audio/beep1.wav";
-                // audio.load();
-                // audio.play();
-
                 let audio = new Audio();
-                audio.play();                 
-                audio.src = "../../../assets/audio/beep.ogg";
+                audio.src = "../../../assets/audio/beep1.wav";
+                audio.load();
                 audio.play();
+
+                // let audio = new Audio();
+                // audio.play();                 
+                // audio.src = "../../../assets/audio/beep.ogg";
+                // audio.play();
             }
         });
         this.socket.on('orderstatus', (data) => {

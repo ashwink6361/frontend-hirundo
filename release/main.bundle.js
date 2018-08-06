@@ -872,14 +872,14 @@ var WebsocketService = /** @class */ (function () {
                     //     audio.play(); 
                     // }, true);
                     // audio.src = source;
-                    // let audio = new Audio();
-                    // audio.src = "../../../assets/audio/beep1.wav";
-                    // audio.load();
-                    // audio.play();
                     var audio = new Audio();
+                    audio.src = "../../../assets/audio/beep1.wav";
+                    audio.load();
                     audio.play();
-                    audio.src = "../../../assets/audio/beep.ogg";
-                    audio.play();
+                    // let audio = new Audio();
+                    // audio.play();
+                    // audio.src = "../../../assets/audio/beep.ogg";
+                    // audio.play();
                 }
                 if (userType == 3) {
                     _this._orders.unshift(data);
@@ -900,14 +900,14 @@ var WebsocketService = /** @class */ (function () {
                 //     audio.play(); 
                 // }, true);
                 // audio.src = source;
-                // let audio = new Audio();
-                // audio.src = "../../../assets/audio/beep1.wav";
-                // audio.load();
-                // audio.play();
                 var audio = new Audio();
+                audio.src = "../../../assets/audio/beep1.wav";
+                audio.load();
                 audio.play();
-                audio.src = "../../../assets/audio/beep.ogg";
-                audio.play();
+                // let audio = new Audio();
+                // audio.play();                 
+                // audio.src = "../../../assets/audio/beep.ogg";
+                // audio.play();
             }
         });
         this.socket.on('orderstatus', function (data) {
