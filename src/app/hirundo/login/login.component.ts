@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit {
     loginForm: FormGroup;
     loginError: boolean = false;
     loginErrorMsg: string = '';
+    loginSuccessMsg: string = '';    
     requestRunning: boolean = false;
     constructor(
         public appService : AppService,
@@ -35,21 +36,24 @@ export class LoginComponent implements OnInit {
         this.User.password = user.password;
         this.User.deviceType = 'web';
         this.loginService.login(this.User).then(data => {
+            this.loginSuccessMsg = 'Login success!';
             document.cookie = "token=" + data.token;
             localStorage.setItem('isLoggedin', 'true');
             localStorage.setItem('currentUser', JSON.stringify(data.data));
             localStorage.setItem('token', data.token);
-            if (data.data.userType === 3) {
-                window.location.href = '/waiter';
-            } else {
-                window.location.href = '/department';
-            }
+            setTimeout(() => {
+                this.loginSuccessMsg = '';
+                if (data.data.userType === 3) {
+                    window.location.href = '/waiter';
+                } else {
+                    window.location.href = '/department';
+                }
+            }, 4000);
         }).catch(error => {
+            console.log('error',error);
             this.requestRunning = false;
-            this.loginError = true;
             this.loginErrorMsg = error;
             setTimeout(() => {
-                this.loginError = false;
                 this.loginErrorMsg = '';
             }, 4000);
             localStorage.removeItem('isLoggedin');

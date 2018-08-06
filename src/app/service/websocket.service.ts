@@ -50,13 +50,8 @@ export class WebsocketService {
                 if (data.type === 'admin') {
                     let audio = new Audio();
                     audio.src = "../../../assets/audio/beep1.wav";
-                    audio.autoplay = true;
                     audio.load();
-                    audio.addEventListener("load", function() { 
-                        audio.play(); 
-                    }, true);
-                   
-                    // audio.play();
+                    audio.play();
                 }
                 if (userType == 3) {
                     this._orders.unshift(data);
@@ -70,17 +65,10 @@ export class WebsocketService {
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 4) {
                 this._orders.push(data);
-                // let audio = new Audio();
-                // audio.src = "../../../assets/audio/beep.mp3";
-                // audio.load();
-                // audio.play();
                 let audio = new Audio();
                 audio.src = "../../../assets/audio/beep1.wav";
-                audio.autoplay = true;
                 audio.load();
-                audio.addEventListener("load", function() { 
-                    audio.play(); 
-                }, true);
+                audio.play();
             }
         });
         this.socket.on('orderstatus', (data) => {

@@ -3,7 +3,7 @@ webpackJsonp(["login.module"],{
 /***/ "../../../../../src/app/hirundo/login/login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"page-header bg-login\">\n  <h1>Login</h1>\n</div>\n\n<section class=\"section-padding\">\n  <div class=\"container\">\n    <div class=\"login-form card\">\n      <div class=\"card-body\">\n        <form [formGroup]=\"loginForm\" (ngSubmit)=\"login(loginForm.value)\">\n          <!-- <p class=\"h5 text-center mb-4\">Sign in</p> -->\n          <div class=\"md-form\">\n            <i class=\"fa fa-envelope prefix grey-text\"></i>\n            <input type=\"email\"  name=\"email\" placeholder=\"Your Email\" id=\"defaultForm-email\" formControlName=\"email\" class=\"form-control\" mdbActive>\n            <!-- <label for=\"defaultForm-email\">Your email</label> -->\n          </div>\n          <div class=\"md-form\">\n            <i class=\"fa fa-lock prefix grey-text\"></i>\n            <input type=\"password\" placeholder=\"Your Password\" id=\"defaultForm-pass\" formControlName=\"password\" class=\"form-control\" mdbActive>\n            <!-- <label for=\"defaultForm-pass\">Your password</label> -->\n          </div>\n          <div class=\"text-center\">\n            <button type=\"submit\" class=\"btn btn-default waves-light\" mdbRippleRadius [disabled]=\"!loginForm.valid || requestRunning\">Login</button>\n          </div>\n        </form>\n      </div>\n    </div>\n  </div>\n</section>\n"
+module.exports = "<div class=\"page-header bg-login\">\n  <h1>Login</h1>\n</div>\n\n<section class=\"section-padding\">\n  <div class=\"container\">\n    <div class=\"login-form card\">\n      <div class=\"card-body\">\n        <form [formGroup]=\"loginForm\" (ngSubmit)=\"login(loginForm.value)\">\n          <div class=\"alert-success\" *ngIf=\"loginSuccessMsg\">{{loginSuccessMsg}}</div>\n          <div class=\"alert-danger\" *ngIf=\"loginErrorMsg\">{{loginErrorMsg}}</div>\n          <div class=\"md-form\">\n            <i class=\"fa fa-envelope prefix grey-text\"></i>\n            <input type=\"email\"  name=\"email\" placeholder=\"Your Email\" id=\"defaultForm-email\" formControlName=\"email\" class=\"form-control\" mdbActive>\n            <!-- <label for=\"defaultForm-email\">Your email</label> -->\n          </div>\n          <div class=\"md-form\">\n            <i class=\"fa fa-lock prefix grey-text\"></i>\n            <input type=\"password\" placeholder=\"Your Password\" id=\"defaultForm-pass\" formControlName=\"password\" class=\"form-control\" mdbActive>\n            <!-- <label for=\"defaultForm-pass\">Your password</label> -->\n          </div>\n          <div class=\"text-center\">\n            <button type=\"submit\" class=\"btn btn-default waves-light\" mdbRippleRadius [disabled]=\"!loginForm.valid || requestRunning\">Login</button>\n          </div>\n        </form>\n      </div>\n    </div>\n  </div>\n</section>\n"
 
 /***/ }),
 
@@ -57,6 +57,7 @@ var LoginComponent = /** @class */ (function () {
         this.User = {};
         this.loginError = false;
         this.loginErrorMsg = '';
+        this.loginSuccessMsg = '';
         this.requestRunning = false;
     }
     LoginComponent.prototype.ngOnInit = function () {
@@ -75,22 +76,25 @@ var LoginComponent = /** @class */ (function () {
         this.User.password = user.password;
         this.User.deviceType = 'web';
         this.loginService.login(this.User).then(function (data) {
+            _this.loginSuccessMsg = 'Login success!';
             document.cookie = "token=" + data.token;
             localStorage.setItem('isLoggedin', 'true');
             localStorage.setItem('currentUser', JSON.stringify(data.data));
             localStorage.setItem('token', data.token);
-            if (data.data.userType === 3) {
-                window.location.href = '/waiter';
-            }
-            else {
-                window.location.href = '/department';
-            }
+            setTimeout(function () {
+                _this.loginSuccessMsg = '';
+                if (data.data.userType === 3) {
+                    window.location.href = '/waiter';
+                }
+                else {
+                    window.location.href = '/department';
+                }
+            }, 4000);
         }).catch(function (error) {
+            console.log('error', error);
             _this.requestRunning = false;
-            _this.loginError = true;
             _this.loginErrorMsg = error;
             setTimeout(function () {
-                _this.loginError = false;
                 _this.loginErrorMsg = '';
             }, 4000);
             localStorage.removeItem('isLoggedin');

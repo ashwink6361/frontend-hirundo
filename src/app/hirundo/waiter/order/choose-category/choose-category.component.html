@@ -15,10 +15,13 @@
     <app-steps></app-steps>
     <div class="category-list">
         <div class="d-flex flex-wrap">
-            <div class="d-flex align-items-center justify-content-between search-category w-100">
+            <div class="search-category w-100">
                 <div class="md-form search">
                     <i class="fas fa-search prefix"></i>
                     <input class="form-control" [(ngModel)]="searchText" type="text" placeholder="Search Category" />
+                    <button type="button" class="btn-cart">
+                        <i class="fas fa-shopping-cart"></i> {{orderService.getOrderData().cartTotalItem}} | &euro;{{orderService.getOrderData().cartTotalPrice}}
+                    </button>
                 </div>
             </div>
             <div class="category" *ngFor="let category of categoryList | filter : searchText" [ngStyle]="{'background-color': category.color}"
