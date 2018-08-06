@@ -91,7 +91,6 @@ var LoginComponent = /** @class */ (function () {
                 }
             }, 4000);
         }).catch(function (error) {
-            console.log('error', error);
             _this.requestRunning = false;
             _this.loginErrorMsg = error;
             setTimeout(function () {
