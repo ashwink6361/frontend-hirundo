@@ -1630,7 +1630,7 @@ var OrderListService = /** @class */ (function () {
             return Promise.reject(body.message || error);
         }
         else {
-            this.logout();
+            return Promise.reject(body.message || error);
         }
     };
     OrderListService.prototype.logout = function () {
