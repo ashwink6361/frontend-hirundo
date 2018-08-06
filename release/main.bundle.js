@@ -864,10 +864,14 @@ var WebsocketService = /** @class */ (function () {
             var userType = _this.authGuard.getCurrentUser().userType;
             if (data.restro == _this.authGuard.getCurrentUser().restro) {
                 if (data.type === 'admin') {
-                    var audio = new Audio();
-                    audio.src = "../../../assets/audio/beep.ogg";
-                    audio.load();
-                    audio.play();
+                    var audio_1 = new Audio();
+                    audio_1.src = "../../../assets/audio/beep1.wav";
+                    audio_1.autoplay = true;
+                    audio_1.load();
+                    audio_1.addEventListener("load", function () {
+                        audio_1.play();
+                    }, true);
+                    // audio.play();
                 }
                 if (userType == 3) {
                     _this._orders.unshift(data);
@@ -880,10 +884,17 @@ var WebsocketService = /** @class */ (function () {
             var userType = _this.authGuard.getCurrentUser().userType;
             if (userType == 4) {
                 _this._orders.push(data);
-                var audio = new Audio();
-                audio.src = "../../../assets/audio/beep.mp3";
-                audio.load();
-                audio.play();
+                // let audio = new Audio();
+                // audio.src = "../../../assets/audio/beep.mp3";
+                // audio.load();
+                // audio.play();
+                var audio_2 = new Audio();
+                audio_2.src = "../../../assets/audio/beep1.wav";
+                audio_2.autoplay = true;
+                audio_2.load();
+                audio_2.addEventListener("load", function () {
+                    audio_2.play();
+                }, true);
             }
         });
         this.socket.on('orderstatus', function (data) {

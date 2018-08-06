@@ -49,9 +49,14 @@ export class WebsocketService {
             if (data.restro == this.authGuard.getCurrentUser().restro) {
                 if (data.type === 'admin') {
                     let audio = new Audio();
-                    audio.src = "../../../assets/audio/beep.ogg";
+                    audio.src = "../../../assets/audio/beep1.wav";
+                    audio.autoplay = true;
                     audio.load();
-                    audio.play();
+                    audio.addEventListener("load", function() { 
+                        audio.play(); 
+                    }, true);
+                   
+                    // audio.play();
                 }
                 if (userType == 3) {
                     this._orders.unshift(data);
@@ -65,10 +70,17 @@ export class WebsocketService {
             let userType = this.authGuard.getCurrentUser().userType;
             if (userType == 4) {
                 this._orders.push(data);
+                // let audio = new Audio();
+                // audio.src = "../../../assets/audio/beep.mp3";
+                // audio.load();
+                // audio.play();
                 let audio = new Audio();
-                audio.src = "../../../assets/audio/beep.mp3";
+                audio.src = "../../../assets/audio/beep1.wav";
+                audio.autoplay = true;
                 audio.load();
-                audio.play();
+                audio.addEventListener("load", function() { 
+                    audio.play(); 
+                }, true);
             }
         });
         this.socket.on('orderstatus', (data) => {
