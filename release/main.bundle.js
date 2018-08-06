@@ -864,10 +864,18 @@ var WebsocketService = /** @class */ (function () {
             var userType = _this.authGuard.getCurrentUser().userType;
             if (data.restro == _this.authGuard.getCurrentUser().restro) {
                 if (data.type === 'admin') {
-                    var audio = new Audio();
-                    audio.src = "../../../assets/audio/beep1.wav";
+                    var source = "../../../assets/audio/beep.ogg";
+                    var audio = document.createElement("audio");
+                    audio.autoplay = true;
                     audio.load();
-                    audio.play();
+                    audio.addEventListener("load", function () {
+                        audio.play();
+                    }, true);
+                    audio.src = source;
+                    // let audio = new Audio();
+                    // audio.src = "../../../assets/audio/beep1.wav";
+                    // audio.load();
+                    // audio.play();
                 }
                 if (userType == 3) {
                     _this._orders.unshift(data);
@@ -880,10 +888,18 @@ var WebsocketService = /** @class */ (function () {
             var userType = _this.authGuard.getCurrentUser().userType;
             if (userType == 4) {
                 _this._orders.push(data);
-                var audio = new Audio();
-                audio.src = "../../../assets/audio/beep1.wav";
+                var source = "../../../assets/audio/beep.ogg";
+                var audio = document.createElement("audio");
+                audio.autoplay = true;
                 audio.load();
-                audio.play();
+                audio.addEventListener("load", function () {
+                    audio.play();
+                }, true);
+                audio.src = source;
+                // let audio = new Audio();
+                // audio.src = "../../../assets/audio/beep1.wav";
+                // audio.load();
+                // audio.play();
             }
         });
         this.socket.on('orderstatus', function (data) {
