@@ -103,7 +103,6 @@ var CartComponent = /** @class */ (function () {
     CartComponent.prototype.createOrder = function () {
         var _this = this;
         var data = this.orderService.getOrderData();
-        console.log('data', data);
         var itemarray = [];
         var steps = [];
         if (this.globalService.getStepData()) {
@@ -247,7 +246,7 @@ var CartComponent = /** @class */ (function () {
                 _this.nonVariantData = false;
                 _this.variantData.quantity = article.quantity;
                 _this.variantData.variant = article.variant;
-                _this.variantData.notes = article.ordernote;
+                _this.variantData.notes = article.ordernote ? article.ordernote : '';
                 if (article.ordernote) {
                     var note = article.ordernote.split(',');
                     _this.notes = note;
@@ -306,18 +305,44 @@ var CartComponent = /** @class */ (function () {
         this.variantData.quantity = value;
     };
     CartComponent.prototype.addRemoveVariant = function (variant, status) {
-        if (status == 0) {
-            variant.status = 0;
-        }
-        else {
-            variant.status = 1;
-        }
-        for (var i = 0; i < this.variantData.variant.length; i++) {
-            if (this.variantData.variant[i]._id == variant._id) {
-                this.variantData.variant.splice(i, 1);
+        var varIds = [];
+        if (this.variantData.variant.length) {
+            for (var i = 0; i < this.variantData.variant.length; i++) {
+                varIds.push(this.variantData.variant[i]._id);
+                if (this.variantData.variant[i]._id == variant._id) {
+                    if (this.variantData.variant[i].status == status) {
+                        delete variant.status;
+                        this.variantData.variant.splice(i, 1);
+                    }
+                    else {
+                        variant.status = status;
+                        this.variantData.variant[i].status = status;
+                    }
+                }
+            }
+            if (varIds.length == this.variantData.variant.length) {
+                if (varIds.indexOf(variant._id) < 0) {
+                    variant.status = status;
+                    this.variantData.variant.push(variant);
+                }
             }
         }
-        this.variantData.variant.push(variant);
+        else {
+            variant.status = status;
+            this.variantData.variant.push(variant);
+        }
+        // if (status == 0) {
+        //   variant.status = 0;
+        // }
+        // else {
+        //   variant.status = 1;
+        // }
+        // for (let i = 0; i < this.variantData.variant.length; i++) {
+        //   if (this.variantData.variant[i]._id == variant._id) {
+        //     this.variantData.variant.splice(i, 1);
+        //   }
+        // }
+        // this.variantData.variant.push(variant);
     };
     CartComponent.prototype.addNote = function (event, note, i) {
         if (event.target.checked) {
@@ -390,7 +415,7 @@ var CartComponent = /** @class */ (function () {
                     _this.variantError = '';
                 }, 4000);
             }
-            else if (this.variantData.quantity > 0 && !this.variantData.variant.length && !this.variantData.notes) {
+            else if (this.variantData.quantity > 0 && this.variantData.variant.length == 0) {
                 this.variantError = 'Please select variants/notes';
                 setTimeout(function () {
                     _this.variantError = '';
@@ -399,13 +424,23 @@ var CartComponent = /** @class */ (function () {
             else {
                 this.articleData.quantity = this.variantData.quantity;
                 this.articleData.variant = this.variantData.variant;
-                this.articleData.ordernote = this.variantData.notes;
+                if (this.variantData.notes != '') {
+                    this.articleData.ordernote = this.variantData.notes;
+                }
+                else {
+                    delete this.articleData.ordernote;
+                }
                 var data = this.orderService.getOrderData();
                 for (var i = 0; i < data.selectedItems[this.articleData.step].length; i++) {
                     if (data.selectedItems[this.articleData.step][i]._id == this.articleData._id && data.selectedItems[this.articleData.step][i].variant && data.selectedItems[this.articleData.step][i].variantUniqueId == this.articleData.variantUniqueId) {
                         data.selectedItems[this.articleData.step][i].quantity = this.articleData.quantity;
                         data.selectedItems[this.articleData.step][i].variant = this.articleData.variant;
-                        data.selectedItems[this.articleData.step][i].ordernote = this.articleData.ordernote;
+                        if (this.articleData.ordernote) {
+                            data.selectedItems[this.articleData.step][i].ordernote = this.articleData.ordernote;
+                        }
+                        else {
+                            delete data.selectedItems[this.articleData.step][i].ordernote;
+                        }
                     }
                 }
                 for (var i = 0; i < data.categoryItems[this.articleData.step].length; i++) {
@@ -797,7 +832,6 @@ var ItemComponent = /** @class */ (function () {
         this.router = router;
         this.quantity = 0;
         this.articles = {};
-        // private articles = [];  
         this.categoryList = [];
         this.categorySearchData = [];
         this.variantList = [];
@@ -1040,13 +1074,6 @@ var ItemComponent = /** @class */ (function () {
     ItemComponent.prototype.addArticle = function () {
         var _this = this;
         this.stepsComponent.ngOnInit();
-        //     this.orderService.getAllergens().then(data=>{
-        // console.log('data',data);
-        // this.allergens = data.data;
-        //     })
-        //     .catch(error=>{
-        //       console.log('error',error);
-        //     });
         this.orderService.getVariantAndNotes()
             .then(function (data) {
             _this.variantList = data.data.variants;
@@ -1081,16 +1108,7 @@ var ItemComponent = /** @class */ (function () {
             notes: '',
             isDeleted: true
         };
-        // this.selectedIconImage = [];
-        // this.allergens = [];
-        // this.showVarient = false;
-        // this.variantData = {
-        //   quantity: 0,
-        //   variant: [],
-        //   notes: ''
-        // };
         this.articleNotes = [];
-        // this.articleData = {};
     };
     ItemComponent.prototype.filterBySubcategory = function (subcategory, index) {
         this.subcategory = subcategory;
@@ -1124,18 +1142,44 @@ var ItemComponent = /** @class */ (function () {
         this.variantData.quantity = value;
     };
     ItemComponent.prototype.addRemoveVariant = function (variant, status) {
-        if (status == 0) {
-            variant.status = 0;
-        }
-        else {
-            variant.status = 1;
-        }
-        for (var i = 0; i < this.variantData.variant.length; i++) {
-            if (this.variantData.variant[i]._id == variant._id) {
-                this.variantData.variant.splice(i, 1);
+        var varIds = [];
+        if (this.variantData.variant.length) {
+            for (var i = 0; i < this.variantData.variant.length; i++) {
+                varIds.push(this.variantData.variant[i]._id);
+                if (this.variantData.variant[i]._id == variant._id) {
+                    if (this.variantData.variant[i].status == status) {
+                        delete variant.status;
+                        this.variantData.variant.splice(i, 1);
+                    }
+                    else {
+                        variant.status = status;
+                        this.variantData.variant[i].status = status;
+                    }
+                }
+            }
+            if (varIds.length == this.variantData.variant.length) {
+                if (varIds.indexOf(variant._id) < 0) {
+                    variant.status = status;
+                    this.variantData.variant.push(variant);
+                }
             }
         }
-        this.variantData.variant.push(variant);
+        else {
+            variant.status = status;
+            this.variantData.variant.push(variant);
+        }
+        // if (status == 0) {
+        //   variant.status = 0;
+        // }
+        // else {
+        //   variant.status = 1;
+        // }
+        // for (let i = 0; i < this.variantData.variant.length; i++) {
+        //   if (this.variantData.variant[i]._id == variant._id) {
+        //     this.variantData.variant.splice(i, 1);
+        //   }
+        // }
+        // this.variantData.variant.push(variant);
     };
     ItemComponent.prototype.addNote = function (event, note, i) {
         if (event.target.checked) {
@@ -1167,8 +1211,12 @@ var ItemComponent = /** @class */ (function () {
         }
         else {
             this.articleData.quantity = this.variantData.quantity;
-            this.articleData.variant = this.variantData.variant;
-            this.articleData.ordernote = this.variantData.notes;
+            if (this.variantData.variant.length) {
+                this.articleData.variant = this.variantData.variant;
+            }
+            if (this.variantData.notes != '') {
+                this.articleData.ordernote = this.variantData.notes;
+            }
             this.articleData.step = currentStep;
             this.articleData.variantUniqueId = Math.floor(Math.random() * 10000);
             var data = this.orderService.getOrderData();
@@ -1252,11 +1300,7 @@ var ItemComponent = /** @class */ (function () {
                 price: Number(this.AddDataArticle.price),
                 category: this.AddDataArticle.category,
                 subCategory: this.AddDataArticle.subCategory,
-                // quantity: this.AddDataArticle.quantity,
-                // variant: this.AddDataArticle.variant,
-                // notes: this.AddDataArticle.notes,
                 isDeleted: this.AddDataArticle.isDeleted
-                // allergens: this.selectedIconImage ? JSON.stringify(this.selectedIconImage) : '',
             };
             this.loader = true;
             this.orderService.addArticle(opts)
@@ -1264,22 +1308,14 @@ var ItemComponent = /** @class */ (function () {
                 var itemTemp = __WEBPACK_IMPORTED_MODULE_6_lodash__["cloneDeep"](data.data);
                 itemTemp.step = currentStep;
                 itemTemp.quantity = _this.AddDataArticle.quantity;
-                itemTemp.variant = _this.AddDataArticle.variant;
-                itemTemp.ordernote = _this.AddDataArticle.notes;
-                // itemTemp.quantity = 0;
-                // itemTemp.itemTotal = itemTemp.quantity;
+                if (_this.AddDataArticle.variant.length) {
+                    itemTemp.variant = _this.AddDataArticle.variant;
+                }
+                if (_this.AddDataArticle.notes != '') {
+                    itemTemp.ordernote = _this.AddDataArticle.notes;
+                }
                 var itemData = __WEBPACK_IMPORTED_MODULE_6_lodash__["cloneDeep"](itemTemp);
                 _this.loader = false;
-                // var steps = [];
-                // if (this.globalService.getStepData()) {
-                //   steps = this.globalService.getStepData();
-                // }
-                // else {
-                //   steps = ['Uscita 1', 'Uscita 2'];
-                // }
-                // for (let j = 0; j < steps.length; j++) {
-                // orderdata.categoryItems[steps[j]][orderdata.categoryItems[steps[j]].length] = itemData;
-                // }
                 orderdata_1.selectedItems[currentStep].push(itemData);
                 var cp = 0;
                 var itemno = 0;
@@ -1346,18 +1382,44 @@ var ItemComponent = /** @class */ (function () {
         this.AddDataArticle.quantity = value;
     };
     ItemComponent.prototype.addRemoveArticleVariant = function (variant, status) {
-        if (status == 0) {
-            variant.status = 0;
-        }
-        else {
-            variant.status = 1;
-        }
-        for (var i = 0; i < this.AddDataArticle.variant.length; i++) {
-            if (this.AddDataArticle.variant[i]._id == variant._id) {
-                this.AddDataArticle.variant.splice(i, 1);
+        var varIds = [];
+        if (this.AddDataArticle.variant.length) {
+            for (var i = 0; i < this.AddDataArticle.variant.length; i++) {
+                varIds.push(this.AddDataArticle.variant[i]._id);
+                if (this.AddDataArticle.variant[i]._id == variant._id) {
+                    if (this.AddDataArticle.variant[i].status == status) {
+                        delete variant.status;
+                        this.AddDataArticle.variant.splice(i, 1);
+                    }
+                    else {
+                        variant.status = status;
+                        this.AddDataArticle.variant[i].status = status;
+                    }
+                }
+            }
+            if (varIds.length == this.AddDataArticle.variant.length) {
+                if (varIds.indexOf(variant._id) < 0) {
+                    variant.status = status;
+                    this.AddDataArticle.variant.push(variant);
+                }
             }
         }
-        this.AddDataArticle.variant.push(variant);
+        else {
+            variant.status = status;
+            this.AddDataArticle.variant.push(variant);
+        }
+        // if (status == 0) {
+        //   variant.status = 0;
+        // }
+        // else {
+        //   variant.status = 1;
+        // }
+        // for (let i = 0; i < this.AddDataArticle.variant.length; i++) {
+        //   if (this.AddDataArticle.variant[i]._id == variant._id) {
+        //     this.AddDataArticle.variant.splice(i, 1);
+        //   }
+        // }
+        // this.AddDataArticle.variant.push(variant);
     };
     ItemComponent.prototype.addArticleNote = function (event, note, i) {
         if (event.target.checked) {

@@ -74,6 +74,7 @@ export class WebsocketService {
         });
 
         this.socket.on('neworder', (data) => {
+            console.log(data,'neworder++++++++++++++++++++++');            
             this.socketEvent = true;
             this.orderId = data._id;
             let userType = this.authGuard.getCurrentUser().userType;
@@ -138,6 +139,26 @@ export class WebsocketService {
                 }
             }
         });
+
+        this.socket.on('orderUpdateDept', (data) => {
+            this.socketEvent = true;
+            this.orderId = data._id;
+            for (var i = 0; i < this._orders.length; i++) {
+                if (data._id == this._orders[i]._id) {
+                    this._orders[i] = _.cloneDeep(data);
+                    let itemsToSplice = [];
+                    if (data.item.length) {
+                        for (var k = 0; k < data.item.length; k++) {
+                            itemsToSplice.push(data.item[k].status);
+                        }
+                    }
+                    if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(this.isBelowThreshold)) {
+                        this._orders.splice(i, 1);
+                    }
+                }
+            }
+        });
+        
         this.socket.on('tablestatus', (data) => {
             if (data.restro == this.authGuard.getCurrentUser().restro) {
                 if (this._rooms && this._rooms.length) {

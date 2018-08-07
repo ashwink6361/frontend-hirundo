@@ -16,7 +16,6 @@ import { StepsComponent } from '../../../../shared/steps/steps.component';
 export class ItemComponent implements OnInit {
   public quantity: number = 0;
   private articles = {};
-  // private articles = [];  
   private categoryList = [];
   public categorySearchData: any[] = [];
   protected dataService: CompleterData;
@@ -29,7 +28,7 @@ export class ItemComponent implements OnInit {
   public articleAdd: boolean = false;
   protected subcategory: string;
   public selectedSubcategory: boolean[] = [false];
-  public showAllergenIcon:boolean = false;
+  public showAllergenIcon: boolean = false;
   public variantData = {
     quantity: 0,
     variant: [],
@@ -48,12 +47,12 @@ export class ItemComponent implements OnInit {
     notes: '',
     isDeleted: true
   }
-  public articleNotes = [];  
+  public articleNotes = [];
   public loader: boolean = false;
   public addArticleError = '';
   public allergens = [];
   public selectedIconImage = [];
-  constructor(private orderService: OrderService,public stepsComponent: StepsComponent, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
+  constructor(private orderService: OrderService, public stepsComponent: StepsComponent, private completerService: CompleterService, private globalService: GlobalService, public router: Router) { }
 
   ngOnInit() {
     this.data = this.orderService.getOrderData();
@@ -271,13 +270,6 @@ export class ItemComponent implements OnInit {
 
   addArticle() {
     this.stepsComponent.ngOnInit();
-//     this.orderService.getAllergens().then(data=>{
-// console.log('data',data);
-// this.allergens = data.data;
-//     })
-//     .catch(error=>{
-//       console.log('error',error);
-//     });
     this.orderService.getVariantAndNotes()
       .then(data => {
         this.variantList = data.data.variants;
@@ -313,16 +305,7 @@ export class ItemComponent implements OnInit {
       notes: '',
       isDeleted: true
     };
-    // this.selectedIconImage = [];
-    // this.allergens = [];
-    // this.showVarient = false;
-    // this.variantData = {
-    //   quantity: 0,
-    //   variant: [],
-    //   notes: ''
-    // };
     this.articleNotes = [];
-    // this.articleData = {};
   }
 
   filterBySubcategory(subcategory, index) {
@@ -358,20 +341,46 @@ export class ItemComponent implements OnInit {
     value++;
     this.variantData.quantity = value;
   }
-  
+
   addRemoveVariant(variant, status) {
-    if (status == 0) {
-      variant.status = 0;
-    }
-    else {
-      variant.status = 1;
-    }
-    for (let i = 0; i < this.variantData.variant.length; i++) {
-      if (this.variantData.variant[i]._id == variant._id) {
-        this.variantData.variant.splice(i, 1);
+    let varIds = [];
+    if (this.variantData.variant.length) {
+      for (let i = 0; i < this.variantData.variant.length; i++) {
+        varIds.push(this.variantData.variant[i]._id);
+        if (this.variantData.variant[i]._id == variant._id) {
+          if (this.variantData.variant[i].status == status) {
+            delete variant.status;
+            this.variantData.variant.splice(i, 1);
+          }
+          else {
+            variant.status = status;
+            this.variantData.variant[i].status = status;
+          }
+        }
+      }
+      if (varIds.length == this.variantData.variant.length) {
+        if (varIds.indexOf(variant._id) < 0) {
+          variant.status = status;
+          this.variantData.variant.push(variant);
+        }
       }
     }
-    this.variantData.variant.push(variant);
+    else {
+      variant.status = status;
+      this.variantData.variant.push(variant);
+    }
+    // if (status == 0) {
+    //   variant.status = 0;
+    // }
+    // else {
+    //   variant.status = 1;
+    // }
+    // for (let i = 0; i < this.variantData.variant.length; i++) {
+    //   if (this.variantData.variant[i]._id == variant._id) {
+    //     this.variantData.variant.splice(i, 1);
+    //   }
+    // }
+    // this.variantData.variant.push(variant);
   }
 
   addNote(event, note, i) {
@@ -404,8 +413,12 @@ export class ItemComponent implements OnInit {
     }
     else {
       this.articleData.quantity = this.variantData.quantity;
-      this.articleData.variant = this.variantData.variant;
-      this.articleData.ordernote = this.variantData.notes;
+      if(this.variantData.variant.length){
+        this.articleData.variant = this.variantData.variant;
+      }
+      if(this.variantData.notes != ''){
+        this.articleData.ordernote = this.variantData.notes;        
+      }      
       this.articleData.step = currentStep;
       this.articleData.variantUniqueId = Math.floor(Math.random() * 10000);
       let data = this.orderService.getOrderData();
@@ -447,7 +460,7 @@ export class ItemComponent implements OnInit {
   }
 
   saveAddArticleData() {
-    let currentStep = this.globalService.getTabData().step;    
+    let currentStep = this.globalService.getTabData().step;
     if (this.AddDataArticle.name === '') {
       this.addArticleError = 'Please enter name';
       setTimeout(() => {
@@ -489,11 +502,7 @@ export class ItemComponent implements OnInit {
         price: Number(this.AddDataArticle.price),
         category: this.AddDataArticle.category,
         subCategory: this.AddDataArticle.subCategory,
-        // quantity: this.AddDataArticle.quantity,
-        // variant: this.AddDataArticle.variant,
-        // notes: this.AddDataArticle.notes,
         isDeleted: this.AddDataArticle.isDeleted
-        // allergens: this.selectedIconImage ? JSON.stringify(this.selectedIconImage) : '',
       }
       this.loader = true;
       this.orderService.addArticle(opts)
@@ -501,22 +510,14 @@ export class ItemComponent implements OnInit {
           let itemTemp = _.cloneDeep(data.data);
           itemTemp.step = currentStep;
           itemTemp.quantity = this.AddDataArticle.quantity;
-          itemTemp.variant = this.AddDataArticle.variant;
-          itemTemp.ordernote = this.AddDataArticle.notes;
-          // itemTemp.quantity = 0;
-          // itemTemp.itemTotal = itemTemp.quantity;
+          if(this.AddDataArticle.variant.length){
+            itemTemp.variant = this.AddDataArticle.variant;
+          }
+          if(this.AddDataArticle.notes != ''){
+            itemTemp.ordernote = this.AddDataArticle.notes;            
+          }          
           let itemData = _.cloneDeep(itemTemp);
           this.loader = false;
-          // var steps = [];
-          // if (this.globalService.getStepData()) {
-          //   steps = this.globalService.getStepData();
-          // }
-          // else {
-          //   steps = ['Uscita 1', 'Uscita 2'];
-          // }
-          // for (let j = 0; j < steps.length; j++) {
-          // orderdata.categoryItems[steps[j]][orderdata.categoryItems[steps[j]].length] = itemData;
-          // }
           orderdata.selectedItems[currentStep].push(itemData);
           let cp = 0;
           let itemno = 0;
@@ -543,7 +544,7 @@ export class ItemComponent implements OnInit {
               orderdata.cartTotalItem = itemno;
             }
           }
-          this.orderService.setOrderData(orderdata);  
+          this.orderService.setOrderData(orderdata);
           this.hideArticle();
           this.stepsComponent.ngOnInit();
         })
@@ -552,10 +553,9 @@ export class ItemComponent implements OnInit {
     }
   }
 
-  inputChanged(){
-    if((Number(this.AddDataArticle.price) % 1) != 0)
-    {
-      this.AddDataArticle.price =  parseFloat(this.AddDataArticle.price).toFixed(2);
+  inputChanged() {
+    if ((Number(this.AddDataArticle.price) % 1) != 0) {
+      this.AddDataArticle.price = parseFloat(this.AddDataArticle.price).toFixed(2);
     }
   }
 
@@ -564,120 +564,146 @@ export class ItemComponent implements OnInit {
       this.selectedIconImage.push(icon.image);
     }
     this.showAllergenIcon = false;
-};
+  };
 
   removeAllergens(indx, item) {
-  if (this.selectedIconImage.indexOf(item) > -1) {
+    if (this.selectedIconImage.indexOf(item) > -1) {
       this.selectedIconImage.splice(indx, 1);
-  }
-};
+    }
+  };
 
-decreaseArticleQty() {
-  let value = this.AddDataArticle.quantity;
-  value = isNaN(value) ? 0 : value;
-  value < 1 ? value = 1 : '';
-  value--;
-  this.AddDataArticle.quantity = value;
-}
+  decreaseArticleQty() {
+    let value = this.AddDataArticle.quantity;
+    value = isNaN(value) ? 0 : value;
+    value < 1 ? value = 1 : '';
+    value--;
+    this.AddDataArticle.quantity = value;
+  }
 
-increaseArticleQty() {
-  let value = this.AddDataArticle.quantity;
-  value = isNaN(value) ? 0 : value;
-  value++;
-  this.AddDataArticle.quantity = value;
-}
-addRemoveArticleVariant(variant, status) {
-  if (status == 0) {
-    variant.status = 0;
+  increaseArticleQty() {
+    let value = this.AddDataArticle.quantity;
+    value = isNaN(value) ? 0 : value;
+    value++;
+    this.AddDataArticle.quantity = value;
   }
-  else {
-    variant.status = 1;
-  }
-  for (let i = 0; i < this.AddDataArticle.variant.length; i++) {
-    if (this.AddDataArticle.variant[i]._id == variant._id) {
-      this.AddDataArticle.variant.splice(i, 1);
-    }
-  }
-  this.AddDataArticle.variant.push(variant);
-}
-addArticleNote(event, note, i) {
-  if (event.target.checked) {
-    this.articleNotes.push(note);
-  }
-  else {
-    for (let i = 0; i < this.articleNotes.length; i++) {
-      if (this.articleNotes[i] == note) {
-        this.articleNotes.splice(i, 1);
-      }
-    }
-  }
-  this.AddDataArticle.notes = this.articleNotes.toString();
-}
-
-deleteItemFromCart(article) {
-  let data = this.orderService.getOrderData();
-  let currentStep = this.globalService.getTabData().step;
-  for (let i = 0; i < data.selectedItems[currentStep].length; i++) {
-    if (data.selectedItems[currentStep][i]._id == article._id && !article.variant) {
-      //non variant type data
-      for (let m = 0; m < data.categoryItems[currentStep].length; m++) {
-        if (data.categoryItems[currentStep][m]._id == data.selectedItems[currentStep][i]._id) {
-          data.categoryItems[currentStep][m].itemTotal = data.categoryItems[currentStep][m].itemTotal - data.selectedItems[currentStep][i].quantity;
-        }
-      }
-      if (!data.selectedItems[currentStep][i].variant && currentStep == data.selectedItems[currentStep][i].step) {
-        data.selectedItems[currentStep].splice(i, 1);
-      }
-    }
-    else if (data.selectedItems[currentStep][i]._id == article._id && article.variant) {
-      //variant type data
-      for (let m = 0; m < data.categoryItems[currentStep].length; m++) {
-        if (data.categoryItems[currentStep][m]._id == data.selectedItems[currentStep][i]._id) {
-          data.categoryItems[currentStep][m].itemTotal = data.categoryItems[currentStep][m].itemTotal - data.selectedItems[currentStep][i].quantity;
-        }
-      }
-      if (data.selectedItems[currentStep][i].variant && currentStep == data.selectedItems[currentStep][i].step) {
-        data.selectedItems[currentStep].splice(i, 1);
-      }
-    }
-  }
-  let cp = 0;
-  let itemno = 0;
-  let varicost = 0;
-  var steps = [];
-  if (this.globalService.getStepData()) {
-    steps = this.globalService.getStepData();
-  }
-  else {
-    steps = ['Uscita 1', 'Uscita 2'];
-  }
-  let emptyArray = [];
-  for (let a = 0; a < steps.length; a++) {
-    if (data.selectedItems[steps[a]].length) {
-      for (let i = 0; i < data.selectedItems[steps[a]].length; i++) {
-        itemno += data.selectedItems[steps[a]][i].quantity;
-        if (data.selectedItems[steps[a]][i].variant) {
-          for (let j = 0; j < data.selectedItems[steps[a]][i].variant.length; j++) {
-            if (data.selectedItems[steps[a]][i].variant[j].status == 1) {
-              varicost += data.selectedItems[steps[a]][i].variant[j].price;
-            }
+  addRemoveArticleVariant(variant, status) {
+    let varIds = [];
+    if (this.AddDataArticle.variant.length) {
+      for (let i = 0; i < this.AddDataArticle.variant.length; i++) {
+        varIds.push(this.AddDataArticle.variant[i]._id);
+        if (this.AddDataArticle.variant[i]._id == variant._id) {
+          if (this.AddDataArticle.variant[i].status == status) {
+            delete variant.status;
+            this.AddDataArticle.variant.splice(i, 1);
+          }
+          else {
+            variant.status = status;
+            this.AddDataArticle.variant[i].status = status;
           }
         }
-        cp += (data.selectedItems[steps[a]][i].price + varicost) * data.selectedItems[steps[a]][i].quantity;
-        data.cartTotalPrice = cp;
-        data.cartTotalItem = itemno;
+      }
+      if (varIds.length == this.AddDataArticle.variant.length) {
+        if (varIds.indexOf(variant._id) < 0) {
+          variant.status = status;
+          this.AddDataArticle.variant.push(variant);
+        }
       }
     }
-    if (data.selectedItems[steps[a]].length == 0) {
-      if (emptyArray.indexOf(steps[a]) < 0) {
-        emptyArray.push(steps[a]);
-      }
+    else {
+      variant.status = status;
+      this.AddDataArticle.variant.push(variant);
     }
-    if (emptyArray.length == steps.length) {
-      data.cartTotalPrice = 0;
-      data.cartTotalItem = 0;
-    }
+    // if (status == 0) {
+    //   variant.status = 0;
+    // }
+    // else {
+    //   variant.status = 1;
+    // }
+    // for (let i = 0; i < this.AddDataArticle.variant.length; i++) {
+    //   if (this.AddDataArticle.variant[i]._id == variant._id) {
+    //     this.AddDataArticle.variant.splice(i, 1);
+    //   }
+    // }
+    // this.AddDataArticle.variant.push(variant);
   }
-  this.orderService.setOrderData(data);
-}
+  addArticleNote(event, note, i) {
+    if (event.target.checked) {
+      this.articleNotes.push(note);
+    }
+    else {
+      for (let i = 0; i < this.articleNotes.length; i++) {
+        if (this.articleNotes[i] == note) {
+          this.articleNotes.splice(i, 1);
+        }
+      }
+    }
+    this.AddDataArticle.notes = this.articleNotes.toString();
+  }
+
+  deleteItemFromCart(article) {
+    let data = this.orderService.getOrderData();
+    let currentStep = this.globalService.getTabData().step;
+    for (let i = 0; i < data.selectedItems[currentStep].length; i++) {
+      if (data.selectedItems[currentStep][i]._id == article._id && !article.variant) {
+        //non variant type data
+        for (let m = 0; m < data.categoryItems[currentStep].length; m++) {
+          if (data.categoryItems[currentStep][m]._id == data.selectedItems[currentStep][i]._id) {
+            data.categoryItems[currentStep][m].itemTotal = data.categoryItems[currentStep][m].itemTotal - data.selectedItems[currentStep][i].quantity;
+          }
+        }
+        if (!data.selectedItems[currentStep][i].variant && currentStep == data.selectedItems[currentStep][i].step) {
+          data.selectedItems[currentStep].splice(i, 1);
+        }
+      }
+      else if (data.selectedItems[currentStep][i]._id == article._id && article.variant) {
+        //variant type data
+        for (let m = 0; m < data.categoryItems[currentStep].length; m++) {
+          if (data.categoryItems[currentStep][m]._id == data.selectedItems[currentStep][i]._id) {
+            data.categoryItems[currentStep][m].itemTotal = data.categoryItems[currentStep][m].itemTotal - data.selectedItems[currentStep][i].quantity;
+          }
+        }
+        if (data.selectedItems[currentStep][i].variant && currentStep == data.selectedItems[currentStep][i].step) {
+          data.selectedItems[currentStep].splice(i, 1);
+        }
+      }
+    }
+    let cp = 0;
+    let itemno = 0;
+    let varicost = 0;
+    var steps = [];
+    if (this.globalService.getStepData()) {
+      steps = this.globalService.getStepData();
+    }
+    else {
+      steps = ['Uscita 1', 'Uscita 2'];
+    }
+    let emptyArray = [];
+    for (let a = 0; a < steps.length; a++) {
+      if (data.selectedItems[steps[a]].length) {
+        for (let i = 0; i < data.selectedItems[steps[a]].length; i++) {
+          itemno += data.selectedItems[steps[a]][i].quantity;
+          if (data.selectedItems[steps[a]][i].variant) {
+            for (let j = 0; j < data.selectedItems[steps[a]][i].variant.length; j++) {
+              if (data.selectedItems[steps[a]][i].variant[j].status == 1) {
+                varicost += data.selectedItems[steps[a]][i].variant[j].price;
+              }
+            }
+          }
+          cp += (data.selectedItems[steps[a]][i].price + varicost) * data.selectedItems[steps[a]][i].quantity;
+          data.cartTotalPrice = cp;
+          data.cartTotalItem = itemno;
+        }
+      }
+      if (data.selectedItems[steps[a]].length == 0) {
+        if (emptyArray.indexOf(steps[a]) < 0) {
+          emptyArray.push(steps[a]);
+        }
+      }
+      if (emptyArray.length == steps.length) {
+        data.cartTotalPrice = 0;
+        data.cartTotalItem = 0;
+      }
+    }
+    this.orderService.setOrderData(data);
+  }
 }

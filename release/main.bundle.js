@@ -887,6 +887,7 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('neworder', function (data) {
+            console.log(data, 'neworder++++++++++++++++++++++');
             _this.socketEvent = true;
             _this.orderId = data._id;
             var userType = _this.authGuard.getCurrentUser().userType;
@@ -932,6 +933,24 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('orderstatusDept', function (data) {
+            _this.socketEvent = true;
+            _this.orderId = data._id;
+            for (var i = 0; i < _this._orders.length; i++) {
+                if (data._id == _this._orders[i]._id) {
+                    _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](data);
+                    var itemsToSplice = [];
+                    if (data.item.length) {
+                        for (var k = 0; k < data.item.length; k++) {
+                            itemsToSplice.push(data.item[k].status);
+                        }
+                    }
+                    if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(_this.isBelowThreshold)) {
+                        _this._orders.splice(i, 1);
+                    }
+                }
+            }
+        });
+        this.socket.on('orderUpdateDept', function (data) {
             _this.socketEvent = true;
             _this.orderId = data._id;
             for (var i = 0; i < _this._orders.length; i++) {
