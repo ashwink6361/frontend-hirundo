@@ -103,7 +103,6 @@ var CartComponent = /** @class */ (function () {
     CartComponent.prototype.createOrder = function () {
         var _this = this;
         var data = this.orderService.getOrderData();
-        console.log('data', data);
         var itemarray = [];
         var steps = [];
         if (this.globalService.getStepData()) {
@@ -247,7 +246,7 @@ var CartComponent = /** @class */ (function () {
                 _this.nonVariantData = false;
                 _this.variantData.quantity = article.quantity;
                 _this.variantData.variant = article.variant;
-                _this.variantData.notes = article.ordernote;
+                _this.variantData.notes = article.ordernote ? article.ordernote : '';
                 if (article.ordernote) {
                     var note = article.ordernote.split(',');
                     _this.notes = note;
@@ -306,18 +305,44 @@ var CartComponent = /** @class */ (function () {
         this.variantData.quantity = value;
     };
     CartComponent.prototype.addRemoveVariant = function (variant, status) {
-        if (status == 0) {
-            variant.status = 0;
-        }
-        else {
-            variant.status = 1;
-        }
-        for (var i = 0; i < this.variantData.variant.length; i++) {
-            if (this.variantData.variant[i]._id == variant._id) {
-                this.variantData.variant.splice(i, 1);
+        var varIds = [];
+        if (this.variantData.variant.length) {
+            for (var i = 0; i < this.variantData.variant.length; i++) {
+                varIds.push(this.variantData.variant[i]._id);
+                if (this.variantData.variant[i]._id == variant._id) {
+                    if (this.variantData.variant[i].status == status) {
+                        delete variant.status;
+                        this.variantData.variant.splice(i, 1);
+                    }
+                    else {
+                        variant.status = status;
+                        this.variantData.variant[i].status = status;
+                    }
+                }
+            }
+            if (varIds.length == this.variantData.variant.length) {
+                if (varIds.indexOf(variant._id) < 0) {
+                    variant.status = status;
+                    this.variantData.variant.push(variant);
+                }
             }
         }
-        this.variantData.variant.push(variant);
+        else {
+            variant.status = status;
+            this.variantData.variant.push(variant);
+        }
+        // if (status == 0) {
+        //   variant.status = 0;
+        // }
+        // else {
+        //   variant.status = 1;
+        // }
+        // for (let i = 0; i < this.variantData.variant.length; i++) {
+        //   if (this.variantData.variant[i]._id == variant._id) {
+        //     this.variantData.variant.splice(i, 1);
+        //   }
+        // }
+        // this.variantData.variant.push(variant);
     };
     CartComponent.prototype.addNote = function (event, note, i) {
         if (event.target.checked) {
@@ -390,7 +415,7 @@ var CartComponent = /** @class */ (function () {
                     _this.variantError = '';
                 }, 4000);
             }
-            else if (this.variantData.quantity > 0 && !this.variantData.variant.length && !this.variantData.notes) {
+            else if (this.variantData.quantity > 0 && this.variantData.variant.length == 0) {
                 this.variantError = 'Please select variants/notes';
                 setTimeout(function () {
                     _this.variantError = '';
@@ -399,13 +424,23 @@ var CartComponent = /** @class */ (function () {
             else {
                 this.articleData.quantity = this.variantData.quantity;
                 this.articleData.variant = this.variantData.variant;
-                this.articleData.ordernote = this.variantData.notes;
+                if (this.variantData.notes != '') {
+                    this.articleData.ordernote = this.variantData.notes;
+                }
+                else {
+                    delete this.articleData.ordernote;
+                }
                 var data = this.orderService.getOrderData();
                 for (var i = 0; i < data.selectedItems[this.articleData.step].length; i++) {
                     if (data.selectedItems[this.articleData.step][i]._id == this.articleData._id && data.selectedItems[this.articleData.step][i].variant && data.selectedItems[this.articleData.step][i].variantUniqueId == this.articleData.variantUniqueId) {
                         data.selectedItems[this.articleData.step][i].quantity = this.articleData.quantity;
                         data.selectedItems[this.articleData.step][i].variant = this.articleData.variant;
-                        data.selectedItems[this.articleData.step][i].ordernote = this.articleData.ordernote;
+                        if (this.articleData.ordernote) {
+                            data.selectedItems[this.articleData.step][i].ordernote = this.articleData.ordernote;
+                        }
+                        else {
+                            delete data.selectedItems[this.articleData.step][i].ordernote;
+                        }
                     }
                 }
                 for (var i = 0; i < data.categoryItems[this.articleData.step].length; i++) {
@@ -466,7 +501,7 @@ var CartComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/hirundo/waiter/order/choose-category/choose-category.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header class=\"page-content-header\">\r\n    <div class=\"back-btn\">\r\n        <a *ngIf=\"!orderId\" routerLink=\"/waiter/order/:id\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n        <a *ngIf=\"orderId\" (click)=\"hideStep()\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\">\r\n        Choose Category\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <app-steps></app-steps>\r\n    <div class=\"category-list\">\r\n        <div class=\"d-flex flex-wrap\">\r\n            <div class=\"d-flex align-items-center justify-content-between search-category w-100\">\r\n                <div class=\"md-form search\">\r\n                    <i class=\"fas fa-search prefix\"></i>\r\n                    <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Category\" />\r\n                </div>\r\n            </div>\r\n            <div class=\"category\" *ngFor=\"let category of categoryList | filter : searchText\" [ngStyle]=\"{'background-color': category.color}\"\r\n                (click)=\"showItems(category)\">\r\n                <img *ngIf=\"!category.isIcon\" [src]=\"category.logo.small\" alt=\"\" />\r\n                <img class=\"icon-img\" *ngIf=\"category.isIcon\" [src]=\"category.icon\" alt=\"\" />\r\n                <p class=\"name\">{{category.name}}</p>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<header class=\"page-content-header\">\r\n    <div class=\"back-btn\">\r\n        <a *ngIf=\"!orderId\" routerLink=\"/waiter/order/:id\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n        <a *ngIf=\"orderId\" (click)=\"hideStep()\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\">\r\n        Choose Category\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <app-steps></app-steps>\r\n    <div class=\"category-list\">\r\n        <div class=\"d-flex flex-wrap\">\r\n            <div class=\"search-category w-100\">\r\n                <div class=\"md-form search\">\r\n                    <i class=\"fas fa-search prefix\"></i>\r\n                    <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Category\" />\r\n                    <button type=\"button\" class=\"btn-cart\">\r\n                        <i class=\"fas fa-shopping-cart\"></i> {{orderService.getOrderData().cartTotalItem}} | &euro;{{orderService.getOrderData().cartTotalPrice}}\r\n                    </button>\r\n                </div>\r\n            </div>\r\n            <div class=\"category\" *ngFor=\"let category of categoryList | filter : searchText\" [ngStyle]=\"{'background-color': category.color}\"\r\n                (click)=\"showItems(category)\">\r\n                <img *ngIf=\"!category.isIcon\" [src]=\"category.logo.small\" alt=\"\" />\r\n                <img class=\"icon-img\" *ngIf=\"category.isIcon\" [src]=\"category.icon\" alt=\"\" />\r\n                <p class=\"name\">{{category.name}}</p>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -734,7 +769,7 @@ var CreateOrderComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/hirundo/waiter/order/item/item.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<header class=\"page-content-header\" [ngStyle]=\"{'background-color' : orderService.getOrderData().selectedCategory.color}\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter/order/:id/choose-category\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\r\n        {{orderService.getOrderData().selectedCategory.name}}\r\n        <span class=\"add-article-btn\" (click)=\"addArticle()\">\r\n            <img src=\"assets/images/icon_file.png\" alt=\"\" />\r\n        </span>\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <div class=\"tabs-container subcategory-tabs\">\r\n        <ul [ngStyle]=\"{'background-color' : orderService.getOrderData().selectedCategory.color}\">\r\n            <li [class.subcategory-active]=\"selectedSubcategory[-1]\" (click)=\"filterBySubcategory()\">All</li>\r\n            <span *ngIf=\"data.selectedCategory.subCategory.length\">\r\n                <li *ngFor=\"let subCategory of data.selectedCategory.subCategory; let j = index\" [class.subcategory-active]=\"selectedSubcategory[j]\"\r\n                    (click)=\"filterBySubcategory(subCategory,j)\">\r\n                    {{subCategory}}\r\n                </li>\r\n            </span>\r\n        </ul>\r\n    </div>\r\n    <app-steps></app-steps>\r\n    <div class=\"item-container item-list-height\">\r\n        <div class=\"search-category w-100\">\r\n            <div class=\"md-form search\">\r\n                <i class=\"fas fa-search prefix\"></i>\r\n                <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Item\" />\r\n                <button type=\"button\" class=\"btn-cart\" (click)=\"viewCart()\">\r\n                    <i class=\"fas fa-shopping-cart\"></i> {{orderService.getOrderData().cartTotalItem}} | &euro;{{orderService.getOrderData().cartTotalPrice}}\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>\r\n        <!-- <div *ngIf=\"!articles.length\" class=\"text-center\">\r\n            No Item Found\r\n        </div> -->\r\n        <div *ngIf=\"orderService.getOrderData().categoryItems[globalService.getTabData().step].length == 0\" class=\"text-center\">\r\n            No Item Found\r\n        </div>\r\n        <div *ngIf=\"orderService.getOrderData().categoryItems[globalService.getTabData().step].length > 0\">\r\n            <!-- <div *ngFor=\"let article of articles | filter : searchText ; let i = index\"> -->\r\n            <div *ngFor=\"let article of orderService.getOrderData().categoryItems[globalService.getTabData().step] | filter : searchText ; let i = index\">\r\n                <div class=\"item-list align-items-center\" *ngIf=\"subcategory && (article.subCategory == subcategory)\">\r\n                    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                            alt=\"Category Logo\" />\r\n                        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                        <span class=\"item-quantity\" *ngIf=\"article.itemTotal>0\">{{article.itemTotal}}</span>\r\n                    </div>\r\n                    <div class=\"item-name\">\r\n                        <p class=\"name m-0\">{{article.name}}</p>\r\n                        <p class=\"name m-0\">&euro;{{article.price}}</p>\r\n                    </div>\r\n                    <div class=\"input-prepend-append\">\r\n                        <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue(article)\" value=\"Decrease Value\">\r\n                            <i class=\"fas fa-minus\"></i>\r\n                        </button>\r\n                        <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue(article)\" value=\"Increase Value\">\r\n                            <i class=\"fas fa-plus\"></i>\r\n                        </button>\r\n                    </div>\r\n                    <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"viewVarient(article)\">\r\n                        <img src=\"assets/images/icon_edit.png\" alt=\"\" />\r\n                    </button>\r\n                </div>\r\n                <div class=\"item-list align-items-center\" *ngIf=\"!subcategory\">\r\n                    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                            alt=\"Category Logo\" />\r\n                        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                        <span class=\"item-quantity\" *ngIf=\"article.itemTotal>0\">{{article.itemTotal}}</span>\r\n                    </div>\r\n                    <div class=\"item-name\">\r\n                        <p class=\"name m-0\">{{article.name}}</p>\r\n                        <p class=\"name m-0\">&euro;{{article.price}}</p>\r\n                    </div>\r\n                    <div class=\"input-prepend-append\">\r\n                        <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue(article)\" value=\"Decrease Value\">\r\n                            <i class=\"fas fa-minus\"></i>\r\n                        </button>\r\n                        <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue(article)\" value=\"Increase Value\">\r\n                            <i class=\"fas fa-plus\"></i>\r\n                        </button>\r\n                    </div>\r\n                    <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"viewVarient(article)\">\r\n                        <img src=\"assets/images/icon_edit.png\" alt=\"\" />\r\n                    </button>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n\r\n<div class=\"varient-container\" [class.show-varient]=\"showVarient\">\r\n    <div class=\"modal-header\">\r\n        <div class=\"back-btn\">\r\n            <a (click)=\"hideVarient()\">\r\n                <i class=\"fas fa-times\"></i>\r\n            </a>\r\n        </div>\r\n        <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\r\n            Choose Varient\r\n            <button (click)=\"saveVariantData()\">Save</button>\r\n        </div>\r\n    </div>\r\n    <app-steps></app-steps>\r\n    <div class=\"varient-content\">\r\n        <div class=\"input-quantity-container\">\r\n            <h1>Quantity</h1>\r\n            <div class=\"input-prepend-append d-flex\">\r\n                <button type=\"button\" id=\"decrease\" value=\"Decrease Value\" (click)=\"decreaseQty()\">\r\n                    <i class=\"fas fa-minus\"></i>\r\n                </button>\r\n                <div class=\"text-center input-value\">{{variantData.quantity}}</div>\r\n                <button type=\"button\" id=\"increase\" value=\"Increase Value\" (click)=\"increaseQty()\">\r\n                    <i class=\"fas fa-plus\"></i>\r\n                </button>\r\n            </div>\r\n            <div *ngIf=\"variantError\" class=\"color-red\">{{variantError}}</div>\r\n        </div>\r\n        <h1>Varient and Notes</h1>\r\n        <div class=\"tabs-btn\">\r\n            <button type=\"button\" (click)=\"tabActive(1)\" [class.active]=\"activeTab[0]\">Varients</button>\r\n            <button type=\"button\" (click)=\"tabActive(2)\" [class.active]=\"activeTab[1]\">Notes</button>\r\n        </div>\r\n        <div class=\"varient-list\" *ngIf=\"activeTab[0]\">\r\n            <table class=\"table\">\r\n                <tbody>\r\n                    <tr *ngFor=\"let varient of variantList\">\r\n                        <td>{{varient.name}}</td>\r\n                        <td>&euro;{{varient.price}}</td>\r\n                        <td>\r\n                            <button type=\"button\" class=\"add-varient-btn\" [class.variant-remove]=\"varient.status == 0\" id=\"decrease\" value=\"Decrease Value\"\r\n                                (click)=\"addRemoveVariant(varient,0)\">\r\n                                <i class=\"fas fa-minus\"></i>\r\n                            </button>\r\n                            <button type=\"button\" class=\"add-varient-btn\" [class.variant-added]=\"varient.status == 1\" id=\"increase\" value=\"Increase Value\"\r\n                                (click)=\"addRemoveVariant(varient,1)\">\r\n                                <i class=\"fas fa-plus\"></i>\r\n                            </button>\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n        </div>\r\n        <div class=\"varient-list\" *ngIf=\"activeTab[1]\">\r\n            <table class=\"table\">\r\n                <tbody>\r\n                    <tr *ngFor=\"let note of noteList; let i = index\">\r\n                        <td>{{note.notes}}</td>\r\n                        <td>\r\n                            <input type=\"checkbox\" (change)=\"addNote($event, note.notes, i)\" />\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<div class=\"add-article\" [class.showarticle]=\"articleAdd\">\r\n    <div class=\"modal-header\">\r\n        <div class=\"back-btn\">\r\n            <a (click)=\"hideArticle()\">\r\n                <i class=\"fas fa-times\"></i>\r\n            </a>\r\n        </div>\r\n        <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\r\n            New Article\r\n            <button type=\"button\" (click)=\"saveAddArticleData()\">Add</button>\r\n        </div>\r\n    </div>\r\n    <app-steps></app-steps>\r\n    <div class=\"modal-body varient-content\">\r\n        <div *ngIf=\"addArticleError\" class=\"color-red\">{{addArticleError}}</div>\r\n        <div class=\"md-form\">\r\n            <label for=\"name\">Name</label>\r\n            <input type=\"text\" id=\"name\" [(ngModel)]=\"AddDataArticle.name\" class=\"form-control\">\r\n        </div>\r\n        <div class=\"input-quantity-container md-form\">\r\n            <h1>Quantity</h1>\r\n            <div class=\"input-prepend-append  d-flex\">\r\n                <button type=\"button\" id=\"decrease\" value=\"Decrease Value\" (click)=\"decreaseArticleQty()\">\r\n                    <i class=\"fas fa-minus\"></i>\r\n                </button>\r\n                <div class=\"text-center input-value\">{{AddDataArticle.quantity}}</div>\r\n                <button type=\"button\" id=\"increase\" value=\"Increase Value\" (click)=\"increaseArticleQty()\">\r\n                    <i class=\"fas fa-plus\"></i>\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <div class=\"md-form\">\r\n            <i class=\"fas fa-euro-sign prefix euro-symbol\"></i>\r\n            <label for=\"price\">Price</label>\r\n            <input type=\"number\" id=\"price\" step=\"0.01\" min=\"0\" (change)=\"inputChanged()\" [(ngModel)]=\"AddDataArticle.price\" class=\"form-control\">\r\n        </div>\r\n        <h1>Varient and Notes</h1>\r\n        <div class=\"tabs-btn\">\r\n            <button type=\"button\" (click)=\"tabActive(1)\" [class.active]=\"activeTab[0]\">Varients</button>\r\n            <button type=\"button\" (click)=\"tabActive(2)\" [class.active]=\"activeTab[1]\">Notes</button>\r\n        </div>\r\n        <div class=\"varient-list\" *ngIf=\"activeTab[0]\">\r\n            <table class=\"table\">\r\n                <tbody>\r\n                    <tr *ngFor=\"let varient of variantList\">\r\n                        <td>{{varient.name}}</td>\r\n                        <td>&euro;{{varient.price}}</td>\r\n                        <td>\r\n                            <button type=\"button\" class=\"add-varient-btn\" [class.variant-remove]=\"varient.status == 0\" id=\"decrease\" value=\"Decrease Value\"\r\n                                (click)=\"addRemoveArticleVariant(varient,0)\">\r\n                                <i class=\"fas fa-minus\"></i>\r\n                            </button>\r\n                            <button type=\"button\" class=\"add-varient-btn\" [class.variant-added]=\"varient.status == 1\" id=\"increase\" value=\"Increase Value\"\r\n                                (click)=\"addRemoveArticleVariant(varient,1)\">\r\n                                <i class=\"fas fa-plus\"></i>\r\n                            </button>\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n        </div>\r\n        <div class=\"varient-list\" *ngIf=\"activeTab[1]\">\r\n            <table class=\"table\">\r\n                <tbody>\r\n                    <tr *ngFor=\"let note of noteList; let i = index\">\r\n                        <td>{{note.notes}}</td>\r\n                        <td>\r\n                            <input type=\"checkbox\" (change)=\"addArticleNote($event, note.notes, i)\" />\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n        </div>\r\n        <!-- <div class=\"md-form\">\r\n            <div class=\"d-flex-category\">\r\n                <div class=\"d-flex allergens-icon\">\r\n                    <div class=\"icon-preview\" *ngFor=\"let item of selectedIconImage;let i=index;\">\r\n                        <img [src]=\"item\" />\r\n                        <button type=\"button\" class=\"remove-icon\" (click)=\"removeAllergens(i, item)\">\r\n                            <i class=\"fas fa-times\"></i>\r\n                        </button>\r\n                    </div>\r\n                </div>\r\n                <div class=\"category-icon-container\">\r\n                    <button type=\"button\" class=\"form-control btn btn-yellow\" (click)=\"allergenIcon()\">\r\n                        <span>Select Allergens</span>\r\n                    </button>\r\n                    <div class=\"icon-popup\" *ngIf=\"showAllergenIcon\">\r\n                        <div class=\"icon-container\" *ngFor=\"let allergen of allergens\">\r\n                            <div (click)=\"selectedIcon(allergen)\">\r\n                                <img [src]=\"allergen.image\" alt=\"\">\r\n                                <p>{{allergen.name}}</p>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>            \r\n        </div> -->\r\n    </div>\r\n</div>\r\n"
+module.exports = "<header class=\"page-content-header\" [ngStyle]=\"{'background-color' : orderService.getOrderData().selectedCategory.color}\">\r\n    <div class=\"back-btn\">\r\n        <a routerLink=\"/waiter/order/:id/choose-category\">\r\n            <i class=\"fas fa-angle-left\"></i>\r\n        </a>\r\n    </div>\r\n    <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\r\n        {{orderService.getOrderData().selectedCategory.name}}\r\n        <span class=\"add-article-btn\" (click)=\"addArticle()\">\r\n            <img src=\"assets/images/icon_file.png\" alt=\"\" />\r\n        </span>\r\n    </div>\r\n</header>\r\n<div class=\"page-content\">\r\n    <div class=\"tabs-container subcategory-tabs\">\r\n        <ul [ngStyle]=\"{'background-color' : orderService.getOrderData().selectedCategory.color}\">\r\n            <li [class.subcategory-active]=\"selectedSubcategory[-1]\" (click)=\"filterBySubcategory()\">All</li>\r\n            <span *ngIf=\"data.selectedCategory.subCategory.length\">\r\n                <li *ngFor=\"let subCategory of data.selectedCategory.subCategory; let j = index\" [class.subcategory-active]=\"selectedSubcategory[j]\"\r\n                    (click)=\"filterBySubcategory(subCategory,j)\">\r\n                    {{subCategory}}\r\n                </li>\r\n            </span>\r\n        </ul>\r\n    </div>\r\n    <app-steps></app-steps>\r\n    <div class=\"item-container item-list-height\">\r\n        <div class=\"search-category w-100\">\r\n            <div class=\"md-form search\">\r\n                <i class=\"fas fa-search prefix\"></i>\r\n                <input class=\"form-control\" [(ngModel)]=\"searchText\" type=\"text\" placeholder=\"Search Item\" />\r\n                <button type=\"button\" class=\"btn-cart\" (click)=\"viewCart()\">\r\n                    <i class=\"fas fa-shopping-cart\"></i> {{orderService.getOrderData().cartTotalItem}} | &euro;{{orderService.getOrderData().cartTotalPrice}}\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <div class=\"alert-danger\" *ngIf=\"error\">{{errorMsg}}</div>\r\n        <!-- <div *ngIf=\"!articles.length\" class=\"text-center\">\r\n            No Item Found\r\n        </div> -->\r\n        <div *ngIf=\"orderService.getOrderData().categoryItems[globalService.getTabData().step].length == 0\" class=\"text-center\">\r\n            No Item Found\r\n        </div>\r\n        <div *ngIf=\"orderService.getOrderData().categoryItems[globalService.getTabData().step].length > 0\">\r\n            <!-- <div *ngFor=\"let article of articles | filter : searchText ; let i = index\"> -->\r\n            <div *ngFor=\"let article of orderService.getOrderData().categoryItems[globalService.getTabData().step] | filter : searchText ; let i = index\">\r\n                <div class=\"item-list align-items-center\" *ngIf=\"subcategory && (article.subCategory == subcategory)\">\r\n                    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                            alt=\"Category Logo\" />\r\n                        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                        <span class=\"item-quantity\" *ngIf=\"article.itemTotal>0\">{{article.itemTotal}}</span>\r\n                    </div>\r\n                    <div class=\"item-name\">\r\n                        <p class=\"name m-0\">{{article.name}}</p>\r\n                        <p class=\"name m-0\">&euro;{{article.price}}</p>\r\n                    </div>\r\n                    <div class=\"input-prepend-append\">\r\n                        <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue(article)\" value=\"Decrease Value\">\r\n                            <i class=\"fas fa-minus\"></i>\r\n                        </button>\r\n                        <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue(article)\" value=\"Increase Value\">\r\n                            <i class=\"fas fa-plus\"></i>\r\n                        </button>\r\n                    </div>\r\n                    <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"viewVarient(article)\">\r\n                        <img src=\"assets/images/icon_edit.png\" alt=\"\" />\r\n                    </button>\r\n                </div>\r\n                <div class=\"item-list align-items-center\" *ngIf=\"!subcategory\">\r\n                    <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                        <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                        <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                            alt=\"Category Logo\" />\r\n                        <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                        <span class=\"item-quantity\" *ngIf=\"article.itemTotal>0\">{{article.itemTotal}}</span>\r\n                    </div>\r\n                    <div class=\"item-name\">\r\n                        <p class=\"name m-0\">{{article.name}}</p>\r\n                        <p class=\"name m-0\">&euro;{{article.price}}</p>\r\n                    </div>\r\n                    <div class=\"input-prepend-append\">\r\n                        <button type=\"button\" class=\"btn btn-prepend btn-danger\" id=\"decrease\" (click)=\"decreaseValue(article)\" value=\"Decrease Value\">\r\n                            <i class=\"fas fa-minus\"></i>\r\n                        </button>\r\n                        <button type=\"button\" class=\"btn btn-append btn-success\" id=\"increase\" (click)=\"increaseValue(article)\" value=\"Increase Value\">\r\n                            <i class=\"fas fa-plus\"></i>\r\n                        </button>\r\n                    </div>\r\n                    <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"viewVarient(article)\">\r\n                        <img src=\"assets/images/icon_edit.png\" alt=\"\" />\r\n                    </button>\r\n                </div>\r\n            </div>\r\n            <div *ngIf=\"orderService.getOrderData().selectedItems\">\r\n                <div *ngFor=\"let article of orderService.getOrderData().selectedItems[globalService.getTabData().step]\">\r\n                    <div class=\"item-list align-items-center {{article.step}} {{globalService.getTabData().step}}\" *ngIf=\"article.step == globalService.getTabData().step && article.isDeleted\">\r\n                        <div class=\"item\" [ngStyle]=\"{'background-color': article.category.color}\">\r\n                            <img *ngIf=\"!article.logo.small && article.category.isIcon\" class=\"icon-img\" [src]=\"article.category.icon\" alt=\"\" />\r\n                            <img *ngIf=\"!article.logo.small && !article.category.isIcon && article.category.logo.small\" [src]=\"article.category.logo.small\"\r\n                                alt=\"Category Logo\" />\r\n                            <img *ngIf=\"article.logo.small\" [src]=\"article.logo.small\" alt=\"Item Logo\" />\r\n                            <span class=\"item-quantity\" *ngIf=\"article.quantity>0\">{{article.quantity}}</span>\r\n                        </div>\r\n                        <div class=\"item-name\">\r\n                            <p class=\"name m-0\">{{article.name}}</p>\r\n                            <p class=\"name m-0\">&euro;{{article.price}}</p>\r\n                            <span *ngIf=\"article.variant && article.variant.length\">\r\n                                <span *ngFor=\"let variant of article.variant\" class=\"d-flex added-variand-name\">\r\n                                    <span *ngIf=\"variant.status == 0\">- {{variant.name}} </span>\r\n                                    <span *ngIf=\"variant.status == 1\">+ {{variant.name}} &euro;{{variant.price}}</span>\r\n                                </span>\r\n                            </span>\r\n                            <span *ngIf=\"article.ordernote\" class=\"d-flex added-variand-name\">{{article.ordernote}}</span>\r\n                        </div>\r\n                        <!-- <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"viewVarient(article)\">\r\n                            <i class=\"fas fa-edit\"></i>\r\n                        </button> -->\r\n                        <button type=\"submit\" class=\"btn btn-floating waves-light\" (click)=\"deleteItemFromCart(article)\">\r\n                            <i class=\"fas fa-times\"></i>\r\n                        </button>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n\r\n<div class=\"varient-container\" [class.show-varient]=\"showVarient\">\r\n    <div class=\"modal-header\">\r\n        <div class=\"back-btn\">\r\n            <a (click)=\"hideVarient()\">\r\n                <i class=\"fas fa-times\"></i>\r\n            </a>\r\n        </div>\r\n        <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\r\n            Choose Varient\r\n            <button (click)=\"saveVariantData()\">Save</button>\r\n        </div>\r\n    </div>\r\n    <app-steps></app-steps>\r\n    <div class=\"varient-content\">\r\n        <div class=\"input-quantity-container\">\r\n            <h1>Quantity</h1>\r\n            <div class=\"input-prepend-append d-flex\">\r\n                <button type=\"button\" id=\"decrease\" value=\"Decrease Value\" (click)=\"decreaseQty()\">\r\n                    <i class=\"fas fa-minus\"></i>\r\n                </button>\r\n                <div class=\"text-center input-value\">{{variantData.quantity}}</div>\r\n                <button type=\"button\" id=\"increase\" value=\"Increase Value\" (click)=\"increaseQty()\">\r\n                    <i class=\"fas fa-plus\"></i>\r\n                </button>\r\n            </div>\r\n            <div *ngIf=\"variantError\" class=\"color-red\">{{variantError}}</div>\r\n        </div>\r\n        <h1>Varient and Notes</h1>\r\n        <div class=\"tabs-btn\">\r\n            <button type=\"button\" (click)=\"tabActive(1)\" [class.active]=\"activeTab[0]\">Varients</button>\r\n            <button type=\"button\" (click)=\"tabActive(2)\" [class.active]=\"activeTab[1]\">Notes</button>\r\n        </div>\r\n        <div class=\"varient-list\" *ngIf=\"activeTab[0]\">\r\n            <table class=\"table\">\r\n                <tbody>\r\n                    <tr *ngFor=\"let varient of variantList\">\r\n                        <td>{{varient.name}}</td>\r\n                        <td>&euro;{{varient.price}}</td>\r\n                        <td>\r\n                            <button type=\"button\" class=\"add-varient-btn\" [class.variant-remove]=\"varient.status == 0\" id=\"decrease\" value=\"Decrease Value\"\r\n                                (click)=\"addRemoveVariant(varient,0)\">\r\n                                <i class=\"fas fa-minus\"></i>\r\n                            </button>\r\n                            <button type=\"button\" class=\"add-varient-btn\" [class.variant-added]=\"varient.status == 1\" id=\"increase\" value=\"Increase Value\"\r\n                                (click)=\"addRemoveVariant(varient,1)\">\r\n                                <i class=\"fas fa-plus\"></i>\r\n                            </button>\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n        </div>\r\n        <div class=\"varient-list\" *ngIf=\"activeTab[1]\">\r\n            <table class=\"table\">\r\n                <tbody>\r\n                    <tr *ngFor=\"let note of noteList; let i = index\">\r\n                        <td>{{note.notes}}</td>\r\n                        <td>\r\n                            <input type=\"checkbox\" (change)=\"addNote($event, note.notes, i)\" />\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<div class=\"add-article\" [class.showarticle]=\"articleAdd\">\r\n    <div class=\"modal-header\">\r\n        <div class=\"back-btn\">\r\n            <a (click)=\"hideArticle()\">\r\n                <i class=\"fas fa-times\"></i>\r\n            </a>\r\n        </div>\r\n        <div class=\"header-title\" *ngIf=\"orderService.getOrderData().selectedCategory\">\r\n            New Article\r\n            <button type=\"button\" (click)=\"saveAddArticleData()\">Add</button>\r\n        </div>\r\n    </div>\r\n    <app-steps></app-steps>\r\n    <div class=\"modal-body varient-content\">\r\n        <div *ngIf=\"addArticleError\" class=\"color-red\">{{addArticleError}}</div>\r\n        <div class=\"md-form\">\r\n            <label for=\"name\">Name</label>\r\n            <input type=\"text\" id=\"name\" [(ngModel)]=\"AddDataArticle.name\" class=\"form-control\">\r\n        </div>\r\n        <div class=\"input-quantity-container md-form\">\r\n            <h1>Quantity</h1>\r\n            <div class=\"input-prepend-append  d-flex\">\r\n                <button type=\"button\" id=\"decrease\" value=\"Decrease Value\" (click)=\"decreaseArticleQty()\">\r\n                    <i class=\"fas fa-minus\"></i>\r\n                </button>\r\n                <div class=\"text-center input-value\">{{AddDataArticle.quantity}}</div>\r\n                <button type=\"button\" id=\"increase\" value=\"Increase Value\" (click)=\"increaseArticleQty()\">\r\n                    <i class=\"fas fa-plus\"></i>\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <div class=\"md-form\">\r\n            <i class=\"fas fa-euro-sign prefix euro-symbol\"></i>\r\n            <label for=\"price\">Price</label>\r\n            <input type=\"number\" id=\"price\" step=\"0.01\" min=\"0\" (change)=\"inputChanged()\" [(ngModel)]=\"AddDataArticle.price\" class=\"form-control\">\r\n        </div>\r\n        <h1>Varient and Notes</h1>\r\n        <div class=\"tabs-btn\">\r\n            <button type=\"button\" (click)=\"tabActive(1)\" [class.active]=\"activeTab[0]\">Varients</button>\r\n            <button type=\"button\" (click)=\"tabActive(2)\" [class.active]=\"activeTab[1]\">Notes</button>\r\n        </div>\r\n        <div class=\"varient-list\" *ngIf=\"activeTab[0]\">\r\n            <table class=\"table\">\r\n                <tbody>\r\n                    <tr *ngFor=\"let varient of variantList\">\r\n                        <td>{{varient.name}}</td>\r\n                        <td>&euro;{{varient.price}}</td>\r\n                        <td>\r\n                            <button type=\"button\" class=\"add-varient-btn\" [class.variant-remove]=\"varient.status == 0\" id=\"decrease\" value=\"Decrease Value\"\r\n                                (click)=\"addRemoveArticleVariant(varient,0)\">\r\n                                <i class=\"fas fa-minus\"></i>\r\n                            </button>\r\n                            <button type=\"button\" class=\"add-varient-btn\" [class.variant-added]=\"varient.status == 1\" id=\"increase\" value=\"Increase Value\"\r\n                                (click)=\"addRemoveArticleVariant(varient,1)\">\r\n                                <i class=\"fas fa-plus\"></i>\r\n                            </button>\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n        </div>\r\n        <div class=\"varient-list\" *ngIf=\"activeTab[1]\">\r\n            <table class=\"table\">\r\n                <tbody>\r\n                    <tr *ngFor=\"let note of noteList; let i = index\">\r\n                        <td>{{note.notes}}</td>\r\n                        <td>\r\n                            <input type=\"checkbox\" (change)=\"addArticleNote($event, note.notes, i)\" />\r\n                        </td>\r\n                    </tr>\r\n                </tbody>\r\n            </table>\r\n        </div>\r\n        <!-- <div class=\"md-form\">\r\n            <div class=\"d-flex-category\">\r\n                <div class=\"d-flex allergens-icon\">\r\n                    <div class=\"icon-preview\" *ngFor=\"let item of selectedIconImage;let i=index;\">\r\n                        <img [src]=\"item\" />\r\n                        <button type=\"button\" class=\"remove-icon\" (click)=\"removeAllergens(i, item)\">\r\n                            <i class=\"fas fa-times\"></i>\r\n                        </button>\r\n                    </div>\r\n                </div>\r\n                <div class=\"category-icon-container\">\r\n                    <button type=\"button\" class=\"form-control btn btn-yellow\" (click)=\"allergenIcon()\">\r\n                        <span>Select Allergens</span>\r\n                    </button>\r\n                    <div class=\"icon-popup\" *ngIf=\"showAllergenIcon\">\r\n                        <div class=\"icon-container\" *ngFor=\"let allergen of allergens\">\r\n                            <div (click)=\"selectedIcon(allergen)\">\r\n                                <img [src]=\"allergen.image\" alt=\"\">\r\n                                <p>{{allergen.name}}</p>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>            \r\n        </div> -->\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -770,6 +805,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_Rx__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared_steps_steps_component__ = __webpack_require__("../../../../../src/app/shared/steps/steps.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -786,15 +822,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ItemComponent = /** @class */ (function () {
-    function ItemComponent(orderService, completerService, globalService, router) {
+    function ItemComponent(orderService, stepsComponent, completerService, globalService, router) {
         this.orderService = orderService;
+        this.stepsComponent = stepsComponent;
         this.completerService = completerService;
         this.globalService = globalService;
         this.router = router;
         this.quantity = 0;
         this.articles = {};
-        // private articles = [];  
         this.categoryList = [];
         this.categorySearchData = [];
         this.variantList = [];
@@ -1036,13 +1073,7 @@ var ItemComponent = /** @class */ (function () {
     };
     ItemComponent.prototype.addArticle = function () {
         var _this = this;
-        //     this.orderService.getAllergens().then(data=>{
-        // console.log('data',data);
-        // this.allergens = data.data;
-        //     })
-        //     .catch(error=>{
-        //       console.log('error',error);
-        //     });
+        this.stepsComponent.ngOnInit();
         this.orderService.getVariantAndNotes()
             .then(function (data) {
             _this.variantList = data.data.variants;
@@ -1077,16 +1108,7 @@ var ItemComponent = /** @class */ (function () {
             notes: '',
             isDeleted: true
         };
-        // this.selectedIconImage = [];
-        // this.allergens = [];
-        // this.showVarient = false;
-        // this.variantData = {
-        //   quantity: 0,
-        //   variant: [],
-        //   notes: ''
-        // };
         this.articleNotes = [];
-        // this.articleData = {};
     };
     ItemComponent.prototype.filterBySubcategory = function (subcategory, index) {
         this.subcategory = subcategory;
@@ -1120,18 +1142,44 @@ var ItemComponent = /** @class */ (function () {
         this.variantData.quantity = value;
     };
     ItemComponent.prototype.addRemoveVariant = function (variant, status) {
-        if (status == 0) {
-            variant.status = 0;
-        }
-        else {
-            variant.status = 1;
-        }
-        for (var i = 0; i < this.variantData.variant.length; i++) {
-            if (this.variantData.variant[i]._id == variant._id) {
-                this.variantData.variant.splice(i, 1);
+        var varIds = [];
+        if (this.variantData.variant.length) {
+            for (var i = 0; i < this.variantData.variant.length; i++) {
+                varIds.push(this.variantData.variant[i]._id);
+                if (this.variantData.variant[i]._id == variant._id) {
+                    if (this.variantData.variant[i].status == status) {
+                        delete variant.status;
+                        this.variantData.variant.splice(i, 1);
+                    }
+                    else {
+                        variant.status = status;
+                        this.variantData.variant[i].status = status;
+                    }
+                }
+            }
+            if (varIds.length == this.variantData.variant.length) {
+                if (varIds.indexOf(variant._id) < 0) {
+                    variant.status = status;
+                    this.variantData.variant.push(variant);
+                }
             }
         }
-        this.variantData.variant.push(variant);
+        else {
+            variant.status = status;
+            this.variantData.variant.push(variant);
+        }
+        // if (status == 0) {
+        //   variant.status = 0;
+        // }
+        // else {
+        //   variant.status = 1;
+        // }
+        // for (let i = 0; i < this.variantData.variant.length; i++) {
+        //   if (this.variantData.variant[i]._id == variant._id) {
+        //     this.variantData.variant.splice(i, 1);
+        //   }
+        // }
+        // this.variantData.variant.push(variant);
     };
     ItemComponent.prototype.addNote = function (event, note, i) {
         if (event.target.checked) {
@@ -1163,8 +1211,12 @@ var ItemComponent = /** @class */ (function () {
         }
         else {
             this.articleData.quantity = this.variantData.quantity;
-            this.articleData.variant = this.variantData.variant;
-            this.articleData.ordernote = this.variantData.notes;
+            if (this.variantData.variant.length) {
+                this.articleData.variant = this.variantData.variant;
+            }
+            if (this.variantData.notes != '') {
+                this.articleData.ordernote = this.variantData.notes;
+            }
             this.articleData.step = currentStep;
             this.articleData.variantUniqueId = Math.floor(Math.random() * 10000);
             var data = this.orderService.getOrderData();
@@ -1248,11 +1300,7 @@ var ItemComponent = /** @class */ (function () {
                 price: Number(this.AddDataArticle.price),
                 category: this.AddDataArticle.category,
                 subCategory: this.AddDataArticle.subCategory,
-                // quantity: this.AddDataArticle.quantity,
-                // variant: this.AddDataArticle.variant,
-                // notes: this.AddDataArticle.notes,
                 isDeleted: this.AddDataArticle.isDeleted
-                // allergens: this.selectedIconImage ? JSON.stringify(this.selectedIconImage) : '',
             };
             this.loader = true;
             this.orderService.addArticle(opts)
@@ -1260,22 +1308,14 @@ var ItemComponent = /** @class */ (function () {
                 var itemTemp = __WEBPACK_IMPORTED_MODULE_6_lodash__["cloneDeep"](data.data);
                 itemTemp.step = currentStep;
                 itemTemp.quantity = _this.AddDataArticle.quantity;
-                itemTemp.variant = _this.AddDataArticle.variant;
-                itemTemp.ordernote = _this.AddDataArticle.notes;
-                // itemTemp.quantity = 0;
-                // itemTemp.itemTotal = itemTemp.quantity;
+                if (_this.AddDataArticle.variant.length) {
+                    itemTemp.variant = _this.AddDataArticle.variant;
+                }
+                if (_this.AddDataArticle.notes != '') {
+                    itemTemp.ordernote = _this.AddDataArticle.notes;
+                }
                 var itemData = __WEBPACK_IMPORTED_MODULE_6_lodash__["cloneDeep"](itemTemp);
                 _this.loader = false;
-                // var steps = [];
-                // if (this.globalService.getStepData()) {
-                //   steps = this.globalService.getStepData();
-                // }
-                // else {
-                //   steps = ['Uscita 1', 'Uscita 2'];
-                // }
-                // for (let j = 0; j < steps.length; j++) {
-                // orderdata.categoryItems[steps[j]][orderdata.categoryItems[steps[j]].length] = itemData;
-                // }
                 orderdata_1.selectedItems[currentStep].push(itemData);
                 var cp = 0;
                 var itemno = 0;
@@ -1304,6 +1344,7 @@ var ItemComponent = /** @class */ (function () {
                 }
                 _this.orderService.setOrderData(orderdata_1);
                 _this.hideArticle();
+                _this.stepsComponent.ngOnInit();
             })
                 .catch(function (error) {
             });
@@ -1341,18 +1382,44 @@ var ItemComponent = /** @class */ (function () {
         this.AddDataArticle.quantity = value;
     };
     ItemComponent.prototype.addRemoveArticleVariant = function (variant, status) {
-        if (status == 0) {
-            variant.status = 0;
-        }
-        else {
-            variant.status = 1;
-        }
-        for (var i = 0; i < this.AddDataArticle.variant.length; i++) {
-            if (this.AddDataArticle.variant[i]._id == variant._id) {
-                this.AddDataArticle.variant.splice(i, 1);
+        var varIds = [];
+        if (this.AddDataArticle.variant.length) {
+            for (var i = 0; i < this.AddDataArticle.variant.length; i++) {
+                varIds.push(this.AddDataArticle.variant[i]._id);
+                if (this.AddDataArticle.variant[i]._id == variant._id) {
+                    if (this.AddDataArticle.variant[i].status == status) {
+                        delete variant.status;
+                        this.AddDataArticle.variant.splice(i, 1);
+                    }
+                    else {
+                        variant.status = status;
+                        this.AddDataArticle.variant[i].status = status;
+                    }
+                }
+            }
+            if (varIds.length == this.AddDataArticle.variant.length) {
+                if (varIds.indexOf(variant._id) < 0) {
+                    variant.status = status;
+                    this.AddDataArticle.variant.push(variant);
+                }
             }
         }
-        this.AddDataArticle.variant.push(variant);
+        else {
+            variant.status = status;
+            this.AddDataArticle.variant.push(variant);
+        }
+        // if (status == 0) {
+        //   variant.status = 0;
+        // }
+        // else {
+        //   variant.status = 1;
+        // }
+        // for (let i = 0; i < this.AddDataArticle.variant.length; i++) {
+        //   if (this.AddDataArticle.variant[i]._id == variant._id) {
+        //     this.AddDataArticle.variant.splice(i, 1);
+        //   }
+        // }
+        // this.AddDataArticle.variant.push(variant);
     };
     ItemComponent.prototype.addArticleNote = function (event, note, i) {
         if (event.target.checked) {
@@ -1367,16 +1434,82 @@ var ItemComponent = /** @class */ (function () {
         }
         this.AddDataArticle.notes = this.articleNotes.toString();
     };
+    ItemComponent.prototype.deleteItemFromCart = function (article) {
+        var data = this.orderService.getOrderData();
+        var currentStep = this.globalService.getTabData().step;
+        for (var i = 0; i < data.selectedItems[currentStep].length; i++) {
+            if (data.selectedItems[currentStep][i]._id == article._id && !article.variant) {
+                //non variant type data
+                for (var m = 0; m < data.categoryItems[currentStep].length; m++) {
+                    if (data.categoryItems[currentStep][m]._id == data.selectedItems[currentStep][i]._id) {
+                        data.categoryItems[currentStep][m].itemTotal = data.categoryItems[currentStep][m].itemTotal - data.selectedItems[currentStep][i].quantity;
+                    }
+                }
+                if (!data.selectedItems[currentStep][i].variant && currentStep == data.selectedItems[currentStep][i].step) {
+                    data.selectedItems[currentStep].splice(i, 1);
+                }
+            }
+            else if (data.selectedItems[currentStep][i]._id == article._id && article.variant) {
+                //variant type data
+                for (var m = 0; m < data.categoryItems[currentStep].length; m++) {
+                    if (data.categoryItems[currentStep][m]._id == data.selectedItems[currentStep][i]._id) {
+                        data.categoryItems[currentStep][m].itemTotal = data.categoryItems[currentStep][m].itemTotal - data.selectedItems[currentStep][i].quantity;
+                    }
+                }
+                if (data.selectedItems[currentStep][i].variant && currentStep == data.selectedItems[currentStep][i].step) {
+                    data.selectedItems[currentStep].splice(i, 1);
+                }
+            }
+        }
+        var cp = 0;
+        var itemno = 0;
+        var varicost = 0;
+        var steps = [];
+        if (this.globalService.getStepData()) {
+            steps = this.globalService.getStepData();
+        }
+        else {
+            steps = ['Uscita 1', 'Uscita 2'];
+        }
+        var emptyArray = [];
+        for (var a = 0; a < steps.length; a++) {
+            if (data.selectedItems[steps[a]].length) {
+                for (var i = 0; i < data.selectedItems[steps[a]].length; i++) {
+                    itemno += data.selectedItems[steps[a]][i].quantity;
+                    if (data.selectedItems[steps[a]][i].variant) {
+                        for (var j = 0; j < data.selectedItems[steps[a]][i].variant.length; j++) {
+                            if (data.selectedItems[steps[a]][i].variant[j].status == 1) {
+                                varicost += data.selectedItems[steps[a]][i].variant[j].price;
+                            }
+                        }
+                    }
+                    cp += (data.selectedItems[steps[a]][i].price + varicost) * data.selectedItems[steps[a]][i].quantity;
+                    data.cartTotalPrice = cp;
+                    data.cartTotalItem = itemno;
+                }
+            }
+            if (data.selectedItems[steps[a]].length == 0) {
+                if (emptyArray.indexOf(steps[a]) < 0) {
+                    emptyArray.push(steps[a]);
+                }
+            }
+            if (emptyArray.length == steps.length) {
+                data.cartTotalPrice = 0;
+                data.cartTotalItem = 0;
+            }
+        }
+        this.orderService.setOrderData(data);
+    };
     ItemComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
             selector: 'app-item',
             template: __webpack_require__("../../../../../src/app/hirundo/waiter/order/item/item.component.html"),
             styles: [__webpack_require__("../../../../../src/app/hirundo/waiter/order/item/item.component.scss")]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__order_service__["a" /* OrderService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__order_service__["a" /* OrderService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_ng2_completer__["a" /* CompleterService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ng2_completer__["a" /* CompleterService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__global_service__["a" /* GlobalService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__global_service__["a" /* GlobalService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* Router */]) === "function" && _d || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__order_service__["a" /* OrderService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__order_service__["a" /* OrderService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_7__shared_steps_steps_component__["a" /* StepsComponent */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__shared_steps_steps_component__["a" /* StepsComponent */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_ng2_completer__["a" /* CompleterService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ng2_completer__["a" /* CompleterService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__global_service__["a" /* GlobalService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__global_service__["a" /* GlobalService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* Router */]) === "function" && _e || Object])
     ], ItemComponent);
     return ItemComponent;
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
 }());
 
 //# sourceMappingURL=item.component.js.map
@@ -1454,12 +1587,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__choose_category_choose_category_component__ = __webpack_require__("../../../../../src/app/hirundo/waiter/order/choose-category/choose-category.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__shared_shared_module__ = __webpack_require__("../../../../../src/app/shared/shared.module.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__cart_cart_component__ = __webpack_require__("../../../../../src/app/hirundo/waiter/order/cart/cart.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__shared_steps_steps_component__ = __webpack_require__("../../../../../src/app/shared/steps/steps.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -1484,6 +1619,7 @@ var OrderModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* ReactiveFormsModule */],
                 __WEBPACK_IMPORTED_MODULE_3_ng2_completer__["b" /* Ng2CompleterModule */]
             ],
+            providers: [__WEBPACK_IMPORTED_MODULE_11__shared_steps_steps_component__["a" /* StepsComponent */]],
             declarations: [__WEBPACK_IMPORTED_MODULE_4__order_component__["a" /* OrderComponent */], __WEBPACK_IMPORTED_MODULE_6__item_item_component__["a" /* ItemComponent */], __WEBPACK_IMPORTED_MODULE_7__create_order_create_order_component__["a" /* CreateOrderComponent */], __WEBPACK_IMPORTED_MODULE_8__choose_category_choose_category_component__["a" /* ChooseCategoryComponent */], __WEBPACK_IMPORTED_MODULE_10__cart_cart_component__["a" /* CartComponent */]],
         })
     ], OrderModule);

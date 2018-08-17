@@ -9,7 +9,7 @@ import { CreateOrderComponent } from './create-order/create-order.component';
 import { ChooseCategoryComponent } from './choose-category/choose-category.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CartComponent } from './cart/cart.component';
-
+import { StepsComponent } from '../../../shared/steps/steps.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -19,6 +19,7 @@ import { CartComponent } from './cart/cart.component';
     ReactiveFormsModule,
     Ng2CompleterModule
   ],
+  providers: [StepsComponent],
   declarations: [OrderComponent, ItemComponent, CreateOrderComponent, ChooseCategoryComponent, CartComponent],
 })
 export class OrderModule { }

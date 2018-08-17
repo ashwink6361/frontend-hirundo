@@ -62,7 +62,6 @@ export class CartComponent implements OnInit {
 
   createOrder() {
     let data = this.orderService.getOrderData();
-    console.log('data',data);
     var itemarray = [];
     var steps = [];
     if (this.globalService.getStepData()) {
@@ -208,7 +207,7 @@ export class CartComponent implements OnInit {
           this.nonVariantData = false;          
           this.variantData.quantity = article.quantity;
           this.variantData.variant = article.variant;
-          this.variantData.notes = article.ordernote;
+          this.variantData.notes = article.ordernote ? article.ordernote : '';
           if (article.ordernote) {
             let note = article.ordernote.split(',');
             this.notes = note;
@@ -272,18 +271,44 @@ export class CartComponent implements OnInit {
   }
 
   addRemoveVariant(variant, status) {
-    if (status == 0) {
-      variant.status = 0;
-    }
-    else {
-      variant.status = 1;
-    }
-    for (let i = 0; i < this.variantData.variant.length; i++) {
-      if (this.variantData.variant[i]._id == variant._id) {
-        this.variantData.variant.splice(i, 1);
+    let varIds = [];
+    if (this.variantData.variant.length) {
+      for (let i = 0; i < this.variantData.variant.length; i++) {
+        varIds.push(this.variantData.variant[i]._id);
+        if (this.variantData.variant[i]._id == variant._id) {
+          if (this.variantData.variant[i].status == status) {
+            delete variant.status;
+            this.variantData.variant.splice(i, 1);
+          }
+          else {
+            variant.status = status;
+            this.variantData.variant[i].status = status;
+          }
+        }
+      }
+      if (varIds.length == this.variantData.variant.length) {
+        if (varIds.indexOf(variant._id) < 0) {
+          variant.status = status;
+          this.variantData.variant.push(variant);
+        }
       }
     }
-    this.variantData.variant.push(variant);
+    else {
+      variant.status = status;
+      this.variantData.variant.push(variant);
+    }
+    // if (status == 0) {
+    //   variant.status = 0;
+    // }
+    // else {
+    //   variant.status = 1;
+    // }
+    // for (let i = 0; i < this.variantData.variant.length; i++) {
+    //   if (this.variantData.variant[i]._id == variant._id) {
+    //     this.variantData.variant.splice(i, 1);
+    //   }
+    // }
+    // this.variantData.variant.push(variant);
   }
 
   addNote(event, note, i) {
@@ -357,7 +382,7 @@ export class CartComponent implements OnInit {
           this.variantError = '';
         }, 4000);
       }
-      else if (this.variantData.quantity > 0 && !this.variantData.variant.length && !this.variantData.notes) {
+      else if (this.variantData.quantity > 0 && this.variantData.variant.length == 0) {
         this.variantError = 'Please select variants/notes';
         setTimeout(() => {
           this.variantError = '';
@@ -366,13 +391,23 @@ export class CartComponent implements OnInit {
       else {
         this.articleData.quantity = this.variantData.quantity;
         this.articleData.variant = this.variantData.variant;
-        this.articleData.ordernote = this.variantData.notes;
+        if(this.variantData.notes != ''){
+          this.articleData.ordernote = this.variantData.notes;
+        }
+        else{
+          delete this.articleData.ordernote;
+        }
         let data = this.orderService.getOrderData();
         for (let i = 0; i < data.selectedItems[this.articleData.step].length; i++) {
           if (data.selectedItems[this.articleData.step][i]._id == this.articleData._id && data.selectedItems[this.articleData.step][i].variant && data.selectedItems[this.articleData.step][i].variantUniqueId == this.articleData.variantUniqueId) {
             data.selectedItems[this.articleData.step][i].quantity = this.articleData.quantity;
             data.selectedItems[this.articleData.step][i].variant = this.articleData.variant;
-            data.selectedItems[this.articleData.step][i].ordernote = this.articleData.ordernote;
+            if(this.articleData.ordernote){
+              data.selectedItems[this.articleData.step][i].ordernote = this.articleData.ordernote;
+            }
+            else{
+              delete data.selectedItems[this.articleData.step][i].ordernote;
+            }
           }
         }
         for (let i = 0; i < data.categoryItems[this.articleData.step].length; i++) {

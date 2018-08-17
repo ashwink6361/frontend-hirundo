@@ -15,7 +15,7 @@ export class WebsocketService {
     public _rooms: Array<any> = [];
     public socketEvent: boolean = false;
     public orderId = '';
-
+    public autoplay: string = '0';
     constructor(private http: Http, private authGuard: AuthGuard) {
         let url = '/server/env';
         this.http.get(url).toPromise()
@@ -46,7 +46,6 @@ export class WebsocketService {
 
         this.socket.on('neworderAdmin', (data) => {
             let userType = this.authGuard.getCurrentUser().userType;
-            let autoplay = false;
             if (data.restro == this.authGuard.getCurrentUser().restro) {
                 if (data.type === 'admin') {
                     // let audio = new Audio();
@@ -57,7 +56,7 @@ export class WebsocketService {
                     // }).catch(err => {
                     //     console.log(err, 'err webservice audio')
                     // });
-                    autoplay = true;
+                    // this.autoplay = '1';
                 }
                 if (userType == 3) {
                     this._orders.unshift(data);
@@ -66,18 +65,29 @@ export class WebsocketService {
         });
 
         this.socket.on('neworder', (data) => {
+            console.log(data, 'neworder++++++++++++++++++++++');
             this.socketEvent = true;
             this.orderId = data._id;
             let userType = this.authGuard.getCurrentUser().userType;
-            let autoplay = false;
+            this.autoplay = '0';
+            localStorage.setItem('autoplay', this.autoplay);
+            console.log(localStorage.getItem('autoplay'), 'autoplay++++');
             if (userType == 4) {
                 this._orders.push(data);
                 // let audio = new Audio();
                 // audio.src = "../../../assets/audio/beep.mp3";
                 // audio.load();
                 // audio.play();
-                autoplay = true;
+                this.autoplay = '1';
+                localStorage.setItem('autoplay', this.autoplay);
+                console.log(localStorage.getItem('autoplay'), 'autoplay-----');
             }
+            setTimeout(function () {
+            this.autoplay = '0';
+                localStorage.setItem('autoplay', this.autoplay);
+                console.log(localStorage.getItem('autoplay'), 'autoplay');
+            }, 10000);
+
         });
         this.socket.on('orderstatus', (data) => {
             let userType = this.authGuard.getCurrentUser().userType;
@@ -118,6 +128,26 @@ export class WebsocketService {
                 }
             }
         });
+
+        this.socket.on('orderUpdateDept', (data) => {
+            this.socketEvent = true;
+            this.orderId = data._id;
+            for (var i = 0; i < this._orders.length; i++) {
+                if (data._id == this._orders[i]._id) {
+                    this._orders[i] = _.cloneDeep(data);
+                    let itemsToSplice = [];
+                    if (data.item.length) {
+                        for (var k = 0; k < data.item.length; k++) {
+                            itemsToSplice.push(data.item[k].status);
+                        }
+                    }
+                    if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(this.isBelowThreshold)) {
+                        this._orders.splice(i, 1);
+                    }
+                }
+            }
+        });
+
         this.socket.on('tablestatus', (data) => {
             if (data.restro == this.authGuard.getCurrentUser().restro) {
                 if (this._rooms && this._rooms.length) {
@@ -152,7 +182,7 @@ export class WebsocketService {
         this.socket.on('orderkey', (data) => {
             let userType = this.authGuard.getCurrentUser().userType;
             let autoplay = false;
-            if (data.restro == this.authGuard.getCurrentUser().restro) {                
+            if (data.restro == this.authGuard.getCurrentUser().restro) {
                 if (userType == 3) {
                     // let audio = new Audio();
                     // audio.src = "../../../assets/audio/beep.mp3";
@@ -261,9 +291,15 @@ export class WebsocketService {
         });
     };
 
+    public getCurrentUser(): any {
+        return JSON.parse(localStorage.getItem('autoplay'));
+    }
+    
     isBelowThreshold(currentValue) {
         return currentValue == 1;
     };
+
+    
 
     public getOrders(tab): Promise<any> {
         let url = '/api/department/orders';

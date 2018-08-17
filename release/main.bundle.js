@@ -326,7 +326,7 @@ var DepartmentProfileService = /** @class */ (function () {
     };
     DepartmentProfileService.prototype.handleErrorPromise = function (error) {
         var body = error.json();
-        if (error.status === 400 || error.status === 401) {
+        if (error.status === 400 || error.status === 401 || error.status === 403) {
             return Promise.reject(body.message || error);
         }
         else {
@@ -421,7 +421,7 @@ var GlobalService = /** @class */ (function () {
     };
     GlobalService.prototype.handleErrorPromise = function (error) {
         var body = error.json();
-        if (error.status === 400 || error.status === 401) {
+        if (error.status === 400 || error.status === 401 || error.status === 403) {
             return Promise.reject(body.error || error);
         }
         else {
@@ -623,7 +623,7 @@ var LoginService = /** @class */ (function () {
     };
     LoginService.prototype.handleErrorPromise = function (error) {
         var body = error.json();
-        if (error.status === 400 || error.status === 401) {
+        if (error.status === 400 || error.status === 401 || error.status === 403) {
             return Promise.reject(body.message || error);
         }
         else {
@@ -832,6 +832,7 @@ var WebsocketService = /** @class */ (function () {
         this._rooms = [];
         this.socketEvent = false;
         this.orderId = '';
+        this.autoplay = '0';
         var url = '/server/env';
         this.http.get(url).toPromise()
             .then(function (data) {
@@ -862,7 +863,6 @@ var WebsocketService = /** @class */ (function () {
         ;
         this.socket.on('neworderAdmin', function (data) {
             var userType = _this.authGuard.getCurrentUser().userType;
-            var autoplay = false;
             if (data.restro == _this.authGuard.getCurrentUser().restro) {
                 if (data.type === 'admin') {
                     // let audio = new Audio();
@@ -873,7 +873,7 @@ var WebsocketService = /** @class */ (function () {
                     // }).catch(err => {
                     //     console.log(err, 'err webservice audio')
                     // });
-                    autoplay = true;
+                    // this.autoplay = '1';
                 }
                 if (userType == 3) {
                     _this._orders.unshift(data);
@@ -881,18 +881,28 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('neworder', function (data) {
+            console.log(data, 'neworder++++++++++++++++++++++');
             _this.socketEvent = true;
             _this.orderId = data._id;
             var userType = _this.authGuard.getCurrentUser().userType;
-            var autoplay = false;
+            _this.autoplay = '0';
+            localStorage.setItem('autoplay', _this.autoplay);
+            console.log(localStorage.getItem('autoplay'), 'autoplay++++');
             if (userType == 4) {
                 _this._orders.push(data);
                 // let audio = new Audio();
                 // audio.src = "../../../assets/audio/beep.mp3";
                 // audio.load();
                 // audio.play();
-                autoplay = true;
+                _this.autoplay = '1';
+                localStorage.setItem('autoplay', _this.autoplay);
+                console.log(localStorage.getItem('autoplay'), 'autoplay-----');
             }
+            setTimeout(function () {
+                this.autoplay = '0';
+                localStorage.setItem('autoplay', this.autoplay);
+                console.log(localStorage.getItem('autoplay'), 'autoplay');
+            }, 10000);
         });
         this.socket.on('orderstatus', function (data) {
             var userType = _this.authGuard.getCurrentUser().userType;
@@ -916,6 +926,24 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('orderstatusDept', function (data) {
+            _this.socketEvent = true;
+            _this.orderId = data._id;
+            for (var i = 0; i < _this._orders.length; i++) {
+                if (data._id == _this._orders[i]._id) {
+                    _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](data);
+                    var itemsToSplice = [];
+                    if (data.item.length) {
+                        for (var k = 0; k < data.item.length; k++) {
+                            itemsToSplice.push(data.item[k].status);
+                        }
+                    }
+                    if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(_this.isBelowThreshold)) {
+                        _this._orders.splice(i, 1);
+                    }
+                }
+            }
+        });
+        this.socket.on('orderUpdateDept', function (data) {
             _this.socketEvent = true;
             _this.orderId = data._id;
             for (var i = 0; i < _this._orders.length; i++) {
@@ -1074,6 +1102,9 @@ var WebsocketService = /** @class */ (function () {
         });
     };
     ;
+    WebsocketService.prototype.getCurrentUser = function () {
+        return JSON.parse(localStorage.getItem('autoplay'));
+    };
     WebsocketService.prototype.isBelowThreshold = function (currentValue) {
         return currentValue == 1;
     };
@@ -2014,7 +2045,7 @@ var UserChangePasswordService = /** @class */ (function () {
     };
     UserChangePasswordService.prototype.handleErrorPromise = function (error) {
         var body = error.json();
-        if (error.status === 400 || error.status === 401) {
+        if (error.status === 400 || error.status === 401 || error.status === 403) {
             return Promise.reject(body.message || error);
         }
         else {

@@ -128,7 +128,7 @@ var ProfileService = /** @class */ (function () {
     };
     ProfileService.prototype.handleErrorPromise = function (error) {
         var body = error.json();
-        if (error.status === 400 || error.status === 401) {
+        if (error.status === 400 || error.status === 401 || error.status === 403) {
             return Promise.reject(body.message || error);
         }
         else {

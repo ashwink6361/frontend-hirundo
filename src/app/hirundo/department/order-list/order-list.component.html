@@ -1,4 +1,6 @@
 <div class="tabs-container">
+    
+{{audioPlay}}dsffgds
     <ul>
         <li [class.active]="activetab == 1" (click)="changeTab(1)">
             All
@@ -136,9 +138,7 @@
         </div>
     </div>
 </div>
-
-
-<audio controls autoplay *ngIf="autoplay">
+<audio controls autoplay *ngIf="websocketService.getCurrentUser() == '1'">
     <source src="assets/audio/beep.ogg" type="audio/ogg">
     <source src="assets/audio/beep.mp3" type="audio/mp3">
 </audio>

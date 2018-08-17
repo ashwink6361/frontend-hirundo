@@ -115,7 +115,7 @@
 //     isEqualToFive(currentValue) {
 //         return currentValue == 5;
 //     };
-    
+
 //     public getOrderStatus(status) {
 //         var str = 'In progress';
 //         switch (status) {
@@ -160,13 +160,13 @@
 //                 this.itemStatusDelivered = [];
 //                 this.itemStatusRunning = [];
 //                 this.itemStatusCompleted = [];
-                
+
 //                 for (let i = 0; i < this.orders.length; i++) {
 //                     let itemStatusStart = {};
 //                     let itemStatusDelivered = {};
 //                     let itemStatusRunning = {};
 //                     let itemStatusCompleted = {};
-                    
+
 //                     for (let m = 0; m < this.orders[i].step.length; m++) {
 //                         let startTemp = [];
 //                         for (let n = 0; n < this.orders[i].step[m].item.length; n++) {
@@ -176,13 +176,13 @@
 //                         itemStatusDelivered[this.orders[i].step[m].step] = startTemp.every(this.isEqualToOne);                          
 //                         itemStatusRunning[this.orders[i].step[m].step] = startTemp.every(this.isEqualToFour);                          
 //                         itemStatusCompleted[this.orders[i].step[m].step] = startTemp.every(this.isEqualToFive);                          
-                   
+
 //                     }
 //                     this.itemStatusStart[this.orders[i]._id] = itemStatusStart;  
 //                     this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered;   
 //                     this.itemStatusRunning[this.orders[i]._id] = itemStatusRunning;                    
 //                     this.itemStatusCompleted[this.orders[i]._id] = itemStatusCompleted;                    
-                                     
+
 //                 }
 //             }
 //         }).catch(error => {
@@ -207,13 +207,13 @@
 //                 this.itemStatusDelivered = [];
 //                 this.itemStatusRunning = [];
 //                 this.itemStatusCompleted = [];
-                
+
 //                 for (let i = 0; i < this.orders.length; i++) {
 //                     let itemStatusStart = {};
 //                     let itemStatusDelivered = {};
 //                     let itemStatusRunning = {};
 //                     let itemStatusCompleted = {};
-                    
+
 //                     for (let m = 0; m < this.orders[i].step.length; m++) {
 //                         let startTemp = [];
 //                         for (let n = 0; n < this.orders[i].step[m].item.length; n++) {
@@ -223,14 +223,14 @@
 //                         itemStatusDelivered[this.orders[i].step[m].step] = startTemp.every(this.isEqualToOne); 
 //                         itemStatusRunning[this.orders[i].step[m].step] = startTemp.every(this.isEqualToFour);      
 //                         itemStatusCompleted[this.orders[i].step[m].step] = startTemp.every(this.isEqualToFive);      
-                             
+
 //                     }
 //                     this.itemStatusStart[this.orders[i]._id] = itemStatusStart;   
 //                     this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered;
 //                     this.itemStatusRunning[this.orders[i]._id] = itemStatusRunning;                    
 //                     this.itemStatusCompleted[this.orders[i]._id] = itemStatusCompleted;                    
-                                        
-                                     
+
+
 //                 }
 //             }
 //         }).catch(error => {
@@ -298,13 +298,13 @@
 //                             this.itemStatusDelivered = [];
 //                             this.itemStatusRunning = [];
 //                             this.itemStatusCompleted = [];
-                            
+
 //                             for (let i = 0; i < this.orders.length; i++) {
 //                                 let itemStatusStart = {};
 //                                 let itemStatusDelivered = {};
 //                                 let itemStatusRunning = {};
 //                                 let itemStatusCompleted = {};
-                                
+
 //                                 for (let m = 0; m < this.orders[i].step.length; m++) {
 //                                     let startTemp = [];
 //                                     for (let n = 0; n < this.orders[i].step[m].item.length; n++) {
@@ -314,13 +314,13 @@
 //                                     itemStatusDelivered[this.orders[i].step[m].step] = startTemp.every(this.isEqualToOne);      
 //                                     itemStatusRunning[this.orders[i].step[m].step] = startTemp.every(this.isEqualToFour);      
 //                                     itemStatusCompleted[this.orders[i].step[m].step] = startTemp.every(this.isEqualToFive);      
-                                    
+
 //                                 }
 //                                 this.itemStatusStart[this.orders[i]._id] = itemStatusStart;    
 //                                 this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered;                    
 //                                 this.itemStatusRunning[this.orders[i]._id] = itemStatusRunning;                    
 //                                 this.itemStatusCompleted[this.orders[i]._id] = itemStatusCompleted;                    
-                                                
+
 //                             }
 //                         }
 //                     }).catch(error => {
@@ -377,13 +377,13 @@
 //                 this.itemStatusDelivered = []; 
 //                 this.itemStatusRunning = [];                                                                                                                 
 //                 this.itemStatusCompleted = [];                                                                                                                 
-                                                                                                                                
+
 //                 for (let i = 0; i < this.orders.length; i++) {
 //                     let itemStatusStart = {};
 //                     let itemStatusDelivered = {};
 //                     let itemStatusRunning = {};
 //                     let itemStatusCompleted = {};
-                    
+
 //                     for (let m = 0; m < this.orders[i].step.length; m++) {
 //                         let startTemp = [];
 //                         for (let n = 0; n < this.orders[i].step[m].item.length; n++) {
@@ -393,13 +393,13 @@
 //                         itemStatusDelivered[this.orders[i].step[m].step] = startTemp.every(this.isEqualToOne);      
 //                         itemStatusRunning[this.orders[i].step[m].step] = startTemp.every(this.isEqualToFour);      
 //                         itemStatusCompleted[this.orders[i].step[m].step] = startTemp.every(this.isEqualToFive);      
-                   
+
 //                     }
 //                     this.itemStatusStart[this.orders[i]._id] = itemStatusStart;  
 //                     this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered; 
 //                     this.itemStatusRunning[this.orders[i]._id] = itemStatusRunning;                    
 //                     this.itemStatusCompleted[this.orders[i]._id] = itemStatusCompleted;                    
-                                       
+
 //                 }
 //             }
 //             for (let i = 0; i < data.data.step.length; i++) {
@@ -515,7 +515,7 @@
 //                 }
 //             }
 //         }
-        
+
 //     }
 // }
 
@@ -587,7 +587,7 @@
 //     isEqualToOne(currentValue) {
 //         return currentValue == 1;
 //     };
-    
+
 //     public getOrderStatus(status) {
 //         var str = 'In progress';
 //         switch (status) {
@@ -833,7 +833,7 @@
 //         for (let i = 0; i < this.orders.length; i++) {
 //             for (let k = 0; k < this.orders[i].step.length; k++) {
 //                 }
-         
+
 //         }
 //         let timePeriodInMs = step.preparationTime*60*1000;
 //         console.log('timePeriodInMs',timePeriodInMs);        
@@ -868,14 +868,17 @@ export class OrderListComponent implements DoCheck {
     public itemStatusDelivered: Array<any> = [];
     public remainingTime: Array<any> = [];
     public activetab = 1;
-    public changedTab: boolean = false;    
+    public changedTab: boolean = false;
+    public audioPlay: string = '';
     constructor(public websocketService: WebsocketService, public authGuard: AuthGuard, private differs: IterableDiffers) {
         this.differ = differs.find([]).create(null);
     }
 
-    ngOnInit() {
+    ngOnInit() {        
         this.activetab = 1;
         this.websocketService.getOrders(this.activetab).then(data => {
+            this.audioPlay = localStorage.getItem('autoplay');
+            console.log(this.audioPlay, 'audioplay');
             this.orders = data;
             if (this.orders.length) {
                 this.itemStatusDelivered = [];
@@ -931,7 +934,7 @@ export class OrderListComponent implements DoCheck {
                                             }
                                         }
                                         var minutes = m;
-                                        if(this.orders[i] && this.orders[i].step[k]){
+                                        if (this.orders[i] && this.orders[i].step[k]) {
                                             remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
                                         }
                                     }, timeInterval);
@@ -960,8 +963,8 @@ export class OrderListComponent implements DoCheck {
                                             }
                                         }
                                         var minutes = m;
-                                        if(this.orders[i] && this.orders[i].step[k]){                                        
-                                        remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
+                                        if (this.orders[i] && this.orders[i].step[k]) {
+                                            remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
                                         }
                                     }, timeInterval);
                                 }
@@ -1066,8 +1069,8 @@ export class OrderListComponent implements DoCheck {
                                             }
                                         }
                                         var minutes = m;
-                                        if(this.orders[i] && this.orders[i].step[k]){                                                                                
-                                        remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
+                                        if (this.orders[i] && this.orders[i].step[k]) {
+                                            remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
                                         }
                                     }, timeInterval);
                                 }
@@ -1095,10 +1098,11 @@ export class OrderListComponent implements DoCheck {
                                             }
                                         }
                                         var minutes = m;
-                                        if(this.orders[i] && this.orders[i].step[k]){                                        
-                                        
-                                        remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
-                                    }}, timeInterval);
+                                        if (this.orders[i] && this.orders[i].step[k]) {
+
+                                            remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
+                                        }
+                                    }, timeInterval);
                                 }
                             }
                         }
@@ -1125,7 +1129,7 @@ export class OrderListComponent implements DoCheck {
                 key: 'delivered'
             };
             this.websocketService.updateOrder(order._id, opts).then((data) => {
-                order =  _.cloneDeep(data.data);
+                order = _.cloneDeep(data.data);
                 this.websocketService.getOrders(this.activetab).then(data => {
                     this.orders = data;
                     if (this.orders.length) {
@@ -1156,7 +1160,7 @@ export class OrderListComponent implements DoCheck {
                                 }
                                 let stepIds = [];
                                 for (let k = 0; k < this.orders[i].step.length; k++) {
-                                stepIds.push(this.orders[i].step[k]._id);
+                                    stepIds.push(this.orders[i].step[k]._id);
                                     if (this.orders[i].step[k].preparationTime) {
                                         if ((this.orders[i].step[k].step == 'Uscita 1') && !this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[k].step]) {
                                             let seconds = this.orders[i].step[k].preparationTime * 60;
@@ -1182,10 +1186,10 @@ export class OrderListComponent implements DoCheck {
                                                     }
                                                 }
                                                 var minutes = m;
-                                        if(this.orders[i] && this.orders[i].step[k]){                                        
-                                                
-                                                remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
-                                        }
+                                                if (this.orders[i] && this.orders[i].step[k]) {
+
+                                                    remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
+                                                }
                                             }, timeInterval);
                                         }
                                         else if ((this.orders[i].step[k].step != 'Uscita 1') && (this.orders[i].stepStatus == this.orders[i].step[k].step) && !this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[k].step]) {
@@ -1212,16 +1216,16 @@ export class OrderListComponent implements DoCheck {
                                                     }
                                                 }
                                                 var minutes = m;
-                                        if(this.orders[i] && this.orders[i].step[k]){                                        
-                                             
-                                                remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
-                                        }
+                                                if (this.orders[i] && this.orders[i].step[k]) {
+
+                                                    remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
+                                                }
                                             }, timeInterval);
                                         }
                                     }
                                 }
-                                    this.remainingTime[this.orders[i]._id] = _.cloneDeep(remTime);
-                            break;
+                                this.remainingTime[this.orders[i]._id] = _.cloneDeep(remTime);
+                                break;
                             }
                         }
                     }
@@ -1249,18 +1253,18 @@ export class OrderListComponent implements DoCheck {
     }
 
     updateDepartmentStatus(department, order, step) {
-        if(department.status == 0){
+        if (department.status == 0) {
             department.status = 1;
             var opts = {
                 step: step,
-                status : 1
+                status: 1
             };
         }
         else {
             department.status = 0;
             var opts = {
                 step: step,
-                status : 0
+                status: 0
             };
         }
         // let opts = {
@@ -1303,7 +1307,7 @@ export class OrderListComponent implements DoCheck {
     }
 
     ngDoCheck() {
-        if(this.websocketService.socketEvent){
+        if (this.websocketService.socketEvent) {
             if (this.orders && this.orders.length) {
                 const change = this.differ.diff(this.orders);
                 if (change != null) {
@@ -1359,10 +1363,11 @@ export class OrderListComponent implements DoCheck {
                                                     }
                                                 }
                                                 var minutes = m;
-                                        if(this.orders[i] && this.orders[i].step[k]){                                        
-                                                
-                                                remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
-                                                }    }, timeInterval);
+                                                if (this.orders[i] && this.orders[i].step[k]) {
+
+                                                    remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
+                                                }
+                                            }, timeInterval);
                                         }
                                         else if ((this.orders[i].step[k].step != 'Uscita 1') && (this.orders[i].stepStatus == this.orders[i].step[k].step) && !this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[k].step]) {
                                             let seconds = this.orders[i].step[k].preparationTime * 60;
@@ -1388,16 +1393,17 @@ export class OrderListComponent implements DoCheck {
                                                     }
                                                 }
                                                 var minutes = m;
-                                        if(this.orders[i] && this.orders[i].step[k]){                                        
-                                                
-                                                remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
-                                             } }, timeInterval);
+                                                if (this.orders[i] && this.orders[i].step[k]) {
+
+                                                    remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
+                                                }
+                                            }, timeInterval);
                                         }
                                     }
                                 }
                                 this.remainingTime[this.orders[i]._id] = remTime;
                                 this.websocketService.orderId = '';
-                            break;                                
+                                break;
                             }
                         }
                     }
