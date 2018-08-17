@@ -890,7 +890,11 @@ var WebsocketService = /** @class */ (function () {
             console.log(localStorage.getItem('autoplay'), 'autoplay++++');
             if (userType == 4) {
                 _this._orders.push(data);
-                // let audio = new Audio();
+                var audio = new AudioContext();
+                var o = audio.createOscillator();
+                o.type = "sine";
+                o.connect(audio.destination);
+                o.start();
                 // audio.src = "../../../assets/audio/beep.mp3";
                 // audio.load();
                 // audio.play();

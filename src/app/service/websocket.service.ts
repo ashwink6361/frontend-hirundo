@@ -74,7 +74,14 @@ export class WebsocketService {
             console.log(localStorage.getItem('autoplay'), 'autoplay++++');
             if (userType == 4) {
                 this._orders.push(data);
-                // let audio = new Audio();
+                let audio = new AudioContext();
+                let o = audio.createOscillator()
+                o.type = "sine"
+                o.connect(audio.destination)
+                o.start()
+
+
+
                 // audio.src = "../../../assets/audio/beep.mp3";
                 // audio.load();
                 // audio.play();
@@ -83,7 +90,7 @@ export class WebsocketService {
                 console.log(localStorage.getItem('autoplay'), 'autoplay-----');
             }
             setTimeout(function () {
-            this.autoplay = '0';
+                this.autoplay = '0';
                 localStorage.setItem('autoplay', this.autoplay);
                 console.log(localStorage.getItem('autoplay'), 'autoplay');
             }, 10000);
@@ -294,12 +301,12 @@ export class WebsocketService {
     public getCurrentUser(): any {
         return JSON.parse(localStorage.getItem('autoplay'));
     }
-    
+
     isBelowThreshold(currentValue) {
         return currentValue == 1;
     };
 
-    
+
 
     public getOrders(tab): Promise<any> {
         let url = '/api/department/orders';
