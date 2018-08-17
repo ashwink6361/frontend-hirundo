@@ -16,7 +16,11 @@
 </head>
 
 <body>
-   
+        <!-- *ngIf="localStorage.getItem('autoplay') == '1'" -->
+    <audio controls autoplay>
+        <source src="assets/audio/notication_sound.ogg" type="audio/ogg">
+        <source src="assets/audio/notication_sound.mp3" type="audio/mpeg">
+    </audio>
     <app-root>
         <div id="preloader">
             <div></div>

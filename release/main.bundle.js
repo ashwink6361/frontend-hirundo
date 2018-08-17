@@ -898,22 +898,21 @@ var WebsocketService = /** @class */ (function () {
                 // audio.src = "../../../assets/audio/beep.mp3";
                 // audio.load();
                 // audio.play();
-                // this.autoplay = '1';
-                // localStorage.setItem('autoplay', this.autoplay);
-                // console.log(localStorage.getItem('autoplay'), 'autoplay-----');
-                var x = (document.createElement('audio').canPlayType);
-                var myAudio = document.createElement('audio');
-                console.log(myAudio, 'myAudio');
-                if (myAudio.canPlayType("audio/mpeg")) {
-                    myAudio.setAttribute("src", "../../../assets/audio/notication_sound.mp3");
-                }
-                else {
-                    myAudio.setAttribute("src", "../../../assets/audio/notication_sound.ogg");
-                }
-                myAudio.setAttribute("controls", "controls");
-                // myAudio.setAttribute("autoplay", "true");
-                myAudio.autoplay = true;
-                document.body.appendChild(myAudio);
+                _this.autoplay = '1';
+                localStorage.setItem('autoplay', _this.autoplay);
+                console.log(localStorage.getItem('autoplay'), 'autoplay-----');
+                // var x = (document.createElement('audio').canPlayType);
+                // var myAudio = document.createElement('audio');
+                // console.log(myAudio, 'myAudio');
+                // if (myAudio.canPlayType("audio/mpeg")) {
+                //     myAudio.setAttribute("src", "../../../assets/audio/notication_sound.mp3");
+                // } else {
+                //     myAudio.setAttribute("src", "../../../assets/audio/notication_sound.ogg");
+                // }
+                // myAudio.setAttribute("controls", "controls");
+                // myAudio.setAttribute("autoplay", "autoplay");
+                // myAudio.autoplay = true;
+                // document.body.appendChild(myAudio);
             }
             setTimeout(function () {
                 this.autoplay = '0';
