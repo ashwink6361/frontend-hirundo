@@ -911,7 +911,8 @@ var WebsocketService = /** @class */ (function () {
                     myAudio.setAttribute("src", "../../../assets/audio/notication_sound.ogg");
                 }
                 myAudio.setAttribute("controls", "controls");
-                myAudio.setAttribute("autoplay", "autoplay");
+                // myAudio.setAttribute("autoplay", "true");
+                myAudio.autoplay = true;
                 document.body.appendChild(myAudio);
             }
             setTimeout(function () {
