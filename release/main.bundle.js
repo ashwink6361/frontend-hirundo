@@ -890,17 +890,29 @@ var WebsocketService = /** @class */ (function () {
             console.log(localStorage.getItem('autoplay'), 'autoplay++++');
             if (userType == 4) {
                 _this._orders.push(data);
-                var audio = new AudioContext();
-                var o = audio.createOscillator();
-                o.type = "sine";
-                o.connect(audio.destination);
-                o.start();
+                // let audio = new AudioContext();
+                // let o = audio.createOscillator()
+                // o.type = "sine"
+                // o.connect(audio.destination)
+                // o.start()
                 // audio.src = "../../../assets/audio/beep.mp3";
                 // audio.load();
                 // audio.play();
-                _this.autoplay = '1';
-                localStorage.setItem('autoplay', _this.autoplay);
-                console.log(localStorage.getItem('autoplay'), 'autoplay-----');
+                // this.autoplay = '1';
+                // localStorage.setItem('autoplay', this.autoplay);
+                // console.log(localStorage.getItem('autoplay'), 'autoplay-----');
+                var x = (document.createElement('audio').canPlayType);
+                var myAudio = document.createElement('audio');
+                console.log(myAudio, 'myAudio');
+                if (myAudio.canPlayType("audio/mpeg")) {
+                    myAudio.setAttribute("src", "../../../assets/audio/notication_sound.mp3");
+                }
+                else {
+                    myAudio.setAttribute("src", "../../../assets/audio/notication_sound.ogg");
+                }
+                myAudio.setAttribute("controls", "controls");
+                myAudio.setAttribute("autoplay", "autoplay");
+                document.body.appendChild(myAudio);
             }
             setTimeout(function () {
                 this.autoplay = '0';
@@ -1106,7 +1118,8 @@ var WebsocketService = /** @class */ (function () {
         });
     };
     ;
-    WebsocketService.prototype.getCurrentUser = function () {
+    WebsocketService.prototype.getAudio = function () {
+        console.log(localStorage.getItem('autoplay'), 'localStorage.getItem ingetaudio');
         return JSON.parse(localStorage.getItem('autoplay'));
     };
     WebsocketService.prototype.isBelowThreshold = function (currentValue) {

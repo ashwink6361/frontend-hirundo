@@ -872,13 +872,29 @@ export class OrderListComponent implements DoCheck {
     public audioPlay: string = '';
     constructor(public websocketService: WebsocketService, public authGuard: AuthGuard, private differs: IterableDiffers) {
         this.differ = differs.find([]).create(null);
+        // console.log(this.websocketService.getAudio(), 'this.websocketService.getCurrentUser()')
+        // if (this.websocketService.getAudio() == '1') {
+        //     console.log(this.websocketService.getAudio(), 'this.websocketService.getCurrentUser()')
+        //     var x = (document.createElement('audio').canPlayType);
+        //     var myAudio = document.createElement('audio');
+        //     console.log(myAudio, 'myAudio');
+        //     if (myAudio.canPlayType("audio/mpeg")) {
+        //         myAudio.setAttribute("src", "../../../assets/audio/notication_sound.mp3");
+        //     } else {
+        //         myAudio.setAttribute("src", "../../../assets/audio/notication_sound.ogg");
+        //     }
+        //     myAudio.setAttribute("controls", "controls");
+        //     myAudio.setAttribute("autoplay", "autoplay");
+        //     document.body.appendChild(myAudio);
+        // }
     }
 
-    ngOnInit() {        
+    ngOnInit() {
         this.activetab = 1;
         this.websocketService.getOrders(this.activetab).then(data => {
-            this.audioPlay = localStorage.getItem('autoplay');
-            console.log(this.audioPlay, 'audioplay');
+
+            // this.audioPlay = localStorage.getItem('autoplay');
+            // console.log(this.audioPlay, 'audioplay');
             this.orders = data;
             if (this.orders.length) {
                 this.itemStatusDelivered = [];
