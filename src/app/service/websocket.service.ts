@@ -46,16 +46,18 @@ export class WebsocketService {
 
         this.socket.on('neworderAdmin', (data) => {
             let userType = this.authGuard.getCurrentUser().userType;
+            let autoplay = false;
             if (data.restro == this.authGuard.getCurrentUser().restro) {
                 if (data.type === 'admin') {
-                    let audio = new Audio();
-                    audio.src = "../../../assets/audio/beep.mp3";
-                    audio.load();
-                    audio.play().then(data => {
-                        console.log(data, 'data webservice audio')
-                    }).catch(err => {
-                        console.log(err, 'err webservice audio')
-                    });
+                    // let audio = new Audio();
+                    // audio.src = "../../../assets/audio/beep.mp3";
+                    // audio.load();
+                    // audio.play().then(data => {
+                    //     console.log(data, 'data webservice audio')
+                    // }).catch(err => {
+                    //     console.log(err, 'err webservice audio')
+                    // });
+                    autoplay = true;
                 }
                 if (userType == 3) {
                     this._orders.unshift(data);
@@ -67,12 +69,14 @@ export class WebsocketService {
             this.socketEvent = true;
             this.orderId = data._id;
             let userType = this.authGuard.getCurrentUser().userType;
+            let autoplay = false;
             if (userType == 4) {
                 this._orders.push(data);
-                let audio = new Audio();
-                audio.src = "../../../assets/audio/beep.mp3";
-                audio.load();
-                audio.play();
+                // let audio = new Audio();
+                // audio.src = "../../../assets/audio/beep.mp3";
+                // audio.load();
+                // audio.play();
+                autoplay = true;
             }
         });
         this.socket.on('orderstatus', (data) => {
@@ -133,24 +137,28 @@ export class WebsocketService {
         this.socket.on('changeStep', (data) => {
             this.socketEvent = true;
             this.orderId = data._id;
+            let autoplay = false;
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id === this._orders[i]._id) {
                     this._orders[i] = data;
                 }
             }
-            let audio = new Audio();
-            audio.src = "../../../assets/audio/beep.mp3";
-            audio.load();
-            audio.play();
+            // let audio = new Audio();
+            // audio.src = "../../../assets/audio/beep.mp3";
+            // audio.load();
+            // audio.play();
+            autoplay = true;
         });
         this.socket.on('orderkey', (data) => {
             let userType = this.authGuard.getCurrentUser().userType;
-            if (data.restro == this.authGuard.getCurrentUser().restro) {
+            let autoplay = false;
+            if (data.restro == this.authGuard.getCurrentUser().restro) {                
                 if (userType == 3) {
-                    let audio = new Audio();
-                    audio.src = "../../../assets/audio/beep.mp3";
-                    audio.load();
-                    audio.play();
+                    // let audio = new Audio();
+                    // audio.src = "../../../assets/audio/beep.mp3";
+                    // audio.load();
+                    // audio.play();
+                    autoplay = true;
                 }
             }
         });
