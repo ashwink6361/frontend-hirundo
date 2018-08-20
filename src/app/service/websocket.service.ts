@@ -48,15 +48,10 @@ export class WebsocketService {
             let userType = this.authGuard.getCurrentUser().userType;
             if (data.restro == this.authGuard.getCurrentUser().restro) {
                 if (data.type === 'admin') {
-                    // let audio = new Audio();
-                    // audio.src = "../../../assets/audio/beep.mp3";
-                    // audio.load();
-                    // audio.play().then(data => {
-                    //     console.log(data, 'data webservice audio')
-                    // }).catch(err => {
-                    //     console.log(err, 'err webservice audio')
-                    // });
-                    // this.autoplay = '1';
+                    let audio = new Audio();
+                    audio.src = "../../../assets/audio/beep.mp3";
+                    audio.load();
+                    audio.play();
                 }
                 if (userType == 3) {
                     this._orders.unshift(data);
@@ -69,44 +64,44 @@ export class WebsocketService {
             this.socketEvent = true;
             this.orderId = data._id;
             let userType = this.authGuard.getCurrentUser().userType;
-            this.autoplay = '0';
-            localStorage.setItem('autoplay', this.autoplay);
-            console.log(localStorage.getItem('autoplay'), 'autoplay++++');
+            // this.autoplay = '0';
+            // localStorage.setItem('autoplay', this.autoplay);
+            // console.log(localStorage.getItem('autoplay'), 'autoplay++++');
             if (userType == 4) {
                 this._orders.push(data);
-                // let audio = new AudioContext();
+                let audio = new Audio();
                 // let o = audio.createOscillator()
                 // o.type = "sine"
                 // o.connect(audio.destination)
                 // o.start()
-                // audio.src = "../../../assets/audio/beep.mp3";
-                // audio.load();
-                // audio.play();
+                audio.src = "../../../assets/audio/beep.mp3";
+                audio.load();
+                audio.play();
                 // this.autoplay = '1';
                 // localStorage.setItem('autoplay', this.autoplay);
                 // console.log(localStorage.getItem('autoplay'), 'autoplay-----');
 
 
-                var x = (document.createElement('audio').canPlayType);
-                var myAudio = document.createElement('audio');
-                console.log(myAudio, 'myAudio');
-                if (myAudio.canPlayType("audio/mpeg")) {
-                    myAudio.setAttribute("src", "../../../assets/audio/notication_sound.mp3");
-                } else {
-                    myAudio.setAttribute("src", "../../../assets/audio/notication_sound.ogg");
-                }
-                myAudio.setAttribute("controls", "controls");
-                myAudio.setAttribute("autoplay", "autoplay");
-                myAudio.autoplay = true;
-                document.body.appendChild(myAudio);
+                // var x = (document.createElement('audio').canPlayType);
+                // var myAudio = document.createElement('audio');
+                // console.log(myAudio, 'myAudio');
+                // if (myAudio.canPlayType("audio/mpeg")) {
+                //     myAudio.setAttribute("src", "../../../assets/audio/notication_sound.mp3");
+                // } else {
+                //     myAudio.setAttribute("src", "../../../assets/audio/notication_sound.ogg");
+                // }
+                // myAudio.setAttribute("controls", "controls");
+                // myAudio.setAttribute("autoplay", "autoplay");
+                // myAudio.autoplay = true;
+                // document.body.appendChild(myAudio);
 
 
             }
-            setTimeout(function () {
-                this.autoplay = '0';
-                localStorage.setItem('autoplay', this.autoplay);
-                console.log(localStorage.getItem('autoplay'), 'autoplay');
-            }, 10000);
+            // setTimeout(function () {
+            //     this.autoplay = '0';
+            //     localStorage.setItem('autoplay', this.autoplay);
+            //     console.log(localStorage.getItem('autoplay'), 'autoplay');
+            // }, 10000);
 
         });
         this.socket.on('orderstatus', (data) => {
@@ -150,10 +145,13 @@ export class WebsocketService {
         });
 
         this.socket.on('orderUpdateDept', (data) => {
+            console.log('data',data);
             this.socketEvent = true;
             this.orderId = data._id;
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id == this._orders[i]._id) {
+                    console.log('this._orders-----------',this._orders);
+                    
                     this._orders[i] = _.cloneDeep(data);
                     let itemsToSplice = [];
                     if (data.item.length) {
@@ -163,6 +161,8 @@ export class WebsocketService {
                     }
                     if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(this.isBelowThreshold)) {
                         this._orders.splice(i, 1);
+                        console.log('this._orders',this._orders);
+                        
                     }
                 }
             }
