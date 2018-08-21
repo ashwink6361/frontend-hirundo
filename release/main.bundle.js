@@ -870,7 +870,7 @@ var WebsocketService = /** @class */ (function () {
                     audio_1.load();
                     setTimeout(function () {
                         audio_1.play();
-                    }, 5);
+                    }, 1000);
                     // audio.play();
                 }
                 if (userType == 3) {
@@ -897,7 +897,7 @@ var WebsocketService = /** @class */ (function () {
                 audio_2.load();
                 setTimeout(function () {
                     audio_2.play();
-                }, 5);
+                }, 1000);
                 // audio.play();
                 // this.autoplay = '1';
                 // localStorage.setItem('autoplay', this.autoplay);

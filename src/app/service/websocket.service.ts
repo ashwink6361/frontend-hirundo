@@ -53,7 +53,7 @@ export class WebsocketService {
                     audio.load();
                     setTimeout(function () {
                         audio.play();
-                    }, 5);
+                    }, 1000);
                     // audio.play();
                 }
                 if (userType == 3) {
@@ -81,7 +81,7 @@ export class WebsocketService {
                 audio.load();
                 setTimeout(function () {
                     audio.play();
-                }, 5);
+                }, 1000);
                 // audio.play();
                 // this.autoplay = '1';
                 // localStorage.setItem('autoplay', this.autoplay);
