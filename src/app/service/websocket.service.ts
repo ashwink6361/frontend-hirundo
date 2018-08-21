@@ -51,7 +51,10 @@ export class WebsocketService {
                     let audio = new Audio();
                     audio.src = "../../../assets/audio/notication_sound.mp3";
                     audio.load();
-                    audio.play();
+                    setTimeout(function () {
+                        audio.play();
+                    }, 5);
+                    // audio.play();
                 }
                 if (userType == 3) {
                     this._orders.unshift(data);
@@ -76,7 +79,10 @@ export class WebsocketService {
                 // o.start()
                 audio.src = "../../../assets/audio/notication_sound.mp3";
                 audio.load();
-                audio.play();
+                setTimeout(function () {
+                    audio.play();
+                }, 5);
+                // audio.play();
                 // this.autoplay = '1';
                 // localStorage.setItem('autoplay', this.autoplay);
                 // console.log(localStorage.getItem('autoplay'), 'autoplay-----');
