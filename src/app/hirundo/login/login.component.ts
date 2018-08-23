@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { GlobalService } from '../global.service';
 import { LoginService } from './login.service';
 import { AppService } from '../../service/app.service';
+import {Router} from "@angular/router";
 // import 'player.js';
 
 declare var player: any;
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit {
     loginSuccessMsg: string = '';
     requestRunning: boolean = false;
     constructor(
+        public router : Router,
         public appService: AppService,
         private globalService: GlobalService,
         private loginService: LoginService,
@@ -46,7 +48,7 @@ export class LoginComponent implements OnInit {
             console.log('login clicked');
             setTimeout( function(){
                 player.pauseAudio();
-            }, 200);
+            }, 100);
             this.loginSuccessMsg = 'Login success!';
             document.cookie = "token=" + data.token;
             localStorage.setItem('isLoggedin', 'true');
@@ -55,9 +57,11 @@ export class LoginComponent implements OnInit {
             setTimeout(() => {
                 this.loginSuccessMsg = '';
                 if (data.data.userType === 3) {
-                    window.location.href = '/waiter';
+                    this.router.navigate(['/waiter']);
+                    // window.location.href = '/waiter';
                 } else {
-                    window.location.href = '/department';
+                    this.router.navigate(['/department']);
+                    // window.location.href = '/department';
                 }
             }, 4000);
         }).catch(error => {

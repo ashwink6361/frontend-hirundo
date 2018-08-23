@@ -35,6 +35,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__global_service__ = __webpack_require__("../../../../../src/app/hirundo/global.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_service__ = __webpack_require__("../../../../../src/app/hirundo/login/login.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__service_app_service__ = __webpack_require__("../../../../../src/app/service/app.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -49,8 +50,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var LoginComponent = /** @class */ (function () {
-    function LoginComponent(appService, globalService, loginService) {
+    function LoginComponent(router, appService, globalService, loginService) {
+        this.router = router;
         this.appService = appService;
         this.globalService = globalService;
         this.loginService = loginService;
@@ -81,7 +84,7 @@ var LoginComponent = /** @class */ (function () {
             console.log('login clicked');
             setTimeout(function () {
                 player.pauseAudio();
-            }, 200);
+            }, 100);
             _this.loginSuccessMsg = 'Login success!';
             document.cookie = "token=" + data.token;
             localStorage.setItem('isLoggedin', 'true');
@@ -90,10 +93,12 @@ var LoginComponent = /** @class */ (function () {
             setTimeout(function () {
                 _this.loginSuccessMsg = '';
                 if (data.data.userType === 3) {
-                    window.location.href = '/waiter';
+                    _this.router.navigate(['/waiter']);
+                    // window.location.href = '/waiter';
                 }
                 else {
-                    window.location.href = '/department';
+                    _this.router.navigate(['/department']);
+                    // window.location.href = '/department';
                 }
             }, 4000);
         }).catch(function (error) {
@@ -114,10 +119,10 @@ var LoginComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/hirundo/login/login.component.html"),
             styles: [__webpack_require__("../../../../../src/app/hirundo/login/login.component.scss")]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_4__service_app_service__["a" /* AppService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__service_app_service__["a" /* AppService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__global_service__["a" /* GlobalService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__global_service__["a" /* GlobalService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__login_service__["a" /* LoginService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__login_service__["a" /* LoginService */]) === "function" && _c || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_5__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__angular_router__["a" /* Router */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__service_app_service__["a" /* AppService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__service_app_service__["a" /* AppService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__global_service__["a" /* GlobalService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__global_service__["a" /* GlobalService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__login_service__["a" /* LoginService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__login_service__["a" /* LoginService */]) === "function" && _d || Object])
     ], LoginComponent);
     return LoginComponent;
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
 }());
 
 //# sourceMappingURL=login.component.js.map
