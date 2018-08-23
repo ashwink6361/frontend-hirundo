@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
     console.log('login clicked');
     setTimeout(function () {
       stopAudio();
-    }, 500);
+    }, 100);
   }
   showResrvation() {
     this.Reservation = true;

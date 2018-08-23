@@ -143,7 +143,7 @@ app.get('/server/env', function(req, res) {
     res.send({socketUrl: app.get('socketUrl')});
 });
 
-app.use('/login', function (req, res, next) {
+app.post('/login', function (req, res, next) {
     var url = app.get('apiUrl')+'login';
     var body = req.body;
     var headers = {

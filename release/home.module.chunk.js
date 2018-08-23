@@ -75,7 +75,7 @@ var HomeComponent = /** @class */ (function () {
         console.log('login clicked');
         setTimeout(function () {
             stopAudio();
-        }, 500);
+        }, 100);
     };
     HomeComponent.prototype.showResrvation = function () {
         this.Reservation = true;
