@@ -8,7 +8,7 @@ import { AuthGuard } from '../shared/guard/auth.guard';
 import *  as _ from 'lodash';
 // import 'player.js';
 
-// declare var player: any;
+declare function playAudio(): void;
 @Injectable()
 export class WebsocketService {
     // Our socket connection
@@ -58,7 +58,7 @@ export class WebsocketService {
                     //     audio.play();
                     // }, 1000);
                     // // audio.play();
-                    // player.playAudio();
+                    playAudio();
                 }
                 if (userType == 3) {
                     this._orders.unshift(data);
@@ -76,6 +76,7 @@ export class WebsocketService {
             // console.log(localStorage.getItem('autoplay'), 'autoplay++++');
             if (userType == 4) {
                 this._orders.push(data);
+                playAudio();
                 // player.playAudio();
                 // let audio = new Audio();
                 // let o = audio.createOscillator()

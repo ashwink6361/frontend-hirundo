@@ -55,6 +55,9 @@
             
             function playnow(){
                 my_jPlayer.jPlayer("play");
+                setTimeout( function(){
+                    my_jPlayer.jPlayer("pause");
+                }, 200);
             }
         </script>
     <app-root>

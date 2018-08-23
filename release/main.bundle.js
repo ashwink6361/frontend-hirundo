@@ -823,8 +823,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-// import 'player.js';
-// declare var player: any;
 var WebsocketService = /** @class */ (function () {
     function WebsocketService(http, authGuard) {
         var _this = this;
@@ -874,7 +872,7 @@ var WebsocketService = /** @class */ (function () {
                     //     audio.play();
                     // }, 1000);
                     // // audio.play();
-                    // player.playAudio();
+                    playAudio();
                 }
                 if (userType == 3) {
                     _this._orders.unshift(data);
@@ -891,6 +889,7 @@ var WebsocketService = /** @class */ (function () {
             // console.log(localStorage.getItem('autoplay'), 'autoplay++++');
             if (userType == 4) {
                 _this._orders.push(data);
+                playAudio();
                 // player.playAudio();
                 // let audio = new Audio();
                 // let o = audio.createOscillator()
