@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { GlobalService } from '../global.service';
 import { LoginService } from './login.service';
-import {AppService } from '../../service/app.service'
+import { AppService } from '../../service/app.service';
+// import 'player.js';
+
+declare var player: any;
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -13,13 +16,16 @@ export class LoginComponent implements OnInit {
     loginForm: FormGroup;
     loginError: boolean = false;
     loginErrorMsg: string = '';
-    loginSuccessMsg: string = '';    
+    loginSuccessMsg: string = '';
     requestRunning: boolean = false;
     constructor(
-        public appService : AppService,
+        public appService: AppService,
         private globalService: GlobalService,
         private loginService: LoginService,
-    ) { }
+    ) { 
+        console.log("Login player called");
+       
+    }
 
     ngOnInit() {
         this.createLoginForm();
@@ -36,11 +42,16 @@ export class LoginComponent implements OnInit {
         this.User.password = user.password;
         this.User.deviceType = 'web';
         this.loginService.login(this.User).then(data => {
+            player.playAudio();
+            console.log('login clicked');
+            setTimeout( function(){
+                player.pauseAudio();
+            }, 200);
             this.loginSuccessMsg = 'Login success!';
             document.cookie = "token=" + data.token;
             localStorage.setItem('isLoggedin', 'true');
             localStorage.setItem('currentUser', JSON.stringify(data.data));
-            localStorage.setItem('token', data.token);
+            localStorage.setItem('token', data.token);            
             setTimeout(() => {
                 this.loginSuccessMsg = '';
                 if (data.data.userType === 3) {

@@ -6,6 +6,9 @@ import * as Rx from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 import { AuthGuard } from '../shared/guard/auth.guard';
 import *  as _ from 'lodash';
+// import 'player.js';
+
+declare var player: any;
 @Injectable()
 export class WebsocketService {
     // Our socket connection
@@ -17,7 +20,7 @@ export class WebsocketService {
     public orderId = '';
     public autoplay: string = '0';
     constructor(private http: Http, private authGuard: AuthGuard) {
-        let url = '/server/env';
+        let url = '/server/env';        
         this.http.get(url).toPromise()
             .then(data => {
                 this.socketUrl = data.json().socketUrl;
@@ -48,13 +51,14 @@ export class WebsocketService {
             let userType = this.authGuard.getCurrentUser().userType;
             if (data.restro == this.authGuard.getCurrentUser().restro) {
                 if (data.type === 'admin') {
-                    let audio = new Audio();
-                    audio.src = "../../../assets/audio/notication_sound.mp3";
-                    audio.load();
-                    setTimeout(function () {
-                        audio.play();
-                    }, 1000);
-                    // audio.play();
+                    // let audio = new Audio();
+                    // audio.src = "../../../assets/audio/notication_sound.mp3";
+                    // audio.load();
+                    // setTimeout(function () {
+                    //     audio.play();
+                    // }, 1000);
+                    // // audio.play();
+                    player.playAudio();
                 }
                 if (userType == 3) {
                     this._orders.unshift(data);
