@@ -6,7 +6,8 @@ import { AppService } from '../../service/app.service';
 import {Router} from "@angular/router";
 // import 'player.js';
 
-declare var player: any;
+declare function playAudio(): void;
+declare function stopAudio(): void;
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -20,6 +21,7 @@ export class LoginComponent implements OnInit {
     loginSuccessMsg: string = '';
     requestRunning: boolean = false;
     constructor(
+
         public router : Router,
         public appService: AppService,
         private globalService: GlobalService,
@@ -44,10 +46,10 @@ export class LoginComponent implements OnInit {
         this.User.password = user.password;
         this.User.deviceType = 'web';
         this.loginService.login(this.User).then(data => {
-            player.playAudio();
+            playAudio();
             console.log('login clicked');
             setTimeout( function(){
-                player.pauseAudio();
+                stopAudio();
             }, 500);
             this.loginSuccessMsg = 'Login success!';
             document.cookie = "token=" + data.token;

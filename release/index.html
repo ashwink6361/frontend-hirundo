@@ -12,11 +12,51 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jplayer/2.9.2/jplayer/jquery.jplayer.js"></script>
 </head>
 
 <body>
-   
+    <a onclick="playnow()">allow play</a>
+    <div id="jquery_jplayer"></div>
+    <script>
+            var	my_jPlayer = $("#jquery_jplayer");
+            my_jPlayer.jPlayer({
+                ready: function () {
+                    //$("#jp_container .track-default").click();
+                },
+                timeupdate: function (event) {
+                    //my_extraPlayInfo.text(parseInt(event.jPlayer.status.currentPercentAbsolute, 10) + "%");
+                },
+                play: function (event) {
+                    //my_playState.text(opt_text_playing);
+                },
+                pause: function (event) {
+                    //my_playState.text(opt_text_selected);
+                },
+                ended: function (event) {
+                    //my_playState.text(opt_text_selected);
+                },
+                swfPath: "./assets/js/jplayer",
+                //cssSelectorAncestor: "#jp_container",
+                supplied: "mp3",
+                wmode: "window"
+            });
+            my_jPlayer.jPlayer("setMedia", {
+                mp3: './assets/audio/notication_sound.mp3'
+            });
+            // my_jPlayer.jPlayer("play");
+            window.playAudio = function(){
+                my_jPlayer.jPlayer("play");
+            };
+            window.stopAudio = function(){
+                my_jPlayer.jPlayer("pause");
+            };
+            
+            function playnow(){
+                my_jPlayer.jPlayer("play");
+            }
+        </script>
     <app-root>
         <div id="preloader">
             <div></div>
@@ -24,6 +64,7 @@
     </app-root>
 <script type="text/javascript" src="inline.bundle.js"></script><script type="text/javascript" src="polyfills.bundle.js"></script><script type="text/javascript" src="scripts.bundle.js"></script><script type="text/javascript" src="styles.bundle.js"></script><script type="text/javascript" src="vendor.bundle.js"></script><script type="text/javascript" src="main.bundle.js"></script></body>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-81010143-7"></script>
+
 <script>
     window.dataLayer = window.dataLayer || [];
 
@@ -34,5 +75,6 @@
     gtag('config', 'UA-81010143-7');
 
 </script>
+
 
 </html>

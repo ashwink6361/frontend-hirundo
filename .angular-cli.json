@@ -31,8 +31,7 @@
         "../node_modules/mdbootstrap/js/popper.min.js",
         "../node_modules/mdbootstrap/js/bootstrap.min.js",
         "../node_modules/mdbootstrap/js/mdb.min.js",
-        "../node_modules/chart.js/dist/Chart.js",
-        "player.js"
+        "../node_modules/chart.js/dist/Chart.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
