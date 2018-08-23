@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthGuard } from '../../shared/guard/auth.guard';
-
+import {Router} from "@angular/router";
 @Component({
     selector: 'app-waiter',
     template: `
@@ -12,16 +12,18 @@ import { AuthGuard } from '../../shared/guard/auth.guard';
 })
 export class WaiterComponent implements OnInit {
     private currentUser: any;
-    constructor( private authGuard: AuthGuard ) { }
+    constructor( private authGuard: AuthGuard, public router : Router ) { }
 
     ngOnInit() {
         if( this.authGuard.isLoggedIn() ) {
             this.currentUser = this.authGuard.getCurrentUser();
             if(this.currentUser.userType === 4) {
-                window.location.href = '/department';
+                this.router.navigate(['/department']);
+                // window.location.href = '/department';
             }
         } else {
-            window.location.href = '/';
+            this.router.navigate(['/']);
+            // window.location.href = '/';
         }
     }
 

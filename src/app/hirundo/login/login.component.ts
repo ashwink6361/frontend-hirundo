@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
             console.log('login clicked');
             setTimeout( function(){
                 player.pauseAudio();
-            }, 100);
+            }, 500);
             this.loginSuccessMsg = 'Login success!';
             document.cookie = "token=" + data.token;
             localStorage.setItem('isLoggedin', 'true');

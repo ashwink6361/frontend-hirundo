@@ -84,7 +84,7 @@ var LoginComponent = /** @class */ (function () {
             console.log('login clicked');
             setTimeout(function () {
                 player.pauseAudio();
-            }, 100);
+            }, 500);
             _this.loginSuccessMsg = 'Login success!';
             document.cookie = "token=" + data.token;
             localStorage.setItem('isLoggedin', 'true');
