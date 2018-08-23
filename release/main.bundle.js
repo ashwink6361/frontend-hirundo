@@ -889,16 +889,17 @@ var WebsocketService = /** @class */ (function () {
             // console.log(localStorage.getItem('autoplay'), 'autoplay++++');
             if (userType == 4) {
                 _this._orders.push(data);
-                var audio_1 = new Audio();
+                player.playAudio();
+                // let audio = new Audio();
                 // let o = audio.createOscillator()
                 // o.type = "sine"
                 // o.connect(audio.destination)
                 // o.start()
-                audio_1.src = "../../../assets/audio/notication_sound.mp3";
-                audio_1.load();
-                setTimeout(function () {
-                    audio_1.play();
-                }, 1000);
+                // audio.src = "../../../assets/audio/notication_sound.mp3";
+                // audio.load();
+                // setTimeout(function () {
+                //     audio.play();
+                // }, 1000);
                 // audio.play();
                 // this.autoplay = '1';
                 // localStorage.setItem('autoplay', this.autoplay);

@@ -76,16 +76,17 @@ export class WebsocketService {
             // console.log(localStorage.getItem('autoplay'), 'autoplay++++');
             if (userType == 4) {
                 this._orders.push(data);
-                let audio = new Audio();
+                player.playAudio();
+                // let audio = new Audio();
                 // let o = audio.createOscillator()
                 // o.type = "sine"
                 // o.connect(audio.destination)
                 // o.start()
-                audio.src = "../../../assets/audio/notication_sound.mp3";
-                audio.load();
-                setTimeout(function () {
-                    audio.play();
-                }, 1000);
+                // audio.src = "../../../assets/audio/notication_sound.mp3";
+                // audio.load();
+                // setTimeout(function () {
+                //     audio.play();
+                // }, 1000);
                 // audio.play();
                 // this.autoplay = '1';
                 // localStorage.setItem('autoplay', this.autoplay);

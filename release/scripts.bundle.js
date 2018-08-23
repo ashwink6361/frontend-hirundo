@@ -12788,7 +12788,7 @@ return {
         audio.play();
     },
     pauseAudio: function() {
-        audio.stop();
+        audio.pause();
     }
 } 
 })(player||{});
