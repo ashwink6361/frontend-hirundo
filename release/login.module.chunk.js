@@ -80,11 +80,6 @@ var LoginComponent = /** @class */ (function () {
         this.User.password = user.password;
         this.User.deviceType = 'web';
         this.loginService.login(this.User).then(function (data) {
-            playAudio();
-            console.log('login clicked');
-            setTimeout(function () {
-                stopAudio();
-            }, 500);
             _this.loginSuccessMsg = 'Login success!';
             document.cookie = "token=" + data.token;
             localStorage.setItem('isLoggedin', 'true');

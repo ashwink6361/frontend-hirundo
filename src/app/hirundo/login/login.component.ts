@@ -45,12 +45,7 @@ export class LoginComponent implements OnInit {
         this.User.userName = user.email;
         this.User.password = user.password;
         this.User.deviceType = 'web';
-        this.loginService.login(this.User).then(data => {
-            playAudio();
-            console.log('login clicked');
-            setTimeout( function(){
-                stopAudio();
-            }, 500);
+        this.loginService.login(this.User).then(data => {            
             this.loginSuccessMsg = 'Login success!';
             document.cookie = "token=" + data.token;
             localStorage.setItem('isLoggedin', 'true');

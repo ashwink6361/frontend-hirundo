@@ -3,7 +3,7 @@ webpackJsonp(["home.module"],{
 /***/ "../../../../../src/app/hirundo/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section class=\"banner-container\">\r\n  <div class=\"container text-center\">\r\n    <h1>Make reservations the easy way</h1>\r\n    <p>Find the best deals, discounts and offers</p>\r\n    <a routerLink=\"/login\" class=\"btn\">Make Reservation</a>\r\n  </div>\r\n</section>"
+module.exports = "<section class=\"banner-container\">\r\n  <div class=\"container text-center\">\r\n    <h1>Make reservations the easy way</h1>\r\n    <p>Find the best deals, discounts and offers</p>\r\n    <a (click)=\"goToLogin()\" class=\"btn\">Make Reservation</a>\r\n  </div>\r\n</section>"
 
 /***/ }),
 
@@ -32,6 +32,7 @@ module.exports = module.exports.toString();
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomeComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -43,8 +44,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 var HomeComponent = /** @class */ (function () {
-    function HomeComponent() {
+    function HomeComponent(router) {
+        this.router = router;
         this.Reservation = false;
         this.myControl = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormControl */]();
         this.options = [
@@ -66,6 +69,14 @@ var HomeComponent = /** @class */ (function () {
             return option.toLowerCase().indexOf(val.toLowerCase()) === 0;
         });
     };
+    HomeComponent.prototype.goToLogin = function () {
+        this.router.navigate(['/login']);
+        playAudio();
+        console.log('login clicked');
+        setTimeout(function () {
+            stopAudio();
+        }, 500);
+    };
     HomeComponent.prototype.showResrvation = function () {
         this.Reservation = true;
     };
@@ -78,9 +89,10 @@ var HomeComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/hirundo/home/home.component.html"),
             styles: [__webpack_require__("../../../../../src/app/hirundo/home/home.component.scss")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */]) === "function" && _a || Object])
     ], HomeComponent);
     return HomeComponent;
+    var _a;
 }());
 
 //# sourceMappingURL=home.component.js.map
