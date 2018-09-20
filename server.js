@@ -7,7 +7,7 @@ var express = require('express'),
     request = require('request'),
     _ = require('underscore-node'),
     cons = require('consolidate'),
-    multer  = require('multer'),
+    multer = require('multer'),
     Config = require('./config/config'),
     root = fs.realpathSync('.'),
     app = express();
@@ -27,7 +27,9 @@ app.all('*', function (req, res, next) {
     next();
 });
 
-app.use(multer({ dest: './uploads/'}).any());
+app.use(multer({
+    dest: './uploads/'
+}).any());
 //rendering engine
 app.set('views', './');
 app.engine('html', cons.underscore);
@@ -38,10 +40,10 @@ app.set('socketUrl', Config.socketUrl);
 //intercepting API requests
 app.use('/api/*', function (req, res, next) {
     var token = req.cookies.token;
-    var headers = {        
+    var headers = {
         Authorization: 'Bearer ' + token,
         // privatekey: app.set('secretKey')    
-    }; 
+    };
     var urlArr = req.originalUrl.split('/');
     urlArr.splice(0, 2);
     var path = urlArr.join('/');
@@ -56,6 +58,9 @@ app.use('/api/*', function (req, res, next) {
                 json: req.body,
                 headers: headers
             }, function (error, httpResponse, body) {
+                if (httpResponse.statusCode == 401) {
+                    logout()
+                }
                 if (!error) {
                     res.status(httpResponse.statusCode).send(body);
                 }
@@ -65,13 +70,16 @@ app.use('/api/*', function (req, res, next) {
             var fileObj = _.pairs(req.files);
             for (var i = 0; i < fileObj.length; i++) {
                 formData[fileObj[i][1].fieldname] = fs.createReadStream(__dirname + '/uploads/' + fileObj[i][1].filename);
-                fs.unlink(__dirname + '/uploads/' + fileObj[i][1].filename, function(error) {});
+                fs.unlink(__dirname + '/uploads/' + fileObj[i][1].filename, function (error) {});
             }
             request.post({
                 url: uri,
                 formData: formData,
                 headers: headers
             }, function (error, httpResponse, body) {
+                if (httpResponse.statusCode == 401) {
+                    logout()
+                }
                 if (!error) {
                     res.status(httpResponse.statusCode).send(body);
                 }
@@ -86,6 +94,9 @@ app.use('/api/*', function (req, res, next) {
                 json: req.body,
                 headers: headers
             }, function (error, httpResponse, body) {
+                if (httpResponse.statusCode == 401) {
+                    logout()
+                }
                 if (!error) {
                     res.status(httpResponse.statusCode).send(body);
                 }
@@ -101,6 +112,9 @@ app.use('/api/*', function (req, res, next) {
                 formData: formData,
                 headers: headers
             }, function (error, httpResponse, body) {
+                if (httpResponse.statusCode == 401) {
+                    logout()
+                }
                 if (!error) {
                     res.status(httpResponse.statusCode).send(body);
                 }
@@ -114,6 +128,9 @@ app.use('/api/*', function (req, res, next) {
             url: uri,
             headers: headers
         }, function (error, httpResponse, body) {
+            if (httpResponse.statusCode == 401) {
+                logout()
+            }
             if (!error) {
                 var resStatus = (httpResponse && httpResponse.statusCode) ? httpResponse.statusCode : 200;
                 res.status(resStatus).send(body);
@@ -132,6 +149,9 @@ app.use('/api/*', function (req, res, next) {
             url: uri,
             headers: headers
         }, function (error, httpResponse, body) {
+            if (httpResponse.statusCode == 401) {
+                logout()
+            }
             if (!error) {
                 res.status(httpResponse.statusCode).send(body);
             }
@@ -139,12 +159,14 @@ app.use('/api/*', function (req, res, next) {
     }
 });
 
-app.get('/server/env', function(req, res) {
-    res.send({socketUrl: app.get('socketUrl')});
+app.get('/server/env', function (req, res) {
+    res.send({
+        socketUrl: app.get('socketUrl')
+    });
 });
 
 app.post('/login', function (req, res, next) {
-    var url = app.get('apiUrl')+'login';
+    var url = app.get('apiUrl') + 'login';
     var body = req.body;
     var headers = {
         "accept-language": req.headers['accept-language'],
@@ -161,13 +183,21 @@ app.post('/login', function (req, res, next) {
     });
 });
 
+function logout() {
+    localStorage.removeItem('isLoggedin');
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('token');
+    document.cookie = "token=" + '';
+    window.location.href = '/';
+  }
+
 // User Account Varify
 
 app.get('/user/account/verify', function (req, res) {
-    var uri = app.get('apiUrl') + 'user/account/verify?userId=' + req.query.userId + '&email=' + req.query.email + '&token=' + req.query.token;    
-    var headers = {        
+    var uri = app.get('apiUrl') + 'user/account/verify?userId=' + req.query.userId + '&email=' + req.query.email + '&token=' + req.query.token;
+    var headers = {
         "accept-language": req.headers['accept-language'],
-        "content-type": "application/json"    
+        "content-type": "application/json"
     };
     request.get({
         url: uri,
@@ -177,7 +207,7 @@ app.get('/user/account/verify', function (req, res) {
         if (result.statusCode == 200) {
             res.send("<p style='text-align: center; color: #fff; background-color: green; padding: 20px; font-size: 18px;'>" + result.message + " on your app</p>");
         } else {
-            res.send("<p style='text-align: center; color: #fff; background-color: red; padding: 20px; font-size: 18px;'>" + result.message + " </p>");    
+            res.send("<p style='text-align: center; color: #fff; background-color: red; padding: 20px; font-size: 18px;'>" + result.message + " </p>");
         }
     });
 });
@@ -185,10 +215,10 @@ app.get('/user/account/verify', function (req, res) {
 // Waiter Account Varify
 
 app.get('/waiter/account/verify', function (req, res) {
-    var uri = app.get('apiUrl') + 'user/account/verify?userId=' + req.query.userId + '&email=' + req.query.email + '&token=' + req.query.token;    
-    var headers = {        
+    var uri = app.get('apiUrl') + 'user/account/verify?userId=' + req.query.userId + '&email=' + req.query.email + '&token=' + req.query.token;
+    var headers = {
         "accept-language": req.headers['accept-language'],
-        "content-type": "application/json"    
+        "content-type": "application/json"
     };
     request.get({
         url: uri,
@@ -198,7 +228,7 @@ app.get('/waiter/account/verify', function (req, res) {
         if (result.statusCode == 200) {
             res.send("<p style='text-align: center; color: #fff; background-color: green; padding: 20px; font-size: 18px;'>" + result.message + " on your app</p>");
         } else {
-            res.send("<p style='text-align: center; color: #fff; background-color: red; padding: 20px; font-size: 18px;'>" + result.message + " </p>");    
+            res.send("<p style='text-align: center; color: #fff; background-color: red; padding: 20px; font-size: 18px;'>" + result.message + " </p>");
         }
     });
 });
@@ -206,10 +236,10 @@ app.get('/waiter/account/verify', function (req, res) {
 // Department Account Varify
 
 app.get('/department/account/verify', function (req, res) {
-    var uri = app.get('apiUrl') + 'user/account/verify?userId=' + req.query.userId + '&email=' + req.query.email + '&token=' + req.query.token;    
-    var headers = {        
+    var uri = app.get('apiUrl') + 'user/account/verify?userId=' + req.query.userId + '&email=' + req.query.email + '&token=' + req.query.token;
+    var headers = {
         "accept-language": req.headers['accept-language'],
-        "content-type": "application/json"    
+        "content-type": "application/json"
     };
     request.get({
         url: uri,
@@ -219,7 +249,7 @@ app.get('/department/account/verify', function (req, res) {
         if (result.statusCode == 200) {
             res.send("<p style='text-align: center; color: #fff; background-color: green; padding: 20px; font-size: 18px;'>" + result.message + " on your app</p>");
         } else {
-            res.send("<p style='text-align: center; color: #fff; background-color: red; padding: 20px; font-size: 18px;'>" + result.message + " </p>");    
+            res.send("<p style='text-align: center; color: #fff; background-color: red; padding: 20px; font-size: 18px;'>" + result.message + " </p>");
         }
     });
 });
