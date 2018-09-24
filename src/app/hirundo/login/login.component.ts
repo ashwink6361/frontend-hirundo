@@ -27,8 +27,6 @@ export class LoginComponent implements OnInit {
         private globalService: GlobalService,
         private loginService: LoginService,
     ) { 
-        console.log("Login player called");
-       
     }
 
     ngOnInit() {

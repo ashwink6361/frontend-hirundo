@@ -25,11 +25,15 @@ export class AuthGuard implements CanActivate {
     }
 
     public getCurrentUser(): any {
-        return JSON.parse(localStorage.getItem('currentUser'));
+        if(localStorage.getItem('currentUser')){
+            return JSON.parse(localStorage.getItem('currentUser'));
+        }
     }
 
     public getCurrentUserId(): number {
+        if(localStorage.getItem('currentUser')){
         let user = JSON.parse(localStorage.getItem('currentUser'));
         return user._id;
+        }
     }
 }

@@ -46,6 +46,13 @@ export class GlobalService {
 
     public extractData(res: Response) {
         let body = res.json();
+        if(body.statusCode == 401){
+            localStorage.removeItem('isLoggedin');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('token');
+            document.cookie = "token=" + '';
+            window.location.href = '/';     
+        }
         if (body.hasOwnProperty('error')) {
             if (body.error.message === 'Token is required') {
                 localStorage.removeItem('isLoggedin');
@@ -61,8 +68,16 @@ export class GlobalService {
     }
 
     public handleErrorPromise(error: Response | any) {
+        console.log(error);
         let body = error.json();
-        if (error.status === 400 || error.status === 401 || error.status === 403) {
+        if( error.status === 401){
+            localStorage.removeItem('isLoggedin');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('token');
+            document.cookie = "token=" + '';
+            window.location.href = '/';
+        }
+        else if (error.status === 400 || error.status === 403) {
             return Promise.reject(body.error || error);
         } else {
             localStorage.removeItem('isLoggedin');
@@ -87,4 +102,12 @@ export class GlobalService {
         let data = localStorage.getItem('tabData');
         return JSON.parse(data);
     }
+
+    private logout() {
+        localStorage.removeItem('isLoggedin');
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
+        document.cookie = "token=" + '';
+        window.location.href = '/';
+      }
 }
