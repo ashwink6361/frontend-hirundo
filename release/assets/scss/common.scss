@@ -22,6 +22,7 @@ body {
 .pointer-none {
     pointer-events: none;
     cursor: not-allowed;
+    opacity: 0.5;
 }
 
 .text-line {
@@ -34,6 +35,13 @@ body {
     border-radius: 50%;
     height: 30px;
     background-color: $primary;
+}
+table>tbody>tr>td>table{
+    margin-bottom: 0 !important;
+}
+table>tbody>tr>td>table>tbody>tr>td{
+    padding: 0 !important;
+    border-top: 0 !important;
 }
 
 .bg-red {

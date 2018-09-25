@@ -164,17 +164,25 @@
             <table class="table">
                 <tbody>
                     <tr *ngFor="let varient of variantList">
-                        <td>{{varient.name}}</td>
-                        <td>&euro;{{varient.price}}</td>
-                        <td>
-                            <button type="button" class="add-varient-btn" [class.variant-remove]="varient.status == 0" id="decrease" value="Decrease Value"
-                                (click)="addRemoveVariant(varient,0)">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <button type="button" class="add-varient-btn" [class.variant-added]="varient.status == 1" id="increase" value="Increase Value"
-                                (click)="addRemoveVariant(varient,1)">
-                                <i class="fas fa-plus"></i>
-                            </button>
+                        <td *ngIf="!varient.category.length || (varient.category.length && varient.category.indexOf(orderService.getOrderData().selectedCategory._id)>-1)">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td style="width:75%;">{{varient.name}}</td>
+                                        <td>&euro;{{varient.price}}</td>
+                                        <td>
+                                            <button type="button" class="add-varient-btn" [class.variant-remove]="varient.status == 0" id="decrease" value="Decrease Value"
+                                                (click)="addRemoveVariant(varient,0)">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <button type="button" class="add-varient-btn" [class.variant-added]="varient.status == 1" id="increase" value="Increase Value"
+                                                (click)="addRemoveVariant(varient,1)">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </td>
                     </tr>
                 </tbody>
@@ -184,9 +192,17 @@
             <table class="table">
                 <tbody>
                     <tr *ngFor="let note of noteList; let i = index">
-                        <td>{{note.notes}}</td>
-                        <td>
-                            <input type="checkbox" (change)="addNote($event, note.notes, i)" />
+                        <td *ngIf="!note.category.length || (note.category.length && note.category.indexOf(orderService.getOrderData().selectedCategory._id)>-1)">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>{{note.notes}}</td>
+                                        <td>
+                                            <input type="checkbox" (change)="addNote($event, note.notes, i)" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </td>
                     </tr>
                 </tbody>
@@ -235,39 +251,55 @@
         <div class="tabs-btn">
             <button type="button" (click)="tabActive(1)" [class.active]="activeTab[0]">Varients</button>
             <button type="button" (click)="tabActive(2)" [class.active]="activeTab[1]">Notes</button>
-        </div>
-        <div class="varient-list" *ngIf="activeTab[0]">
-            <table class="table">
-                <tbody>
-                    <tr *ngFor="let varient of variantList">
-                        <td>{{varient.name}}</td>
-                        <td>&euro;{{varient.price}}</td>
-                        <td>
-                            <button type="button" class="add-varient-btn" [class.variant-remove]="varient.status == 0" id="decrease" value="Decrease Value"
-                                (click)="addRemoveArticleVariant(varient,0)">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <button type="button" class="add-varient-btn" [class.variant-added]="varient.status == 1" id="increase" value="Increase Value"
-                                (click)="addRemoveArticleVariant(varient,1)">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="varient-list" *ngIf="activeTab[1]">
-            <table class="table">
-                <tbody>
-                    <tr *ngFor="let note of noteList; let i = index">
-                        <td>{{note.notes}}</td>
-                        <td>
-                            <input type="checkbox" (change)="addArticleNote($event, note.notes, i)" />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            </div>
+            <div class="varient-list" *ngIf="activeTab[0]">
+                <table class="table">
+                    <tbody>
+                        <tr *ngFor="let varient of variantList">
+                            <td *ngIf="!varient.category.length || (varient.category.length && varient.category.indexOf(orderService.getOrderData().selectedCategory._id)>-1)">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width:75%;">{{varient.name}}</td>
+                                            <td>&euro;{{varient.price}}</td>
+                                            <td>
+                                                <button type="button" class="add-varient-btn" [class.variant-remove]="varient.status == 0" id="decrease" value="Decrease Value"
+                                                    (click)="addRemoveArticleVariant(varient,0)">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                                <button type="button" class="add-varient-btn" [class.variant-added]="varient.status == 1" id="increase" value="Increase Value"
+                                                    (click)="addRemoveArticleVariant(varient,1)">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="varient-list" *ngIf="activeTab[1]">
+                <table class="table">
+                    <tbody>
+                        <tr *ngFor="let note of noteList; let i = index">
+                            <td *ngIf="!note.category.length || (note.category.length && note.category.indexOf(orderService.getOrderData().selectedCategory._id)>-1)">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td>{{note.notes}}</td>
+                                            <td>
+                                                <input type="checkbox" (change)="addArticleNote($event, note.notes, i)" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         <!-- <div class="md-form">
             <div class="d-flex-category">
                 <div class="d-flex allergens-icon">
