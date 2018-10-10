@@ -120,6 +120,7 @@ export class WebsocketService {
             let userType = this.authGuard.getCurrentUser().userType;
             if (data.restro == this.authGuard.getCurrentUser().restro) {
                 if (userType == 3) {
+                    playAudio();
                     for (var i = 0; i < this._orders.length; i++) {
                         if (data._id == this._orders[i]._id) {
                             this._orders[i] = _.cloneDeep(data);
