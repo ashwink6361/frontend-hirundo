@@ -30,7 +30,7 @@ export class ItemComponent implements OnInit {
   public selectedSubcategory: boolean[] = [false];
   public showAllergenIcon: boolean = false;
   public variantData = {
-    quantity: 0,
+    quantity: 1,
     variant: [],
     notes: ''
   }
@@ -42,7 +42,7 @@ export class ItemComponent implements OnInit {
     price: '',
     category: '',
     subCategory: '',
-    quantity: 0,
+    quantity: 1,
     variant: [],
     notes: '',
     isDeleted: true
@@ -249,7 +249,7 @@ export class ItemComponent implements OnInit {
   hideVarient() {
     this.showVarient = false;
     this.variantData = {
-      quantity: 0,
+      quantity: 1,
       variant: [],
       notes: ''
     };
@@ -283,7 +283,7 @@ export class ItemComponent implements OnInit {
       price: '',
       category: '',
       subCategory: '',
-      quantity: 0,
+      quantity: 1,
       variant: [],
       notes: '',
       isDeleted: true
@@ -300,7 +300,7 @@ export class ItemComponent implements OnInit {
       price: '',
       category: '',
       subCategory: '',
-      quantity: 0,
+      quantity: 1,
       variant: [],
       notes: '',
       isDeleted: true
@@ -329,15 +329,15 @@ export class ItemComponent implements OnInit {
 
   decreaseQty() {
     let value = this.variantData.quantity;
-    value = isNaN(value) ? 0 : value;
-    value < 1 ? value = 1 : '';
+    value = isNaN(value) ? 2 : value;
+    value < 2 ? value = 2 : '';
     value--;
     this.variantData.quantity = value;
   }
 
   increaseQty() {
     let value = this.variantData.quantity;
-    value = isNaN(value) ? 0 : value;
+    value = isNaN(value) ? 1 : value;
     value++;
     this.variantData.quantity = value;
   }
@@ -574,15 +574,15 @@ export class ItemComponent implements OnInit {
 
   decreaseArticleQty() {
     let value = this.AddDataArticle.quantity;
-    value = isNaN(value) ? 0 : value;
-    value < 1 ? value = 1 : '';
+    value = isNaN(value) ? 2 : value;
+    value < 2 ? value = 2 : '';
     value--;
     this.AddDataArticle.quantity = value;
   }
 
   increaseArticleQty() {
     let value = this.AddDataArticle.quantity;
-    value = isNaN(value) ? 0 : value;
+    value = isNaN(value) ? 1 : value;
     value++;
     this.AddDataArticle.quantity = value;
   }

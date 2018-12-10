@@ -1138,6 +1138,7 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('checkouttable', function (data) {
+            console.log('checkouttable', data);
             var userType = _this.authGuard.getCurrentUser().userType;
             if (data.restro == _this.authGuard.getCurrentUser().restro) {
                 if (userType == 3) {

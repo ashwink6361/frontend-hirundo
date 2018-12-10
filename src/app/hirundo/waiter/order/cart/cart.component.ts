@@ -20,7 +20,7 @@ export class CartComponent implements OnInit {
   public loader:boolean = false;
   public activeTab: boolean[] = [true, false];
   public variantData = {
-    quantity: 0,
+    quantity: 1,
     variant: [],
     notes: ''
   }
@@ -257,15 +257,15 @@ export class CartComponent implements OnInit {
 
   decreaseQty() {
     let value = this.variantData.quantity;
-    value = isNaN(value) ? 0 : value;
-    value < 1 ? value = 1 : '';
+    value = isNaN(value) ? 2 : value;
+    value < 2 ? value = 2 : '';
     value--;
     this.variantData.quantity = value;
   }
 
   increaseQty() {
     let value = this.variantData.quantity;
-    value = isNaN(value) ? 0 : value;
+    value = isNaN(value) ? 1 : value;
     value++;
     this.variantData.quantity = value;
   }

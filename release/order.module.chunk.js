@@ -63,7 +63,7 @@ var CartComponent = /** @class */ (function () {
         this.loader = false;
         this.activeTab = [true, false];
         this.variantData = {
-            quantity: 0,
+            quantity: 1,
             variant: [],
             notes: ''
         };
@@ -293,14 +293,14 @@ var CartComponent = /** @class */ (function () {
     };
     CartComponent.prototype.decreaseQty = function () {
         var value = this.variantData.quantity;
-        value = isNaN(value) ? 0 : value;
-        value < 1 ? value = 1 : '';
+        value = isNaN(value) ? 2 : value;
+        value < 2 ? value = 2 : '';
         value--;
         this.variantData.quantity = value;
     };
     CartComponent.prototype.increaseQty = function () {
         var value = this.variantData.quantity;
-        value = isNaN(value) ? 0 : value;
+        value = isNaN(value) ? 1 : value;
         value++;
         this.variantData.quantity = value;
     };
@@ -842,7 +842,7 @@ var ItemComponent = /** @class */ (function () {
         this.selectedSubcategory = [false];
         this.showAllergenIcon = false;
         this.variantData = {
-            quantity: 0,
+            quantity: 1,
             variant: [],
             notes: ''
         };
@@ -853,7 +853,7 @@ var ItemComponent = /** @class */ (function () {
             price: '',
             category: '',
             subCategory: '',
-            quantity: 0,
+            quantity: 1,
             variant: [],
             notes: '',
             isDeleted: true
@@ -1054,7 +1054,7 @@ var ItemComponent = /** @class */ (function () {
     ItemComponent.prototype.hideVarient = function () {
         this.showVarient = false;
         this.variantData = {
-            quantity: 0,
+            quantity: 1,
             variant: [],
             notes: ''
         };
@@ -1087,7 +1087,7 @@ var ItemComponent = /** @class */ (function () {
             price: '',
             category: '',
             subCategory: '',
-            quantity: 0,
+            quantity: 1,
             variant: [],
             notes: '',
             isDeleted: true
@@ -1103,7 +1103,7 @@ var ItemComponent = /** @class */ (function () {
             price: '',
             category: '',
             subCategory: '',
-            quantity: 0,
+            quantity: 1,
             variant: [],
             notes: '',
             isDeleted: true
@@ -1130,14 +1130,14 @@ var ItemComponent = /** @class */ (function () {
     };
     ItemComponent.prototype.decreaseQty = function () {
         var value = this.variantData.quantity;
-        value = isNaN(value) ? 0 : value;
-        value < 1 ? value = 1 : '';
+        value = isNaN(value) ? 2 : value;
+        value < 2 ? value = 2 : '';
         value--;
         this.variantData.quantity = value;
     };
     ItemComponent.prototype.increaseQty = function () {
         var value = this.variantData.quantity;
-        value = isNaN(value) ? 0 : value;
+        value = isNaN(value) ? 1 : value;
         value++;
         this.variantData.quantity = value;
     };
@@ -1370,14 +1370,14 @@ var ItemComponent = /** @class */ (function () {
     ;
     ItemComponent.prototype.decreaseArticleQty = function () {
         var value = this.AddDataArticle.quantity;
-        value = isNaN(value) ? 0 : value;
-        value < 1 ? value = 1 : '';
+        value = isNaN(value) ? 2 : value;
+        value < 2 ? value = 2 : '';
         value--;
         this.AddDataArticle.quantity = value;
     };
     ItemComponent.prototype.increaseArticleQty = function () {
         var value = this.AddDataArticle.quantity;
-        value = isNaN(value) ? 0 : value;
+        value = isNaN(value) ? 1 : value;
         value++;
         this.AddDataArticle.quantity = value;
     };

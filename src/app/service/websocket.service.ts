@@ -268,6 +268,7 @@ export class WebsocketService {
             }
         });
         this.socket.on('checkouttable', (data) => {
+            console.log('checkouttable',data);
             let userType = this.authGuard.getCurrentUser().userType;
             if (data.restro == this.authGuard.getCurrentUser().restro) {
                 if (userType == 3) {
