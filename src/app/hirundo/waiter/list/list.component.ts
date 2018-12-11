@@ -41,7 +41,6 @@ export class ListComponent implements DoCheck {
                     }
                     this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered; 
                     this.showToCall[this.orders[i]._id] = call;  
-                    console.log('this.itemStatusDelivered',this.itemStatusDelivered);
                     if(this.orders[i].step.length>2){
                         for (let m = 0; m < this.orders[i].step.length; m++) {
                             if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
@@ -167,7 +166,6 @@ export class ListComponent implements DoCheck {
                         if(this.orders[i].step.length>2){
                             for (let m = 0; m < this.orders[i].step.length; m++) {
                                 if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
-                                    console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]',this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]);
                                     if(this.orders[i].step[m].step != 'Uscita 1'){
                                         let temparray = this.orders[i].step[m].step.split(' ');
                                         let num = Number(temparray[1]);

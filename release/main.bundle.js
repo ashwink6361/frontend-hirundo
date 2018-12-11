@@ -314,7 +314,6 @@ var DepartmentProfileService = /** @class */ (function () {
     };
     DepartmentProfileService.prototype.extractData = function (res) {
         var body = res.json();
-        console.log('body', body);
         if (body.statusCode == 401) {
             localStorage.removeItem('isLoggedin');
             localStorage.removeItem('currentUser');
@@ -339,7 +338,6 @@ var DepartmentProfileService = /** @class */ (function () {
         }
     };
     DepartmentProfileService.prototype.handleErrorPromise = function (error) {
-        console.log('error', error);
         var body = error.json();
         if (error.status === 401) {
             localStorage.removeItem('isLoggedin');
@@ -1198,7 +1196,6 @@ var WebsocketService = /** @class */ (function () {
     ;
     WebsocketService.prototype.getOrders = function (tab) {
         var _this = this;
-        console.log('getOrders tab', tab);
         var url = '/api/department/orders';
         var opts = {
             category: this.authGuard.getCurrentUser().category,

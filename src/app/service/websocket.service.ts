@@ -330,7 +330,6 @@ export class WebsocketService {
 
 
     public getOrders(tab): Promise<any> {
-        console.log('getOrders tab',tab);
         let url = '/api/department/orders';
         let opts = {
             category: this.authGuard.getCurrentUser().category,

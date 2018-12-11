@@ -82,7 +82,6 @@ var ListComponent = /** @class */ (function () {
                     }
                     _this.itemStatusDelivered[_this.orders[i]._id] = itemStatusDelivered;
                     _this.showToCall[_this.orders[i]._id] = call;
-                    console.log('this.itemStatusDelivered', _this.itemStatusDelivered);
                     if (_this.orders[i].step.length > 2) {
                         for (var m = 0; m < _this.orders[i].step.length; m++) {
                             if (!_this.itemStatusDelivered[_this.orders[i]._id][_this.orders[i].step[m].step]) {
@@ -211,7 +210,6 @@ var ListComponent = /** @class */ (function () {
                         if (this.orders[i].step.length > 2) {
                             for (var m = 0; m < this.orders[i].step.length; m++) {
                                 if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
-                                    console.log('this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m]]', this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]);
                                     if (this.orders[i].step[m].step != 'Uscita 1') {
                                         var temparray = this.orders[i].step[m].step.split(' ');
                                         var num = Number(temparray[1]);

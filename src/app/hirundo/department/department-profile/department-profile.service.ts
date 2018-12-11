@@ -52,7 +52,6 @@ export class DepartmentProfileService {
 
   public extractData(res: Response) {
     let body = res.json();
-    console.log('body',body);
     if(body.statusCode == 401){
       localStorage.removeItem('isLoggedin');
       localStorage.removeItem('currentUser');
@@ -76,7 +75,6 @@ export class DepartmentProfileService {
   }
 
   private handleErrorPromise(error: Response | any) {
-    console.log('error',error);
     let body = error.json();
     if (error.status === 401) {
       localStorage.removeItem('isLoggedin');
