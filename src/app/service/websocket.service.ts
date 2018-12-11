@@ -67,13 +67,11 @@ export class WebsocketService {
         });
 
         this.socket.on('neworder', (data) => {
-            console.log(data, 'neworder++++++++++++++++++++++');
             this.socketEvent = true;
             this.orderId = data._id;
             let userType = this.authGuard.getCurrentUser().userType;
             // this.autoplay = '0';
             // localStorage.setItem('autoplay', this.autoplay);
-            // console.log(localStorage.getItem('autoplay'), 'autoplay++++');
             if (userType == 4) {
                 this._orders.push(data);
                 playAudio();
@@ -91,12 +89,10 @@ export class WebsocketService {
                 // audio.play();
                 // this.autoplay = '1';
                 // localStorage.setItem('autoplay', this.autoplay);
-                // console.log(localStorage.getItem('autoplay'), 'autoplay-----');
 
 
                 // var x = (document.createElement('audio').canPlayType);
                 // var myAudio = document.createElement('audio');
-                // console.log(myAudio, 'myAudio');
                 // if (myAudio.canPlayType("audio/mpeg")) {
                 //     myAudio.setAttribute("src", "../../../assets/audio/notication_sound.mp3");
                 // } else {
@@ -112,7 +108,6 @@ export class WebsocketService {
             // setTimeout(function () {
             //     this.autoplay = '0';
             //     localStorage.setItem('autoplay', this.autoplay);
-            //     console.log(localStorage.getItem('autoplay'), 'autoplay');
             // }, 10000);
 
         });
@@ -158,13 +153,10 @@ export class WebsocketService {
         });
 
         this.socket.on('orderUpdateDept', (data) => {
-            console.log('data',data);
             this.socketEvent = true;
             this.orderId = data._id;
             for (var i = 0; i < this._orders.length; i++) {
                 if (data._id == this._orders[i]._id) {
-                    console.log('this._orders-----------',this._orders);
-                    
                     this._orders[i] = _.cloneDeep(data);
                     let itemsToSplice = [];
                     if (data.item.length) {
@@ -174,8 +166,6 @@ export class WebsocketService {
                     }
                     if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(this.isBelowThreshold)) {
                         this._orders.splice(i, 1);
-                        console.log('this._orders',this._orders);
-                        
                     }
                 }
             }
@@ -201,10 +191,15 @@ export class WebsocketService {
             this.socketEvent = true;
             this.orderId = data._id;
             let autoplay = false;
-            for (var i = 0; i < this._orders.length; i++) {
-                if (data._id === this._orders[i]._id) {
-                    this._orders[i] = data;
+            if(this._orders.length){
+                for (var i = 0; i < this._orders.length; i++) {
+                    if (data._id.toString() === this._orders[i]._id.toString()) {
+                        this._orders[i] = data;
+                    }
                 }
+            }
+            else{
+                this._orders.push(data);
             }
             // let audio = new Audio();
             // audio.src = "../../../assets/audio/beep.mp3";
@@ -268,7 +263,6 @@ export class WebsocketService {
             }
         });
         this.socket.on('checkouttable', (data) => {
-            console.log('checkouttable',data);
             let userType = this.authGuard.getCurrentUser().userType;
             if (data.restro == this.authGuard.getCurrentUser().restro) {
                 if (userType == 3) {
@@ -326,7 +320,6 @@ export class WebsocketService {
     };
 
     public getAudio(): any {
-        console.log(localStorage.getItem('autoplay'), 'localStorage.getItem ingetaudio')
         return JSON.parse(localStorage.getItem('autoplay'));
     }
 
@@ -337,6 +330,7 @@ export class WebsocketService {
 
 
     public getOrders(tab): Promise<any> {
+        console.log('getOrders tab',tab);
         let url = '/api/department/orders';
         let opts = {
             category: this.authGuard.getCurrentUser().category,

@@ -946,13 +946,11 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('neworder', function (data) {
-            console.log(data, 'neworder++++++++++++++++++++++');
             _this.socketEvent = true;
             _this.orderId = data._id;
             var userType = _this.authGuard.getCurrentUser().userType;
             // this.autoplay = '0';
             // localStorage.setItem('autoplay', this.autoplay);
-            // console.log(localStorage.getItem('autoplay'), 'autoplay++++');
             if (userType == 4) {
                 _this._orders.push(data);
                 playAudio();
@@ -970,10 +968,8 @@ var WebsocketService = /** @class */ (function () {
                 // audio.play();
                 // this.autoplay = '1';
                 // localStorage.setItem('autoplay', this.autoplay);
-                // console.log(localStorage.getItem('autoplay'), 'autoplay-----');
                 // var x = (document.createElement('audio').canPlayType);
                 // var myAudio = document.createElement('audio');
-                // console.log(myAudio, 'myAudio');
                 // if (myAudio.canPlayType("audio/mpeg")) {
                 //     myAudio.setAttribute("src", "../../../assets/audio/notication_sound.mp3");
                 // } else {
@@ -987,7 +983,6 @@ var WebsocketService = /** @class */ (function () {
             // setTimeout(function () {
             //     this.autoplay = '0';
             //     localStorage.setItem('autoplay', this.autoplay);
-            //     console.log(localStorage.getItem('autoplay'), 'autoplay');
             // }, 10000);
         });
         this.socket.on('orderstatus', function (data) {
@@ -1031,12 +1026,10 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('orderUpdateDept', function (data) {
-            console.log('data', data);
             _this.socketEvent = true;
             _this.orderId = data._id;
             for (var i = 0; i < _this._orders.length; i++) {
                 if (data._id == _this._orders[i]._id) {
-                    console.log('this._orders-----------', _this._orders);
                     _this._orders[i] = __WEBPACK_IMPORTED_MODULE_5_lodash__["cloneDeep"](data);
                     var itemsToSplice = [];
                     if (data.item.length) {
@@ -1046,7 +1039,6 @@ var WebsocketService = /** @class */ (function () {
                     }
                     if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(_this.isBelowThreshold)) {
                         _this._orders.splice(i, 1);
-                        console.log('this._orders', _this._orders);
                     }
                 }
             }
@@ -1071,10 +1063,15 @@ var WebsocketService = /** @class */ (function () {
             _this.socketEvent = true;
             _this.orderId = data._id;
             var autoplay = false;
-            for (var i = 0; i < _this._orders.length; i++) {
-                if (data._id === _this._orders[i]._id) {
-                    _this._orders[i] = data;
+            if (_this._orders.length) {
+                for (var i = 0; i < _this._orders.length; i++) {
+                    if (data._id.toString() === _this._orders[i]._id.toString()) {
+                        _this._orders[i] = data;
+                    }
                 }
+            }
+            else {
+                _this._orders.push(data);
             }
             // let audio = new Audio();
             // audio.src = "../../../assets/audio/beep.mp3";
@@ -1138,7 +1135,6 @@ var WebsocketService = /** @class */ (function () {
             }
         });
         this.socket.on('checkouttable', function (data) {
-            console.log('checkouttable', data);
             var userType = _this.authGuard.getCurrentUser().userType;
             if (data.restro == _this.authGuard.getCurrentUser().restro) {
                 if (userType == 3) {
@@ -1194,7 +1190,6 @@ var WebsocketService = /** @class */ (function () {
     };
     ;
     WebsocketService.prototype.getAudio = function () {
-        console.log(localStorage.getItem('autoplay'), 'localStorage.getItem ingetaudio');
         return JSON.parse(localStorage.getItem('autoplay'));
     };
     WebsocketService.prototype.isBelowThreshold = function (currentValue) {
@@ -1203,6 +1198,7 @@ var WebsocketService = /** @class */ (function () {
     ;
     WebsocketService.prototype.getOrders = function (tab) {
         var _this = this;
+        console.log('getOrders tab', tab);
         var url = '/api/department/orders';
         var opts = {
             category: this.authGuard.getCurrentUser().category,
