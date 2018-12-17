@@ -1884,9 +1884,7 @@ var StepsComponent = /** @class */ (function () {
     }
     StepsComponent.prototype.ngOnInit = function () {
         var orderId = JSON.parse(localStorage.getItem('orderId'));
-        console.log("orderId, this.globalService.getTabData", orderId, this.globalService.getTabData());
         if (orderId) {
-            console.log("this.globalService.getTabData", this.globalService.getTabData());
             if (this.globalService.getTabData()) {
                 this.activetab[this.globalService.getTabData().tab] = true;
             }
