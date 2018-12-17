@@ -113,6 +113,11 @@ export class CartComponent implements OnInit {
     this.orderService.createOrder(createorder)
       .then(data => {
         this.loader = false;
+        let stepdata = {
+          tab: 0,
+          step: "Uscita 1"
+        }
+        this.globalService.setTabData(stepdata);
         this.router.navigate(['/waiter/list']);
         this.orderService.showElement = false;
       })

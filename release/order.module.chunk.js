@@ -154,6 +154,11 @@ var CartComponent = /** @class */ (function () {
         this.orderService.createOrder(createorder)
             .then(function (data) {
             _this.loader = false;
+            var stepdata = {
+                tab: 0,
+                step: "Uscita 1"
+            };
+            _this.globalService.setTabData(stepdata);
             _this.router.navigate(['/waiter/list']);
             _this.orderService.showElement = false;
         })

@@ -1,3 +1,5 @@
+<div class="loader text-center" *ngIf="loadingOrders"><img src="assets/images/loader.gif"></div>
+<div *ngIf="!loadingOrders">
 <div class="text-center" *ngIf="!(orders && orders.length)">No Order Found.</div>
 <div *ngIf="orders && orders.length" class="order-list-container">
     <div class="card order-list" *ngFor="let order of orders">
@@ -61,4 +63,5 @@
             </div>
         </div>
     </div>
+</div>
 </div>
