@@ -3,7 +3,7 @@ webpackJsonp(["dashboard.module"],{
 /***/ "../../../../../src/app/hirundo/waiter/dashboard/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"tabs-container\">\n    <ul>\n        <li *ngFor=\"let room of roomData; let i= index\" [class.active]=\"activeRoom[i]\" (click)=\"getTables(room,i)\">\n            {{room.name}}\n        </li>\n      </ul>\n</div>\n<section class=\"room-container\">\n    <div class=\"d-flex flex-wrap \">\n        <div class=\"room\" (click)=\"createOrder(table)\" *ngFor=\"let table of tables\" [ngStyle]=\"table.orderId.length ? {'background-color':'#add278'} : {'background-color':'#c5c8cd'}\">\n            <div class=\"table\">\n                <span>{{table.name}}</span>\n            </div>\n        </div>\n    </div>\n</section>\n"
+module.exports = "<div class=\"loader text-center\" *ngIf=\"loader\"><img src=\"assets/images/loader.gif\"></div>\n<div *ngIf=\"!loader\">\n    <div class=\"tabs-container\">\n        <ul>\n            <li *ngFor=\"let room of roomData; let i= index\" [class.active]=\"activeRoom[i]\" (click)=\"getTables(room,i)\">\n                {{room.name}}\n            </li>\n        </ul>\n    </div>\n    <section class=\"room-container\">\n        <div class=\"d-flex flex-wrap \">\n            <div class=\"room\" (click)=\"createOrder(table)\" *ngFor=\"let table of tables\" [ngStyle]=\"table.orderId.length ? {'background-color':'#add278'} : {'background-color':'#c5c8cd'}\">\n                <div class=\"table\">\n                    <span>{{table.name}}</span>\n                </div>\n            </div>\n        </div>\n    </section>\n</div>\n"
 
 /***/ }),
 
@@ -62,17 +62,21 @@ var DashboardComponent = /** @class */ (function () {
         this.tables = [];
         this.stepArray = [];
         this.activeRoom = [false];
+        this.loader = false;
     }
     DashboardComponent.prototype.ngOnInit = function () {
         var _this = this;
         localStorage.removeItem('orderData');
+        this.loader = true;
         this.websocketService.getRooms().then(function (data) {
             _this.roomData = data;
             _this.activeRoom[0] = true;
             _this.tables = _this.roomData[0].tables;
             localStorage.setItem('roomdata', JSON.stringify(_this.roomData[0]));
+            _this.loader = false;
         })
             .catch(function (error) {
+            _this.loader = false;
         });
     };
     DashboardComponent.prototype.createOrder = function (table) {

@@ -24,7 +24,7 @@
                     </button>
                 </div>
             </div>
-            <div class="category" *ngFor="let category of categoryList | filter : searchText" [ngStyle]="{'background-color': category.color}"
+            <div class="category c-p" *ngFor="let category of categoryList | filter : searchText" [ngStyle]="{'background-color': category.color}"
                 (click)="showItems(category)">
                 <img *ngIf="!category.isIcon" [src]="category.logo.small" alt="" />
                 <img class="icon-img" *ngIf="category.isIcon" [src]="category.icon" alt="" />

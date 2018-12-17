@@ -1,16 +1,19 @@
-<div class="tabs-container">
-    <ul>
-        <li *ngFor="let room of roomData; let i= index" [class.active]="activeRoom[i]" (click)="getTables(room,i)">
-            {{room.name}}
-        </li>
-      </ul>
-</div>
-<section class="room-container">
-    <div class="d-flex flex-wrap ">
-        <div class="room" (click)="createOrder(table)" *ngFor="let table of tables" [ngStyle]="table.orderId.length ? {'background-color':'#add278'} : {'background-color':'#c5c8cd'}">
-            <div class="table">
-                <span>{{table.name}}</span>
+<div class="loader text-center" *ngIf="loader"><img src="assets/images/loader.gif"></div>
+<div *ngIf="!loader">
+    <div class="tabs-container">
+        <ul>
+            <li *ngFor="let room of roomData; let i= index" [class.active]="activeRoom[i]" (click)="getTables(room,i)">
+                {{room.name}}
+            </li>
+        </ul>
+    </div>
+    <section class="room-container">
+        <div class="d-flex flex-wrap ">
+            <div class="room" (click)="createOrder(table)" *ngFor="let table of tables" [ngStyle]="table.orderId.length ? {'background-color':'#add278'} : {'background-color':'#c5c8cd'}">
+                <div class="table">
+                    <span>{{table.name}}</span>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</div>

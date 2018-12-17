@@ -17,17 +17,21 @@ export class DashboardComponent implements OnInit {
   private tables = [];
   public stepArray = [];
   private activeRoom: boolean[] = [false];
+  private loader: boolean = false;  
   constructor(public router: Router, private orderService: OrderService, private globalService: GlobalService, private dashboardService: DashboardService, public websocketService: WebsocketService) { }
 
   ngOnInit() {
     localStorage.removeItem('orderData');
+    this.loader = true;
     this.websocketService.getRooms().then(data => {
       this.roomData = data;
       this.activeRoom[0] = true;
       this.tables = this.roomData[0].tables;
       localStorage.setItem('roomdata', JSON.stringify(this.roomData[0]));
+      this.loader = false;      
     })
       .catch(error => {
+      this.loader = false;              
       });
   }
 
