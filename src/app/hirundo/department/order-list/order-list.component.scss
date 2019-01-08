@@ -17,4 +17,10 @@
     margin-right: 20px;
     width: 100%;    
     min-width: 320px;
+    .card-body{
+        padding-bottom: 0  !important;
+        .step-listing {
+            background-color: #fff  !important;
+        }
+    }
 }

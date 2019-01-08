@@ -3,7 +3,7 @@ webpackJsonp(["home.module"],{
 /***/ "../../../../../src/app/hirundo/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section class=\"banner-container\">\n  <div class=\"container text-center\">\n    <h1>The New way to Order</h1>\n    <p>Start ordering with Hirundo</p>\n    <a (click)=\"goToLogin()\" class=\"btn\">LOG IN</a>\n  </div>\n</section>"
+module.exports = "<section class=\"banner-container\">\r\n  <div class=\"container text-center\">\r\n    <h1>The New way to Order</h1>\r\n    <p>Start ordering with Hirundo</p>\r\n    <a (click)=\"goToLogin()\" class=\"btn\">LOG IN</a>\r\n  </div>\r\n</section>"
 
 /***/ }),
 
