@@ -15,7 +15,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".tabs-container {\n  position: fixed;\n  top: 50px;\n  width: 100%; }\n\n.order-list-container {\n  margin-top: 50px; }\n  .order-list-container .row {\n    -ms-flex-wrap: nowrap !important;\n        flex-wrap: nowrap !important;\n    margin: 0; }\n\n.order-card {\n  max-width: 327px;\n  margin-right: 10px;\n  width: 100%;\n  min-width: 320px; }\n  .order-card .card-body {\n    padding-bottom: 0  !important; }\n    .order-card .card-body .step-listing {\n      background-color: #fff  !important; }\n", ""]);
+exports.push([module.i, ".tabs-container {\n  position: fixed;\n  top: 50px;\n  width: 100%; }\n\n.order-list-container {\n  margin-top: 50px;\n  overflow-y: auto;\n  height: calc(100vh - 103px); }\n  .order-list-container .row {\n    -ms-flex-wrap: nowrap !important;\n        flex-wrap: nowrap !important;\n    margin: 0; }\n\n.order-card {\n  max-width: 327px;\n  margin-right: 10px;\n  width: 100%;\n  min-width: 320px; }\n  .order-card .card-body {\n    padding-bottom: 0  !important; }\n    .order-card .card-body .step-listing {\n      background-color: #fff  !important; }\n", ""]);
 
 // exports
 

@@ -6,6 +6,8 @@
 
 .order-list-container{
     margin-top: 50px;
+    overflow-y: auto;
+    height: calc(100vh - 103px);
     .row{
         flex-wrap: nowrap !important;
         margin: 0;
