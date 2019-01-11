@@ -92,7 +92,7 @@ var LoginComponent = /** @class */ (function () {
                     // window.location.href = '/waiter';
                 }
                 else {
-                    localStorage.setItem('bgGrey', 'true');
+                    document.body.style.backgroundColor = '#e9ecef';
                     _this.router.navigate(['/department']);
                     // window.location.href = '/department';
                 }
