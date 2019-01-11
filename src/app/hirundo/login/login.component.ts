@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
     loginError: boolean = false;
     loginErrorMsg: string = '';
     loginSuccessMsg: string = '';
+    public bgGrey: boolean = false;
     requestRunning: boolean = false;
     constructor(
 
@@ -55,6 +56,7 @@ export class LoginComponent implements OnInit {
                     this.router.navigate(['/waiter']);
                     // window.location.href = '/waiter';
                 } else {
+                    localStorage.setItem('bgGrey', 'true')
                     this.router.navigate(['/department']);
                     // window.location.href = '/department';
                 }

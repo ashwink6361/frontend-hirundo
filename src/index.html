@@ -20,46 +20,47 @@
     <!-- <a onclick="playnow()">allow play</a> -->
     <div id="jquery_jplayer"></div>
     <script>
-            var	my_jPlayer = $("#jquery_jplayer");
-            my_jPlayer.jPlayer({
-                ready: function () {
-                    //$("#jp_container .track-default").click();
-                },
-                timeupdate: function (event) {
-                    //my_extraPlayInfo.text(parseInt(event.jPlayer.status.currentPercentAbsolute, 10) + "%");
-                },
-                play: function (event) {
-                    //my_playState.text(opt_text_playing);
-                },
-                pause: function (event) {
-                    //my_playState.text(opt_text_selected);
-                },
-                ended: function (event) {
-                    //my_playState.text(opt_text_selected);
-                },
-                swfPath: "./assets/js/jplayer",
-                //cssSelectorAncestor: "#jp_container",
-                supplied: "mp3",
-                wmode: "window"
-            });
-            my_jPlayer.jPlayer("setMedia", {
-                mp3: './assets/audio/notication_sound.mp3'
-            });
-            // my_jPlayer.jPlayer("play");
-            window.playAudio = function(){
-                my_jPlayer.jPlayer("play");
-            };
-            window.stopAudio = function(){
+        var my_jPlayer = $("#jquery_jplayer");
+        my_jPlayer.jPlayer({
+            ready: function () {
+                //$("#jp_container .track-default").click();
+            },
+            timeupdate: function (event) {
+                //my_extraPlayInfo.text(parseInt(event.jPlayer.status.currentPercentAbsolute, 10) + "%");
+            },
+            play: function (event) {
+                //my_playState.text(opt_text_playing);
+            },
+            pause: function (event) {
+                //my_playState.text(opt_text_selected);
+            },
+            ended: function (event) {
+                //my_playState.text(opt_text_selected);
+            },
+            swfPath: "./assets/js/jplayer",
+            //cssSelectorAncestor: "#jp_container",
+            supplied: "mp3",
+            wmode: "window"
+        });
+        my_jPlayer.jPlayer("setMedia", {
+            mp3: './assets/audio/notication_sound.mp3'
+        });
+        // my_jPlayer.jPlayer("play");
+        window.playAudio = function () {
+            my_jPlayer.jPlayer("play");
+        };
+        window.stopAudio = function () {
+            my_jPlayer.jPlayer("pause");
+        };
+
+        function playnow() {
+            my_jPlayer.jPlayer("play");
+            setTimeout(function () {
                 my_jPlayer.jPlayer("pause");
-            };
-            
-            function playnow(){
-                my_jPlayer.jPlayer("play");
-                setTimeout( function(){
-                    my_jPlayer.jPlayer("pause");
-                }, 200);
-            }
-        </script>
+            }, 200);
+        }
+
+    </script>
     <app-root>
         <div id="preloader">
             <div></div>
@@ -77,6 +78,10 @@
     gtag('js', new Date());
     gtag('config', 'UA-81010143-7');
 
+</script>
+
+<script>
+   localStorage.getItem('bgGrey')? document.body.style.backgroundColor = '#e9ecef' : document.body.style.backgroundColor = '#fff';
 </script>
 
 

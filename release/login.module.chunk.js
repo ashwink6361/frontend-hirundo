@@ -61,6 +61,7 @@ var LoginComponent = /** @class */ (function () {
         this.loginError = false;
         this.loginErrorMsg = '';
         this.loginSuccessMsg = '';
+        this.bgGrey = false;
         this.requestRunning = false;
     }
     LoginComponent.prototype.ngOnInit = function () {
@@ -91,6 +92,7 @@ var LoginComponent = /** @class */ (function () {
                     // window.location.href = '/waiter';
                 }
                 else {
+                    localStorage.setItem('bgGrey', 'true');
                     _this.router.navigate(['/department']);
                     // window.location.href = '/department';
                 }
