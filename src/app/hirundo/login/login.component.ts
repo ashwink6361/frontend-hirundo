@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
                     this.router.navigate(['/waiter']);
                     // window.location.href = '/waiter';
                 } else {
-                    localStorage.setItem('bgGrey', 'true')
+                    document.body.style.backgroundColor = '#e9ecef';
                     this.router.navigate(['/department']);
                     // window.location.href = '/department';
                 }
