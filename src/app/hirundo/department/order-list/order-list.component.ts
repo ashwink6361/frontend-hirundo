@@ -461,6 +461,9 @@ export class OrderListComponent implements DoCheck {
         });
     }
 
+    isZero(currentValue) {
+        return currentValue == 0;
+    };
     ngDoCheck() {
         if (this.websocketService.socketEvent) {
             if (this.orders && this.orders.length) {
@@ -473,9 +476,13 @@ export class OrderListComponent implements DoCheck {
                             if (this.orders[j].stepStatus == null) {
                                 this.orders[j].stepStatus = 'Uscita 1';
                             }
-                            for (let k = 0; k < this.orders[j].item.length; k++) {
-                                if (this.orders[j].stepStatus == this.orders[j].item[k].step) {
-                                    arr.push(this.orders[j].item[k].status);
+                            for (let k = 0; k < this.orders[j].step.length; k++) {
+                                if(this.orders[j].step[k].itemId.length){
+                                    for (let l = 0; l < this.orders[j].step[k].itemId.length; l++) {
+                                        if (this.orders[j].stepStatus == this.orders[j].step[k].step) {
+                                            arr.push(this.orders[j].step[k].itemId[l].status);
+                                        }
+                                    }
                                 }
                             }
                             if (this.activetab == 2) {
@@ -484,6 +491,9 @@ export class OrderListComponent implements DoCheck {
                                 }
                             }
                             else if (this.activetab == 3) {
+                                if(!arr.length){
+                                    this.orders.splice(this.orders[j], 1);                                    
+                                }
                                 if (_.uniq(arr).length === 1 && arr[0] === 1) {
                                     this.orders.splice(this.orders[j], 1);
                                 }

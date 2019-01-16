@@ -155,19 +155,24 @@ export class WebsocketService {
         this.socket.on('orderUpdateDept', (data) => {
             this.socketEvent = true;
             this.orderId = data._id;
-            for (var i = 0; i < this._orders.length; i++) {
-                if (data._id == this._orders[i]._id) {
-                    this._orders[i] = _.cloneDeep(data);
-                    let itemsToSplice = [];
-                    if (data.item.length) {
-                        for (var k = 0; k < data.item.length; k++) {
-                            itemsToSplice.push(data.item[k].status);
+            if (this._orders.length) {
+                for (var i = 0; i < this._orders.length; i++) {
+                    if (data._id == this._orders[i]._id) {
+                        this._orders[i] = _.cloneDeep(data);
+                        let itemsToSplice = [];
+                        if (data.item.length) {
+                            for (var k = 0; k < data.item.length; k++) {
+                                itemsToSplice.push(data.item[k].status);
+                            }
+                        }
+                        if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(this.isBelowThreshold)) {
+                            this._orders.splice(i, 1);
                         }
                     }
-                    if (data.item.length && itemsToSplice.length == data.item.length && itemsToSplice.every(this.isBelowThreshold)) {
-                        this._orders.splice(i, 1);
-                    }
                 }
+            }
+            else {
+                this._orders.push(data);
             }
         });
 
