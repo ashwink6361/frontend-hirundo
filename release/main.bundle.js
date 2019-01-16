@@ -1066,11 +1066,16 @@ var WebsocketService = /** @class */ (function () {
             _this.socketEvent = true;
             _this.orderId = data._id;
             var autoplay = false;
+            var orderIds = [];
             if (_this._orders.length) {
                 for (var i = 0; i < _this._orders.length; i++) {
+                    orderIds.push(_this._orders[i]._id);
                     if (data._id.toString() === _this._orders[i]._id.toString()) {
                         _this._orders[i] = data;
                     }
+                }
+                if (orderIds.length == _this._orders.length && orderIds.indexOf(_this.orderId) < 0) {
+                    _this._orders.push(data);
                 }
             }
             else {

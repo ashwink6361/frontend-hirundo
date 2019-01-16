@@ -196,11 +196,16 @@ export class WebsocketService {
             this.socketEvent = true;
             this.orderId = data._id;
             let autoplay = false;
+            let orderIds = [];
             if(this._orders.length){
                 for (var i = 0; i < this._orders.length; i++) {
+                    orderIds.push(this._orders[i]._id);
                     if (data._id.toString() === this._orders[i]._id.toString()) {
                         this._orders[i] = data;
                     }
+                }
+                if(orderIds.length == this._orders.length && orderIds.indexOf(this.orderId)<0){
+                    this._orders.push(data);                    
                 }
             }
             else{

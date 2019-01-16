@@ -466,12 +466,13 @@ export class OrderListComponent implements DoCheck {
     };
     ngDoCheck() {
         if (this.websocketService.socketEvent) {
-            if (this.orders && this.orders.length) {
+            if (this.orders.length) {
                 const change = this.differ.diff(this.orders);
                 if (change != null) {
                     if (this.orders.length) {
                         // new code
-                        for (let j = this.orders.length - 1; j >= 0; j--) {
+                        for (let j = this.orders.length - 1; j >= 0; j--) {                                     
+                            if (this.orders[j]._id == this.websocketService.orderId) {                            
                             let arr = [];
                             if (this.orders[j].stepStatus == null) {
                                 this.orders[j].stepStatus = 'Uscita 1';
@@ -487,113 +488,139 @@ export class OrderListComponent implements DoCheck {
                             }
                             if (this.activetab == 2) {
                                 if (!(_.uniq(arr).length === 1 && arr[0] === 1)) {
-                                    this.orders.splice(this.orders[j], 1);
+                                    this.orders.splice(j, 1);
                                 }
                             }
                             else if (this.activetab == 3) {
                                 if(!arr.length){
-                                    this.orders.splice(this.orders[j], 1);                                    
+                                    this.orders.splice(j, 1);
                                 }
                                 if (_.uniq(arr).length === 1 && arr[0] === 1) {
-                                    this.orders.splice(this.orders[j], 1);
+                                    this.orders.splice(j, 1);
                                 }
                             }
-                        }
-                        if(this.orders.length){
-                        for (let i = 0; i < this.orders.length; i++) {
-                            if (this.orders[i]._id == this.websocketService.orderId) {
-                                let itemStatusDelivered = {};
-                                let remTime = {};
-                                for (let m = 0; m < this.orders[i].step.length; m++) {
+                            let itemStatusDelivered = {};
+                            let remTime = {};
+                            if(this.orders[j]){
+                                for (let m = 0; m < this.orders[j].step.length; m++) {
                                     let startTemp = [];
-                                    for (let n = 0; n < this.orders[i].step[m].itemId.length; n++) {
-                                        startTemp.push(this.orders[i].step[m].itemId[n].status);
+                                    for (let n = 0; n < this.orders[j].step[m].itemId.length; n++) {
+                                        startTemp.push(this.orders[j].step[m].itemId[n].status);
                                     }
-                                    itemStatusDelivered[this.orders[i].step[m].step] = startTemp.every(this.isEqualToOne);
+                                    itemStatusDelivered[this.orders[j].step[m].step] = startTemp.every(this.isEqualToOne);
                                 }
-                                this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered;
-                                for (let m = 0; m < this.orders[i].step.length; m++) {
-                                    if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
-                                        let temparray = this.orders[i].step[m].step.split(' ');
+                                this.itemStatusDelivered[this.orders[j]._id] = itemStatusDelivered;
+                                for (let m = 0; m < this.orders[j].step.length; m++) {
+                                    if (!this.itemStatusDelivered[this.orders[j]._id][this.orders[j].step[m].step]) {
+                                        let temparray = this.orders[j].step[m].step.split(' ');
                                         let num = Number(temparray[1]);
                                         let temp = {
                                             tab: num - 1,
-                                            step: this.orders[i].step[m].step,
+                                            step: this.orders[j].step[m].step,
                                         }
-                                        this.stepdata[this.orders[i]._id] = temp;
+                                        this.stepdata[this.orders[j]._id] = temp;
                                         break;
                                     }
                                 }
-                                for (let k = 0; k < this.orders[i].step.length; k++) {
-                                    if (this.orders[i].step[k].preparationTime) {
-                                        if ((this.orders[i].step[k].step == 'Uscita 1') && !this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[k].step]) {
-                                            let seconds = this.orders[i].step[k].preparationTime * 60;
-                                            let timeInterval = 1000;
-                                            let m = this.orders[i].step[k].preparationTime - 1;
-                                            let t = 0;
-                                            let s = 60;
-                                            var id = setInterval(() => {
-                                                t = t + 1;
-                                                seconds = seconds > 0 ? seconds - 1 : 0;
-                                                s = s > 0 ? s - 1 : 0;
-                                                if (seconds == 0) {
-                                                    clearInterval(id);
-                                                }
-                                                if (t == 60) {
-                                                    t = 0;
-                                                    if (m == 0) {
-                                                        m = 0;
-                                                        s = 0;
-                                                    } else {
-                                                        m = m - 1;
-                                                        s = 60;
-                                                    }
-                                                }
-                                                var minutes = m;
-                                                if (this.orders[i] && this.orders[i].step[k]) {
-
-                                                    remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
-                                                }
-                                            }, timeInterval);
-                                        }
-                                        else if ((this.orders[i].step[k].step != 'Uscita 1') && (this.orders[i].stepStatus == this.orders[i].step[k].step) && !this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[k].step]) {
-                                            let seconds = this.orders[i].step[k].preparationTime * 60;
-                                            let timeInterval = 1000;
-                                            let m = this.orders[i].step[k].preparationTime - 1;
-                                            let t = 0;
-                                            let s = 60;
-                                            var id = setInterval(() => {
-                                                t = t + 1;
-                                                seconds = seconds > 0 ? seconds - 1 : 0;
-                                                s = s > 0 ? s - 1 : 0;
-                                                if (seconds == 0) {
-                                                    clearInterval(id);
-                                                }
-                                                if (t == 60) {
-                                                    t = 0;
-                                                    if (m == 0) {
-                                                        m = 0;
-                                                        s = 0;
-                                                    } else {
-                                                        m = m - 1;
-                                                        s = 60;
-                                                    }
-                                                }
-                                                var minutes = m;
-                                                if (this.orders[i] && this.orders[i].step[k]) {
-
-                                                    remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
-                                                }
-                                            }, timeInterval);
-                                        }
-                                    }
-                                }
-                                this.remainingTime[this.orders[i]._id] = remTime;
-                                this.websocketService.orderId = '';
-                                break;
-                            }
+                            }                           
+                            this.websocketService.orderId = '';
                         }
-                    }
+                        }
+                    //     if(this.orders.length){
+                    //     for (let i = 0; i < this.orders.length; i++) {
+                    //         if (this.orders[i]._id == this.websocketService.orderId) {
+                    //             let itemStatusDelivered = {};
+                    //             let remTime = {};
+                    //             for (let m = 0; m < this.orders[i].step.length; m++) {
+                    //                 let startTemp = [];
+                    //                 for (let n = 0; n < this.orders[i].step[m].itemId.length; n++) {
+                    //                     startTemp.push(this.orders[i].step[m].itemId[n].status);
+                    //                 }
+                    //                 itemStatusDelivered[this.orders[i].step[m].step] = startTemp.every(this.isEqualToOne);
+                    //             }
+                    //             this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered;
+                    //             for (let m = 0; m < this.orders[i].step.length; m++) {
+                    //                 if (!this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[m].step]) {
+                    //                     let temparray = this.orders[i].step[m].step.split(' ');
+                    //                     let num = Number(temparray[1]);
+                    //                     let temp = {
+                    //                         tab: num - 1,
+                    //                         step: this.orders[i].step[m].step,
+                    //                     }
+                    //                     this.stepdata[this.orders[i]._id] = temp;
+                    //                     break;
+                    //                 }
+                    //             }
+                    //             for (let k = 0; k < this.orders[i].step.length; k++) {
+                    //                 if (this.orders[i].step[k].preparationTime) {
+                    //                     if ((this.orders[i].step[k].step == 'Uscita 1') && !this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[k].step]) {
+                    //                         let seconds = this.orders[i].step[k].preparationTime * 60;
+                    //                         let timeInterval = 1000;
+                    //                         let m = this.orders[i].step[k].preparationTime - 1;
+                    //                         let t = 0;
+                    //                         let s = 60;
+                    //                         var id = setInterval(() => {
+                    //                             t = t + 1;
+                    //                             seconds = seconds > 0 ? seconds - 1 : 0;
+                    //                             s = s > 0 ? s - 1 : 0;
+                    //                             if (seconds == 0) {
+                    //                                 clearInterval(id);
+                    //                             }
+                    //                             if (t == 60) {
+                    //                                 t = 0;
+                    //                                 if (m == 0) {
+                    //                                     m = 0;
+                    //                                     s = 0;
+                    //                                 } else {
+                    //                                     m = m - 1;
+                    //                                     s = 60;
+                    //                                 }
+                    //                             }
+                    //                             var minutes = m;
+                    //                             if (this.orders[i] && this.orders[i].step[k]) {
+
+                    //                                 remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
+                    //                             }
+                    //                         }, timeInterval);
+                    //                     }
+                    //                     else if ((this.orders[i].step[k].step != 'Uscita 1') && (this.orders[i].stepStatus == this.orders[i].step[k].step) && !this.itemStatusDelivered[this.orders[i]._id][this.orders[i].step[k].step]) {
+                    //                         let seconds = this.orders[i].step[k].preparationTime * 60;
+                    //                         let timeInterval = 1000;
+                    //                         let m = this.orders[i].step[k].preparationTime - 1;
+                    //                         let t = 0;
+                    //                         let s = 60;
+                    //                         var id = setInterval(() => {
+                    //                             t = t + 1;
+                    //                             seconds = seconds > 0 ? seconds - 1 : 0;
+                    //                             s = s > 0 ? s - 1 : 0;
+                    //                             if (seconds == 0) {
+                    //                                 clearInterval(id);
+                    //                             }
+                    //                             if (t == 60) {
+                    //                                 t = 0;
+                    //                                 if (m == 0) {
+                    //                                     m = 0;
+                    //                                     s = 0;
+                    //                                 } else {
+                    //                                     m = m - 1;
+                    //                                     s = 60;
+                    //                                 }
+                    //                             }
+                    //                             var minutes = m;
+                    //                             if (this.orders[i] && this.orders[i].step[k]) {
+
+                    //                                 remTime[this.orders[i].step[k].step] = (minutes < 10 ? ('0' + minutes) : minutes) + ":" + (s < 10 ? ('0' + s) : s);
+                    //                             }
+                    //                         }, timeInterval);
+                    //                     }
+                    //                 }
+                    //             }
+                    //             this.remainingTime[this.orders[i]._id] = remTime;
+                    //             this.websocketService.orderId = '';
+                    //             break;
+                    //         }
+                    //     }
+                    // }
                     }
                 }
             }

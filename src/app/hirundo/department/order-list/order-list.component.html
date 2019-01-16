@@ -16,7 +16,7 @@
     <div class="row">
         <div class="order-card" *ngFor="let order of orders">
             <div class="card order-list">
-                <div class="card-body" [class.opacity]="order.status == 3">
+                <div class="card-body" *ngIf="order" [class.opacity]="order.status == 3">
                     <h4 class="card-title" *ngIf="stepdata[order._id]">
                         <div>
                             <img src="assets/images/table.png" alt="">
@@ -43,7 +43,7 @@
                             <i class="far fa-user"></i> {{order.noOfPeople}}</p>
                     </div>
                     <div class="step-listing">
-                        <ul *ngIf="stepdata[order._id]">
+                        <ul *ngIf="order && stepdata[order._id]">
                             <li *ngFor="let step of order.step; let i = index;" (click)="selectedTab(step.step,i,order._id)" [class.active]="step.step == stepdata[order._id].step"
                                 [class.completed]="itemStatusDelivered[order._id] && itemStatusDelivered[order._id][step.step]">{{step.step}}</li>
                         </ul>
@@ -51,7 +51,7 @@
                     <div class="order-items-container">
                         <div *ngFor="let step of order.step; let i= index">
                             <div *ngFor="let item of step.itemId">
-                                <div class="order-item" *ngIf="stepdata[order._id] && item.step == stepdata[order._id].step" [class.text-line]="item.status == 1">
+                                <div class="order-item" *ngIf="order&& stepdata[order._id] && item.step == stepdata[order._id].step" [class.text-line]="item.status == 1">
                                     <!-- <label class="label item-status">{{getOrderStatus(item.status)}}</label> -->
                                     <div class="order-item-img">
                                         {{item.quantity}} X
@@ -84,7 +84,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="order-call-btn" *ngIf="order.step.length">
+                <div class="order-call-btn" *ngIf="order && order.step.length">
                     <div *ngFor="let step of order.step">
                         <div *ngIf="stepdata[order._id].step == step.step">
                             <div class="department-checkbtn-container">
