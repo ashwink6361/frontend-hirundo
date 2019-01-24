@@ -37,7 +37,13 @@ export class ListComponent implements DoCheck {
                             startTemp.push(this.orders[i].step[k].itemId[l].status);
                         }
                         itemStatusDelivered[this.orders[i].step[k].step] = startTemp.every(this.isEqualToOne);
-                        call[this.orders[i].step[k].step] = true;                        
+                        // call[this.orders[i].step[k].step] = true;                           
+                        if (this.orders[i].step[k].step == this.orders[i].stepStatus) {
+                            call[this.orders[i].step[k].step] = false;
+                        }
+                        else {
+                            call[this.orders[i].step[k].step] = true;
+                        }
                     }
                     this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered; 
                     this.showToCall[this.orders[i]._id] = call;  
@@ -159,7 +165,13 @@ export class ListComponent implements DoCheck {
                                 startTemp.push(this.orders[i].step[k].itemId[l].status);
                             }
                             itemStatusDelivered[this.orders[i].step[k].step] = startTemp.every(this.isEqualToOne);
-                            call[this.orders[i].step[k].step] = true;                                                    
+                            // call[this.orders[i].step[k].step] = true;   
+                            if (this.orders[i].step[k].step == this.orders[i].stepStatus) {
+                                call[this.orders[i].step[k].step] = false;
+                            }
+                            else {
+                                call[this.orders[i].step[k].step] = true;
+                            }                                                 
                         }
                         this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered; 
                         this.showToCall[this.orders[i]._id] = call;  

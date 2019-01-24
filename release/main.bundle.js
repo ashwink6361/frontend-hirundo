@@ -1081,11 +1081,12 @@ var WebsocketService = /** @class */ (function () {
             else {
                 _this._orders.push(data);
             }
+            playAudio();
             // let audio = new Audio();
             // audio.src = "../../../assets/audio/beep.mp3";
             // audio.load();
             // audio.play();
-            autoplay = true;
+            // autoplay = true;
         });
         this.socket.on('orderkey', function (data) {
             var userType = _this.authGuard.getCurrentUser().userType;

@@ -78,7 +78,13 @@ var ListComponent = /** @class */ (function () {
                             startTemp.push(_this.orders[i].step[k].itemId[l].status);
                         }
                         itemStatusDelivered[_this.orders[i].step[k].step] = startTemp.every(_this.isEqualToOne);
-                        call[_this.orders[i].step[k].step] = true;
+                        // call[this.orders[i].step[k].step] = true;                           
+                        if (_this.orders[i].step[k].step == _this.orders[i].stepStatus) {
+                            call[_this.orders[i].step[k].step] = false;
+                        }
+                        else {
+                            call[_this.orders[i].step[k].step] = true;
+                        }
                     }
                     _this.itemStatusDelivered[_this.orders[i]._id] = itemStatusDelivered;
                     _this.showToCall[_this.orders[i]._id] = call;
@@ -203,7 +209,13 @@ var ListComponent = /** @class */ (function () {
                                 startTemp.push(this.orders[i].step[k].itemId[l].status);
                             }
                             itemStatusDelivered[this.orders[i].step[k].step] = startTemp.every(this.isEqualToOne);
-                            call[this.orders[i].step[k].step] = true;
+                            // call[this.orders[i].step[k].step] = true;   
+                            if (this.orders[i].step[k].step == this.orders[i].stepStatus) {
+                                call[this.orders[i].step[k].step] = false;
+                            }
+                            else {
+                                call[this.orders[i].step[k].step] = true;
+                            }
                         }
                         this.itemStatusDelivered[this.orders[i]._id] = itemStatusDelivered;
                         this.showToCall[this.orders[i]._id] = call;
