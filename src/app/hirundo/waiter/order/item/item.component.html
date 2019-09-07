@@ -230,6 +230,12 @@
             <label for="name">Name</label>
             <input type="text" id="name" [(ngModel)]="AddDataArticle.name" class="form-control">
         </div>
+        <div class="md-group">
+            <label for="vattax">Vat Tax</label>
+            <select id="vattax" >
+                <option *ngFor="let vat of vats" [selected]="vat._id == 'R1'">{{vat.name}}</option>
+            </select>
+        </div>
         <div class="input-quantity-container md-form">
             <h1>Quantity</h1>
             <div class="input-prepend-append  d-flex">

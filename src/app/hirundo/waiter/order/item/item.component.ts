@@ -43,10 +43,25 @@ export class ItemComponent implements OnInit {
     category: '',
     subCategory: '',
     quantity: 1,
+    vat: 'R1',
     variant: [],
     notes: '',
     isDeleted: true
   }
+  public vats = [
+    {
+        _id: "R1",
+        name: "10%"
+    },
+    {
+        _id: "R2",
+        name: "4%"
+    },
+    {
+        _id: "R3",
+        name: "22%"
+    }
+  ]
   public articleNotes = [];
   public loader: boolean = false;
   public addArticleError = '';
@@ -285,9 +300,24 @@ export class ItemComponent implements OnInit {
       subCategory: '',
       quantity: 1,
       variant: [],
+      vat: 'R1',
       notes: '',
       isDeleted: true
     }
+    this.vats = [
+      {
+          _id: 'R1',
+          name: '10%'
+      },
+      {
+          _id: 'R2',
+          name: '4%'
+      },
+      {
+          _id: 'R3',
+          name: '22%'
+      }
+    ]
     this.articleNotes = [];
     this.activeTab[0] = true;
     this.activeTab[1] = false;
@@ -301,6 +331,7 @@ export class ItemComponent implements OnInit {
       category: '',
       subCategory: '',
       quantity: 1,
+      vat: 'R1',
       variant: [],
       notes: '',
       isDeleted: true
@@ -501,6 +532,7 @@ export class ItemComponent implements OnInit {
         name: this.AddDataArticle.name,
         price: Number(this.AddDataArticle.price),
         category: this.AddDataArticle.category,
+        vat: (this.AddDataArticle.vat) ? this.AddDataArticle.vat : 'R1',
         subCategory: this.AddDataArticle.subCategory,
         isDeleted: this.AddDataArticle.isDeleted
       }
