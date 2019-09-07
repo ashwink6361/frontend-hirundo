@@ -76,6 +76,10 @@ export class ChooseCategoryComponent implements OnInit {
       });
   }
 
+  viewCart() {
+    this.router.navigate(['/waiter/order/:id/cart']);
+  }
+
   hideStep(){
     this.orderService.showElement = false;
     this.router.navigate(['/waiter/order/:id/cart']);
