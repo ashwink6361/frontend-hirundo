@@ -34,6 +34,9 @@ export class CartComponent implements OnInit {
   constructor(private orderService: OrderService, private router: Router, private globalService: GlobalService) { }
 
   ngOnInit() {
+
+    window.history.pushState( {} , 'Waiter', '/waiter' );
+
     this.tableData = JSON.parse(localStorage.getItem('tabledata'));
     if (this.tableData.orderId.length) {
       var cp = 0;
@@ -117,12 +120,13 @@ export class CartComponent implements OnInit {
           tab: 0,
           step: "Uscita 1"
         }
+
         this.globalService.setTabData(stepdata);
         this.router.navigate(['/waiter/list']);
         this.orderService.showElement = false;
       })
       .catch(error => {
-      });
+      }); 
   }
 
   deleteItemFromCart(article) {

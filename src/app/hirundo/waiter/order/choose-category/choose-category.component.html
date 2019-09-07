@@ -19,7 +19,7 @@
                 <div class="md-form search">
                     <i class="fas fa-search prefix"></i>
                     <input class="form-control" [(ngModel)]="searchText" type="text" placeholder="Search Category" />
-                    <button type="button" class="btn-cart">
+                    <button type="button" class="btn-cart" (click)="viewCart()">
                         <i class="fas fa-shopping-cart"></i> {{orderService.getOrderData().cartTotalItem}} | &euro;{{orderService.getOrderData().cartTotalPrice}}
                     </button>
                 </div>
