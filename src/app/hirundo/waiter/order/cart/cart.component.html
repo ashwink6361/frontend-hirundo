@@ -1,9 +1,9 @@
 <header class="page-content-header">
     <div class="back-btn">
-        <a *ngIf="!tableData.orderId.length" routerLink="/waiter/order/:id/choose-item">
+        <a *ngIf="!tableData.orderId.length || this.orderService.getOrderData().cartTotalItem" routerLink="/waiter/order/:id/choose-item">
             <i class="fas fa-angle-left"></i>
         </a>
-        <a *ngIf="tableData.orderId.length" (click)="hideStep()">
+        <a *ngIf="tableData.orderId.length && !this.orderService.getOrderData().cartTotalItem" (click)="hideStep()">
             <i class="fas fa-angle-left"></i>
         </a>
     </div>
