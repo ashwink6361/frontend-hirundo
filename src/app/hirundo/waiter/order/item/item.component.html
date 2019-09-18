@@ -232,8 +232,8 @@
         </div>
         <div class="md-group">
             <label for="vattax">Vat Tax</label>
-            <select id="vattax" >
-                <option *ngFor="let vat of vats" [selected]="vat._id == 'R1'">{{vat.name}}</option>
+            <select id="vattax" [(ngModel)]="AddDataArticle.vat">
+                <option *ngFor="let vat of vats" ngValue="{{vat._id}}">{{vat.name}}</option>
             </select>
         </div>
         <div class="input-quantity-container md-form">
