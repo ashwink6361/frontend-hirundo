@@ -666,4 +666,19 @@ export class OrderListComponent implements DoCheck {
             .catch(error => {
             });
     }
+    public getItemCount() {
+
+        var counter = 0;
+
+        for (let i = 0; i < this.orders.length; i++) {
+            for (let k = 0; k < this.orders[i].step.length; k++) {
+                for (let l = 0; l < this.orders[i].step[k].itemId.length; l++) {
+         
+                    counter += this.orders[i].step[k].itemId[l].quantity;
+                }
+            }
+        }
+
+        return counter;
+    }
 }

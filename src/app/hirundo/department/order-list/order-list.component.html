@@ -10,6 +10,9 @@
             Delivered
         </li>
     </ul>
+    <span>
+        {{orders.length}} Ordini<br>{{getItemCount()}} Articoli
+    </span>
 </div>
 <div class="text-center" *ngIf="!(orders && orders.length)">No Order Found.</div>
 <div *ngIf="orders && orders.length" class="order-list-container container-fluid">
