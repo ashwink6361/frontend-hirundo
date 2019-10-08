@@ -58,9 +58,6 @@ app.use('/api/*', function (req, res, next) {
                 json: req.body,
                 headers: headers
             }, function (error, httpResponse, body) {
-                if (httpResponse.statusCode == 401) {
-                    logout()
-                }
                 if (!error) {
                     res.status(httpResponse.statusCode).send(body);
                 }
@@ -77,9 +74,6 @@ app.use('/api/*', function (req, res, next) {
                 formData: formData,
                 headers: headers
             }, function (error, httpResponse, body) {
-                if (httpResponse.statusCode == 401) {
-                    logout()
-                }
                 if (!error) {
                     res.status(httpResponse.statusCode).send(body);
                 }
@@ -94,9 +88,6 @@ app.use('/api/*', function (req, res, next) {
                 json: req.body,
                 headers: headers
             }, function (error, httpResponse, body) {
-                if (httpResponse.statusCode == 401) {
-                    logout()
-                }
                 if (!error) {
                     res.status(httpResponse.statusCode).send(body);
                 }
@@ -112,9 +103,6 @@ app.use('/api/*', function (req, res, next) {
                 formData: formData,
                 headers: headers
             }, function (error, httpResponse, body) {
-                if (httpResponse.statusCode == 401) {
-                    logout()
-                }
                 if (!error) {
                     res.status(httpResponse.statusCode).send(body);
                 }
@@ -128,9 +116,6 @@ app.use('/api/*', function (req, res, next) {
             url: uri,
             headers: headers
         }, function (error, httpResponse, body) {
-            if (httpResponse.statusCode == 401) {
-                logout()
-            }
             if (!error) {
                 var resStatus = (httpResponse && httpResponse.statusCode) ? httpResponse.statusCode : 200;
                 res.status(resStatus).send(body);
@@ -149,9 +134,6 @@ app.use('/api/*', function (req, res, next) {
             url: uri,
             headers: headers
         }, function (error, httpResponse, body) {
-            if (httpResponse.statusCode == 401) {
-                logout()
-            }
             if (!error) {
                 res.status(httpResponse.statusCode).send(body);
             }
@@ -182,14 +164,6 @@ app.post('/login', function (req, res, next) {
         }
     });
 });
-
-function logout() {
-    localStorage.removeItem('isLoggedin');
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('token');
-    document.cookie = "token=" + '';
-    window.location.href = '/';
-  }
 
 // User Account Varify
 
