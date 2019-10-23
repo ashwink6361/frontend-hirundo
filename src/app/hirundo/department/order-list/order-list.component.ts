@@ -171,13 +171,15 @@ export class OrderListComponent implements DoCheck {
     };
 
     public updateItem(item, order) {
-        item.status = 1;
-        let ids = [];
-        ids.push(item._id);
+
+        item.status = !item.status;
         let opts = {
-            id: ids
+            id: [ item._id ],
+            statuses: [ item.status ]
         };
+        
         this.websocketService.updateOrder(order, opts).then(data => {
+        
             order = data.data;
             if (this.orders.length) {
                 for (let i = 0; i < this.orders.length; i++) {
