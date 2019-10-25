@@ -224,11 +224,10 @@ var OrderListComponent = /** @class */ (function () {
     ;
     OrderListComponent.prototype.updateItem = function (item, order) {
         var _this = this;
-        item.status = 1;
-        var ids = [];
-        ids.push(item._id);
+        item.status = !item.status;
         var opts = {
-            id: ids
+            id: [item._id],
+            statuses: [item.status]
         };
         this.websocketService.updateOrder(order, opts).then(function (data) {
             order = data.data;

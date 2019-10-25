@@ -1223,6 +1223,99 @@ var WebsocketService = /** @class */ (function () {
             return error;
         });
     };
+    WebsocketService.prototype.getAdministrativeOrders = function (date) {
+        var _this = this;
+        var dateToISO = null;
+        var opts = {};
+        if (date) {
+            var dateNow = new Date(date);
+            dateNow.setUTCHours(0, 0, 0, 0);
+            dateNow.setDate(dateNow.getDate() + 1);
+            dateToISO = dateNow.toISOString();
+        }
+        var url = '/api/orders';
+        if (dateToISO) {
+            url += '?date=' + dateToISO;
+        }
+        return this.http.get(url).toPromise()
+            .then(function (data) {
+            var res = data.json();
+            _this._orders = res.data;
+            return _this._orders;
+        })
+            .catch(function (error) {
+            _this._orders = [];
+            return error;
+        });
+    };
+    WebsocketService.prototype.getTables = function (date) {
+        var dateToISO = null;
+        var opts = {};
+        if (date) {
+            var dateNow = new Date(date);
+            dateNow.setUTCHours(0, 0, 0, 0);
+            dateNow.setDate(dateNow.getDate() + 1);
+            dateToISO = dateNow.toISOString();
+        }
+        var url = '/api/room/tables';
+        if (dateToISO) {
+            url += '?date=' + dateToISO;
+        }
+        return this.http.get(url).toPromise()
+            .then(function (data) {
+            return data.json();
+        })
+            .catch(function (error) {
+            return error;
+        });
+    };
+    WebsocketService.prototype.updateAdminOrder = function (id, opts) {
+        var url = '/api/orders/' + id;
+        return this.http.put(url, {}, opts).toPromise()
+            .then(function (data) {
+            return data.json();
+        })
+            .catch(function (error) {
+            return error;
+        });
+    };
+    WebsocketService.prototype.getPrinterConfigs = function () {
+        var url = '/api/printer';
+        return this.http.get(url).toPromise()
+            .then(function (data) {
+            return data.json();
+        })
+            .catch(function (error) {
+            return error;
+        });
+    };
+    WebsocketService.prototype.closeDay = function (url) {
+        var xml = '<Service><cmd>=C3</cmd><cmd>=C10</cmd><cmd>=C1</cmd><cmd>=C0</cmd></Service>';
+        // let opts = {
+        //     headers : [
+        //         new HttpHeaders({
+        //         'Content-Type':  'text/xml'
+        //       })
+        //     ]
+        // }
+        return this.http.post(url, xml, {}).toPromise()
+            .then(function (data) {
+            return data;
+        })
+            .catch(function (error) {
+            return error;
+        });
+    };
+    WebsocketService.prototype.checkoutTable = function (roomid, tableid) {
+        var url = '/api/orders/checkout/' + roomid + '/' + tableid;
+        return this.http.get(url).toPromise()
+            .then(function (data) {
+            return data;
+        })
+            .catch(function (error) {
+            return error;
+        });
+    };
     WebsocketService.prototype.getWaiterOrders = function () {
         var _this = this;
         var url = '/api/waiter/orders';
