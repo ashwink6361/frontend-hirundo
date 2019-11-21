@@ -6,6 +6,7 @@ import * as Rx from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 import { AuthGuard } from '../shared/guard/auth.guard';
 import *  as _ from 'lodash';
+import { HttpHeaders } from '@angular/common/http';
 // import 'player.js';
 
 declare function playAudio(): void;
@@ -357,6 +358,101 @@ export class WebsocketService {
                 return error;
             });
     }
+    public getAdministrativeOrders(date): Promise<any> {
+        var dateToISO = null;
+        let opts = {}
+        if(date){
+            var dateNow = new Date(date);
+            dateNow.setUTCHours(0, 0, 0, 0);
+            dateNow.setDate(dateNow.getDate() + 1);
+            dateToISO = dateNow.toISOString();
+        }
+        var url = '/api/orders';
+        if (dateToISO) {
+            url += '?date=' + dateToISO;
+        }
+        return this.http.get(url).toPromise()
+            .then(data => {
+                let res = data.json();
+                this._orders = res.data;
+                return this._orders;
+            })
+            .catch(error => {
+                this._orders = [];
+                return error;
+            });
+    }
+    public getTables(date): Promise<any> {
+        var dateToISO = null;
+        let opts = {}
+        if(date){
+            var dateNow = new Date(date);
+            dateNow.setUTCHours(0, 0, 0, 0);
+            dateNow.setDate(dateNow.getDate() + 1);
+            dateToISO = dateNow.toISOString();
+        }
+        var url = '/api/room/tables';
+        if (dateToISO) {
+            url += '?date=' + dateToISO;
+        }
+        return this.http.get(url).toPromise()
+            .then(data => {
+                return data.json();
+            })
+            .catch(error => {
+                return error;
+            });
+    }
+    public updateAdminOrder(id, opts): Promise<any>{
+        var url = '/api/orders/' + id;
+        return this.http.put(url, {}, opts).toPromise()
+            .then(data => {
+                return data.json();
+            })
+            .catch(error => {
+                return error;
+            });
+    }
+    public getPrinterConfigs(): Promise<any> {
+        var url = '/api/printer';
+        return this.http.get(url).toPromise()
+            .then(data => {
+                return data.json();
+            })
+            .catch(error => {
+                return error;
+            });
+    }
+
+    public closeDay(url): Promise<any> {
+        var xml = '<Service><cmd>=C3</cmd><cmd>=C10</cmd><cmd>=C1</cmd><cmd>=C0</cmd></Service>';
+        // let opts = {
+        //     headers : [
+        //         new HttpHeaders({
+        //         'Content-Type':  'text/xml'
+        //       })
+        //     ]
+        // }
+        return this.http.post(url, xml, {}).toPromise()
+            .then(data => {
+                return data;
+            })
+            .catch(error => {
+                return error;
+            });
+    }
+
+    public checkoutTable(roomid, tableid): Promise<any> {
+        var url = '/api/orders/checkout/' + roomid + '/' + tableid;
+        return this.http.get(url).toPromise()
+            .then(data => {
+                return data;
+            })
+            .catch(error => {
+                return error;
+            });
+    }
+      
     public getWaiterOrders(): Promise<any> {
         let url = '/api/waiter/orders';
         return this.http.get(url).toPromise()
