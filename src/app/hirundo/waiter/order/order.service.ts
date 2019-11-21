@@ -50,6 +50,7 @@ export class OrderService {
       .catch(this.globalService.handleErrorPromise);
   }
   updateOrder(item,orderId): Promise<any> {
+
     let url = '/api/waiter/order';
     let opts = {
       item: item,

@@ -384,9 +384,12 @@ export class WebsocketService {
             });
     }
     public updateOrder(id, opts): Promise<any> {
+        console.log('update order', id, opts);
         let url = '/api/department/orders/' + id;
+        console.log('url', url);
         return this.http.put(url, opts).toPromise()
             .then(data => {
+                console.log('then data', data);
                 let res = data.json();
                 for (var i = 0; i < this._orders.length; i++) {
                     if (res.data._id === this._orders[i]._id) {
@@ -401,6 +404,8 @@ export class WebsocketService {
                         }
                     }
                 }
+                console.log('data', data);
+                console.log('data json', data.json());
                 return data.json();
             })
             .catch(error => {
